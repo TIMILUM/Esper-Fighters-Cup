@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,19 +9,19 @@ public class CameraMovement : MonoBehaviour
 
     [SerializeField]
     private List<Transform> _movementTargets;
- 
+
     [SerializeField]
     private Vector3 _offset;
     [SerializeField]
     private float _smoothTime = 0.1f;
- 
+
     [SerializeField]
     private float _minZoom = 70f;
     [SerializeField]
     private float _maxZoom = 20f;
     [SerializeField]
     private float _zoomLimiter = 50f;
- 
+
     private Vector3 _velocityVector3;
     private float _velocityFloat;
     private Bounds _totalBounds;
@@ -32,7 +30,7 @@ public class CameraMovement : MonoBehaviour
     {
         _camera = GetComponent<Camera>();
     }
- 
+
     private void Update()
     {
         if (_movementTargets.Count == 0) return;
@@ -40,15 +38,15 @@ public class CameraMovement : MonoBehaviour
         Move();
         Zoom();
     }
- 
+
     private void Zoom()
     {
         var newZoom = Mathf.Lerp(_maxZoom, _minZoom, Mathf.Max(_totalBounds.size.x, _totalBounds.size.z * 1.5f) / _zoomLimiter);
         _camera.fieldOfView = Mathf.Lerp(_camera.fieldOfView, newZoom, Time.deltaTime);
         _camera.fieldOfView = Mathf.SmoothDamp(_camera.fieldOfView, newZoom, ref _velocityFloat, _smoothTime);
     }
- 
- 
+
+
     private void Move()
     {
         var centerPoint = _totalBounds.center;

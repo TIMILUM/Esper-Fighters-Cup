@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+ï»¿using System.Collections;
 using UnityEngine;
 
 public enum CHARACTER
-{ 
-    IDLE ,  MOVE , SPASTICITY , SKILL
+{
+    IDLE, MOVE, SPASTICITY, SKILL
 }
 
 
@@ -18,14 +17,14 @@ public class CharacterContorller : MonoBehaviour
     [SerializeField] private float _Spastic;
     [SerializeField] private float _RotateSmooth;
 
-    
+
 
     private SkillBase[] Skills;
 
     private float _MoveSpeedTime;
 
     private CHARACTER _CharacterStateType;
-    
+
     private float _DirX;
     private float _DirZ;
 
@@ -46,7 +45,7 @@ public class CharacterContorller : MonoBehaviour
         Getinput();
     }
 
-    // Ä³¸¯ÅÍ ¿òÁ÷ÀÓ
+    // ìºë¦­í„° ì›€ì§ì„
     private void CharacterMove()
     {
         CharacterLookAt();
@@ -63,7 +62,7 @@ public class CharacterContorller : MonoBehaviour
     }
 
 
-    // ¸¶¿ì½º¸¦ ¹Ù¶óº¸´Â ·ÎÁ÷
+    // ë§ˆìš°ìŠ¤ë¥¼ ë°”ë¼ë³´ëŠ” ë¡œì§
     private void CharacterLookAt()
     {
 
@@ -83,7 +82,7 @@ public class CharacterContorller : MonoBehaviour
 
     }
 
-    // °¢ »óÅÂ¿¡ µû¸¥ ÀÌº¥Æ® Àû¿ë
+    // ê° ìƒíƒœì— ë”°ë¥¸ ì´ë²¤íŠ¸ ì ìš©
     private void StateUpdate()
     {
         switch (_CharacterStateType)
@@ -113,10 +112,10 @@ public class CharacterContorller : MonoBehaviour
         }
     }
 
-    
 
 
-    // ½ºÅ³ »ç¿ë
+
+    // ìŠ¤í‚¬ ì‚¬ìš©
     private void TrySkill()
     {
         foreach (var Skill in Skills)
@@ -128,7 +127,7 @@ public class CharacterContorller : MonoBehaviour
         }
     }
 
-    // ½ºÅ³ Àû¿ë
+    // ìŠ¤í‚¬ ì ìš©
     private void ExecuteSkill()
     {
         foreach (var Skill in Skills)
@@ -139,19 +138,19 @@ public class CharacterContorller : MonoBehaviour
     }
 
 
-    // ÀÌµ¿ »óÅÂÀÏ¶§ ¸Å ÇÁ·¹ÀÓ¸¶´Ù Àû¿ë
+    // ì´ë™ ìƒíƒœì¼ë•Œ ë§¤ í”„ë ˆì„ë§ˆë‹¤ ì ìš©
     private void ExecuteMove()
     {
         CharacterMove();
         IncreaseTime();
     }
-    // ´ë±â »óÅÂÀÏ¶§ ¸Å ÇÁ·¹ÀÓ¸¶´Ù Àû¿ë
+    // ëŒ€ê¸° ìƒíƒœì¼ë•Œ ë§¤ í”„ë ˆì„ë§ˆë‹¤ ì ìš©
     private void ExecuteIdle()
     {
         CharacterMove();
         DecreaseTime();
     }
-    //½ºÇÇµå Áõ°¡
+    //ìŠ¤í”¼ë“œ ì¦ê°€
     private void IncreaseTime()
     {
         if (_IncreaseSpeedTime == 0)
@@ -169,7 +168,7 @@ public class CharacterContorller : MonoBehaviour
 
 
     }
-    //½ºÇÇµå °¨¼Ò
+    //ìŠ¤í”¼ë“œ ê°ì†Œ
     private void DecreaseTime()
     {
 
@@ -198,7 +197,7 @@ public class CharacterContorller : MonoBehaviour
     }
 
 
-    //´ë±âÀÏ¶§ »óÅÂ º¯ÀÌ
+    //ëŒ€ê¸°ì¼ë•Œ ìƒíƒœ ë³€ì´
     private void IdleStateChange()
     {
         if (_DirX != 0 || _DirZ != 0)
@@ -209,14 +208,14 @@ public class CharacterContorller : MonoBehaviour
         TrySkill();
     }
 
-    // ½ºÅ³ÀÌ ³¡³­ ´ÙÀ½ÀÇ »óÅÂ º¯ÀÌ
+    // ìŠ¤í‚¬ì´ ëë‚œ ë‹¤ìŒì˜ ìƒíƒœ ë³€ì´
     private void SkillStateChange()
     {
         foreach (var Skill in Skills)
         {
             if (!Skill.isSkillUsing)
                 continue;
-            if (Skill.EndSkill() )
+            if (Skill.EndSkill())
             {
                 _CharacterStateType = CHARACTER.IDLE;
                 return;
@@ -224,7 +223,7 @@ public class CharacterContorller : MonoBehaviour
         }
     }
 
-    //¿òÁ÷ÀÓ »óÅÂ º¯ÀÌ 
+    //ì›€ì§ì„ ìƒíƒœ ë³€ì´ 
     private void MoveStateChange()
     {
         if (_DirX == 0 && _DirZ == 0)
@@ -232,9 +231,9 @@ public class CharacterContorller : MonoBehaviour
             _CharacterStateType = CHARACTER.IDLE;
         }
         TrySkill();
-    } 
+    }
 
-    //ÀÓ½Ã·Î °æÁ÷
+    //ì„ì‹œë¡œ ê²½ì§
     private void Getinput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -243,13 +242,13 @@ public class CharacterContorller : MonoBehaviour
         }
     }
 
-    //ÀÓ½Ã °æÁ÷ ½Ã°£
+    //ì„ì‹œ ê²½ì§ ì‹œê°„
     private IEnumerator SpasticityCoroutine()
     {
-        
+
         yield return new WaitForSeconds(_Spastic);
 
         _CharacterStateType = CHARACTER.IDLE;
     }
-        
+
 }

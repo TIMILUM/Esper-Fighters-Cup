@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
 // 간단하게 괴력 스킬 구현
 public class SimpleSuperStrength : SkillBase
 {
-    
+
     [SerializeField] private float _Force;
     private Transform _TargetObj;
 
@@ -20,12 +18,12 @@ public class SimpleSuperStrength : SkillBase
     // 스킬이 끝날을때.
     public override bool EndSkill()
     {
-        
+
         isSkillUsing = false;
         return true;
-        
-        
-        
+
+
+
     }
     // 던지기 이벤트
     private void ThrowObject()
@@ -42,11 +40,11 @@ public class SimpleSuperStrength : SkillBase
     public void MousePicking()
     {
         //물건을 잡을때 거리를 계산해서 던지기
-        if (Vector3.Distance(transform.position, _EndPos) > _SKillRange )
+        if (Vector3.Distance(transform.position, _EndPos) > _SKillRange)
             return;
 
         MousePick();
-        
+
     }
 
     private void MousePick()
@@ -58,9 +56,9 @@ public class SimpleSuperStrength : SkillBase
 
         if (Physics.Raycast(ray, out Hitinfo))
         {
-            
+
             //컨트롤이랑 태그를 판별
-            if (Hitinfo.transform.tag == "Object" && _SkillKeyCode != SKILLKEYCODE.CONTROL) 
+            if (Hitinfo.transform.tag == "Object" && _SkillKeyCode != SKILLKEYCODE.CONTROL)
             {
 
                 if (_TargetObj == null)
@@ -73,7 +71,8 @@ public class SimpleSuperStrength : SkillBase
                             return;
                     }
                     else
-                    {   return;
+                    {
+                        return;
                     }
 
                     if (_TargetObj == null)
@@ -96,7 +95,8 @@ public class SimpleSuperStrength : SkillBase
                 if (Hitinfo.transform.tag == "Object")
                 {
                     if (_TargetObj == null)
-                    {   GrapObject(Hitinfo);
+                    {
+                        GrapObject(Hitinfo);
                         return;
                     }
                 }
@@ -105,7 +105,7 @@ public class SimpleSuperStrength : SkillBase
         ResetObject();
     }
 
-    
+
 
 
     private void ResetObject()
@@ -128,7 +128,7 @@ public class SimpleSuperStrength : SkillBase
 
     //물건을 잡을때 istrigger 활성화 중력값 비활성화
     private void GrapObject(RaycastHit Hitinfo)
-    {        
+    {
         _TargetObj = Hitinfo.transform;
         _TargetObj.transform.parent = transform.Find("SkillShotPoint");
         _TargetObj.GetComponent<Collider>().isTrigger = true;
@@ -137,8 +137,8 @@ public class SimpleSuperStrength : SkillBase
         _TargetObj.GetComponent<Rigidbody>().freezeRotation = true;
 
         _TargetObj.transform.tag = "GrapObject"; // 잡고 있는 상태
-        _TargetObj.localPosition = new Vector3(0.0f,  0.0f , 1.0f);
-        
+        _TargetObj.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
+
 
     }
 

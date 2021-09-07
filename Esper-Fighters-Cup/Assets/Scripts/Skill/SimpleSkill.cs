@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -8,7 +6,7 @@ public class SimpleSkill : SkillBase
 {
     [SerializeField] private float _Force;
     [SerializeField] private float _RotateSpeed;
-    
+
     private Transform _TargetObj;
     private Vector3 _EndPos;
     private float _RealTime;
@@ -51,13 +49,13 @@ public class SimpleSkill : SkillBase
                 }
             }
             _EndPos = Hitinfo.point;
-        }        
+        }
     }
 
     // 스킬 키를 놓았을때 이벤트 적용
     public bool MouseEndSkill()
     {
-        
+
         if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
         {
             if (Input.GetKeyUp(KeyCode.LeftControl))
@@ -126,20 +124,20 @@ public class SimpleSkill : SkillBase
 
         // 물체 들어 올렸으때 회전 및 움직임
 
-        _TargetObj.position = new Vector3 (_TargetObj.position.x ,
-            Mathf.Lerp(_TargetObj.position.y, transform.position.y + 0.8f , 0.1f), _TargetObj.position.z);
+        _TargetObj.position = new Vector3(_TargetObj.position.x,
+            Mathf.Lerp(_TargetObj.position.y, transform.position.y + 0.8f, 0.1f), _TargetObj.position.z);
 
         if (Vector3.Distance(_EndPos, _TargetObj.position) > 0.03f)
         {
-        _TargetObj.position = new Vector3(Mathf.Lerp(_TargetObj.position.x, _EndPos.x, 0.1f),
-            _TargetObj.position.y , Mathf.Lerp(_TargetObj.position.z, _EndPos.z, 0.1f));
+            _TargetObj.position = new Vector3(Mathf.Lerp(_TargetObj.position.x, _EndPos.x, 0.1f),
+                _TargetObj.position.y, Mathf.Lerp(_TargetObj.position.z, _EndPos.z, 0.1f));
         }
 
-        float Sin = Mathf.Sin(_RealTime * Mathf.Deg2Rad );
-        float Cos = Mathf.Cos(_RealTime * Mathf.Deg2Rad );
+        float Sin = Mathf.Sin(_RealTime * Mathf.Deg2Rad);
+        float Cos = Mathf.Cos(_RealTime * Mathf.Deg2Rad);
 
 
-        _TargetObj.rotation =  Quaternion.Euler
-            (new Vector3(Sin * 360.0f *_RotateSpeed, Cos  * 360.0f * _RotateSpeed , Cos * 360.0f * _RotateSpeed));
+        _TargetObj.rotation = Quaternion.Euler
+            (new Vector3(Sin * 360.0f * _RotateSpeed, Cos * 360.0f * _RotateSpeed, Cos * 360.0f * _RotateSpeed));
     }
 }
