@@ -11,7 +11,7 @@ public class SimpleSkill : SkillBase
     
     private Transform _TargetObj;
     private Vector3 _EndPos;
-    private float RealTime;
+    private float _RealTime;
 
 
     // 이벤트 적용
@@ -104,10 +104,12 @@ public class SimpleSkill : SkillBase
     {
         // 던질때
         if (_TargetObj == null) return;
-
-        var dir = _EndPos - _TargetObj.position;
-        dir.Normalize();
-        _TargetObj.GetComponent<Rigidbody>().AddForce(dir * _Force, ForceMode.Impulse);
+        if (Vector3.Distance(_TargetObj.position, _EndPos) > 1.0f)
+        {
+            var dir = _EndPos - _TargetObj.position;
+            dir.Normalize();
+            _TargetObj.GetComponent<Rigidbody>().AddForce(dir * _Force, ForceMode.Impulse);
+        }
     }
 
 
@@ -120,9 +122,7 @@ public class SimpleSkill : SkillBase
 
         _TargetObj.GetComponent<Collider>().isTrigger = true;
         _TargetObj.GetComponent<Rigidbody>().useGravity = false;
-        RealTime += Time.deltaTime;
-
-
+        _RealTime += Time.deltaTime;
 
         // 물체 들어 올렸으때 회전 및 움직임
 
@@ -135,12 +135,11 @@ public class SimpleSkill : SkillBase
             _TargetObj.position.y , Mathf.Lerp(_TargetObj.position.z, _EndPos.z, 0.1f));
         }
 
-        float Sin = Mathf.Sin(RealTime * Mathf.Deg2Rad );
-        float Cos = Mathf.Cos(RealTime * Mathf.Deg2Rad );
+        float Sin = Mathf.Sin(_RealTime * Mathf.Deg2Rad );
+        float Cos = Mathf.Cos(_RealTime * Mathf.Deg2Rad );
 
 
         _TargetObj.rotation =  Quaternion.Euler
             (new Vector3(Sin * 360.0f *_RotateSpeed, Cos  * 360.0f * _RotateSpeed , Cos * 360.0f * _RotateSpeed));
-
     }
 }

@@ -12,10 +12,10 @@ public abstract class SkillBase : MonoBehaviour
 {
     [SerializeField , TextArea] private string _SkillDesc; // 스킬 설명
     [SerializeField] private string _SkillName; // 스킬 이름
-    [SerializeField] private string _SkillAnimation;
-    [SerializeField] protected float _SKillRange;
-    [SerializeField] protected SKILLKEYCODE _SkillKeyCode;
-    public bool isSkillUsing { get; set; }
+    [SerializeField] private string _SkillAnimation; // 스킬에 적용할 애니메이션
+    [SerializeField] protected float _SKillRange; // 스킬 사거리
+    [SerializeField] protected SKILLKEYCODE _SkillKeyCode; // 스킬 키 코드
+    public bool isSkillUsing { get; set; } // 스킬 사용중인지 아닌지 판별
    
 
     public abstract void SkillExecute();
@@ -52,7 +52,4 @@ public abstract class SkillBase : MonoBehaviour
 
         return false; 
     }
-    
-
-
 }

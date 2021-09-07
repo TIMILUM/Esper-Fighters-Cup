@@ -30,7 +30,4 @@ public class SimpleObject : MonoBehaviour
             Destroy(gameObject);
     }
 
-
-
-
 }

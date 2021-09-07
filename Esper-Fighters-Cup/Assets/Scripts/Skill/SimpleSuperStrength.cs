@@ -88,6 +88,7 @@ public class SimpleSuperStrength : SkillBase
             _EndPos = Hitinfo.point;
         }
 
+        // 스킬 키코드가 컨트롤일때 
         if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
         {
             if (Physics.Raycast(transform.position, transform.forward, out Hitinfo, _SKillRange))
@@ -125,7 +126,7 @@ public class SimpleSuperStrength : SkillBase
 
     }
 
-    //물건을 잡을때 istrigger 활성화 중력값 제거
+    //물건을 잡을때 istrigger 활성화 중력값 비활성화
     private void GrapObject(RaycastHit Hitinfo)
     {        
         _TargetObj = Hitinfo.transform;

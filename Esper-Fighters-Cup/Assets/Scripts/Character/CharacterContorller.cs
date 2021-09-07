@@ -51,7 +51,7 @@ public class CharacterContorller : MonoBehaviour
     {
         CharacterLookAt();
 
-        if (_CharacterStateType == CHARACTER.MOVE)
+        if (_DirX != 0 || _DirZ != 0)
         {
             _CurrentDirX = _DirX;
             _CurrentDirZ = _DirZ;
@@ -62,6 +62,8 @@ public class CharacterContorller : MonoBehaviour
         _DirZ = Input.GetAxisRaw("Vertical");
     }
 
+
+    // 마우스를 바라보는 로직
     private void CharacterLookAt()
     {
 
@@ -102,6 +104,7 @@ public class CharacterContorller : MonoBehaviour
 
             case CHARACTER.SKILL:
                 CharacterMove();
+                PlayerSkillMove();
                 ExecuteSkill();
                 SkillStateChange();
                 break;
@@ -142,14 +145,12 @@ public class CharacterContorller : MonoBehaviour
         CharacterMove();
         IncreaseTime();
     }
-
     // 대기 상태일때 매 프레임마다 적용
     private void ExecuteIdle()
     {
         CharacterMove();
         DecreaseTime();
     }
-
     //스피드 증가
     private void IncreaseTime()
     {
@@ -168,7 +169,6 @@ public class CharacterContorller : MonoBehaviour
 
 
     }
-
     //스피드 감소
     private void DecreaseTime()
     {
@@ -186,14 +186,21 @@ public class CharacterContorller : MonoBehaviour
         transform.position += CurrentDir * _MoveSpeed * Time.deltaTime;
     }
 
+    private void PlayerSkillMove()
+    {
+        if (_DirX == 0 && _DirZ == 0)
+        {
+            DecreaseTime();
+            return;
+        }
 
+        IncreaseTime();
+    }
 
 
     //대기일때 상태 변이
     private void IdleStateChange()
     {
-   
-
         if (_DirX != 0 || _DirZ != 0)
         {
             _CharacterStateType = CHARACTER.MOVE;
@@ -226,7 +233,6 @@ public class CharacterContorller : MonoBehaviour
         }
         TrySkill();
     } 
-
 
     //임시로 경직
     private void Getinput()
