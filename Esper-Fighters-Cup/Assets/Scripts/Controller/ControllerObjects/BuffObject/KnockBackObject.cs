@@ -51,4 +51,9 @@ public class KnockBackObject : BuffObject
         _name = "";
         _buffType = Type.KnockBack;
     }
+
+    protected override void OnHit(ObjectBase @from, ObjectBase to)
+    {
+        throw new System.NotImplementedException();
+    }
 }

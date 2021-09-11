@@ -24,4 +24,9 @@ public class StunObject : BuffObject
         _name = "Stun";
         _buffType = Type.Stun;
     }
+
+    protected override void OnHit(ObjectBase @from, ObjectBase to)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerObject : ObjectBase
+public abstract class ControllerObject : ObjectBase
 {
     protected ControllerBase _controller = null;
 

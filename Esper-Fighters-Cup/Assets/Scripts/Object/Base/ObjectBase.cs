@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class ObjectBase : MonoBehaviourPunCallbacks
+public abstract class ObjectBase : MonoBehaviourPunCallbacks
 {
-    
-    protected virtual void OnHit(ObjectBase from, ObjectBase to)
-    {
-        
-    }
+
+    protected abstract void OnHit(ObjectBase from, ObjectBase to);
 
     public void SetHit(ObjectBase to)
     {
         to.OnHit(this, to);
     }
+    
+    
 }

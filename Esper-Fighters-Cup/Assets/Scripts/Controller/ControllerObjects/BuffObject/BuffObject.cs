@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffObject : ControllerObject
+public abstract class BuffObject : ControllerObject
 {
     public enum Type
     {

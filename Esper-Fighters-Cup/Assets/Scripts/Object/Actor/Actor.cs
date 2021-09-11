@@ -12,4 +12,8 @@ public class Actor : ObjectBase
     {
         _controllerManager?.SetActor(this);
     }
+
+    protected override void OnHit(ObjectBase @from, ObjectBase to)
+    {
+    }
 }

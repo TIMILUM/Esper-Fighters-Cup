@@ -7,6 +7,7 @@ public class BuffController : ControllerBase
 {
     private APlayer _player = null;
 
+    // Todo: 반드시 Static Util Class 형식으로 빼놓도록 수정해야한다!
     private readonly Dictionary<BuffObject.Type, BuffObject> _buffPrefabLists =
         new Dictionary<BuffObject.Type, BuffObject>();
 
