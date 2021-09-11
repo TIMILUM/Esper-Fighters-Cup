@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -6,16 +7,22 @@ using UnityEngine;
 
 public class ControllerBase : MonoBehaviourPunCallbacks
 {
-    [SerializeField, ReadOnly]
     protected readonly List<ControllerObject> _controllerObjects = new List<ControllerObject>();
 
     protected ControllerManager _controllerManager = null;
-    private ControllerManager.ControllerType _type = ControllerManager.ControllerType.None;
+    public ControllerManager ControllerManager => _controllerManager;
+
+    [SerializeField]
+    private ControllerManager.Type _type = ControllerManager.Type.None;
 
     // Start is called before the first frame update
-    private void Start()
+    protected void Start()
     {
         
+    }
+
+    protected void Update()
+    {
     }
 
     public void Register(ControllerManager controllerManager)
@@ -24,7 +31,7 @@ public class ControllerBase : MonoBehaviourPunCallbacks
         _controllerManager.RegisterController(_type, this);
     }
 
-    protected virtual void SetControllerType(ControllerManager.ControllerType type)
+    protected virtual void SetControllerType(ControllerManager.Type type)
     {
         _type = type;
     }

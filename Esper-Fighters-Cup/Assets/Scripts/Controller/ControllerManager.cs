@@ -6,7 +6,7 @@ using UnityEngine;
 public class ControllerManager : MonoBehaviour
 {
     
-    public enum ControllerType
+    public enum Type
     {
         None,
         MovementController,
@@ -14,11 +14,11 @@ public class ControllerManager : MonoBehaviour
         BuffController,
     }
 
-    private readonly Dictionary<ControllerType, ControllerBase> _controllers =
-        new Dictionary<ControllerType, ControllerBase>();
+    private readonly Dictionary<Type, ControllerBase> _controllers =
+        new Dictionary<Type, ControllerBase>();
     private Actor _actor = null;
 
-    private void Start()
+    protected void Awake()
     {
         RegisterControllers();
     }
@@ -29,7 +29,7 @@ public class ControllerManager : MonoBehaviour
         
     }
 
-    public T GetController<T>(ControllerType type) where T : ControllerBase
+    public T GetController<T>(Type type) where T : ControllerBase
     {
         if (!_controllers.ContainsKey(type)) return null;
 
@@ -38,7 +38,7 @@ public class ControllerManager : MonoBehaviour
 
     private void RegisterControllers()
     {
-        var controllers = GetComponents<ControllerBase>();
+        var controllers = GetComponentsInChildren<ControllerBase>();
 
         foreach (var controller in controllers)
         {
@@ -46,7 +46,7 @@ public class ControllerManager : MonoBehaviour
         }
     }
 
-    public void RegisterController(ControllerType type, ControllerBase controller)
+    public void RegisterController(Type type, ControllerBase controller)
     {
         if (_controllers.ContainsKey(type)) return;
         _controllers.Add(type, controller);
