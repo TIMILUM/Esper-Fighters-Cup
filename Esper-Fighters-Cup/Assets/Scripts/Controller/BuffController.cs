@@ -23,7 +23,7 @@ public class BuffController : ControllerBase
 
     private void Awake()
     {
-        var prefabs = Resources.LoadAll<BuffObject>("Prefabs/SkillPrefabs");
+        var prefabs = Resources.LoadAll<BuffObject>("Prefabs/BuffPrefabs");
         foreach (var buffObject in prefabs)
         {
             _buffPrefabLists.Add(buffObject.BuffType, buffObject);
@@ -31,14 +31,14 @@ public class BuffController : ControllerBase
     }
 
     // Start is called before the first frame update
-    private new void Start()
+    protected override void Start()
     {
         base.Start();
         _player = _controllerManager.GetActor() as APlayer;
     }
 
     // Update is called once per frame
-    private new void Update()
+    protected override void Update()
     {
         base.Update();
     }
@@ -68,6 +68,23 @@ public class BuffController : ControllerBase
         buffObject.Register(this);
         
         _buffObjects[buffType].Add(buffObject);
+        return buffObject;
+    }
+    
+    public BuffObject GenerateBuff(BuffObject.BuffStruct buffStruct)
+    {
+        var buffType = buffStruct.Type;
+        if (!_buffPrefabLists.ContainsKey(buffType)) return null;
+        if (!_buffObjects.ContainsKey(buffType)) _buffObjects.Add(buffType, new List<BuffObject>());
+        var buffObjectList = _buffObjects[buffType];
+        if (!buffStruct.AllowDuplicates && buffObjectList.Count > 0) return null;
+
+        var prefab = _buffPrefabLists[buffType];
+        var buffObject = Instantiate(prefab, transform);
+        buffObject.Register(this);
+        buffObject.SetBuffStruct(buffStruct);
+        
+        buffObjectList.Add(buffObject);
         return buffObject;
     }
 }

@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class ControllerBase : MonoBehaviourPunCallbacks
 {
-    protected readonly List<ControllerObject> _controllerObjects = new List<ControllerObject>();
-
     protected ControllerManager _controllerManager = null;
     public ControllerManager ControllerManager => _controllerManager;
 
@@ -16,12 +14,12 @@ public class ControllerBase : MonoBehaviourPunCallbacks
     private ControllerManager.Type _type = ControllerManager.Type.None;
 
     // Start is called before the first frame update
-    protected void Start()
+    protected virtual void Start()
     {
         
     }
 
-    protected void Update()
+    protected virtual void Update()
     {
     }
 

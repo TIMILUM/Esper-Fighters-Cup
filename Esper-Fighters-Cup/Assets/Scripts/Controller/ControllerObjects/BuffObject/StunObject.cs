@@ -22,10 +22,10 @@ public class StunObject : BuffObject
     private void Reset()
     {
         _name = "Stun";
-        _buffType = Type.Stun;
+        _buffStruct.Type = Type.Stun;
     }
 
-    protected override void OnHit(ObjectBase @from, ObjectBase to)
+    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffStruct[] appendBuff)
     {
         throw new NotImplementedException();
     }

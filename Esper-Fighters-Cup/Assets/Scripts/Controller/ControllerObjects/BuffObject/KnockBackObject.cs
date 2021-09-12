@@ -33,7 +33,7 @@ public class KnockBackObject : BuffObject
         _normalizedDirection = _normalizedDirection.normalized;
         _actor = _controller.ControllerManager.GetActor();
         _startPosition = _actor.transform.localPosition;
-        _endPosition = _startPosition + (_normalizedDirection * _speed * _duration);
+        _endPosition = _startPosition + (_normalizedDirection * _speed * _buffStruct.Duration);
     }
 
     // Update is called once per frame
@@ -42,18 +42,24 @@ public class KnockBackObject : BuffObject
         base.Update();
         if (photonView != null && !photonView.IsMine) return;
         
-        var t = _lerpCurve.Evaluate((float)((_elapsedMilliseconds / 1000) / _duration));
+        var t = _lerpCurve.Evaluate((float)((_elapsedMilliseconds / 1000) / _buffStruct.Duration));
         _actor.transform.position = Vector3.Lerp(_startPosition, _endPosition, t);
+    }
+
+    public override void SetBuffStruct(BuffStruct buffStruct)
+    {
+        base.SetBuffStruct(buffStruct);
+        _normalizedDirection = buffStruct.ValueVector3[0];
+        _speed = buffStruct.ValueFloat[0];
     }
 
     private void Reset()
     {
         _name = "";
-        _buffType = Type.KnockBack;
+        _buffStruct.Type = Type.KnockBack;
     }
 
-    protected override void OnHit(ObjectBase @from, ObjectBase to)
+    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffStruct[] appendBuff)
     {
-        throw new System.NotImplementedException();
     }
 }

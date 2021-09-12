@@ -11,20 +11,39 @@ public abstract class SkillObject : ControllerObject
         FrontDelay = 1,
         Use = 2,
         EndDelay = 3,
-        Release = 4,
+        Canceled = 4,
+        Release = 5,
     }
 
     [SerializeField]
     private SkillObject.State _currentState = State.ReadyToUse;
-
     protected SkillObject.State CurrentState
     {
         get => _currentState;
         set => SetState(_currentState);
     }
 
+    private bool _allowDuplicates = false;
+    public bool AllowDuplicates
+    {
+        get => _allowDuplicates;
+        protected set => _allowDuplicates = value;
+    }
+
+    private string _name;
+    public string Name
+    {
+        get => _name;
+        set => _name = value;
+    }
+
     protected BuffController _buffController = null;
     protected Coroutine _currentCoroutine = null;
+
+    protected virtual void Start()
+    {
+        SetState(State.ReadyToUse);
+    }
 
     public override void Register(ControllerBase controller)
     {
@@ -37,6 +56,7 @@ public abstract class SkillObject : ControllerObject
     protected abstract IEnumerator OnFrontDelay();
     protected abstract IEnumerator OnUse();
     protected abstract IEnumerator OnEndDelay();
+    protected abstract IEnumerator OnCanceled();
     protected abstract IEnumerator OnRelease();
 
     public void SetNextState()
@@ -73,6 +93,8 @@ public abstract class SkillObject : ControllerObject
                 return OnUse();
             case State.EndDelay:
                 return OnEndDelay();
+            case State.Canceled:
+                return OnCanceled();
             case State.Release:
                 return OnRelease();
         }
