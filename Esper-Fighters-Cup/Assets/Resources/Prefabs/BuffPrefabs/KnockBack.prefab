@@ -43,10 +43,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cc855ce2e156b348b436cb8dbd44adf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _buffOnCollision: []
   _name: 
-  _buffType: 2
-  _duration: 0.5
-  _knockBackDirection: {x: 0, y: 0, z: 0}
+  _buffStruct:
+    Type: 2
+    Duration: 0
+    Value: 0
+  _normalizedDirection: {x: 0, y: 0, z: 0}
+  _speed: 1
   _lerpCurve:
     serializedVersion: 2
     m_Curve:

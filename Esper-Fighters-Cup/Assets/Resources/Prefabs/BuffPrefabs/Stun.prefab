@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b173205c427bdf4da699559aed6f698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _buffOnCollision: []
   _name: Stun
-  _buffType: 1
-  _duration: 1
+  _buffStruct:
+    Type: 1
+    Duration: 0
+    Value: 0
 --- !u!1 &5475818330278905354
 GameObject:
   m_ObjectHideFlags: 0
