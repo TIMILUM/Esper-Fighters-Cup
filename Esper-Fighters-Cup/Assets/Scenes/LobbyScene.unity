@@ -228,8 +228,6 @@ GameObject:
   - component: {fileID: 748294419}
   - component: {fileID: 748294418}
   - component: {fileID: 748294417}
-  - component: {fileID: 748294421}
-  - component: {fileID: 748294420}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -301,13 +299,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 748294420}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 972508398}
+        m_TargetAssemblyTypeName: RoomConnector, Assembly-CSharp
+        m_MethodName: ConnectToServer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -351,38 +349,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 748294415}
   m_CullTransparentMesh: 1
---- !u!114 &748294420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 748294415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2fe5546f775c47d2820aa5e8a715f53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data:
-    _json: '{"nest":{"source":"Embed","macro":null,"embed":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"Start
-      Button Logic","summary":"\uc2dc\uc791\ubc84\ud2bc \ud074\ub9ad \uc2dc \ub85c\uc9c1","pan":{"x":180.0,"y":60.0},"zoom":1.0,"elements":[{"coroutine":false,"defaultValues":{"target":null},"position":{"x":-230.0,"y":-105.0},"guid":"a3fb5235-e844-45f6-adf0-1647ff3976eb","$version":"A","$type":"Unity.VisualScripting.OnButtonClick","$id":"10"},{"chainable":false,"member":{"name":"LoadScene","parameterTypes":["System.String"],"targetType":"UnityEngine.SceneManagement.SceneManager","targetTypeName":"UnityEngine.SceneManagement.SceneManager","$version":"A"},"defaultValues":{"%sceneName":{"$content":"RoomChoiceScene","$type":"System.String"}},"position":{"x":343.0,"y":-104.0},"guid":"7b3cc27a-e37e-4a00-ba94-1b4bd28e48a1","$version":"A","$type":"Unity.VisualScripting.InvokeMember","$id":"12"},{"exceptionType":"System.Exception","defaultValues":{},"position":{"x":-105.0,"y":79.0},"guid":"fc15b7af-fb8a-47ec-a7af-fee6c7f65019","$version":"A","$type":"Unity.VisualScripting.TryCatch"},{"defaultValues":{},"position":{"x":193.0,"y":-104.0},"guid":"a639e112-4fdf-47b5-ba39-505359a32592","$version":"A","$type":"Unity.VisualScripting.If","$id":"17"},{"chainable":false,"member":{"name":"TryConnect","parameterTypes":[],"targetType":"NetworkManager","targetTypeName":"NetworkManager","$version":"A"},"defaultValues":{"target":{"$content":0,"$type":"UnityEngine.Object"}},"position":{"x":-49.0,"y":-105.0},"guid":"5d0f7048-7133-448a-96e2-3c5b2f1aa694","$version":"A","$type":"Unity.VisualScripting.InvokeMember","$id":"19"},{"sourceUnit":{"$ref":"17"},"sourceKey":"ifTrue","destinationUnit":{"$ref":"12"},"destinationKey":"enter","guid":"70084828-bc26-4746-b360-8e9fc46a19a2","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"10"},"sourceKey":"trigger","destinationUnit":{"$ref":"19"},"destinationKey":"enter","guid":"d299ee02-f469-4777-926d-c553e641fbdf","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"19"},"sourceKey":"exit","destinationUnit":{"$ref":"17"},"destinationKey":"enter","guid":"2e76a94a-1d75-46a8-883a-f05e395d47c2","$type":"Unity.VisualScripting.ControlConnection"},{"sourceUnit":{"$ref":"19"},"sourceKey":"result","destinationUnit":{"$ref":"17"},"destinationKey":"condition","guid":"cd043508-0cc8-4641-a917-eff4de0b3c58","$type":"Unity.VisualScripting.ValueConnection"}],"$version":"A"}}}'
-    _objectReferences:
-    - {fileID: 972508398}
---- !u!114 &748294421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 748294415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e741851cba3ad425c91ecf922cc6b379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data:
-    _json: '{"declarations":{"collection":{"$content":[],"$version":"A"},"$version":"A"}}'
-    _objectReferences: []
 --- !u!1 &762418943
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +542,7 @@ GameObject:
   - component: {fileID: 972508399}
   - component: {fileID: 972508398}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: Room Connector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -602,7 +568,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 972508397}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 400.14334, y: 233.52948, z: -23.229568}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -949,8 +915,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000038147, y: 147}
-  m_SizeDelta: {x: 214.1949, y: 62.0243}
+  m_AnchoredPosition: {x: 0, y: 147.9}
+  m_SizeDelta: {x: 326.7091, y: 62.0243}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2033888333
 MonoBehaviour:
@@ -985,7 +951,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB354\uBBF8 \uD0C0\uC774\uD2C0"
+  m_Text: Esper Fighters Cup
 --- !u!222 &2033888334
 CanvasRenderer:
   m_ObjectHideFlags: 0
