@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-//°£´ÜÇÑ ¿ÀºêÁ§Æ®
+//ê°„ë‹¨í•œ ì˜¤ë¸Œì íŠ¸
 
 [RequireComponent(typeof(Rigidbody))]
 public class SimpleObject : MonoBehaviour
