@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -6,8 +6,22 @@ using UnityEngine;
 
 public class MovementController : ControllerBase
 {
+
+    [SerializeField , Range(0.001f,  30.0f)] private float _moveSpeed;
+
+    [SerializeField , Range(0.001f,  30.0f), Header("속도 0까지 시간(단위는 초)")] private float _decreaseSpeedTime;
+    [SerializeField , Range(0.001f,  30.0f) , Header("최고 속도 까지 시간(단위는 초)")] private float _increaseSpeedTime;
+
+    private float _currentIncreaseSpeed; 
+    private float _currentDecreaseSpeed;
+    private Vector3 _currentMoveDir;
+    private Vector3 _beforeMoveDirection;
+
     private APlayer _player = null;
     private BuffController _buffController = null;
+
+
+
     private void Reset()
     {
         // 컨트롤러 타입 지정을 위해 Reset 함수로 이렇게 선언을 해줘야 합니다.
@@ -58,31 +72,42 @@ public class MovementController : ControllerBase
         {
             return;
         }
-        
-        // 움직이는지 알아보기 위해 인터넷에서 그냥 움직이는 코드 그대로 복붙한 임시 코드입니다. ====
-        var playerPosition = _player.transform.position;
-        var moveSpeed = 8;
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            playerPosition += Vector3.forward * moveSpeed * Time.deltaTime;
-            
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            playerPosition += Vector3.left * moveSpeed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            playerPosition -= Vector3.forward * moveSpeed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            playerPosition -= Vector3.left * moveSpeed * Time.deltaTime;
-        }
+        var playerPosition = _player.transform.position;
         
+
+
+        float dirx = Input.GetAxisRaw("Horizontal");
+        float dirz = Input.GetAxisRaw("Vertical");
+
+        var dir = new Vector3(dirx, 0.0f, dirz).normalized;
+
+
+        float currentSpeedTime = 0.0f;
+        var tempDirection = Vector3.zero;
+        if (dir == Vector3.zero)
+        {
+            _currentIncreaseSpeed = 0.0f;
+            _currentDecreaseSpeed += Time.deltaTime / _decreaseSpeedTime;
+            _currentDecreaseSpeed = Mathf.Clamp(_currentDecreaseSpeed, 0.0f, 1.0f);
+            tempDirection = _beforeMoveDirection;
+            currentSpeedTime = _currentDecreaseSpeed;
+
+        }
+        else
+        {
+            _currentDecreaseSpeed = 0.0f;
+            _currentIncreaseSpeed += Time.deltaTime / _increaseSpeedTime;
+            _currentIncreaseSpeed = Mathf.Clamp(_currentIncreaseSpeed, 0.0f, 1.0f);
+            _beforeMoveDirection = _currentMoveDir;
+            currentSpeedTime = _currentIncreaseSpeed;
+        }
+
+        _currentMoveDir = Vector3.Lerp(tempDirection, dir, currentSpeedTime);
+
+        playerPosition += _currentMoveDir * Time.deltaTime * _moveSpeed;
+
         _player.transform.position = playerPosition;
-        
-        // ====================================================================================
     }
+
 }
