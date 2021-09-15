@@ -84,7 +84,6 @@ public class RoomConnector : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("서버에 연결됨");
-        SceneManager.LoadScene("IngameScene");
         PhotonNetwork.JoinRandomOrCreateRoom();
     }
 
@@ -114,7 +113,7 @@ public class RoomConnector : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        base.OnJoinedRoom();
+        SceneManager.LoadScene("IngameScene");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
