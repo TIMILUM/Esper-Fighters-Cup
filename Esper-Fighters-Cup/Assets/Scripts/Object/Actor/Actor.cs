@@ -29,4 +29,19 @@ public class Actor : ObjectBase
             _buffController.GenerateBuff(buffStruct);
         }
     }
+
+    private void OnPlayerHitEnter(GameObject other)
+    {
+        _controllerManager.OnPlayerHitEnter(other);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        OnPlayerHitEnter(other.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        OnPlayerHitEnter(other.gameObject);
+    }
 }

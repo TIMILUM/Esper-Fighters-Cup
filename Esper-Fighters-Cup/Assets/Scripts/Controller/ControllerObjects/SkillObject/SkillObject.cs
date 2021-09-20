@@ -5,6 +5,9 @@ using UnityEngine;
 
 public abstract class SkillObject : ControllerObject
 {
+    /**
+     * 스킬 FSM의 상태변화가 정리된 enum입니다.
+     */
     public enum State
     {
         ReadyToUse = 0,
@@ -17,6 +20,9 @@ public abstract class SkillObject : ControllerObject
 
     [SerializeField]
     private SkillObject.State _currentState = State.ReadyToUse;
+    /**
+     * 현재 해당 스킬의 FSM입니다.
+     */
     protected SkillObject.State CurrentState
     {
         get => _currentState;
@@ -24,6 +30,9 @@ public abstract class SkillObject : ControllerObject
     }
 
     private bool _allowDuplicates = false;
+    /**
+     * 해당 스킬을 중복으로 호출(생성)이 가능한지에 대한 여부입니다.
+     */
     public bool AllowDuplicates
     {
         get => _allowDuplicates;
@@ -31,13 +40,22 @@ public abstract class SkillObject : ControllerObject
     }
 
     private string _name;
+    /**
+     * UI에 나타날 스킬 이름입니다.
+     */
     public string Name
     {
         get => _name;
         set => _name = value;
     }
 
+    /**
+     * 플레이어의 버프 컨트롤러입니다.
+     */
     protected BuffController _buffController = null;
+    /**
+     * 이 스킬에서 현재 실행 중인 코루틴입니다. (코루틴의 수정은 지정된 함수로 진행하는걸 권장합니다.)
+     */
     protected Coroutine _currentCoroutine = null;
 
     protected virtual void Start()
@@ -52,13 +70,34 @@ public abstract class SkillObject : ControllerObject
             controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
+    /**
+     * 스킬 사용 전 캐스팅 단계입니다.
+     */
     protected abstract IEnumerator OnReadyToUse();
+    /**
+     * 캐스팅 후 스킬 사용하기까지 사이의 선 딜레이 단계입니다.
+     */
     protected abstract IEnumerator OnFrontDelay();
+    /**
+     * 스킬이 본격적으로 실행되는 단계입니다.
+     */
     protected abstract IEnumerator OnUse();
+    /**
+     * 스킬 실행이 끝나고 스킬을 종료하기까지 사이의 후 딜레이 단계입니다.
+     */
     protected abstract IEnumerator OnEndDelay();
+    /**
+     * 스킬 사용이 취소되는 단계입니다.
+     */
     protected abstract IEnumerator OnCanceled();
+    /**
+     * 스킬이 끝나고 릴리즈되는 단계입니다.
+     */
     protected abstract IEnumerator OnRelease();
 
+    /**
+     * 다음 단계의 스킬 FSM으로 이동합니다.
+     */
     public void SetNextState()
     {
         if (_currentState >= State.Release) return;
@@ -66,6 +105,10 @@ public abstract class SkillObject : ControllerObject
         SetState(_currentState);
     }
 
+    /**
+     * 특정 단계의 스킬 FSM으로 이동합니다.
+     * 인스펙터 및 애니메이터에 사용하는 용도로 해당 함수를 삭제하지 마세요!
+     */
     public void SetState(SkillObject.State state)
     {
         if (state < 0 || state > State.Release) return;

@@ -5,7 +5,7 @@ using Photon.Pun;
 using Unity.Collections;
 using UnityEngine;
 
-public class ControllerBase : MonoBehaviourPunCallbacks
+public abstract class ControllerBase : MonoBehaviourPunCallbacks
 {
     protected ControllerManager _controllerManager = null;
     public ControllerManager ControllerManager => _controllerManager;
@@ -33,4 +33,9 @@ public class ControllerBase : MonoBehaviourPunCallbacks
     {
         _type = type;
     }
+
+    /**
+     * 플레이어가 아무 오브젝트와 충돌이 처음 일어날 때만 무조건 실행되는 함수입니다.
+     */
+    public abstract void OnPlayerHitEnter(GameObject other);
 }

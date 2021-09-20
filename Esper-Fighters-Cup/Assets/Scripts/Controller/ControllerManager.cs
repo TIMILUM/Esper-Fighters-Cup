@@ -61,4 +61,13 @@ public class ControllerManager : MonoBehaviour
     {
         return _actor;
     }
+
+    public void OnPlayerHitEnter(GameObject other)
+    {
+        foreach (var controllerPair in _controllers)
+        {
+            var controller = controllerPair.Value;
+            controller.OnPlayerHitEnter(other);
+        }
+    }
 }

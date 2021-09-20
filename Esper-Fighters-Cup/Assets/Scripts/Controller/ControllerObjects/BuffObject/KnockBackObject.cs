@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class KnockBackObject : BuffObject
     private Vector3 _endPosition;
 
     private Actor _actor = null;
+    private Rigidbody _rigidbody = null;
     
     // Start is called before the first frame update
     private new void Start()
@@ -32,18 +34,19 @@ public class KnockBackObject : BuffObject
         base.Start();
         _normalizedDirection = _normalizedDirection.normalized;
         _actor = _controller.ControllerManager.GetActor();
-        _startPosition = _actor.transform.localPosition;
+        _rigidbody = _actor.GetComponent<Rigidbody>();
+        _startPosition = _rigidbody.position;
         _endPosition = _startPosition + (_normalizedDirection * _speed * _buffStruct.Duration);
     }
 
     // Update is called once per frame
-    private new void Update()
+    private void FixedUpdate()
     {
-        base.Update();
+        // base.Update();
         if (photonView != null && !photonView.IsMine) return;
         
         var t = _lerpCurve.Evaluate((float)((_elapsedMilliseconds / 1000) / _buffStruct.Duration));
-        _actor.transform.position = Vector3.Lerp(_startPosition, _endPosition, t);
+        _rigidbody.position = Vector3.Lerp(_startPosition, _endPosition, t);
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
@@ -61,5 +64,11 @@ public class KnockBackObject : BuffObject
 
     protected override void OnHit(ObjectBase @from, ObjectBase to, BuffStruct[] appendBuff)
     {
+        throw new NotImplementedException();
+    }
+
+    public override void OnPlayerHitEnter(GameObject other)
+    {
+        // TODO: 여기에 넉백 후 무언가와 충돌할 때 스턴 버프 생성하도록 설정 필요
     }
 }
