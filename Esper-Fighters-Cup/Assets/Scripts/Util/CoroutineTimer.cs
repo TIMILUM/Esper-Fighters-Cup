@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
 /// 코루틴으로 동작하는 타이머입니다.
 /// </summary>
+[Singleton()]
 public class CoroutineTimer : MonoBehaviour
 {
     private static CoroutineTimer Instance
@@ -13,14 +15,26 @@ public class CoroutineTimer : MonoBehaviour
         {
             if (s_instance == null)
             {
-                var timerObject = Resources.Load<GameObject>("Prefabs/UtilPrefabs/CoroutineTimer");
-                s_instance = Instantiate(timerObject).GetComponent<CoroutineTimer>();
+                Init();
             }
 
             return s_instance;
         }
     }
     private static CoroutineTimer s_instance;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void Init()
+    {
+        if (s_instance)
+        {
+            return;
+        }
+
+        var timerObject = new GameObject { name = "Coroutine Timer" };
+        s_instance = timerObject.AddComponent<CoroutineTimer>();
+        DontDestroyOnLoad(timerObject);
+    }
 
     /// <summary>
     /// 단 한번만 동작하는 타이머
@@ -70,10 +84,5 @@ public class CoroutineTimer : MonoBehaviour
             timerAction();
             yield return wait;
         }
-    }
-
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
     }
 }

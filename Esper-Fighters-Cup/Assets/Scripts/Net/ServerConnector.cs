@@ -7,11 +7,13 @@ using UnityEngine.UI;
 public class ServerConnector : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Text _statusText;
+    [SerializeField] private Button _connectButton;
 
-    // private bool _connected = false;
+    private bool _connected = false;
 
     private void Awake()
     {
+        Debug.Assert(_connectButton);
         Debug.Assert(_statusText);
         _statusText.text = string.Empty;
 
@@ -24,10 +26,13 @@ public class ServerConnector : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnConnectedToMaster()
     {
-        // 만약 연결이 되어 있는 상태에서 이 스크립트가 있는 씬으로 이동하면 바로 해당 콜백 메소드가 실행되어 매칭 씬으로 이동.
-        // 수정 필요
+        if (!_connected)
+        {
+            return;
+        }
+
         _statusText.text = "서버와 연결되었습니다!";
-        CoroutineTimer.SetTimerOnce(() => SceneManager.LoadScene("MatchScene"), 0.5f);
+        CoroutineTimer.SetTimerOnce(() => StartMatch(), 0.5f);
     }
 
     /// <summary>
@@ -36,7 +41,8 @@ public class ServerConnector : MonoBehaviourPunCallbacks
     /// <param name="cause"></param>
     public override void OnDisconnected(DisconnectCause cause)
     {
-        base.OnDisconnected(cause);
+        _statusText.text = "연결에 실패했습니다.";
+        _connectButton.interactable = true;
     }
 
     /// <summary>
@@ -44,7 +50,20 @@ public class ServerConnector : MonoBehaviourPunCallbacks
     /// </summary>
     public void Connect()
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            StartMatch();
+            return;
+        }
+
         _statusText.text = "서버와 연결을 시도합니다...";
         PhotonNetwork.ConnectUsingSettings();
+        _connected = true;
+        _connectButton.interactable = false;
+    }
+
+    private void StartMatch()
+    {
+        SceneManager.LoadScene("MatchScene");
     }
 }
