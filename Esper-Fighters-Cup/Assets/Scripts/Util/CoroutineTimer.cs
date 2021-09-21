@@ -1,12 +1,10 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
 /// 코루틴으로 동작하는 타이머입니다.
 /// </summary>
-[Singleton()]
 public class CoroutineTimer : MonoBehaviour
 {
     private static CoroutineTimer Instance
