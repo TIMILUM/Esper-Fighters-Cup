@@ -16,9 +16,6 @@ public class ServerConnector : MonoBehaviourPunCallbacks
         Debug.Assert(_connectButton);
         Debug.Assert(_statusText);
         _statusText.text = string.Empty;
-
-        // 방에 입장한 플레이어와 씬 동기화
-        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     /// <summary>

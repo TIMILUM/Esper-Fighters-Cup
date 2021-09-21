@@ -21,16 +21,11 @@ public class GameMatch : MonoBehaviourPunCallbacks, IOnEventCallback
             return;
         }
 
-        // 매칭 씬 로드했는데 이미 룸에 있는 경우 해당 룸 빠져나가기
-        if (PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.LeaveRoom();
-        }
+        Debug.Log(PhotonNetwork.CountOfPlayers);
 
         var roomOptions = new RoomOptions { MaxPlayers = MaxPlayerCount, PublishUserId = true };
         var result = PhotonNetwork.JoinRandomOrCreateRoom(roomOptions: roomOptions);
-        Debug.Log(result);
-        _matchStatus.text = "매칭 중...";
+        _matchStatus.text = result ? "매칭 중..." : "매칭에 실패했습니다.";
     }
 
     public override void OnConnectedToMaster()
