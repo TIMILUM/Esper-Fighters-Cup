@@ -1,1 +1,3 @@
-# E.F.C.D
+# E.F.C.
+
+Esper Fighters Cup
