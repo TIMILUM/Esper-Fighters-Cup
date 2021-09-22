@@ -18,9 +18,6 @@ public class KnockBackObject : BuffObject
     {
         set => _speed = value;
     }
-    
-    [SerializeField]
-    private AnimationCurve _lerpCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
     private Vector3 _startPosition;
     private Vector3 _endPosition;
@@ -40,13 +37,12 @@ public class KnockBackObject : BuffObject
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private new void Update()
     {
-        // base.Update();
+        base.Update();
         if (photonView != null && !photonView.IsMine) return;
         
-        var t = _lerpCurve.Evaluate((float)((_elapsedMilliseconds / 1000) / _buffStruct.Duration));
-        _rigidbody.position = Vector3.Lerp(_startPosition, _endPosition, t);
+        _rigidbody.position += (_normalizedDirection * _speed * Time.deltaTime);
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
@@ -69,6 +65,18 @@ public class KnockBackObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        // TODO: 여기에 넉백 후 무언가와 충돌할 때 스턴 버프 생성하도록 설정 필요
+        var actor = other.GetComponent<Actor>();
+        if (actor == null && !other.CompareTag("Wall")) return;
+
+        var myController =
+            _actor.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        var otherController =
+            actor?.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+
+        // TODO: 데미지도 추가 예정
+        myController?.GenerateBuff(Type.Stun);
+        otherController?.GenerateBuff(Type.Stun);
+        
+        ControllerCast<BuffController>().ReleaseBuff(this);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BuffController : ControllerBase
@@ -45,14 +46,14 @@ public class BuffController : ControllerBase
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        foreach (var buffPair in _buffObjects)
+        foreach (var buffPair in _buffObjects.ToList())
         {
             var buffList = buffPair.Value;
             for (var i = buffList.Count - 1; i >= 0; i--)
             {
                 buffList[i].OnPlayerHitEnter(other);
             }
-        }
+        }             
     }
 
     public List<BuffObject> GetBuff(BuffObject.Type buffType)
@@ -68,6 +69,17 @@ public class BuffController : ControllerBase
         if (!_buffObjects.ContainsKey(type)) return;
         _buffObjects[type].Remove(buffObject);
         Destroy(buffObject.gameObject);
+    }
+
+    public void ReleaseBuff(BuffObject.Type buffType)
+    {
+        if (!_buffObjects.ContainsKey(buffType)) return;
+        var buffList = _buffObjects[buffType];
+        foreach (var buffObject in buffList)
+        {
+            buffList.Remove(buffObject);
+            Destroy(buffObject.gameObject);
+        }
     }
 
     public BuffObject GenerateBuff(BuffObject.Type buffType)
@@ -89,7 +101,7 @@ public class BuffController : ControllerBase
         if (!_buffPrefabLists.ContainsKey(buffType)) return null;
         if (!_buffObjects.ContainsKey(buffType)) _buffObjects.Add(buffType, new List<BuffObject>());
         var buffObjectList = _buffObjects[buffType];
-        if (!buffStruct.AllowDuplicates && buffObjectList.Count > 0) return null;
+        if (!buffStruct.AllowDuplicates && buffObjectList.Count > 0) ReleaseBuff(buffType);
 
         var prefab = _buffPrefabLists[buffType];
         var buffObject = Instantiate(prefab, transform);
