@@ -1502,9 +1502,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 1
+  _isMousePickLooking: 0
   _moveSpeed: 10
   _decreaseSpeedTime: 1
   _increaseSpeedTime: 1
+  _smoothLookat: 0.1
 --- !u!1 &1531701716
 GameObject:
   m_ObjectHideFlags: 0
