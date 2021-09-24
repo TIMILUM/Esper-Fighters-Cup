@@ -58,8 +58,10 @@ public class BuffController : ControllerBase
 
     public List<BuffObject> GetBuff(BuffObject.Type buffType)
     {
-        if (!_buffObjects.ContainsKey(buffType)) return null;
-        var result = _buffObjects[buffType];
+        if (!_buffObjects.TryGetValue(buffType, out var result))
+        {
+            return null;
+        }
         return result.Count == 0 ? null : result;
     }
 
@@ -73,8 +75,7 @@ public class BuffController : ControllerBase
 
     public void ReleaseBuff(BuffObject.Type buffType)
     {
-        if (!_buffObjects.ContainsKey(buffType)) return;
-        var buffList = _buffObjects[buffType];
+        if (!_buffObjects.TryGetValue(buffType, out var buffList)) return;
         foreach (var buffObject in buffList)
         {
             buffList.Remove(buffObject);
