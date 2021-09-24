@@ -230,7 +230,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dd1f0b0641389a04db05300458e973a8, type: 2}
+  - {fileID: 2100000, guid: 374585263f0386348afb1868656d37a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -300,9 +300,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buffOnCollision:
   - Type: 2
-    Duration: 0.5
+    Duration: 0.3
     ValueFloat:
-    - 3
+    - 5
     ValueVector3:
     - {x: 0, y: 0, z: 0}
     AllowDuplicates: 0

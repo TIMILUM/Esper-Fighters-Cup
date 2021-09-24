@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,14 +18,12 @@ public class KnockBackObject : BuffObject
     {
         set => _speed = value;
     }
-    
-    [SerializeField]
-    private AnimationCurve _lerpCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
     private Vector3 _startPosition;
     private Vector3 _endPosition;
 
     private Actor _actor = null;
+    private Rigidbody _rigidbody = null;
     
     // Start is called before the first frame update
     private new void Start()
@@ -32,7 +31,8 @@ public class KnockBackObject : BuffObject
         base.Start();
         _normalizedDirection = _normalizedDirection.normalized;
         _actor = _controller.ControllerManager.GetActor();
-        _startPosition = _actor.transform.localPosition;
+        _rigidbody = _actor.GetComponent<Rigidbody>();
+        _startPosition = _rigidbody.position;
         _endPosition = _startPosition + (_normalizedDirection * _speed * _buffStruct.Duration);
     }
 
@@ -42,8 +42,7 @@ public class KnockBackObject : BuffObject
         base.Update();
         if (photonView != null && !photonView.IsMine) return;
         
-        var t = _lerpCurve.Evaluate((float)((_elapsedMilliseconds / 1000) / _buffStruct.Duration));
-        _actor.transform.position = Vector3.Lerp(_startPosition, _endPosition, t);
+        _rigidbody.position += (_normalizedDirection * _speed * Time.deltaTime);
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
@@ -61,5 +60,23 @@ public class KnockBackObject : BuffObject
 
     protected override void OnHit(ObjectBase @from, ObjectBase to, BuffStruct[] appendBuff)
     {
+        throw new NotImplementedException();
+    }
+
+    public override void OnPlayerHitEnter(GameObject other)
+    {
+        var actor = other.GetComponent<Actor>();
+        if (actor == null && !other.CompareTag("Wall")) return;
+
+        var myController =
+            _actor.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        var otherController =
+            actor?.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+
+        // TODO: 데미지도 추가 예정
+        myController?.GenerateBuff(Type.Stun);
+        otherController?.GenerateBuff(Type.Stun);
+        
+        ControllerCast<BuffController>().ReleaseBuff(this);
     }
 }

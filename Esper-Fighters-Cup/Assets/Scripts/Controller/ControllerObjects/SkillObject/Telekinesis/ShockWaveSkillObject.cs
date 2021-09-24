@@ -198,4 +198,8 @@ public class ShockWaveSkillObject : SkillObject
     
     protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) {}
 
+    public override void OnPlayerHitEnter(GameObject other)
+    {
+        
+    }
 }

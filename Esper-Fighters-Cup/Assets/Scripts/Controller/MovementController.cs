@@ -47,6 +47,11 @@ public class MovementController : ControllerBase
         UpdateMine();
     }
 
+    public override void OnPlayerHitEnter(GameObject other)
+    {
+        
+    }
+
     private void UpdateMine()
     {
         // 이 함수의 모든 코드는 모두 임시코드입니다. 잘 돌아가는지 확인해보려고 작성했습니다!

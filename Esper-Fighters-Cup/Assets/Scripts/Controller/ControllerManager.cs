@@ -31,9 +31,12 @@ public class ControllerManager : MonoBehaviour
 
     public T GetController<T>(Type type) where T : ControllerBase
     {
-        if (!_controllers.ContainsKey(type)) return null;
+        if (!_controllers.TryGetValue(type, out var controller))
+        {
+            return null;
+        }
 
-        return (T)_controllers[type];
+        return (T)controller;
     }
 
     private void RegisterControllers()
@@ -60,5 +63,14 @@ public class ControllerManager : MonoBehaviour
     public Actor GetActor()
     {
         return _actor;
+    }
+
+    public void OnPlayerHitEnter(GameObject other)
+    {
+        foreach (var controllerPair in _controllers)
+        {
+            var controller = controllerPair.Value;
+            controller.OnPlayerHitEnter(other);
+        }
     }
 }

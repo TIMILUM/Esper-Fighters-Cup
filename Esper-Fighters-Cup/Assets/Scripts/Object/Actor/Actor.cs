@@ -8,6 +8,7 @@ public class Actor : ObjectBase
 
     [SerializeField, Tooltip("오브젝트를 직접 넣어주세요!")]
     protected ControllerManager _controllerManager = null;
+    public ControllerManager ControllerManager => _controllerManager;
 
     protected BuffController _buffController = null;
     
@@ -28,5 +29,20 @@ public class Actor : ObjectBase
         {
             _buffController.GenerateBuff(buffStruct);
         }
+    }
+
+    private void OnPlayerHitEnter(GameObject other)
+    {
+        _controllerManager.OnPlayerHitEnter(other);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        OnPlayerHitEnter(other.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        OnPlayerHitEnter(other.gameObject);
     }
 }

@@ -29,4 +29,9 @@ public class StunObject : BuffObject
     {
         throw new NotImplementedException();
     }
+
+    public override void OnPlayerHitEnter(GameObject other)
+    {
+        
+    }
 }
