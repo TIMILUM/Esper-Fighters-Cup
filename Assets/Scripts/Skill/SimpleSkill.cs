@@ -1,61 +1,56 @@
 using UnityEngine;
 
 
-//∞£¥‹«œ∞‘ ø∞µø∑¬ ±∏«ˆ
+//Í∞ÑÎã®ÌïòÍ≤å ÏóºÎèôÎ†• Íµ¨ÌòÑ
 public class SimpleSkill : SkillBase
 {
-    [SerializeField] private float _Force;
-    [SerializeField] private float _RotateSpeed;
+    [SerializeField] private float _force;
+    [SerializeField] private float _rotateSpeed;
 
-    private Transform _TargetObj;
-    private Vector3 _EndPos;
-    private float _RealTime;
+    private Transform _targetObj;
+    private Vector3 _endPos;
+    private float _realTime;
 
-
-    // ¿Ã∫•∆Æ ¿˚øÎ
+    // Ïù¥Î≤§Ìä∏ Ï†ÅÏö©
     public override void SkillExecute()
     {
         MousePicking();
         StayObject();
     }
 
-
-    // ∏∂øÏΩ∫ Ω∫≈≥¿Ã ≥°≥µ¥¬¡ˆ ∆«∫∞
+    // ÎßàÏö∞Ïä§ Ïä§ÌÇ¨Ïù¥ ÎÅùÎÇ¨ÎäîÏßÄ ÌåêÎ≥Ñ
     public override bool EndSkill()
     {
         return MouseEndSkill();
     }
 
-    //∏∂øÏΩ∫ ««≈∑
+    //ÎßàÏö∞Ïä§ ÌîºÌÇπ
     public void MousePicking()
     {
-
-        if (Vector3.Distance(transform.position, _EndPos) > _SKillRange && _TargetObj == null)
+        if (Vector3.Distance(transform.position, _endPos) > _SKillRange && _targetObj == null)
+        {
             return;
+        }
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit Hitinfo;
 
-        if (Physics.Raycast(ray, out Hitinfo))
+        if (Physics.Raycast(ray, out RaycastHit hitinfo))
         {
-            if (Hitinfo.transform.tag == "Object")
+            if (hitinfo.transform.CompareTag("Object"))
             {
-                if (_TargetObj == null)
+                if (_targetObj == null)
                 {
-                    _TargetObj = Hitinfo.transform;
-                    _TargetObj.transform.GetComponent<Rigidbody>().velocity = Vector3.zero; // »˚ ≈©±‚∏¶ 0¿∏∑Œ Ω√ƒ—¡›¥œ¥Ÿ.
-
-
+                    _targetObj = hitinfo.transform;
+                    _targetObj.transform.GetComponent<Rigidbody>().velocity = Vector3.zero; // Ìûò ÌÅ¨Í∏∞Î•º 0ÏúºÎ°ú ÏãúÏºúÏ§çÎãàÎã§.
                 }
             }
-            _EndPos = Hitinfo.point;
+            _endPos = hitinfo.point;
         }
     }
 
-    // Ω∫≈≥ ≈∞∏¶ ≥ıæ“¿ª∂ß ¿Ã∫•∆Æ ¿˚øÎ
+    // Ïä§ÌÇ¨ ÌÇ§Î•º ÎÜìÏïòÏùÑÎïå Ïù¥Î≤§Ìä∏ Ï†ÅÏö©
     public bool MouseEndSkill()
     {
-
         if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
         {
             if (Input.GetKeyUp(KeyCode.LeftControl))
@@ -63,7 +58,6 @@ public class SimpleSkill : SkillBase
                 ResetSkill();
                 return true;
             }
-
         }
         else if (_SkillKeyCode == SKILLKEYCODE.LEFTMOUSEBUTTONDOWN)
         {
@@ -87,57 +81,63 @@ public class SimpleSkill : SkillBase
 
     private void ResetSkill()
     {
-
-        //Ω∫≈≥ ≥°≥Ø¿ª∂ß ∏Æº¬
-        if (_TargetObj != null)
+        //Ïä§ÌÇ¨ ÎÅùÎÇ†ÏùÑÎïå Î¶¨ÏÖã
+        if (_targetObj != null)
         {
-            _TargetObj.GetComponent<Collider>().isTrigger = false;
-            _TargetObj.GetComponent<Rigidbody>().useGravity = true;
+            _targetObj.GetComponent<Collider>().isTrigger = false;
+            _targetObj.GetComponent<Rigidbody>().useGravity = true;
         }
         ThrowObject();
-        _TargetObj = null;
+        _targetObj = null;
         isSkillUsing = false;
     }
     private void ThrowObject()
     {
-        // ¥¯¡˙∂ß
-        if (_TargetObj == null) return;
-        if (Vector3.Distance(_TargetObj.position, _EndPos) > 1.0f)
+        // ÎçòÏßàÎïå
+        if (_targetObj == null)
         {
-            var dir = _EndPos - _TargetObj.position;
+            return;
+        }
+
+        if (Vector3.Distance(_targetObj.position, _endPos) > 1.0f)
+        {
+            var dir = _endPos - _targetObj.position;
             dir.Normalize();
-            _TargetObj.GetComponent<Rigidbody>().AddForce(dir * _Force, ForceMode.Impulse);
+            _targetObj.GetComponent<Rigidbody>().AddForce(dir * _force, ForceMode.Impulse);
         }
     }
 
 
 
 
-    // π∞∞«¿ª ¿‚∞Ì¿÷¿ª∂ß 
+    // Î¨ºÍ±¥ÏùÑ Ïû°Í≥†ÏûàÏùÑÎïå 
     private void StayObject()
     {
-        if (_TargetObj == null) return;
-
-        _TargetObj.GetComponent<Collider>().isTrigger = true;
-        _TargetObj.GetComponent<Rigidbody>().useGravity = false;
-        _RealTime += Time.deltaTime;
-
-        // π∞√º µÈæÓ ø√∑»¿∏∂ß »∏¿¸ π◊ øÚ¡˜¿”
-
-        _TargetObj.position = new Vector3(_TargetObj.position.x,
-            Mathf.Lerp(_TargetObj.position.y, transform.position.y + 0.8f, 0.1f), _TargetObj.position.z);
-
-        if (Vector3.Distance(_EndPos, _TargetObj.position) > 0.03f)
+        if (_targetObj == null)
         {
-            _TargetObj.position = new Vector3(Mathf.Lerp(_TargetObj.position.x, _EndPos.x, 0.1f),
-                _TargetObj.position.y, Mathf.Lerp(_TargetObj.position.z, _EndPos.z, 0.1f));
+            return;
         }
 
-        float Sin = Mathf.Sin(_RealTime * Mathf.Deg2Rad);
-        float Cos = Mathf.Cos(_RealTime * Mathf.Deg2Rad);
+        _targetObj.GetComponent<Collider>().isTrigger = true;
+        _targetObj.GetComponent<Rigidbody>().useGravity = false;
+        _realTime += Time.deltaTime;
+
+        // Î¨ºÏ≤¥ Îì§Ïñ¥ Ïò¨Î†∏ÏúºÎïå ÌöåÏ†Ñ Î∞è ÏõÄÏßÅÏûÑ
+
+        _targetObj.position = new Vector3(_targetObj.position.x,
+            Mathf.Lerp(_targetObj.position.y, transform.position.y + 0.8f, 0.1f), _targetObj.position.z);
+
+        if (Vector3.Distance(_endPos, _targetObj.position) > 0.03f)
+        {
+            _targetObj.position = new Vector3(Mathf.Lerp(_targetObj.position.x, _endPos.x, 0.1f),
+                _targetObj.position.y, Mathf.Lerp(_targetObj.position.z, _endPos.z, 0.1f));
+        }
+
+        float sin = Mathf.Sin(_realTime * Mathf.Deg2Rad);
+        float cos = Mathf.Cos(_realTime * Mathf.Deg2Rad);
 
 
-        _TargetObj.rotation = Quaternion.Euler
-            (new Vector3(Sin * 360.0f * _RotateSpeed, Cos * 360.0f * _RotateSpeed, Cos * 360.0f * _RotateSpeed));
+        _targetObj.rotation = Quaternion.Euler
+            (new Vector3(sin * 360.0f * _rotateSpeed, cos * 360.0f * _rotateSpeed, cos * 360.0f * _rotateSpeed));
     }
 }
