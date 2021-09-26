@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,12 +14,16 @@ public abstract class BuffObject : ControllerObject
         Stun,
         KnockBack,
         Slow,
+        DecreaseHp,
+        IncreaseHp
+
     }
     [SerializeField]
     protected string _name = "None";
 
     [SerializeField]
     protected BuffStruct _buffStruct;
+
 
     /// <summary>
     /// 해당 버프의 타입입니다.
@@ -43,7 +47,7 @@ public abstract class BuffObject : ControllerObject
     /// 버프 생성 후 지금까지 진행된 밀리초입니다. (밀리초 단위)
     /// </summary>
     protected double _elapsedMilliseconds;
-    
+
     // Start is called before the first frame update
     protected void Start()
     {
@@ -54,7 +58,8 @@ public abstract class BuffObject : ControllerObject
     {
         _elapsedMilliseconds = (DateTime.Now - _startTime).TotalMilliseconds;
         if (_buffStruct.Duration <= 0) return;
-        if(_elapsedMilliseconds > _buffStruct.Duration * 1000) ControllerCast<BuffController>().ReleaseBuff(this);
+        if (_elapsedMilliseconds > _buffStruct.Duration * 1000) ControllerCast<BuffController>().ReleaseBuff(this);
+        if (_buffStruct.isOnlyonce) ControllerCast<BuffController>().ReleaseBuff(this);
     }
 
     /// <summary>
@@ -74,5 +79,9 @@ public abstract class BuffObject : ControllerObject
         public float[] ValueFloat;
         public Vector3[] ValueVector3;
         public bool AllowDuplicates = true;
+        public float Damage;
+        /// 해당 버프 한번만 적용 되는지 판별하는 변수
+        public bool isOnlyonce = false;
+
     }
 }

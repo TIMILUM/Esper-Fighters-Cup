@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -29,7 +29,7 @@ public class ShockWaveSkillObject : SkillObject
 
     private Vector3 _direction = Vector3.right;
     private Vector3 _startPos = Vector3.zero;
-    
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -41,7 +41,7 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.localScale = colliderScale;
         _collider.OnCollision += SetHit;
     }
-    
+
     public override void SetHit(ObjectBase to)
     {
         _buffOnCollision[0].ValueVector3[0] = _direction;
@@ -83,10 +83,10 @@ public class ShockWaveSkillObject : SkillObject
             {
                 return true;
             }
-            
+
             return isCanceled;
         });
-        
+
         if (isCanceled)
         {
             SetState(State.Canceled);
@@ -179,7 +179,7 @@ public class ShockWaveSkillObject : SkillObject
             gameObj.transform.rotation = rotation;
         }
     }
-    
+
     private void ScaleGameObjects(IEnumerable<GameObject> gameObjects, Vector3 scale)
     {
         foreach (var gameObj in gameObjects)
@@ -187,7 +187,7 @@ public class ShockWaveSkillObject : SkillObject
             gameObj.transform.localScale = scale;
         }
     }
-    
+
     private void TranslateGameObjects(IEnumerable<GameObject> gameObjects, Vector3 position)
     {
         foreach (var gameObj in gameObjects)
@@ -195,11 +195,11 @@ public class ShockWaveSkillObject : SkillObject
             gameObj.transform.position = position;
         }
     }
-    
-    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) {}
+
+    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) { }
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        
+
     }
 }

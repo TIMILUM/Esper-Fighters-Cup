@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class Actor : ObjectBase
     public ControllerManager ControllerManager => _controllerManager;
 
     protected BuffController _buffController = null;
-    
+
     protected virtual void Awake()
     {
         _controllerManager?.SetActor(this);

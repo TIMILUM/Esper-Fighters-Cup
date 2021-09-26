@@ -306,6 +306,15 @@ MonoBehaviour:
     ValueVector3:
     - {x: 0, y: 0, z: 0}
     AllowDuplicates: 0
+    Damage: 0
+    isOnlyonce: 0
+  - Type: 4
+    Duration: 0.001
+    ValueFloat: []
+    ValueVector3: []
+    AllowDuplicates: 0
+    Damage: 10
+    isOnlyonce: 1
   _currentState: 0
   _range: 3
   _onHitDuration: 0.5
