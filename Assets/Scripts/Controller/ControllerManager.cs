@@ -36,6 +36,12 @@ public class ControllerManager : MonoBehaviour
         return (T)controller;
     }
 
+    public bool TryGetController<T>(Type type, out T controller) where T : ControllerBase
+    {
+        controller = GetController<T>(type);
+        return controller != null;
+    }
+
     private void RegisterControllers()
     {
         var controllers = GetComponentsInChildren<ControllerBase>();

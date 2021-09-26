@@ -70,21 +70,23 @@ public class KnockBackObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        var actor = other.GetComponent<Actor>();
-        if (actor == null && !other.CompareTag("Wall"))
+        if (!TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall"))
         {
             return;
         }
 
-        var myController =
-            _actor.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-        var otherController =
-            actor?.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        var myControllerManager = _actor.ControllerManager;
+        var otherControllerManager = otherActor.ControllerManager;
 
-        // TODO: 데미지도 추가 예정
-        myController?.GenerateBuff(Type.Stun);
-        otherController?.GenerateBuff(Type.Stun);
+        if (myControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
+        {
+            myController.GenerateBuff(Type.Stun);
+            myController.ReleaseBuff(this);
+        }
 
-        ControllerCast<BuffController>().ReleaseBuff(this);
+        if (otherControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController otherController))
+        {
+            otherController.GenerateBuff(Type.Stun);
+        }
     }
 }
