@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public abstract class BuffObject : ControllerObject
@@ -74,6 +75,7 @@ public abstract class BuffObject : ControllerObject
     }
 
     [Serializable]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class BuffStruct
     {
         public Type Type;

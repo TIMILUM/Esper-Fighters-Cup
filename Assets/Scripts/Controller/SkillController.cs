@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class SkillController : ControllerBase
@@ -115,6 +116,7 @@ public class SkillController : ControllerBase
     }
 
     [Serializable]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     private class Skill
     {
         public string Name;
