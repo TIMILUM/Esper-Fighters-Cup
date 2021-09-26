@@ -112,8 +112,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnUse()
     {
-        _colliderParentTransform.transform.position = _startPos;
-        _colliderParentTransform.transform.rotation = Quaternion.LookRotation(_direction);
+        _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
         _colliderParentTransform.gameObject.SetActive(true);
         var startTime = DateTime.Now;
         var nowTime = DateTime.Now;
