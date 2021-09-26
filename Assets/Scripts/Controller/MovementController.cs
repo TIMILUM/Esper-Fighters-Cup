@@ -44,7 +44,10 @@ public class MovementController : ControllerBase
     protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine) return;
+        if (photonView != null && !photonView.IsMine)
+        {
+            return;
+        }
 
         UpdateMine();
         MousePickLookAt();
@@ -53,7 +56,10 @@ public class MovementController : ControllerBase
 
     private void MousePickLookAt()
     {
-        if (!_isMousePickLooking) return;
+        if (!_isMousePickLooking)
+        {
+            return;
+        }
 
         var playerRotation = _player.transform.rotation;
         var playerPosition = _player.transform.position;

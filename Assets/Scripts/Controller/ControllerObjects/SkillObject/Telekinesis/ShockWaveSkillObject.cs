@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class ShockWaveSkillObject : SkillObject
@@ -18,18 +17,20 @@ public class ShockWaveSkillObject : SkillObject
     [SerializeField]
     private GameObject[] _secondCasting;
 
-    [SerializeField, Header("Collider")]
+    [SerializeField]
+    [Header("Collider")]
     private Transform _colliderParentTransform;
 
     [SerializeField]
     private ColliderChecker _collider;
 
-    [SerializeField, Tooltip("[세로, 가로]")]
+    [SerializeField]
+    [Tooltip("[세로, 가로]")]
     private Vector2 _colliderSize = new Vector2(0.5f, 2);
 
     private Vector3 _direction = Vector3.right;
     private Vector3 _startPos = Vector3.zero;
-    
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -41,7 +42,7 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.localScale = colliderScale;
         _collider.OnCollision += SetHit;
     }
-    
+
     public override void SetHit(ObjectBase to)
     {
         _buffOnCollision[0].ValueVector3[0] = _direction;
@@ -58,7 +59,11 @@ public class ShockWaveSkillObject : SkillObject
         yield return new WaitUntil(() =>
         {
             // 우클릭 시 취소
-            if (Input.GetKeyDown(KeyCode.Mouse1)) isCanceled = true;
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                isCanceled = true;
+            }
+
             // 시작점 설정
             if (Input.GetMouseButtonDown(0))
             {
@@ -67,6 +72,7 @@ public class ShockWaveSkillObject : SkillObject
                 {
                     isCanceled = true;
                 }
+
                 ActiveGameObjects(_firstCasting, false);
                 ActiveGameObjects(_secondCasting);
             }
@@ -83,10 +89,10 @@ public class ShockWaveSkillObject : SkillObject
             {
                 return true;
             }
-            
+
             return isCanceled;
         });
-        
+
         if (isCanceled)
         {
             SetState(State.Canceled);
@@ -117,9 +123,9 @@ public class ShockWaveSkillObject : SkillObject
             yield return null;
             nowTime = DateTime.Now;
         }
+
         _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();
-        yield break;
     }
 
     protected override IEnumerator OnEndDelay()
@@ -147,6 +153,7 @@ public class ShockWaveSkillObject : SkillObject
         {
             return Vector3.positiveInfinity;
         }
+
         return startPos;
     }
 
@@ -161,6 +168,7 @@ public class ShockWaveSkillObject : SkillObject
                 return hit.point;
             }
         }
+
         return Vector3.positiveInfinity;
     }
 
@@ -179,7 +187,7 @@ public class ShockWaveSkillObject : SkillObject
             gameObj.transform.rotation = rotation;
         }
     }
-    
+
     private void ScaleGameObjects(IEnumerable<GameObject> gameObjects, Vector3 scale)
     {
         foreach (var gameObj in gameObjects)
@@ -187,7 +195,7 @@ public class ShockWaveSkillObject : SkillObject
             gameObj.transform.localScale = scale;
         }
     }
-    
+
     private void TranslateGameObjects(IEnumerable<GameObject> gameObjects, Vector3 position)
     {
         foreach (var gameObj in gameObjects)
@@ -195,11 +203,10 @@ public class ShockWaveSkillObject : SkillObject
             gameObj.transform.position = position;
         }
     }
-    
-    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) {}
+
+    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) { }
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        
     }
 }

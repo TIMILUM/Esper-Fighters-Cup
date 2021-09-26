@@ -1,22 +1,20 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 
 public class ControllerManager : MonoBehaviour
 {
-    
     public enum Type
     {
         None,
         MovementController,
         SkillController,
-        BuffController,
+        BuffController
     }
 
     private readonly Dictionary<Type, ControllerBase> _controllers =
         new Dictionary<Type, ControllerBase>();
-    private Actor _actor = null;
+
+    private Actor _actor;
 
     protected void Awake()
     {
@@ -26,7 +24,6 @@ public class ControllerManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        
     }
 
     public T GetController<T>(Type type) where T : ControllerBase
@@ -51,7 +48,11 @@ public class ControllerManager : MonoBehaviour
 
     public void RegisterController(Type type, ControllerBase controller)
     {
-        if (_controllers.ContainsKey(type)) return;
+        if (_controllers.ContainsKey(type))
+        {
+            return;
+        }
+
         _controllers.Add(type, controller);
     }
 

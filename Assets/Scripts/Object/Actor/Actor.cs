@@ -1,17 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Actor : ObjectBase
 {
+    [SerializeField]
+    [Tooltip("오브젝트를 직접 넣어주세요!")]
+    protected ControllerManager _controllerManager;
 
-    [SerializeField, Tooltip("오브젝트를 직접 넣어주세요!")]
-    protected ControllerManager _controllerManager = null;
+    protected BuffController _buffController;
     public ControllerManager ControllerManager => _controllerManager;
 
-    protected BuffController _buffController = null;
-    
     protected virtual void Awake()
     {
         _controllerManager?.SetActor(this);
@@ -22,9 +19,23 @@ public class Actor : ObjectBase
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
-    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
+    private void OnCollisionEnter(Collision other)
     {
-        if (_buffController == null) return;
+        OnPlayerHitEnter(other.gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        OnPlayerHitEnter(other.gameObject);
+    }
+
+    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
+    {
+        if (_buffController == null)
+        {
+            return;
+        }
+
         foreach (var buffStruct in appendBuff)
         {
             _buffController.GenerateBuff(buffStruct);
@@ -34,15 +45,5 @@ public class Actor : ObjectBase
     private void OnPlayerHitEnter(GameObject other)
     {
         _controllerManager.OnPlayerHitEnter(other);
-    }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        OnPlayerHitEnter(other.gameObject);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        OnPlayerHitEnter(other.gameObject);
     }
 }
