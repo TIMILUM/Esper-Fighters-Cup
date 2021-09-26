@@ -62,4 +62,14 @@ public class CameraMovement : MonoBehaviour
             _totalBounds.Encapsulate(target.position);
         }
     }
+    
+    public void AddTarget(Transform target)
+    {
+        _movementTargets.Add(target);
+    }
+
+    public void RemoveTarget(Transform target)
+    {
+        _movementTargets.Remove(target);
+    }
 }
