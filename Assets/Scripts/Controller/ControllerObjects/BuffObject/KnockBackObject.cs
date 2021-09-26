@@ -41,7 +41,7 @@ public class KnockBackObject : BuffObject
         _actor = _controller.ControllerManager.GetActor();
         _rigidbody = _actor.GetComponent<Rigidbody>();
         _startPosition = _rigidbody.position;
-        _endPosition = _startPosition + (_normalizedDirection * _speed * _buffStruct.Duration);
+        _endPosition = _startPosition + (_buffStruct.Duration * _speed * _normalizedDirection);
     }
 
     // Update is called once per frame
@@ -53,7 +53,7 @@ public class KnockBackObject : BuffObject
             return;
         }
 
-        _rigidbody.position += _normalizedDirection * _speed * Time.deltaTime;
+        _rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)

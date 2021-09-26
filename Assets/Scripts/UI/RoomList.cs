@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class RoomList : MonoBehaviour
 {
@@ -37,9 +37,9 @@ public class RoomList : MonoBehaviour
         ClearRooms();
         var rooms = _roomConnector.CurrentRooms;
 
-        foreach (var room in rooms)
+        foreach (var _ in rooms)
         {
-            var roomButton = Instantiate(_roomEnterButtonPrefab, _contents.transform);
+            Instantiate(_roomEnterButtonPrefab, _contents.transform);
             // 룸 정보 작성
         }
     }
