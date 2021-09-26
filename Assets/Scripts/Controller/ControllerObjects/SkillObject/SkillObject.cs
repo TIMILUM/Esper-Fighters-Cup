@@ -130,22 +130,15 @@ public abstract class SkillObject : ControllerObject
 
     private IEnumerator GetStateFunction()
     {
-        switch (_currentState)
+        return _currentState switch
         {
-            case State.ReadyToUse:
-                return OnReadyToUse();
-            case State.FrontDelay:
-                return OnFrontDelay();
-            case State.Use:
-                return OnUse();
-            case State.EndDelay:
-                return OnEndDelay();
-            case State.Canceled:
-                return OnCanceled();
-            case State.Release:
-                return OnRelease();
-        }
-
-        return null;
+            State.ReadyToUse => OnReadyToUse(),
+            State.FrontDelay => OnFrontDelay(),
+            State.Use => OnUse(),
+            State.EndDelay => OnEndDelay(),
+            State.Canceled => OnCanceled(),
+            State.Release => OnRelease(),
+            _ => null,
+        };
     }
 }
