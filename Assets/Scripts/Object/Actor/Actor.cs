@@ -11,7 +11,8 @@ public class Actor : ObjectBase
 
     protected virtual void Awake()
     {
-        _controllerManager?.SetActor(this);
+        Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");
+        _controllerManager.SetActor(this);
     }
 
     protected virtual void Start()
