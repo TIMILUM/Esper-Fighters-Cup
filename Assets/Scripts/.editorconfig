@@ -10,7 +10,7 @@ indent_style = space
 [*.{h,hpp,cpp,cxx,cs,csx,vb,vbx}]
 indent_size = 4
 insert_final_newline = true
-charset = utf-8-bom
+charset = utf-8
 
 # XML project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
@@ -113,9 +113,9 @@ csharp_style_expression_bodied_local_functions = true:warning
 csharp_prefer_braces = true:suggestion
 
 # var
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_elsewhere = true:suggestion
+# csharp_style_var_for_built_in_types = true:suggestion
+# csharp_style_var_when_type_is_apparent = true:suggestion
+# csharp_style_var_elsewhere = true:suggestion
 
 ############################################
 ########## Unnecessary code rules ##########

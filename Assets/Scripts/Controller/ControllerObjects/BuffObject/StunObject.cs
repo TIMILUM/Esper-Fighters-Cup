@@ -1,12 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StunObject : BuffObject
 {
-    
-    
+    private void Reset()
+    {
+        _name = "Stun";
+        _buffStruct.Type = Type.Stun;
+    }
+
+
     // Start is called before the first frame update
     private new void Start()
     {
@@ -19,19 +22,12 @@ public class StunObject : BuffObject
         base.Update();
     }
 
-    private void Reset()
-    {
-        _name = "Stun";
-        _buffStruct.Type = Type.Stun;
-    }
-
-    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffStruct[] appendBuff)
+    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
     {
         throw new NotImplementedException();
     }
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        
     }
 }

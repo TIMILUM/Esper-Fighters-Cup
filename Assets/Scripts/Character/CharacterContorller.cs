@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public enum CHARACTER
@@ -6,38 +6,31 @@ public enum CHARACTER
     IDLE, MOVE, SPASTICITY, SKILL
 }
 
-
 public class CharacterContorller : MonoBehaviour
 {
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _increaseSpeedTime;
+    [SerializeField] private float _decreaseSpeedTime;
 
-    [SerializeField] private float _MoveSpeed;
-    [SerializeField] private float _IncreaseSpeedTime;
-    [SerializeField] private float _DecreaseSpeedTime;
+    [SerializeField] private float _spastic;
+    [SerializeField] private float _rotateSmooth;
 
-    [SerializeField] private float _Spastic;
-    [SerializeField] private float _RotateSmooth;
+    private SkillBase[] _skills;
 
+    private float _moveSpeedTime;
 
+    private CHARACTER _characterStateType;
 
-    private SkillBase[] Skills;
+    private float _dirX;
+    private float _dirZ;
 
-    private float _MoveSpeedTime;
-
-    private CHARACTER _CharacterStateType;
-
-    private float _DirX;
-    private float _DirZ;
-
-    private float _CurrentDirX;
-    private float _CurrentDirZ;
-
-
+    private float _currentDirX;
+    private float _currentDirZ;
 
     private void Start()
     {
-        Skills = GetComponents<SkillBase>();
+        _skills = GetComponents<SkillBase>();
     }
-
 
     private void Update()
     {
@@ -50,15 +43,15 @@ public class CharacterContorller : MonoBehaviour
     {
         CharacterLookAt();
 
-        if (_DirX != 0 || _DirZ != 0)
+        if (_dirX != 0 || _dirZ != 0)
         {
-            _CurrentDirX = _DirX;
-            _CurrentDirZ = _DirZ;
+            _currentDirX = _dirX;
+            _currentDirZ = _dirZ;
         }
 
 
-        _DirX = Input.GetAxisRaw("Horizontal");
-        _DirZ = Input.GetAxisRaw("Vertical");
+        _dirX = Input.GetAxisRaw("Horizontal");
+        _dirZ = Input.GetAxisRaw("Vertical");
     }
 
 
@@ -67,16 +60,16 @@ public class CharacterContorller : MonoBehaviour
     {
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] Hitinfos = Physics.RaycastAll(ray);
+        RaycastHit[] hitinfos = Physics.RaycastAll(ray);
 
-        foreach (var Hitinfo in Hitinfos)
+        foreach (var hitinfo in hitinfos)
         {
-            if (Hitinfo.transform.tag == "Floor")
+            if (hitinfo.transform.CompareTag("Floor"))
             {
-                Vector3 Dir = Hitinfo.point + new Vector3(0.0f, GetComponent<Collider>().bounds.extents.y, 0.0f)
+                Vector3 dir = hitinfo.point + new Vector3(0.0f, GetComponent<Collider>().bounds.extents.y, 0.0f)
                     - transform.position;
                 transform.rotation = Quaternion.Lerp(transform.rotation,
-                    Quaternion.LookRotation(Dir), _RotateSmooth);
+                    Quaternion.LookRotation(dir), _rotateSmooth);
             }
         }
 
@@ -85,7 +78,7 @@ public class CharacterContorller : MonoBehaviour
     // 각 상태에 따른 이벤트 적용
     private void StateUpdate()
     {
-        switch (_CharacterStateType)
+        switch (_characterStateType)
         {
             case CHARACTER.IDLE:
                 ExecuteIdle();
@@ -112,17 +105,14 @@ public class CharacterContorller : MonoBehaviour
         }
     }
 
-
-
-
     // 스킬 사용
     private void TrySkill()
     {
-        foreach (var Skill in Skills)
+        foreach (var skill in _skills)
         {
-            if (Skill.TrySkill())
+            if (skill.TrySkill())
             {
-                _CharacterStateType = CHARACTER.SKILL;
+                _characterStateType = CHARACTER.SKILL;
             }
         }
     }
@@ -130,13 +120,14 @@ public class CharacterContorller : MonoBehaviour
     // 스킬 적용
     private void ExecuteSkill()
     {
-        foreach (var Skill in Skills)
+        foreach (var skill in _skills)
         {
-            if (Skill.isSkillUsing)
-                Skill.SkillExecute();
+            if (skill.isSkillUsing)
+            {
+                skill.SkillExecute();
+            }
         }
     }
-
 
     // 이동 상태일때 매 프레임마다 적용
     private void ExecuteMove()
@@ -144,50 +135,55 @@ public class CharacterContorller : MonoBehaviour
         CharacterMove();
         IncreaseTime();
     }
+
     // 대기 상태일때 매 프레임마다 적용
     private void ExecuteIdle()
     {
         CharacterMove();
         DecreaseTime();
     }
+
     //스피드 증가
     private void IncreaseTime()
     {
-        if (_IncreaseSpeedTime == 0)
-            _IncreaseSpeedTime = 1;
+        if (_increaseSpeedTime == 0)
+        {
+            _increaseSpeedTime = 1;
+        }
 
-        _MoveSpeedTime += Time.deltaTime / _IncreaseSpeedTime;
-        _MoveSpeedTime = Mathf.Clamp(_MoveSpeedTime, 0, 1);
+        _moveSpeedTime += Time.deltaTime / _increaseSpeedTime;
+        _moveSpeedTime = Mathf.Clamp(_moveSpeedTime, 0, 1);
 
-        var Dir = new Vector3(_CurrentDirX, 0.0f, _CurrentDirZ);
-        Dir.Normalize();
+        var dir = new Vector3(_currentDirX, 0.0f, _currentDirZ);
+        dir.Normalize();
 
-        var CurrentDir = Vector3.Lerp(Vector3.zero, Dir, _MoveSpeedTime);
+        var currentDir = Vector3.Lerp(Vector3.zero, dir, _moveSpeedTime);
 
-        transform.position += CurrentDir * _MoveSpeed * Time.deltaTime;
-
-
+        transform.position += _moveSpeed * Time.deltaTime * currentDir;
     }
+
     //스피드 감소
     private void DecreaseTime()
     {
 
-        if (_DecreaseSpeedTime == 0)
-            _DecreaseSpeedTime = 1;
+        if (_decreaseSpeedTime == 0)
+        {
+            _decreaseSpeedTime = 1;
+        }
 
-        _MoveSpeedTime -= Time.deltaTime / _DecreaseSpeedTime;
-        _MoveSpeedTime = Mathf.Clamp(_MoveSpeedTime, 0, 1);
+        _moveSpeedTime -= Time.deltaTime / _decreaseSpeedTime;
+        _moveSpeedTime = Mathf.Clamp(_moveSpeedTime, 0, 1);
 
-        var Dir = new Vector3(_CurrentDirX, 0.0f, _CurrentDirZ);
-        Dir.Normalize();
+        var dir = new Vector3(_currentDirX, 0.0f, _currentDirZ);
+        dir.Normalize();
 
-        var CurrentDir = Vector3.Lerp(Dir, Vector3.zero, 1 - _MoveSpeedTime);
-        transform.position += CurrentDir * _MoveSpeed * Time.deltaTime;
+        var currentDir = Vector3.Lerp(dir, Vector3.zero, 1 - _moveSpeedTime);
+        transform.position += _moveSpeed * Time.deltaTime * currentDir;
     }
 
     private void PlayerSkillMove()
     {
-        if (_DirX == 0 && _DirZ == 0)
+        if (_dirX == 0 && _dirZ == 0)
         {
             DecreaseTime();
             return;
@@ -196,13 +192,12 @@ public class CharacterContorller : MonoBehaviour
         IncreaseTime();
     }
 
-
     //대기일때 상태 변이
     private void IdleStateChange()
     {
-        if (_DirX != 0 || _DirZ != 0)
+        if (_dirX != 0 || _dirZ != 0)
         {
-            _CharacterStateType = CHARACTER.MOVE;
+            _characterStateType = CHARACTER.MOVE;
             return;
         }
         TrySkill();
@@ -211,13 +206,16 @@ public class CharacterContorller : MonoBehaviour
     // 스킬이 끝난 다음의 상태 변이
     private void SkillStateChange()
     {
-        foreach (var Skill in Skills)
+        foreach (var skill in _skills)
         {
-            if (!Skill.isSkillUsing)
-                continue;
-            if (Skill.EndSkill())
+            if (!skill.isSkillUsing)
             {
-                _CharacterStateType = CHARACTER.IDLE;
+                continue;
+            }
+
+            if (skill.EndSkill())
+            {
+                _characterStateType = CHARACTER.IDLE;
                 return;
             }
         }
@@ -226,9 +224,9 @@ public class CharacterContorller : MonoBehaviour
     //움직임 상태 변이 
     private void MoveStateChange()
     {
-        if (_DirX == 0 && _DirZ == 0)
+        if (_dirX == 0 && _dirZ == 0)
         {
-            _CharacterStateType = CHARACTER.IDLE;
+            _characterStateType = CHARACTER.IDLE;
         }
         TrySkill();
     }
@@ -238,7 +236,7 @@ public class CharacterContorller : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            _CharacterStateType = CHARACTER.SPASTICITY;
+            _characterStateType = CHARACTER.SPASTICITY;
         }
     }
 
@@ -246,9 +244,9 @@ public class CharacterContorller : MonoBehaviour
     private IEnumerator SpasticityCoroutine()
     {
 
-        yield return new WaitForSeconds(_Spastic);
+        yield return new WaitForSeconds(_spastic);
 
-        _CharacterStateType = CHARACTER.IDLE;
+        _characterStateType = CHARACTER.IDLE;
     }
 
 }

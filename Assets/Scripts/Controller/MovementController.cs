@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -13,7 +9,7 @@ public class MovementController : ControllerBase
     [SerializeField, Range(0.001f, 30.0f), Header("속도 0까지 시간(단위는 초)")] private float _decreaseSpeedTime;
     [SerializeField, Range(0.001f, 30.0f), Header("최고 속도 까지 시간(단위는 초)")] private float _increaseSpeedTime;
 
-    private float _currentIncreaseSpeed; 
+    private float _currentIncreaseSpeed;
     private float _currentDecreaseSpeed;
     private Vector3 _currentMoveDir;
     private Vector3 _beforeMoveDirection;
@@ -22,8 +18,8 @@ public class MovementController : ControllerBase
     private BuffController _buffController = null;
 
 
-    [SerializeField , Range(0.01f ,1.0f)]private float _smoothLookat = 0.3f;
-    
+    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.3f;
+
 
     private void Reset()
     {
@@ -44,7 +40,10 @@ public class MovementController : ControllerBase
     protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine) return;
+        if (photonView != null && !photonView.IsMine)
+        {
+            return;
+        }
 
         UpdateMine();
         MousePickLookAt();
@@ -53,46 +52,42 @@ public class MovementController : ControllerBase
 
     private void MousePickLookAt()
     {
-        if (!_isMousePickLooking) return;
+        if (!_isMousePickLooking)
+        {
+            return;
+        }
 
         var playerRotation = _player.transform.rotation;
         var playerPosition = _player.transform.position;
-        var ScreentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hitinfos = Physics.RaycastAll(ScreentoRay);
+        var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hitinfos = Physics.RaycastAll(screentoRay);
 
         foreach (var hitinfo in hitinfos)
         {
-            if (hitinfo.transform.tag == "Floor")
+            if (hitinfo.transform.CompareTag("Floor"))
             {
-                var LookAtDirection = (hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f)) - (playerPosition);
-                playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(LookAtDirection), _smoothLookat);
+                var lookAtDirection = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f) - playerPosition;
+                playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(lookAtDirection), _smoothLookat);
             }
         }
 
         _player.transform.rotation = playerRotation;
-
-
-
-
     }
 
     private void DirectionLookAt()
     {
-        if (_isMousePickLooking) return;
-        if (_currentMoveDir == Vector3.zero) return;
+        if (_isMousePickLooking || _currentMoveDir == Vector3.zero)
+        {
+            return;
+        }
 
         var playerRotation = _player.transform.rotation;
-        
-
         playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(_beforeMoveDirection), _smoothLookat);
         _player.transform.rotation = playerRotation;
-
-
     }
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        
     }
 
     private void UpdateMine()
@@ -125,13 +120,13 @@ public class MovementController : ControllerBase
 
 
 
-        float dirx = Input.GetAxisRaw("Horizontal");
-        float dirz = Input.GetAxisRaw("Vertical");
+        var dirx = Input.GetAxisRaw("Horizontal");
+        var dirz = Input.GetAxisRaw("Vertical");
 
         var dir = new Vector3(dirx, 0.0f, dirz).normalized;
 
 
-        float currentSpeedTime = 0.0f;
+        var currentSpeedTime = 0.0f;
         var tempDirection = Vector3.zero;
         if (dir == Vector3.zero)
         {
@@ -153,7 +148,7 @@ public class MovementController : ControllerBase
 
         _currentMoveDir = Vector3.Lerp(tempDirection, dir, currentSpeedTime);
 
-        playerPosition += _currentMoveDir * Time.deltaTime * _moveSpeed;
+        playerPosition += _moveSpeed * Time.deltaTime * _currentMoveDir;
 
         _player.transform.position = playerPosition;
     }

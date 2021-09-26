@@ -1,18 +1,16 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class SkillController : ControllerBase
 {
-    private APlayer _player = null;
-    private BuffController _buffController = null;
+    [SerializeField]
+    private Skill[] _skills;
 
     private readonly List<ControllerObject> _skillObjects = new List<ControllerObject>();
-
-
-    [SerializeField]
-    private Skill[] _skills = null;
+    private BuffController _buffController;
+    private APlayer _player;
 
     private void Reset()
     {
@@ -29,13 +27,16 @@ public class SkillController : ControllerBase
         _buffController =
             _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
-    
+
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine) return;
-        
+        if (photonView != null && !photonView.IsMine)
+        {
+            return;
+        }
+
         UpdateMine();
     }
 
@@ -55,12 +56,16 @@ public class SkillController : ControllerBase
             ReleaseAllSkills();
             return;
         }
-        
+
         foreach (var skill in _skills)
         {
             if (Input.GetKeyDown(skill.Key))
             {
-                if (GetSkill(skill.Name) != null) continue;
+                if (GetSkill(skill.Name) != null)
+                {
+                    continue;
+                }
+
                 var skillObject = GenerateSkill(skill.SkillPrefab);
                 skillObject.Name = skill.Name;
             }
@@ -85,16 +90,19 @@ public class SkillController : ControllerBase
     {
         var skillObject = Instantiate(skillPrefab, transform);
         skillObject.Register(this);
-        
+
         _skillObjects.Add(skillObject);
         return skillObject;
     }
 
     public void ReleaseSkill(SkillObject skillObject)
     {
-        var obj = _skillObjects.Find((x) => x == skillObject);
-        if(obj == null) return;
-        
+        var obj = _skillObjects.Find(x => x == skillObject);
+        if (obj == null)
+        {
+            return;
+        }
+
         skillObject.SetState(SkillObject.State.Canceled);
     }
 
@@ -108,6 +116,7 @@ public class SkillController : ControllerBase
     }
 
     [Serializable]
+    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     private class Skill
     {
         public string Name;
