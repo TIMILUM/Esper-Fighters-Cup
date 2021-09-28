@@ -82,6 +82,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 4314589049991569685}
   _characterType: 1
+  _characterHp: 100
   _rigidbody: {fileID: 4314589049664778643}
 --- !u!114 &8211835443746325872
 MonoBehaviour:
@@ -276,7 +277,7 @@ MonoBehaviour:
   _type: 2
   _skills:
   - Name: Skill 1
-    Key: 101
+    Key: 323
     SkillPrefab: {fileID: 3750393118598012776, guid: 5fee2229364c9e146ae94f6e0028d138, type: 3}
 --- !u!1001 &4314589050935429649
 PrefabInstance:

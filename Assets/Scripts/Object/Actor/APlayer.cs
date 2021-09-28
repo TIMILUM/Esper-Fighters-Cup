@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class APlayer : ACharacter
 {
@@ -10,6 +10,9 @@ public class APlayer : ACharacter
     {
         base.Start();
         _rigidbody.isKinematic = !(photonView?.IsMine) ?? false;
+        
+        Camera.main.gameObject.GetComponent<CameraMovement>().AddTarget(transform); // 카메라 타겟 추가 설정
+        
     }
 
     // Update is called once per frame
