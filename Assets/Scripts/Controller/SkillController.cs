@@ -40,14 +40,6 @@ public class SkillController : ControllerBase
         UpdateMine();
     }
 
-    public override void OnPlayerHitEnter(GameObject other)
-    {
-        for (var i = _skillObjects.Count - 1; i >= 0; i--)
-        {
-            _skillObjects[i].OnPlayerHitEnter(other);
-        }
-    }
-
     private void UpdateMine()
     {
         // 스턴 확인 시 스킬 사용을 멈춥니다.

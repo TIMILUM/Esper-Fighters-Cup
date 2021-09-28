@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class ControllerObject : ObjectBase
@@ -7,6 +8,12 @@ public abstract class ControllerObject : ObjectBase
     public virtual void Register(ControllerBase controller)
     {
         _controller = controller;
+        _controller.PlayerHitEnterEvent += OnPlayerHitEnter;
+    }
+
+    private void OnDestroy()
+    {
+        _controller.PlayerHitEnterEvent -= OnPlayerHitEnter;
     }
 
     /// <summary>
