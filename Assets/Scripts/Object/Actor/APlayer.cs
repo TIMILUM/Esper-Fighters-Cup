@@ -9,7 +9,7 @@ public class APlayer : ACharacter
     protected override void Start()
     {
         base.Start();
-        _rigidbody.isKinematic = !photonView.IsMine;
+        _rigidbody.isKinematic = !(photonView?.IsMine) ?? false;
     }
 
     // Update is called once per frame

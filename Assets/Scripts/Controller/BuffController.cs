@@ -42,18 +42,6 @@ public class BuffController : ControllerBase
         base.Update();
     }
 
-    public override void OnPlayerHitEnter(GameObject other)
-    {
-        foreach (var buffPair in _buffObjects.ToList())
-        {
-            var buffList = buffPair.Value;
-            for (var i = buffList.Count - 1; i >= 0; i--)
-            {
-                buffList[i].OnPlayerHitEnter(other);
-            }
-        }
-    }
-
     public List<BuffObject> GetBuff(BuffObject.Type buffType)
     {
         if (!_buffObjects.TryGetValue(buffType, out var result))
