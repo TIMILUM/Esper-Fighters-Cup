@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerSpawnManager : MonoBehaviourPunCallbacks
+public class InGamePlayerManager : MonoBehaviourPunCallbacks
 {
+    [Header("Player Generate")]
+    
     [SerializeField]
     private List<ACharacter> _characterPrefabs;
 
     // TODO: 나중에 캐릭터 선택 구현 시 임시로 작성한 PlayerSpawnManager 해당 코드의 수정이 필요함
     [SerializeField]
     private ACharacter.Type _currentCharacterType = ACharacter.Type.Telekinesis;
-
-    [Header("etc")]
     [SerializeField]
     private Transform _spawnTransform;
 
+    
+    private static ACharacter s_myCharacter = null;
+    private static ACharacter s_enemyCharacter = null;
+
+    [Header("Player's Camera")]
+    
     [SerializeField]
     private CameraMovement _cameraMovement;
 
@@ -45,6 +51,15 @@ public class PlayerSpawnManager : MonoBehaviourPunCallbacks
         var player = PhotonNetwork.Instantiate("Prefabs/Characters/" + prefab.name,
             _spawnTransform.position + Vector3.up, Quaternion.identity);
         // player.transform.SetParent(_spawnTransform);
-        _cameraMovement.AddTarget(player.transform);
+    }
+
+    public static void SetMyPlayer(ACharacter character)
+    {
+        s_myCharacter = character;
+    }
+    
+    public static void SetEnemyPlayer(ACharacter character)
+    {
+        s_enemyCharacter = character;
     }
 }

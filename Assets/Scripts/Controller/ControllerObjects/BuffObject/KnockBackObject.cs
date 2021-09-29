@@ -17,6 +17,12 @@ public class KnockBackObject : BuffObject
 
     private Vector3 _startPosition;
 
+    // 넉백 후 오브젝트와 충돌 시 해당값 만큼 HP가 줄어듬
+    private float _decreaseHp = 0;
+    
+    // 넉백 후 오브젝트와 충돌 시 해당값 만큼 스턴 지속기간(초) 지정됨
+    private float _durationStunSeconds = 0;
+
     public Vector3 NormalizedDirection
     {
         set => _normalizedDirection = value;
@@ -58,9 +64,20 @@ public class KnockBackObject : BuffObject
 
     public override void SetBuffStruct(BuffStruct buffStruct)
     {
+        // BuffStruct Help
+        // ---------------
+        // ValueVector3[0]  : _normalizedDirection
+        // ---------------
+        // ValueFloat[0]    : _speed
+        // ValueFloat[1]    : _decreaseHp (0이면 HP감소 효과 없음)
+        // ValueFloat[2]    : _durationStunSeconds (0이면 스턴 효과 없음)
+        // ---------------
+        
         base.SetBuffStruct(buffStruct);
         _normalizedDirection = buffStruct.ValueVector3[0];
         _speed = buffStruct.ValueFloat[0];
+        _decreaseHp = buffStruct.ValueFloat[1];
+        _durationStunSeconds = buffStruct.ValueFloat[2];
     }
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
@@ -78,7 +95,8 @@ public class KnockBackObject : BuffObject
         if (_actor.ControllerManager.TryGetController(
             ControllerManager.Type.BuffController, out BuffController myController))
         {
-            myController.GenerateBuff(Type.Stun);
+            _rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
+            GenerateAfterBuff(myController);
             myController.ReleaseBuff(this);
         }
 
@@ -90,7 +108,30 @@ public class KnockBackObject : BuffObject
         if (otherActor.ControllerManager.TryGetController(
             ControllerManager.Type.BuffController, out BuffController otherController))
         {
-            otherController.GenerateBuff(Type.Stun);
+            GenerateAfterBuff(otherController);
+        }
+    }
+
+    // 넉백 후 오브젝트와 충돌 시 추가적으로 얻는 버프를 이 함수에서 생성함
+    private void GenerateAfterBuff(BuffController controller)
+    {
+        if (_decreaseHp > 0)
+        {
+            controller.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.DecreaseHp,
+                Damage = _decreaseHp,
+                Duration = 0.001f
+            });
+        }
+        
+        if (_durationStunSeconds > 0)
+        {
+            controller.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Stun,
+                Duration = _durationStunSeconds
+            });
         }
     }
 }

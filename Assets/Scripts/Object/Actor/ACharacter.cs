@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 public class ACharacter : Actor
 {
     public enum Type
@@ -14,6 +14,14 @@ public class ACharacter : Actor
     public Type CharacterType => _characterType;
 
     // Start is called before the first frame update
+    [SerializeField]
+    private float _characterHp;
+    public float CharacterHP
+    {
+        get => _characterHp;
+        set => _characterHp = value;
+    }
+
     protected override void Start()
     {
         base.Start();
