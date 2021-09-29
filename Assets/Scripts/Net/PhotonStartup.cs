@@ -8,7 +8,7 @@ using Photon.Pun.UtilityScripts;
 
 using Object = UnityEngine.Object;
 
-public class PhotonStartup
+public static class PhotonStartup
 {
     private const string AppIdFilePath = "photon-cloud";
 
