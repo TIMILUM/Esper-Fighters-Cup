@@ -1,6 +1,14 @@
-# E.F.C
+# Esper Fighters Cup
 
-Esper Fighters Cup
+This game project is work in progress.
+
+## Game Concept
+
+(게임 컨셉)
+
+## Preview Images
+
+(게임 프리뷰 이미지)
 
 ## Requires
 
