@@ -19,7 +19,7 @@ public class KnockBackObject : BuffObject
 
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 HP가 줄어듬
     private float _decreaseHp = 0;
-    
+
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 스턴 지속기간(초) 지정됨
     private float _durationStunSeconds = 0;
 
@@ -72,7 +72,7 @@ public class KnockBackObject : BuffObject
         // ValueFloat[1]    : _decreaseHp (0이면 HP감소 효과 없음)
         // ValueFloat[2]    : _durationStunSeconds (0이면 스턴 효과 없음)
         // ---------------
-        
+
         base.SetBuffStruct(buffStruct);
         _normalizedDirection = buffStruct.ValueVector3[0];
         _speed = buffStruct.ValueFloat[0];
@@ -124,7 +124,7 @@ public class KnockBackObject : BuffObject
                 Duration = 0.001f
             });
         }
-        
+
         if (_durationStunSeconds > 0)
         {
             controller.GenerateBuff(new BuffStruct()

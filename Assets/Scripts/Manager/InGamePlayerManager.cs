@@ -6,7 +6,7 @@ using UnityEngine;
 public class InGamePlayerManager : MonoBehaviourPunCallbacks
 {
     [Header("Player Generate")]
-    
+
     [SerializeField]
     private List<ACharacter> _characterPrefabs;
 
@@ -16,12 +16,12 @@ public class InGamePlayerManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private Transform _spawnTransform;
 
-    
+
     private static ACharacter s_myCharacter = null;
     private static ACharacter s_enemyCharacter = null;
 
     [Header("Player's Camera")]
-    
+
     [SerializeField]
     private CameraMovement _cameraMovement;
 
@@ -57,7 +57,7 @@ public class InGamePlayerManager : MonoBehaviourPunCallbacks
     {
         s_myCharacter = character;
     }
-    
+
     public static void SetEnemyPlayer(ACharacter character)
     {
         s_enemyCharacter = character;

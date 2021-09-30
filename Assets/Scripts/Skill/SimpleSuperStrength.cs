@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-// °£´ÜÇÏ°Ô ±«·Â ½ºÅ³ ±¸Çö
+// ê°„ë‹¨í•˜ê²Œ ê´´ë ¥ ìŠ¤í‚¬ êµ¬í˜„
 public class SimpleSuperStrength : SkillBase
 {
 
@@ -9,13 +9,13 @@ public class SimpleSuperStrength : SkillBase
     private Transform _TargetObj;
 
     private Vector3 _EndPos;
-    // ½ºÅ³ Àû¿ë
+    // ìŠ¤í‚¬ ì ìš©
     public override void SkillExecute()
     {
         MousePicking();
     }
 
-    // ½ºÅ³ÀÌ ³¡³¯À»¶§.
+    // ìŠ¤í‚¬ì´ ëë‚ ì„ë•Œ.
     public override bool EndSkill()
     {
 
@@ -25,7 +25,7 @@ public class SimpleSuperStrength : SkillBase
 
 
     }
-    // ´øÁö±â ÀÌº¥Æ®
+    // ë˜ì§€ê¸° ì´ë²¤íŠ¸
     private void ThrowObject()
     {
         if (_TargetObj == null) return;
@@ -36,10 +36,10 @@ public class SimpleSuperStrength : SkillBase
 
     }
 
-    //¸¶¿ì½º ÇÇÅ·
+    //ë§ˆìš°ìŠ¤ í”¼í‚¹
     public void MousePicking()
     {
-        //¹°°ÇÀ» ÀâÀ»¶§ °Å¸®¸¦ °è»êÇØ¼­ ´øÁö±â
+        //ë¬¼ê±´ì„ ì¡ì„ë•Œ ê±°ë¦¬ë¥¼ ê³„ì‚°í•´ì„œ ë˜ì§€ê¸°
         if (Vector3.Distance(transform.position, _EndPos) > _SKillRange)
             return;
 
@@ -50,20 +50,20 @@ public class SimpleSuperStrength : SkillBase
     private void MousePick()
     {
 
-        // ¸¶¿ì½º ÇÇÅ·ÀÏ¶§ 
+        // ë§ˆìš°ìŠ¤ í”¼í‚¹ì¼ë•Œ 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit Hitinfo;
 
         if (Physics.Raycast(ray, out Hitinfo))
         {
 
-            //ÄÁÆ®·ÑÀÌ¶û ÅÂ±×¸¦ ÆÇº°
+            //ì»¨íŠ¸ë¡¤ì´ë‘ íƒœê·¸ë¥¼ íŒë³„
             if (Hitinfo.transform.tag == "Object" && _SkillKeyCode != SKILLKEYCODE.CONTROL)
             {
 
                 if (_TargetObj == null)
                 {
-                    // °´Ã¼°¡ ¾Õ¿¡ ÀÖ´ÂÁö ÆÇº°
+                    // ê°ì²´ê°€ ì•ì— ìˆëŠ”ì§€ íŒë³„
                     if (Physics.Raycast(transform.position, transform.forward, _SKillRange))
                     {
                         Debug.Log(Hitinfo.transform.name);
@@ -87,7 +87,7 @@ public class SimpleSuperStrength : SkillBase
             _EndPos = Hitinfo.point;
         }
 
-        // ½ºÅ³ Å°ÄÚµå°¡ ÄÁÆ®·ÑÀÏ¶§ 
+        // ìŠ¤í‚¬ í‚¤ì½”ë“œê°€ ì»¨íŠ¸ë¡¤ì¼ë•Œ 
         if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
         {
             if (Physics.Raycast(transform.position, transform.forward, out Hitinfo, _SKillRange))
@@ -111,14 +111,14 @@ public class SimpleSuperStrength : SkillBase
     private void ResetObject()
     {
 
-        //¸®¼Â
+        //ë¦¬ì…‹
         if (_TargetObj != null)
         {
             _TargetObj.GetComponent<Collider>().isTrigger = false;
             _TargetObj.GetComponent<Rigidbody>().useGravity = true;
             _TargetObj.GetComponent<Rigidbody>().freezeRotation = false;
             _TargetObj.transform.parent = null;
-            _TargetObj.transform.tag = "Object"; // Àâ°í ÀÖ´Â »óÅÂ
+            _TargetObj.transform.tag = "Object"; // ì¡ê³  ìˆëŠ” ìƒíƒœ
             ThrowObject();
 
             _TargetObj = null;
@@ -126,7 +126,7 @@ public class SimpleSuperStrength : SkillBase
 
     }
 
-    //¹°°ÇÀ» ÀâÀ»¶§ istrigger È°¼ºÈ­ Áß·Â°ª ºñÈ°¼ºÈ­
+    //ë¬¼ê±´ì„ ì¡ì„ë•Œ istrigger í™œì„±í™” ì¤‘ë ¥ê°’ ë¹„í™œì„±í™”
     private void GrapObject(RaycastHit Hitinfo)
     {
         _TargetObj = Hitinfo.transform;
@@ -136,7 +136,7 @@ public class SimpleSuperStrength : SkillBase
         _TargetObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
         _TargetObj.GetComponent<Rigidbody>().freezeRotation = true;
 
-        _TargetObj.transform.tag = "GrapObject"; // Àâ°í ÀÖ´Â »óÅÂ
+        _TargetObj.transform.tag = "GrapObject"; // ì¡ê³  ìˆëŠ” ìƒíƒœ
         _TargetObj.localPosition = new Vector3(0.0f, 0.0f, 1.0f);
 
 

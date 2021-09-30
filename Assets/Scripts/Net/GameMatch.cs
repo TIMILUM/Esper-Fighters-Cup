@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;

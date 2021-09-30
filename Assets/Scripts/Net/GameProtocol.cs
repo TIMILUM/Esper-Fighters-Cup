@@ -1,4 +1,4 @@
-﻿public static class GameProtocol
+public static class GameProtocol
 {
     public const byte GameMatchEvent = 0x01;
     public const byte GamePlayerEvent = 0x02;

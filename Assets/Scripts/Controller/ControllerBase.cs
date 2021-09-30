@@ -9,7 +9,7 @@ public abstract class ControllerBase : MonoBehaviourPunCallbacks
 
     protected ControllerManager _controllerManager;
     public ControllerManager ControllerManager => _controllerManager;
-    
+
     private UnityAction<GameObject> _onPlayerHitEnterEvent = null;
     public event UnityAction<GameObject> PlayerHitEnterEvent
     {

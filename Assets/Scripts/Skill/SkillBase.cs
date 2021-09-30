@@ -7,12 +7,12 @@ public enum SKILLKEYCODE
 
 public abstract class SkillBase : MonoBehaviour
 {
-    [SerializeField, TextArea] private string _SkillDesc; // ½ºÅ³ ¼³¸í
-    [SerializeField] private string _SkillName; // ½ºÅ³ ÀÌ¸§
-    [SerializeField] private string _SkillAnimation; // ½ºÅ³¿¡ Àû¿ëÇÒ ¾Ö´Ï¸ŞÀÌ¼Ç
-    [SerializeField] protected float _SKillRange; // ½ºÅ³ »ç°Å¸®
-    [SerializeField] protected SKILLKEYCODE _SkillKeyCode; // ½ºÅ³ Å° ÄÚµå
-    public bool isSkillUsing { get; set; } // ½ºÅ³ »ç¿ëÁßÀÎÁö ¾Æ´ÑÁö ÆÇº°
+    [SerializeField, TextArea] private string _SkillDesc; // ìŠ¤í‚¬ ì„¤ëª…
+    [SerializeField] private string _SkillName; // ìŠ¤í‚¬ ì´ë¦„
+    [SerializeField] private string _SkillAnimation; // ìŠ¤í‚¬ì— ì ìš©í•  ì• ë‹ˆë©”ì´ì…˜
+    [SerializeField] protected float _SKillRange; // ìŠ¤í‚¬ ì‚¬ê±°ë¦¬
+    [SerializeField] protected SKILLKEYCODE _SkillKeyCode; // ìŠ¤í‚¬ í‚¤ ì½”ë“œ
+    public bool isSkillUsing { get; set; } // ìŠ¤í‚¬ ì‚¬ìš©ì¤‘ì¸ì§€ ì•„ë‹Œì§€ íŒë³„
 
 
     public abstract void SkillExecute();
