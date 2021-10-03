@@ -1,11 +1,7 @@
-using Photon.Pun;
-using UnityEngine;
 using System.Text.RegularExpressions;
-
-#if UNITY_EDITOR
+using Photon.Pun;
 using Photon.Pun.UtilityScripts;
-#endif
-
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 public static class PhotonStartup
