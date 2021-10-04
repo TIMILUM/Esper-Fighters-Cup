@@ -24,17 +24,15 @@ public abstract class BuffObject : ControllerObject
     [SerializeField]
     protected BuffStruct _buffStruct;
 
-    private double _elapsedMilliseconds;
     /// <summary>
     ///     버프 생성 후 지금까지 진행된 밀리초입니다. (밀리초 단위)
     /// </summary>
-    public double ElapsedMilliseconds => _elapsedMilliseconds;
+    public double ElapsedMilliseconds { get; private set; }
 
-    private readonly DateTime _startTime = DateTime.Now;
     /// <summary>
     ///     해당 버프가 생성된 시간입니다.
     /// </summary>
-    public DateTime StartTime => _startTime;
+    public DateTime StartTime { get; } = DateTime.Now;
 
     /// <summary>
     ///     해당 버프의 타입입니다.
@@ -58,13 +56,13 @@ public abstract class BuffObject : ControllerObject
     // Update is called once per frame
     protected void Update()
     {
-        _elapsedMilliseconds = (DateTime.Now - _startTime).TotalMilliseconds;
+        ElapsedMilliseconds = (DateTime.Now - StartTime).TotalMilliseconds;
         if (_buffStruct.Duration <= 0)
         {
             return;
         }
 
-        if (_elapsedMilliseconds > _buffStruct.Duration * 1000)
+        if (ElapsedMilliseconds > _buffStruct.Duration * 1000)
         {
             ControllerCast<BuffController>().ReleaseBuff(this);
         }
