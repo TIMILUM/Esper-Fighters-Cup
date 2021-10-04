@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
@@ -14,7 +14,9 @@ public abstract class BuffObject : ControllerObject
         KnockBack,
         Slow,
         DecreaseHp,
-        IncreaseHp
+        IncreaseHp,
+        Raise
+
 
     }
 
@@ -23,7 +25,7 @@ public abstract class BuffObject : ControllerObject
 
     [SerializeField]
     protected BuffStruct _buffStruct;
-    
+
     private double _elapsedMilliseconds;
     /// <summary>
     ///     버프 생성 후 지금까지 진행된 밀리초입니다. (밀리초 단위)

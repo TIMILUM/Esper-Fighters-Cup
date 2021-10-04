@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class Actor : ObjectBase
 {
@@ -8,6 +8,16 @@ public class Actor : ObjectBase
 
     protected BuffController _buffController;
     public ControllerManager ControllerManager => _controllerManager;
+
+    [SerializeField]
+    private float _Hp;
+    public float Hp
+    {
+        get => _Hp;
+        set => _Hp = value;
+    }
+
+
 
     protected virtual void Awake()
     {

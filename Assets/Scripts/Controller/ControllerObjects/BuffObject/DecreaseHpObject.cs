@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,8 +29,8 @@ public class DecreaseHpObject : BuffObject
             return;
         }
 
-        _character.CharacterHP -= _damage;
-        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.CharacterHP);
+        _character.Hp -= _damage;
+        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.Hp);
 
 
     }

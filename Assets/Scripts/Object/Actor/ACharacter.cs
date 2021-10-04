@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 public class ACharacter : Actor
 {
     public enum Type
@@ -13,14 +13,15 @@ public class ACharacter : Actor
 
     public Type CharacterType => _characterType;
 
+
+    //캐릭터 애니메이터
+    [SerializeField, Tooltip("직접 컴포넌트를 넣어주세요.")]
+    private Animator _animator = null;
+    public Animator CharacterAnimator => _animator;
+
+
+
     // Start is called before the first frame update
-    [SerializeField]
-    private float _characterHp;
-    public float CharacterHP
-    {
-        get => _characterHp;
-        set => _characterHp = value;
-    }
 
     protected override void Start()
     {
