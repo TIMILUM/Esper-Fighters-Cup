@@ -11,7 +11,7 @@ public static class PhotonStartup
     /// <summary>
     /// 최초로 게임이 실행될 때 씬이 로드되기 전 호출됩니다.
     /// </summary>
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitPhoton()
     {
         InitGameVersion();
