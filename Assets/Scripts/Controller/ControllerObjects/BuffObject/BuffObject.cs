@@ -48,14 +48,30 @@ public abstract class BuffObject : ControllerObject
         set => _buffStruct.Duration = value;
     }
 
+    /// <summary>
+    /// 버프의 시전자 오브젝트입니다.
+    /// </summary>
+    protected APlayer Author { get; private set; }
+
     // Start is called before the first frame update
     protected void Start()
     {
+        if (_controller.ControllerManager.GetActor() is APlayer player)
+        {
+            Author = player;
+        }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// 해당 버프가 자신의 것인지를 확인하고 설정된 값에 따라 버프를 해제하는 작업을 합니다.
+    /// </summary>
     protected void Update()
     {
+        if (!Author.photonView.IsMine)
+        {
+            return;
+        }
+
         ElapsedMilliseconds = (DateTime.Now - StartTime).TotalMilliseconds;
         if (_buffStruct.Duration <= 0)
         {

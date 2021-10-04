@@ -54,10 +54,6 @@ public class KnockBackObject : BuffObject
     private new void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine)
-        {
-            return;
-        }
 
         _rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
     }
