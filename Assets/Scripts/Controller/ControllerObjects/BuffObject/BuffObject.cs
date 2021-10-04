@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public abstract class BuffObject : ControllerObject
@@ -15,6 +16,8 @@ public abstract class BuffObject : ControllerObject
         Slow,
         DecreaseHp,
         IncreaseHp
+        IncreaseHp,
+        Raise
     }
 
     [SerializeField]
@@ -23,6 +26,7 @@ public abstract class BuffObject : ControllerObject
     [SerializeField]
     protected BuffStruct _buffStruct;
 
+    private double _elapsedMilliseconds;
     /// <summary>
     /// 해당 버프의 아이디입니다.
     /// </summary>

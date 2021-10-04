@@ -87,6 +87,9 @@ public class ShockWaveSkillObject : SkillObject
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
+                //충격파 애니메이션
+                _player.CharacterAnimator.SetTrigger("ShockWaveSkill");
+                ParticleManager.sInstance.PullParticle("ShockWave", _player.transform.position + _player.transform.forward, _player.transform.rotation);
                 return true;
             }
 

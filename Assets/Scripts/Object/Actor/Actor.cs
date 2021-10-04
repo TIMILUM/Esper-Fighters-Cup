@@ -11,6 +11,16 @@ public class Actor : ObjectBase
     protected BuffController _buffController;
     public ControllerManager ControllerManager => _controllerManager;
 
+    [SerializeField]
+    private float _Hp;
+    public float Hp
+    {
+        get => _Hp;
+        set => _Hp = value;
+    }
+
+
+
     protected virtual void Awake()
     {
         Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");

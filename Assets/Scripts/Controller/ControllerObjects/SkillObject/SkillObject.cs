@@ -16,8 +16,16 @@ public abstract class SkillObject : ControllerObject
         Release = 5
     }
 
+
+
+    /// <summary>
+    ///  플레이어
+    /// </summary>
+    protected APlayer _player;
+
     [SerializeField]
     private State _currentState = State.ReadyToUse;
+
 
     /// <summary>
     ///     플레이어의 버프 컨트롤러입니다.
@@ -28,6 +36,8 @@ public abstract class SkillObject : ControllerObject
     ///     이 스킬에서 현재 실행 중인 코루틴입니다. (코루틴의 수정은 지정된 함수로 진행하는걸 권장합니다.)
     /// </summary>
     protected Coroutine _currentCoroutine;
+
+
 
     /// <summary>
     ///     현재 해당 스킬의 FSM입니다.
