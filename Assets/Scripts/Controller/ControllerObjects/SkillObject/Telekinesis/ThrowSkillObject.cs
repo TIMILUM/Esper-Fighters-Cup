@@ -108,7 +108,7 @@ public class ThrowSkillObject : SkillObject
             if (TempStoneTime < CurrentTime && _stoneSpawnTime > CurrentTime)
             {
                 _skillobj.Add(InGameSkillManager.Instance.CreateSkillObject("Stone", _startPos + new Vector3(
-                    Random.Range(-_range, _range), 1.0f, Random.Range(-_range, _range))));
+                    Random.Range(-_range * 0.5f, _range * 0.5f), 1.0f, Random.Range(-_range * 0.5f, _range * 0.5f))));
                 _currentStoneCount++;
             }
 
@@ -116,7 +116,7 @@ public class ThrowSkillObject : SkillObject
             if (TempFragmentTime < CurrentTime && _fragmentSpawnTime > CurrentTime)
             {
                 _skillobj.Add(InGameSkillManager.Instance.CreateSkillObject("Fragment", _startPos + new Vector3
-                    (Random.Range(-_range, _range), 1.0f, Random.Range(-_range, _range))));
+                    (Random.Range(-_range * 0.5f, _range * 0.5f), 1.0f, Random.Range(-_range * 0.5f, _range * 0.5f))));
                 _currentFragmentCount++;
             }
 
@@ -138,7 +138,6 @@ public class ThrowSkillObject : SkillObject
 
         yield break;
     }
-
 
     protected override IEnumerator OnReadyToUse()
     {
