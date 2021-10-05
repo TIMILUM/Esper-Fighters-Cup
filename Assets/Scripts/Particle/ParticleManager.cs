@@ -15,11 +15,18 @@ public class ParticleManager : MonoBehaviour
     [System.Serializable]
     private class ParticleInfo
     {
-        public string _particleName;
-        public GameObject _particleFrefab;
-        public int _maxNum = 30;
+        [SerializeField] private string _particleName;
+        [SerializeField] private GameObject _particleFrefab;
+        [SerializeField] private int _maxNum = 30;
         [Tooltip("파티클 라이프 타임입니다. (단위는 밀리세컨드 입니다.)")]
-        public int _lifeTime = 3000;
+        [SerializeField] private int _lifeTime = 3000;
+
+
+        public string ParticleName { get => _particleName; set => _particleName = value; }
+        public GameObject ParticleFrefab { get => _particleFrefab; set => _particleFrefab = value; }
+        public int MaxNum { get => _maxNum; set => _maxNum = value; }
+        public int LifeTime { get => _lifeTime; set => _lifeTime = value; }
+
     }
 
     /// <summary>
@@ -50,7 +57,7 @@ public class ParticleManager : MonoBehaviour
     /// <summary>
     /// 싱글턴으로 제작
     /// </summary>
-    private static ParticleManager _sinstance;
+    private static ParticleManager s_instance;
 
 
     /// <summary>
@@ -77,31 +84,31 @@ public class ParticleManager : MonoBehaviour
     /// 삭제할 파티클 큐
     /// </summary>
     private Queue<Particle> _removeParticle = new Queue<Particle>();
-    public static ParticleManager sInstance
+    public static ParticleManager Instance
     {
         get
         {
-            if (null == _sinstance)
+            if (null == s_instance)
                 return null;
-            return _sinstance;
+            return s_instance;
         }
     }
 
 
     private void Awake()
     {
-        if (_sinstance == null) _sinstance = this;
+        if (s_instance == null) s_instance = this;
 
         foreach (var info in _particleInfo)
         {
-            if (!_paticleList.ContainsKey(info._particleName))
-                _paticleList.Add(info._particleName, new Queue<Particle>());
+            if (!_paticleList.ContainsKey(info.ParticleName))
+                _paticleList.Add(info.ParticleName, new Queue<Particle>());
 
-            for (int i = 0; i < info._maxNum; i++)
+            for (int i = 0; i < info.MaxNum; i++)
             {
-                var clone = Instantiate(info._particleFrefab, transform);
+                var clone = Instantiate(info.ParticleFrefab, transform);
                 clone.SetActive(false);
-                _paticleList[info._particleName].Enqueue(new Particle(clone, info._lifeTime));
+                _paticleList[info.ParticleName].Enqueue(new Particle(clone, info.LifeTime));
             }
         }
     }
@@ -130,8 +137,7 @@ public class ParticleManager : MonoBehaviour
         var clon = _paticleList[particleName].Dequeue();
         clon._particle.SetActive(true);
 
-        clon._particle.transform.position = Pos;
-        clon._particle.transform.rotation = Angle;
+        clon._particle.transform.SetPositionAndRotation(Pos, Angle);
         clon.StartParticle(particleName);
         _activeParticle.Add(clon);
     }

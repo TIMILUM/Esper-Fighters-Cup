@@ -107,7 +107,7 @@ public class ThrowSkillObject : SkillObject
 
             if (TempStoneTime < CurrentTime && _stoneSpawnTime > CurrentTime)
             {
-                _skillobj.Add(InGameSkillManager._sGetInstance.CreateSkillObject("Stone", _startPos + new Vector3(
+                _skillobj.Add(InGameSkillManager.Instance.CreateSkillObject("Stone", _startPos + new Vector3(
                     Random.Range(-_range, _range), 1.0f, Random.Range(-_range, _range))));
                 _currentStoneCount++;
             }
@@ -115,7 +115,7 @@ public class ThrowSkillObject : SkillObject
 
             if (TempFragmentTime < CurrentTime && _fragmentSpawnTime > CurrentTime)
             {
-                _skillobj.Add(InGameSkillManager._sGetInstance.CreateSkillObject("Fragment", _startPos + new Vector3
+                _skillobj.Add(InGameSkillManager.Instance.CreateSkillObject("Fragment", _startPos + new Vector3
                     (Random.Range(-_range, _range), 1.0f, Random.Range(-_range, _range))));
                 _currentFragmentCount++;
             }
@@ -146,7 +146,7 @@ public class ThrowSkillObject : SkillObject
 
         ActiveGameObjects(_firstCasting);
         ActiveGameObjects(_secondCasting);
-        InGameSkillManager._sGetInstance.ScrapingAllSetActive();
+        InGameSkillManager.Instance.ScrapingAllSetActive();
 
         yield return new WaitUntil(() =>
         {
@@ -162,14 +162,14 @@ public class ThrowSkillObject : SkillObject
 
                 if (Input.GetMouseButton(0) && SkillRangeCheck(MousePos))
                 {
-                    if (!InGameSkillManager._sGetInstance.ScrapingCampare(MousePos))
+                    if (!InGameSkillManager.Instance.ScrapingCampare(MousePos))
                     {
                         SetState(State.Release);
                         return isCanceled;
                     }
                     else
                     {
-                        InGameSkillManager._sGetInstance.AddScraping(_secondCasting.transform, _range);
+                        InGameSkillManager.Instance.AddScraping(_secondCasting.transform, _range);
                         _startPos = MousePos;
                         _startTime = Time.time;
                         isCanceled = true;
@@ -215,7 +215,7 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnRelease()
     {
-        InGameSkillManager._sGetInstance.ScrapingAllSetActive(false);
+        InGameSkillManager.Instance.ScrapingAllSetActive(false);
         Destroy(gameObject);
         yield return null;
     }

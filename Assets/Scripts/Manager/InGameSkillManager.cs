@@ -9,31 +9,31 @@ using UnityEngine;
 /// </summary>
 public class InGameSkillManager : MonoBehaviour
 {
-    private static InGameSkillManager _sInstance;
+    private static InGameSkillManager s_Instance;
 
     [SerializeField]
     private GameObject _scrapingFrefab;
     [SerializeField]
-    private SkillObjectFactory skillObjectfactory;
+    private SkillObjectFactory _skillObjectfactory;
 
     private ScrapingArea _scrapingArea = new ScrapingArea();
 
-    public static InGameSkillManager _sGetInstance
+    public static InGameSkillManager Instance
     {
         get
         {
-            if (_sInstance == null)
+            if (s_Instance == null)
                 return null;
 
-            return _sInstance;
+            return s_Instance;
         }
     }
 
     // Start is called before the first frame update
     private void Awake()
     {
-        if (_sInstance == null)
-            _sInstance = this;
+        if (s_Instance == null)
+            s_Instance = this;
 
 
     }
@@ -59,15 +59,15 @@ public class InGameSkillManager : MonoBehaviour
 
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
     {
-        return skillObjectfactory.CreateSkillObject(objectname, pos);
+        return _skillObjectfactory.CreateSkillObject(objectname, pos);
     }
     public List<GameObject> CompareSkillObject(Vector3 pos, float range)
     {
-        return skillObjectfactory.CompareSkillObject(pos, range);
+        return _skillObjectfactory.CompareSkillObject(pos, range);
     }
     public void RemoveSkillObject(GameObject removeObject)
     {
-        skillObjectfactory.RemoveSkillObject(removeObject);
+        _skillObjectfactory.RemoveSkillObject(removeObject);
     }
 
 }
