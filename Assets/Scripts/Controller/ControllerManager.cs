@@ -21,11 +21,6 @@ public class ControllerManager : MonoBehaviour
         RegisterControllers();
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-    }
-
     public T GetController<T>(Type type) where T : ControllerBase
     {
         if (!_controllers.TryGetValue(type, out var controller))

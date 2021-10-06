@@ -39,8 +39,7 @@ public class KnockBackObject : BuffObject
         _buffStruct.Type = Type.KnockBack;
     }
 
-    // Start is called before the first frame update
-    private new void Start()
+    protected override void Start()
     {
         base.Start();
         _normalizedDirection = _normalizedDirection.normalized;
@@ -51,9 +50,13 @@ public class KnockBackObject : BuffObject
     }
 
     // Update is called once per frame
-    private new void Update()
+    protected override void Update()
     {
         base.Update();
+        if (!Author.photonView.IsMine)
+        {
+            return;
+        }
 
         _rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
     }
@@ -83,17 +86,23 @@ public class KnockBackObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
+        if (!Author.photonView.IsMine)
+        {
+            return;
+        }
+
         if (!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall"))
         {
             return;
         }
 
-        if (_actor.ControllerManager.TryGetController(
+        if (Author.ControllerManager.TryGetController(
             ControllerManager.Type.BuffController, out BuffController myController))
         {
             _rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
             GenerateAfterBuff(myController);
-            myController.ReleaseBuff(this);
+            myController.ReleaseBuff(BuffId);
+            return;
         }
 
         if (otherActor is null)

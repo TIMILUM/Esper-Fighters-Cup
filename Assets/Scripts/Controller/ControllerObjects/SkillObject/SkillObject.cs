@@ -48,8 +48,9 @@ public abstract class SkillObject : ControllerObject
     /// </summary>
     public string Name { get; set; }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         SetState(State.ReadyToUse);
     }
 

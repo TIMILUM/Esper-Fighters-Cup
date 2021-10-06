@@ -1,19 +1,35 @@
-using System;
 using UnityEngine;
 
 public abstract class ControllerObject : ObjectBase
 {
-    protected ControllerBase _controller;
+    /// <summary>
+    /// 컨트롤러 오브젝트의 주인 액터입니다.
+    /// </summary>
+    protected Actor Author { get; private set; }
+
+    protected ControllerBase Controller { get; private set; }
+
+    protected virtual void Start()
+    {
+        Author = Controller.ControllerManager.GetActor();
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        // Start가 실행되기 전에 OnPlayerHitEnter가 실행되어버리는 이슈때문에 이벤트 등록 위치 변경
+        Controller.PlayerHitEnterEvent += OnPlayerHitEnter;
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        Controller.PlayerHitEnterEvent -= OnPlayerHitEnter;
+    }
 
     public virtual void Register(ControllerBase controller)
     {
-        _controller = controller;
-        _controller.PlayerHitEnterEvent += OnPlayerHitEnter;
-    }
-
-    private void OnDestroy()
-    {
-        _controller.PlayerHitEnterEvent -= OnPlayerHitEnter;
+        Controller = controller;
     }
 
     /// <summary>
@@ -22,7 +38,7 @@ public abstract class ControllerObject : ObjectBase
     /// <typeparam name="T">형변환 시킬 컨트롤러의 클래스 탬플릿명을 작성합니다</typeparam>
     protected T ControllerCast<T>() where T : ControllerBase
     {
-        return (T)_controller;
+        return (T)Controller;
     }
 
     /// <summary>

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public abstract class ObjectBase : MonoBehaviourPunCallbacks
 {
     [SerializeField]
