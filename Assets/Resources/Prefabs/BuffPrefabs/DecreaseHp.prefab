@@ -46,9 +46,10 @@ MonoBehaviour:
   _buffOnCollision: []
   _name: 
   _buffStruct:
-    Type: 4
-    Duration: 0
-    ValueFloat: []
-    ValueVector3: []
-    AllowDuplicates: 1
-    Damage: 3
+    _type: 4
+    _duration: 0
+    _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 1
+    _damage: 3
+    _isOnlyOnce: 1
