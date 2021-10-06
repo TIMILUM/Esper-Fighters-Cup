@@ -1,4 +1,5 @@
 using System;
+using Photon.Pun;
 using System.Diagnostics.CodeAnalysis;
 using Photon.Pun;
 using UnityEngine;
@@ -79,7 +80,7 @@ public abstract class BuffObject : ControllerObject
             ControllerCast<BuffController>().ReleaseBuff(BuffId);
         }
 
-        if (_buffStruct.isOnlyonce)
+        if (_buffStruct.IsOnlyOnce)
         {
             ControllerCast<BuffController>().ReleaseBuff(BuffId);
         }
@@ -99,17 +100,23 @@ public abstract class BuffObject : ControllerObject
      * @body get/set auto 프로퍼티로 변경을 하거나, 인스펙터 상에 보여야 한다면 SerializeField 적용 등 리팩토링이 필요합니다.
      */
     [Serializable]
-    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     public class BuffStruct
     {
-        public Type Type;
-        public float Duration;
-        public float[] ValueFloat;
-        public Vector3[] ValueVector3;
-        public bool AllowDuplicates = true;
-        public float Damage;
-        /// 해당 버프 한번만 적용 되는지 판별하는 변수
-        public bool isOnlyonce = false;
+        [SerializeField] private Type _type;
+        [SerializeField] private float _duration;
+        [SerializeField] private float[] _valueFloat;
+        [SerializeField] private Vector3[] _valueVector3;
+        [SerializeField] private bool _allowDuplicates;
+        [SerializeField] private float _damage;
+        [SerializeField] private bool _isOnlyOnce;
 
+        public Type Type { get => _type; set => _type = value; }
+        public float Duration { get => _duration; set => _duration = value; }
+        public float[] ValueFloat { get => _valueFloat; set => _valueFloat = value; }
+        public Vector3[] ValueVector3 { get => _valueVector3; set => _valueVector3 = value; }
+        public bool AllowDuplicates { get => _allowDuplicates; set => _allowDuplicates = value; }
+        public float Damage { get => _damage; set => _damage = value; }
+        /// 해당 버프 한번만 적용 되는지 판별하는 변수
+        public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
     }
 }

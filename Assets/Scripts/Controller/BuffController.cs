@@ -17,8 +17,6 @@ public class BuffController : ControllerBase, IOnEventCallback
     private readonly Dictionary<BuffObject.Type, BuffObject> _buffPrefabLists =
         new Dictionary<BuffObject.Type, BuffObject>();
 
-    private APlayer _player;
-
     private void Awake()
     {
         var prefabs = Resources.LoadAll<BuffObject>("Prefabs/BuffPrefabs");
@@ -39,7 +37,6 @@ public class BuffController : ControllerBase, IOnEventCallback
     protected override void Start()
     {
         base.Start();
-        _player = _controllerManager.GetActor() as APlayer;
     }
 
     // Update is called once per frame

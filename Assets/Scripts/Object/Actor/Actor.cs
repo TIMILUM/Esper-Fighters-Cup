@@ -1,5 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class Actor : ObjectBase
 {
     [SerializeField]

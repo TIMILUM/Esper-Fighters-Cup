@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class SkillController : ControllerBase
@@ -10,7 +9,6 @@ public class SkillController : ControllerBase
 
     private readonly List<ControllerObject> _skillObjects = new List<ControllerObject>();
     private BuffController _buffController;
-    private APlayer _player;
 
     private void Reset()
     {
@@ -23,9 +21,7 @@ public class SkillController : ControllerBase
     protected override void Start()
     {
         base.Start();
-        _player = _controllerManager.GetActor() as APlayer;
-        _buffController =
-            _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     // Update is called once per frame
@@ -108,11 +104,14 @@ public class SkillController : ControllerBase
     }
 
     [Serializable]
-    [SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
     private class Skill
     {
-        public string Name;
-        public KeyCode Key;
-        public SkillObject SkillPrefab;
+        [SerializeField] private string _name;
+        [SerializeField] private KeyCode _key;
+        [SerializeField] private SkillObject _skillPrefab;
+
+        public string Name { get => _name; set => _name = value; }
+        public KeyCode Key { get => _key; set => _key = value; }
+        public SkillObject SkillPrefab { get => _skillPrefab; set => _skillPrefab = value; }
     }
 }

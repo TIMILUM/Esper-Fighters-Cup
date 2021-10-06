@@ -11,11 +11,9 @@ public class KnockBackObject : BuffObject
     [Tooltip("최종 넉백 거리는 (스피드 * 지속시간) 입니다.")]
     private float _speed = 1;
 
-    private Actor _actor;
-    private Vector3 _endPosition;
+    // private Vector3 _endPosition;
+    // private Vector3 _startPosition;
     private Rigidbody _rigidbody;
-
-    private Vector3 _startPosition;
 
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 HP가 줄어듬
     private float _decreaseHp = 0;
@@ -43,10 +41,9 @@ public class KnockBackObject : BuffObject
     {
         base.Start();
         _normalizedDirection = _normalizedDirection.normalized;
-        _actor = _controller.ControllerManager.GetActor();
-        _rigidbody = _actor.GetComponent<Rigidbody>();
-        _startPosition = _rigidbody.position;
-        _endPosition = _startPosition + (_buffStruct.Duration * _speed * _normalizedDirection);
+        _rigidbody = Author.GetComponent<Rigidbody>();
+        // _startPosition = _rigidbody.position;
+        // _endPosition = _startPosition + (_buffStruct.Duration * _speed * _normalizedDirection);
     }
 
     // Update is called once per frame
