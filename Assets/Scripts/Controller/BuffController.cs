@@ -116,8 +116,8 @@ public class BuffController : ControllerBase, IOnEventCallback
             return;
         }
 
-        var packet = new GameBuffReleasePacket(photonView.ViewID, id);
         Debug.Log($"Send buff release event - {id}");
+        var packet = new GameBuffReleasePacket(photonView.ViewID, id);
         PacketSender.Broadcast(GameProtocol.GameBuffReleaseEvent, in packet, SendOptions.SendReliable);
     }
 

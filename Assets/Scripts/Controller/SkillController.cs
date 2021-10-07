@@ -28,7 +28,7 @@ public class SkillController : ControllerBase
     protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine)
+        if (!photonView.IsMine)
         {
             return;
         }

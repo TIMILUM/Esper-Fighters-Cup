@@ -48,17 +48,14 @@ public abstract class SkillObject : ControllerObject
     /// </summary>
     public string Name { get; set; }
 
-    protected override void Start()
+    protected virtual void Start()
     {
-        base.Start();
         SetState(State.ReadyToUse);
     }
 
-    public override void Register(ControllerBase controller)
+    protected override void OnRegistered()
     {
-        base.Register(controller);
-        _buffController =
-            controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _buffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     /// <summary>

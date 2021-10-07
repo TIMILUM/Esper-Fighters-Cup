@@ -37,20 +37,16 @@ public class KnockBackObject : BuffObject
         _buffStruct.Type = Type.KnockBack;
     }
 
-    protected override void Start()
+    protected override void OnRegistered()
     {
-        base.Start();
         _normalizedDirection = _normalizedDirection.normalized;
         _rigidbody = Author.GetComponent<Rigidbody>();
-        // _startPosition = _rigidbody.position;
-        // _endPosition = _startPosition + (_buffStruct.Duration * _speed * _normalizedDirection);
     }
 
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        if (!Author.photonView.IsMine)
+        if (!IsRegistered || !Author.photonView.IsMine)
         {
             return;
         }
@@ -83,11 +79,6 @@ public class KnockBackObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        if (!Author.photonView.IsMine)
-        {
-            return;
-        }
-
         if (!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall"))
         {
             return;
@@ -99,7 +90,6 @@ public class KnockBackObject : BuffObject
             _rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
             GenerateAfterBuff(myController);
             myController.ReleaseBuff(BuffId);
-            return;
         }
 
         if (otherActor is null)

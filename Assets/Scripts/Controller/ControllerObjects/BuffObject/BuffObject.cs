@@ -1,7 +1,5 @@
 using System;
 using Photon.Pun;
-using System.Diagnostics.CodeAnalysis;
-using Photon.Pun;
 using UnityEngine;
 
 public abstract class BuffObject : ControllerObject
@@ -54,15 +52,14 @@ public abstract class BuffObject : ControllerObject
         set => _buffStruct.Duration = value;
     }
 
-    protected override void Start()
+    protected virtual void Start()
     {
-        base.Start();
         StartTime = PhotonNetwork.ServerTimestamp;
     }
 
     protected virtual void Update()
     {
-        if (!Author.photonView.IsMine)
+        if (!IsRegistered || !Author.photonView.IsMine)
         {
             return;
         }
@@ -95,10 +92,6 @@ public abstract class BuffObject : ControllerObject
         _buffStruct = buffStruct;
     }
 
-    /**
-     * @todo BuffStruct 리팩토링 필요
-     * @body get/set auto 프로퍼티로 변경을 하거나, 인스펙터 상에 보여야 한다면 SerializeField 적용 등 리팩토링이 필요합니다.
-     */
     [Serializable]
     public class BuffStruct
     {

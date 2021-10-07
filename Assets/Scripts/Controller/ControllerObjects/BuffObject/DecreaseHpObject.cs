@@ -21,7 +21,7 @@ public class DecreaseHpObject : BuffObject
     protected override void Update()
     {
         base.Update();
-        if (!Author.photonView.IsMine)
+        if (!IsRegistered || !Author.photonView.IsMine)
         {
             return;
         }
@@ -35,8 +35,6 @@ public class DecreaseHpObject : BuffObject
 
         _character.CharacterHP -= _damage;
         Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.CharacterHP);
-
-
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
