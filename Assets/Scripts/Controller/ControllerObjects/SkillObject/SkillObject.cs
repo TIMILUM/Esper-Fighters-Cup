@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -56,19 +56,17 @@ public abstract class SkillObject : ControllerObject
         SetState(State.ReadyToUse);
     }
 
-    protected void FixedUpdate()
+    protected override void OnRegistered()
+    {
+        _buffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+    }
+	
+	protected void FixedUpdate()
     {
         if (_physicsCount > 0)
         {
             --_physicsCount;
         }
-    }
-
-    public override void Register(ControllerBase controller)
-    {
-        base.Register(controller);
-        _buffController =
-            controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     /// <summary>

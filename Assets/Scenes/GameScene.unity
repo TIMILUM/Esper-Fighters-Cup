@@ -520,6 +520,8 @@ GameObject:
   - component: {fileID: 33337929}
   - component: {fileID: 33337932}
   - component: {fileID: 33337931}
+  - component: {fileID: 33337934}
+  - component: {fileID: 33337933}
   - component: {fileID: 33337930}
   m_Layer: 0
   m_Name: EnemyDummy
@@ -553,14 +555,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 33337928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cca0438132b4514fbd47bd9a4de468d, type: 3}
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buffOnCollision: []
-  _controllerManager: {fileID: 996294837}
-  _characterType: 0
-  _characterHp: 100
-  _rigidbody: {fileID: 33337931}
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!54 &33337931
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -591,6 +592,46 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &33337933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33337928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cca0438132b4514fbd47bd9a4de468d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buffOnCollision: []
+  _controllerManager: {fileID: 996294837}
+  _characterType: 0
+  _characterHp: 100
+  _rigidbody: {fileID: 33337931}
+--- !u!114 &33337934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33337928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 33337930}
+  sceneViewId: 5
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &36197364
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,6 +958,7 @@ GameObject:
   - component: {fileID: 104796449}
   - component: {fileID: 104796448}
   - component: {fileID: 104796447}
+  - component: {fileID: 104796452}
   m_Layer: 0
   m_Name: 1x1 Cube (2)
   m_TagString: Object
@@ -1032,6 +1074,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104796445}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &104796452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104796445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 6
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &109571289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6598,7 +6662,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterUIStruct:
   - Text: {fileID: 232424870}
-    Chracter: {fileID: 33337930}
+    Chracter: {fileID: 33337933}
     Name: EnemyDummy
 --- !u!1001 &816499513
 PrefabInstance:
@@ -15910,6 +15974,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 628744017}
     m_Modifications:
+    - target: {fileID: 1917822577574673532, guid: b75f5f4c7208ff8458901ed9faa37b6f, type: 3}
+      propertyPath: sceneViewId
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4314589049664778600, guid: b75f5f4c7208ff8458901ed9faa37b6f, type: 3}
       propertyPath: m_RootOrder
       value: 2

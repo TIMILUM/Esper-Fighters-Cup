@@ -9,14 +9,8 @@ public class APlayer : ACharacter
     protected override void Start()
     {
         base.Start();
-        _rigidbody.isKinematic = !(photonView?.IsMine) ?? false;
+        _rigidbody.isKinematic = !photonView.IsMine;
 
         Camera.main.gameObject.GetComponent<CameraMovement>().AddTarget(transform); // 카메라 타겟 추가 설정
-
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 }
