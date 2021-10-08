@@ -41,14 +41,18 @@ public class SawBladeSystem : MonoBehaviour
     public void GenerateSawBladeObject()
     {
         var sawBladeObject = Instantiate(_sawBladeObjectPrefab, _sawBladeRoot);
-        var (start, end) = GetSawBladePositions();
-        sawBladeObject.SetDirection(start, end);
+        var position = GetSawBladePositions();
+        sawBladeObject.SetDirection(position._startTransform, position._endTransform);
     }
 
-    private (Transform, Transform) GetSawBladePositions()
+    private SawBladePosition GetSawBladePositions()
     {
         var index = Random.Range(0, _bladePositions.Count);
-        return (_bladePositions[index]._startTransform, _bladePositions[index]._endTransform);
+        return new SawBladePosition
+        { 
+            _startTransform = _bladePositions[index]._startTransform,
+            _endTransform = _bladePositions[index]._endTransform
+        };
     }
 
     private class SawBladePosition
