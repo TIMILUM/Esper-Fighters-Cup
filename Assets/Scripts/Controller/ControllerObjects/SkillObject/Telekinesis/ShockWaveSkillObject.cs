@@ -116,12 +116,9 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.gameObject.SetActive(true);
         var startTime = DateTime.Now;
         var nowTime = DateTime.Now;
-        while ((nowTime - startTime).TotalMilliseconds <= _onHitDuration * 1000)
-        {
-            _colliderParentTransform.transform.position = _startPos;
-            yield return null;
-            nowTime = DateTime.Now;
-        }
+        _colliderParentTransform.transform.position = _startPos;
+        yield return new WaitUntil(() => WaitPhysicsUpdate());
+        nowTime = DateTime.Now;
 
         _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();
