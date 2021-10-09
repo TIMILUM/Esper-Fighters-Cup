@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -5,10 +6,18 @@ using UnityEngine.Events;
 public class ColliderChecker : MonoBehaviour
 {
     private UnityAction<ObjectBase> _onCollision;
+    private UnityAction<GameObject> _onCollisionAll;
+    private ObjectBase _currentObjectBase = null;
+
+    private void Awake()
+    {
+        _currentObjectBase = GetComponentInParent<ObjectBase>();
+    }
 
     private void OnCollisionEnter(Collision other)
     {
-        var target = other.gameObject.GetComponent<ObjectBase>();
+        _onCollisionAll?.Invoke(other.gameObject);
+        var target = FindObjectBase(other.gameObject);
         if (target == null)
         {
             return;
@@ -19,7 +28,8 @@ public class ColliderChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var target = other.GetComponent<ObjectBase>();
+        _onCollisionAll?.Invoke(other.gameObject);
+        var target = FindObjectBase(other.gameObject);
         if (target == null)
         {
             return;
@@ -28,9 +38,33 @@ public class ColliderChecker : MonoBehaviour
         _onCollision?.Invoke(target);
     }
 
+    private ObjectBase FindObjectBase(GameObject gameObj)
+    {
+        var target = gameObj.GetComponent<ObjectBase>();
+        if (target != null)
+        {
+            return target;
+        }
+
+        var checker = gameObj.GetComponent<ColliderChecker>();
+        if (checker == null)
+        {
+            return null;
+        }
+        target = checker._currentObjectBase;
+
+        return target;
+    }
+
     public event UnityAction<ObjectBase> OnCollision
     {
         add => _onCollision += value;
         remove => _onCollision -= value;
+    }
+    
+    public event UnityAction<GameObject> OnCollisionAll
+    {
+        add => _onCollisionAll += value;
+        remove => _onCollisionAll -= value;
     }
 }

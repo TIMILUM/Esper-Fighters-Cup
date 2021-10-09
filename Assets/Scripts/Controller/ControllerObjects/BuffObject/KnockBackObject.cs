@@ -23,6 +23,7 @@ public class KnockBackObject : BuffObject
 
     public Vector3 NormalizedDirection
     {
+        get => _normalizedDirection;
         set => _normalizedDirection = value;
     }
 

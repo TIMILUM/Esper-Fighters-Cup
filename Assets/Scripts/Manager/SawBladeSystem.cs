@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -40,8 +41,9 @@ public class SawBladeSystem : MonoBehaviour
     /// </summary>
     public void GenerateSawBladeObject()
     {
-        var sawBladeObject = Instantiate(_sawBladeObjectPrefab, _sawBladeRoot);
         var position = GetSawBladePositions();
+        var sawBladeGameObject = PhotonNetwork.Instantiate("Prefabs/StaticObjects/" + _sawBladeObjectPrefab.name, position._startTransform.position, Quaternion.identity);
+        var sawBladeObject = sawBladeGameObject.GetComponent<SawBladeObject>();
         sawBladeObject.SetDirection(position._startTransform, position._endTransform);
     }
 
