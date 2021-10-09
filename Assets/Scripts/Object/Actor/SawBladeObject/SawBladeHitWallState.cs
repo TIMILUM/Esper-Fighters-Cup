@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class SawBladeHitWallState : SawBladeFSMBase
 {
     protected override void Initialize()
@@ -11,11 +7,9 @@ public class SawBladeHitWallState : SawBladeFSMBase
 
     public override void StartState()
     {
-        
     }
 
     public override void EndState()
     {
-        
     }
 }

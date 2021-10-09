@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SawBladeMoveState : SawBladeFSMBase
@@ -13,7 +11,7 @@ public class SawBladeMoveState : SawBladeFSMBase
             ChangeState(SawBladeFSMSystem.StateEnum.HitWall);
             return;
         }
-        
+
         var position = transform.position;
         position += direction * _sawBladeObject.Speed * Time.deltaTime;
         transform.position = position;
@@ -21,12 +19,12 @@ public class SawBladeMoveState : SawBladeFSMBase
         var endPosition = _sawBladeObject.EndPosition;
         // 끝지점에 다다르면 움직임을 종료하고 HitWall상태로 전환
         var endDistance = Vector3.Distance(endPosition.position, position);
-        if(endDistance < 0.5f)
+        if (endDistance < 0.5f)
         {
             ChangeState(SawBladeFSMSystem.StateEnum.HitWall);
         }
     }
-    
+
     protected override void Initialize()
     {
         State = SawBladeFSMSystem.StateEnum.Move;
@@ -34,11 +32,9 @@ public class SawBladeMoveState : SawBladeFSMBase
 
     public override void StartState()
     {
-        
     }
 
     public override void EndState()
     {
-        
     }
 }

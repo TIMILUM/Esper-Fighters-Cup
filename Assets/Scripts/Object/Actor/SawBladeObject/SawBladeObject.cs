@@ -13,6 +13,7 @@ public class SawBladeObject : AStaticObject
 
     [SerializeField]
     private float _speed = 3;
+
     public float Speed => _speed;
 
     private Vector3 _direction = Vector3.one;
@@ -21,7 +22,7 @@ public class SawBladeObject : AStaticObject
     private Transform _startPosition;
     private Transform _endPosition;
     public Transform EndPosition => _endPosition;
-    
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -35,14 +36,14 @@ public class SawBladeObject : AStaticObject
         _buffOnCollision[0].ValueVector3[0] = -hitDirection;
         base.SetHit(to);
     }
-    
+
     public void SetDirection(Transform start, Transform end)
     {
         _startPosition = start;
         _endPosition = end;
         var startPosition = _startPosition.position;
         _direction = Vector3.Normalize(_endPosition.position - startPosition);
-        
+
         transform.SetPositionAndRotation(startPosition, Quaternion.LookRotation(_direction));
     }
 

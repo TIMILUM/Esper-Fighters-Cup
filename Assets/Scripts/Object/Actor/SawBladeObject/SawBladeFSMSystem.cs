@@ -18,11 +18,12 @@ public class SawBladeFSMSystem : InspectorFSMSystem<SawBladeFSMSystem.StateEnum,
 
     [SerializeField, Tooltip("버프 컨트롤러를 직접 넣어주시면 됩니다.")]
     private BuffController _buffController = null;
+
     public BuffController BuffControllerObject => _buffController;
 
     private Vector3 _direction;
     public Vector3 Direction => _direction;
-    
+
     private void Start()
     {
         if (!_buffController.photonView.IsMine)
@@ -37,6 +38,7 @@ public class SawBladeFSMSystem : InspectorFSMSystem<SawBladeFSMSystem.StateEnum,
         {
             return;
         }
+
         // 넉백 버프가 있으면 방향을 추출하고 OnLift상태로 변경 후 넉백버프 제거
         var knockBackList = _buffController.GetBuff(BuffObject.Type.KnockBack);
         if (knockBackList != null)

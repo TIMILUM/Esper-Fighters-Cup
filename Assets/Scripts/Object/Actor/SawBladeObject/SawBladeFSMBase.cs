@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SawBladeObject))]
 public abstract class SawBladeFSMBase : InspectorFSMBase<SawBladeFSMSystem.StateEnum, SawBladeFSMSystem>
 {
-
-    protected SawBladeObject _sawBladeObject = null;
+    protected SawBladeObject _sawBladeObject;
 
     protected override void Awake()
     {

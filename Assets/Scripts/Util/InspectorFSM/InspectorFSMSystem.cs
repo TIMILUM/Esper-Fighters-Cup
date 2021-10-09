@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface InspectorFSMInterface<TStateEnum, TBaseClass>
     where TBaseClass : InspectorFSMBaseInterface<TStateEnum>
-    where TStateEnum : System.Enum
+    where TStateEnum : Enum
 {
     Dictionary<TStateEnum, TBaseClass> StatePool { get; }
     TStateEnum StartState { get; }
@@ -15,23 +14,17 @@ public interface InspectorFSMInterface<TStateEnum, TBaseClass>
 }
 
 /// <summary>
-/// Inspector를 활용한 FSM System 클래스입니다. 해당 클래스를 상속받아 FSM System을 커스텀하시면 됩니다.
+///     Inspector를 활용한 FSM System 클래스입니다. 해당 클래스를 상속받아 FSM System을 커스텀하시면 됩니다.
 /// </summary>
 /// <typeparam name="TStateEnum">Enum 형식의 FSM의 State입니다.</typeparam>
 /// <typeparam name="TBaseClass">InspectorFSMBase를 상속한 클래스입니다.</typeparam>
-public abstract class InspectorFSMSystem<TStateEnum,TBaseClass> : MonoBehaviour, InspectorFSMInterface<TStateEnum, TBaseClass>
-    where TStateEnum : System.Enum
+public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : MonoBehaviour,
+    InspectorFSMInterface<TStateEnum, TBaseClass>
+    where TStateEnum : Enum
     where TBaseClass : InspectorFSMBaseInterface<TStateEnum>
 {
-
-    public Dictionary<TStateEnum, TBaseClass> StatePool { get; private set; }
-
     [SerializeField]
     private TStateEnum _startState;
-    public TStateEnum StartState => _startState;
-
-    private TStateEnum _currState;
-    public TStateEnum CurrState => _currState;
 
     protected virtual void Awake()
     {
@@ -39,8 +32,12 @@ public abstract class InspectorFSMSystem<TStateEnum,TBaseClass> : MonoBehaviour,
         InitStatePool();
     }
 
+    public Dictionary<TStateEnum, TBaseClass> StatePool { get; private set; }
+    public TStateEnum StartState => _startState;
+    public TStateEnum CurrState { get; private set; }
+
     /// <summary>
-    /// 해당 FSM 시스템의 State를 바꿉니다.
+    ///     해당 FSM 시스템의 State를 바꿉니다.
     /// </summary>
     /// <param name="state">바꿀 State를 설정합니다.</param>
     public void ChangeState(TStateEnum state)
@@ -50,9 +47,10 @@ public abstract class InspectorFSMSystem<TStateEnum,TBaseClass> : MonoBehaviour,
             Debug.LogError("Dont have Key in InspectorFSMSystem");
             return;
         }
+
         var nextStateObject = CastToMonoBehavior(nextState);
 
-        if (StatePool.TryGetValue(_currState, out var currentState))
+        if (StatePool.TryGetValue(CurrState, out var currentState))
         {
             currentState.EndState();
         }
@@ -62,7 +60,7 @@ public abstract class InspectorFSMSystem<TStateEnum,TBaseClass> : MonoBehaviour,
             CastToMonoBehavior(pair.Value).enabled = false;
         }
 
-        _currState = state;
+        CurrState = state;
         nextStateObject.enabled = true;
         nextState.StartState();
     }
@@ -83,6 +81,7 @@ public abstract class InspectorFSMSystem<TStateEnum,TBaseClass> : MonoBehaviour,
 
             StatePool[state.State] = state;
         }
+
         // 첫 스테이트로 전환해줍니다.
         ChangeState(StartState);
     }

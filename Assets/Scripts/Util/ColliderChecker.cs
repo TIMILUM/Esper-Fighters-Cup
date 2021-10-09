@@ -51,6 +51,7 @@ public class ColliderChecker : MonoBehaviour
         {
             return null;
         }
+
         target = checker._currentObjectBase;
 
         return target;
@@ -61,7 +62,7 @@ public class ColliderChecker : MonoBehaviour
         add => _onCollision += value;
         remove => _onCollision -= value;
     }
-    
+
     public event UnityAction<GameObject> OnCollisionAll
     {
         add => _onCollisionAll += value;
