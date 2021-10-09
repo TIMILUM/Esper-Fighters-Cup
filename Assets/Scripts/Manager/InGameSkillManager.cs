@@ -12,11 +12,11 @@ public class InGameSkillManager : MonoBehaviour
     private static InGameSkillManager s_Instance;
 
     [SerializeField]
-    private GameObject _scrapingFrefab;
+    private FragmentAreaManager _FragmentArea;
+
     [SerializeField]
     private SkillObjectFactory _skillObjectfactory;
 
-    private ScrapingArea _scrapingArea = new ScrapingArea();
 
     public static InGameSkillManager Instance
     {
@@ -37,25 +37,83 @@ public class InGameSkillManager : MonoBehaviour
 
 
     }
+    /// <summary>
+    /// 파편지대 생성
+    /// </summary>
+    /// <param name="trans"></param> 
+    /// <param name="range"></param>
+    public void AddFragmentArea(Transform trans, float range)
+    {
+        _FragmentArea.AddFragmentList(trans, range);
+    }
+    /// <summary>
+    /// 파편지대 시작 event 띄움
+    /// </summary>
+    public void FragmentEventStart()
+    {
+        _FragmentArea.EventStart();
+    }
+    /// <summary>
+    /// 지금 설치한 파편지대 수
+    /// </summary>
+    /// <returns></returns>
+    public int FragmentCount()
+    {
+        return _FragmentArea.FragmentCount();
+    }
+    /// <summary>
+    /// 파편지대 모두 활성화
+    /// </summary>
+    public void FragmentAllActive(Vector3 pos, float range)
+    {
+        _FragmentArea.SetFragmentAreaActive(pos, range);
+    }
+    /// <summary>
+    /// 파편지대 위치 설정한 파편지대 삭제
+    /// </summary>
+    public void FragmentAllDestroy()
+    {
+        _FragmentArea.AllDestory();
+    }
+    /// <summary>
+    /// 연속 설치 방지하기 위해서 체크하는 함수
+    /// </summary>
+    /// <param name="Pos"></param>
+    /// <returns></returns>
+    public bool CreateFragmentCheck(Vector3 Pos)
+    {
+        return _FragmentArea.CreateFragmentCheck(Pos);
+    }
 
-    public void AddScraping(Transform transform, float range)
+    /// <summary>
+    /// 오브젝트 던지기는 함수
+    /// </summary>
+    /// <param name="Buffstruct"></param>
+    /// <param name="Target"></param>
+    public void FragmentAreaThrowObject(BuffObject.BuffStruct Buffstruct, Vector3 Target)
     {
-        var clone = Instantiate(_scrapingFrefab, transform.position, transform.rotation);
-        clone.transform.localScale = transform.localScale;
-        _scrapingArea.AddScrapingList(clone, range);
+        _FragmentArea.ThrowObject(Buffstruct, Target);
     }
-    public bool ScrapingCampare(Vector3 pos)
+    /// <summary>
+    /// 취소함수
+    /// </summary>
+    public void CancelFragment()
     {
-        return _scrapingArea.ScrapingCampare(pos);
+        _FragmentArea.CancelFragment();
     }
-    public int ScrapingCount()
+
+    /// <summary>
+    /// 방향을 나타내는 함수
+    /// </summary>
+    /// <param name="pos"></param>
+    public void FragmentDirection(Vector3 pos)
     {
-        return _scrapingArea.ScrapingCount();
+        _FragmentArea.FragmentDirection(pos);
     }
-    public void ScrapingAllSetActive(bool isActive = true)
-    {
-        _scrapingArea.AllSetActive(isActive);
-    }
+
+
+
+
 
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
     {

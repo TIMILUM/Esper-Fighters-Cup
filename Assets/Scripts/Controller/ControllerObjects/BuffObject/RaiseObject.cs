@@ -9,11 +9,13 @@ public class RaiseObject : BuffObject
 
     [SerializeField]
     [Tooltip("올라갈 스피드 입니다.")]
-    private float _speed = 1;
     private Actor _actor;
-    private Vector3 _endPoint;
-
     private Rigidbody _rigidbody;
+    private float _limitPosy;
+    private Vector3 _startPos;
+    private float _startTime;
+    private float _endTime;
+
 
     private void Reset()
     {
@@ -24,43 +26,52 @@ public class RaiseObject : BuffObject
 
     private new void Start()
     {
-        base.Start();
         _actor = _controller.ControllerManager.GetActor();
         _rigidbody = _actor.GetComponent<Rigidbody>();
-        _endPoint = transform.position + new Vector3(0.0f, _raiseDate, 0.0f);
         _rigidbody.useGravity = false;
-
+        _buffStruct.Type = Type.Raise;
+        _startPos = _actor.transform.position;
+        _startTime = Time.time;
     }
 
 
     public override void SetBuffStruct(BuffStruct buffStruct)
     {
+        // BuffStruct Help
+        // ----------------
+        // ValueFloat[0] : limitPosY (0이면 스턴 효과 없음)
+        // ----------------
+
         base.SetBuffStruct(buffStruct);
-        _speed = buffStruct.ValueFloat[0];
-        _raiseDate = buffStruct.ValueFloat[1];
-        _buffStruct.Duration = buffStruct.ValueFloat[2];
+        _limitPosy = buffStruct.ValueFloat[0];
+    }
+
+    protected new void Update()
+    {
+        base.Update();
+        _endTime = Time.time;
+        float currentTime = _endTime - _startTime;
+
+        _actor.transform.position = Vector3.Lerp(_startPos, new Vector3(_actor.transform.position.x,
+            _limitPosy, _actor.transform.position.z), currentTime / Duration);
     }
 
     private void OnDestroy()
     {
-        _rigidbody.useGravity = true;
-    }
-    protected new void Update()
-    {
-        base.Update();
-        if (_endPoint.y > _actor.transform.position.y)
-            _rigidbody.position += Vector3.up * _speed * Time.deltaTime;
-
-
+        if (_rigidbody != null)
+            _rigidbody.useGravity = true;
 
     }
+
+
+
     public override void OnPlayerHitEnter(GameObject other)
     {
-        //throw new System.NotImplementedException();
+
     }
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
     {
-        //throw new System.NotImplementedException();
+
     }
 }

@@ -8,4 +8,6 @@ public class AStaticObject : Actor
         base.Start();
     }
 
+
+
 }
