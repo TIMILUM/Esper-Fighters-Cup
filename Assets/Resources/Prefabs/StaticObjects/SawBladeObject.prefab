@@ -128,6 +128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3179342520512475395}
   - component: {fileID: 3179342520512475394}
+  - component: {fileID: 1959413196410685931}
   m_Layer: 0
   m_Name: SawBladeObject
   m_TagString: Untagged
@@ -165,35 +166,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buffOnCollision:
-  - Type: 2
-    Duration: 0.1
-    ValueFloat:
-    - 10
+  - _type: 2
+    _duration: 0.1
+    _valueFloat:
+    - 5
     - 0
     - 0
-    ValueVector3:
+    _valueVector3:
     - {x: 0, y: 0, z: 0}
-    AllowDuplicates: 0
-    Damage: 0
-    isOnlyonce: 0
-  - Type: 1
-    Duration: 1
-    ValueFloat: []
-    ValueVector3: []
-    AllowDuplicates: 0
-    Damage: 0
-    isOnlyonce: 0
-  - Type: 4
-    Duration: 0.001
-    ValueFloat: []
-    ValueVector3: []
-    AllowDuplicates: 0
-    Damage: 10
-    isOnlyonce: 0
+    _allowDuplicates: 0
+    _damage: 0
+    _isOnlyOnce: 0
+  - _type: 1
+    _duration: 0.3
+    _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 0
+    _damage: 0
+    _isOnlyOnce: 0
+  - _type: 4
+    _duration: 0
+    _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 0
+    _damage: 10
+    _isOnlyOnce: 1
   _controllerManager: {fileID: 2003298924726973060}
-  _allowBuffList: 01000000
+  _allowBuffList: 0100000002000000
   _collider: {fileID: 3179342519834818331}
   _speed: 3
+--- !u!114 &1959413196410685931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6804647049068734126
 GameObject:
   m_ObjectHideFlags: 0
