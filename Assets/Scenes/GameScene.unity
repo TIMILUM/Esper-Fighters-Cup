@@ -359,6 +359,7 @@ GameObject:
   - component: {fileID: 28038344}
   - component: {fileID: 28038343}
   - component: {fileID: 28038342}
+  - component: {fileID: 28038345}
   m_Layer: 0
   m_Name: InSkillGameManager
   m_TagString: Untagged
@@ -392,7 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b1cd766b410a04f9293e7657969f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scrapingFrefab: {fileID: 5941034453120984881, guid: 1be45267d166fbf4bb977a66248d8a2f, type: 3}
+  _FragmentArea: {fileID: 28038345}
   _skillObjectfactory: {fileID: 28038342}
 --- !u!4 &28038344
 Transform:
@@ -408,6 +409,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &28038345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28038341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5810252d16183314b86fc9905788f418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fregmentFrefab: {fileID: 6684051829039581318, guid: 189720cac249aaf45a386c3470996d44, type: 3}
+  _shardsOfDebris: 1
 --- !u!1 &28391206
 GameObject:
   m_ObjectHideFlags: 0
@@ -13638,7 +13653,7 @@ Rigidbody:
   m_Drag: 0.1
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

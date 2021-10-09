@@ -123,8 +123,8 @@ public class MovementController : ControllerBase
         //     knockBack.Speed = 3.0f;
         // }
 
-        // 스턴 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null)
+        // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
         {
             return;
         }

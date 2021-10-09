@@ -36,11 +36,6 @@ public class EnvironmentStaticObject : AStaticObject
     }
 
 
-    protected virtual void Updtate()
-    {
-
-    }
-
     protected override void Start()
     {
         base.Start();

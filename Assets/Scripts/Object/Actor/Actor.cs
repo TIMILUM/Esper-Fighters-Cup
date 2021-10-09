@@ -7,9 +7,11 @@ public class Actor : ObjectBase
     [SerializeField]
     [Tooltip("오브젝트를 직접 넣어주세요!")]
     protected ControllerManager _controllerManager;
+    public ControllerManager ControllerManager => _controllerManager;
 
     protected BuffController _buffController;
-    public ControllerManager ControllerManager => _controllerManager;
+    public BuffController BuffController => _buffController;
+
 
     [SerializeField]
     private float _Hp;

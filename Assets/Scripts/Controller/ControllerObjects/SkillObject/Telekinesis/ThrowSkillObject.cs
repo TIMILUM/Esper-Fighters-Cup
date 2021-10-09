@@ -5,65 +5,27 @@ using UnityEngine;
 public class ThrowSkillObject : SkillObject
 {
     [SerializeField]
-    private float _range = 10;
+    private GameObject _casting;
     [SerializeField]
-    private GameObject _firstCasting;
+    private GameObject _fragmentCasting;
     [SerializeField]
-    private GameObject _secondCasting;
+    private float _range;
     [SerializeField]
-    private int _maxStoneCount = 5;
-    [SerializeField]
-    private int _maxFragmentCount = 5;
-    [SerializeField, Tooltip("단위 밀리세컨드")]
-    private float _stoneSpawnTime = 5000;
-
-    [SerializeField, Tooltip("단위 밀리세컨드")]
-    private float _fragmentSpawnTime = 5000;
+    private float _fragmentAreaRange;
 
     [SerializeField]
-    private float _stoneSpwanArea;
-    [SerializeField]
-    private float _onHitDuration = 0.5f;
-
-
-    private int _currentStoneCount;
-    private int _currentFragmentCount;
-    private float _startTime;
-
-    private Vector3 _startPos;
-
-    private List<GameObject> _skillobj = new List<GameObject>();
-
-    private Vector3 _direction = Vector3.right;
-
-
-
-    [SerializeField]
-    [Header("Collider")]
-    private Transform _colliderParentTransform;
-
-    [SerializeField]
-    private ColliderChecker _collider;
+    private float _frontDelayTime;
 
 
 
     protected override void Start()
     {
         base.Start();
-
-
-
-        ScaleGameObjects(_firstCasting, Vector3.one * _range);
-        ScaleGameObjects(_secondCasting, Vector3.one * _range);
-        _colliderParentTransform.localScale = Vector3.one * _range;
-        _collider.OnCollision += SetHit;
-
-        _range = _range / 2.0f;
-
+        ScaleGameObjects(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
+        ScaleGameObjects(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
     }
     public override void SetHit(ObjectBase to)
     {
-        _buffOnCollision[0].ValueVector3[0] = _direction;
         base.SetHit(to);
     }
 
@@ -74,122 +36,96 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnCanceled()
     {
-        Debug.Log("스킬 종료");
         SetState(State.Release);
         yield return null;
     }
 
     protected override IEnumerator OnEndDelay()
     {
-        Debug.Log("스킬 종료");
+
         SetState(State.Release);
         yield return null;
     }
+    protected override IEnumerator OnReadyToUse()
+    {
+        var isCanceled = false;
+        ActiveGameObjects(_casting);
+        ActiveGameObjects(_fragmentCasting);
 
 
+        yield return new WaitUntil(() =>
+       {
+           var MousePos = GetMousePosition();
+           TranslateGameObjects(_fragmentCasting, MousePos);
+
+           if (Input.GetKeyDown(KeyCode.Mouse1))
+           {
+               isCanceled = true;
+               return isCanceled;
+           }
+
+           if (Input.GetMouseButtonDown(0))
+           {
+               if (SetPosCompare(MousePos) && InGameSkillManager.Instance.CreateFragmentCheck(MousePos))
+               {
+                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange);
+               }
+           }
 
 
+           if (Input.GetKeyUp(KeyCode.LeftShift))
+           {
+               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range);
+               ActiveGameObjects(_fragmentCasting, false);
+               ActiveGameObjects(_casting, false);
+               if (InGameSkillManager.Instance.FragmentCount() == 0)
+               {
+                   isCanceled = true;
+                   return isCanceled;
+               }
+
+               return true;
+           }
+           return isCanceled;
+       });
+
+
+        if (isCanceled)
+        {
+            InGameSkillManager.Instance.FragmentAllDestroy();
+            SetState(State.Canceled);
+            yield break;
+        }
+
+        ActiveGameObjects(_fragmentCasting, false);
+        ActiveGameObjects(_casting, false);
+        SetNextState();
+    }
 
     protected override IEnumerator OnFrontDelay()
     {
-
-
-
-
         bool isCanceled = false;
+        var StartTime = Time.time;
+        var CurrentTime = Time.time;
 
-        yield return new WaitUntil(() =>
+        while ((CurrentTime - StartTime) * 1000 <= _frontDelayTime)
         {
-            float CurrentTime = (Time.time - _startTime) * 1000.0f;
-
-            float TempStoneTime = (_stoneSpawnTime / _maxStoneCount) * _currentStoneCount;
-            float TempFragmentTime = (_fragmentSpawnTime / _maxFragmentCount) * _currentFragmentCount;
-
-            if (TempStoneTime < CurrentTime && _stoneSpawnTime > CurrentTime)
-            {
-                _skillobj.Add(InGameSkillManager.Instance.CreateSkillObject("Stone", _startPos + new Vector3(
-                    Random.Range(-_range * 0.5f, _range * 0.5f), 1.0f, Random.Range(-_range * 0.5f, _range * 0.5f))));
-                _currentStoneCount++;
-            }
-
-
-            if (TempFragmentTime < CurrentTime && _fragmentSpawnTime > CurrentTime)
-            {
-                _skillobj.Add(InGameSkillManager.Instance.CreateSkillObject("Fragment", _startPos + new Vector3
-                    (Random.Range(-_range * 0.5f, _range * 0.5f), 1.0f, Random.Range(-_range * 0.5f, _range * 0.5f))));
-                _currentFragmentCount++;
-            }
-
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 isCanceled = true;
-                _direction = GetMousePosition() - _startPos;
+                break;
             }
-            if (Input.GetMouseButton(1))
-                SetState(State.Release);
+            yield return null;
+            CurrentTime = Time.time;
+        }
 
-
-            return isCanceled;
-        });
-
-        if (isCanceled)
-            SetNextState();
-
-
-        yield break;
-    }
-
-    protected override IEnumerator OnReadyToUse()
-    {
-        bool isCanceled = false;
-
-        ActiveGameObjects(_firstCasting);
-        ActiveGameObjects(_secondCasting);
-        InGameSkillManager.Instance.ScrapingAllSetActive();
-
-        yield return new WaitUntil(() =>
+        if (isCanceled == true)
         {
-
-            var MousePos = GetMousePosition();
-            TranslateGameObjects(_secondCasting, GetMousePosition());
-
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                ActiveGameObjects(_firstCasting, false);
-                ActiveGameObjects(_secondCasting, false);
-
-
-                if (Input.GetMouseButton(0) && SkillRangeCheck(MousePos))
-                {
-                    if (!InGameSkillManager.Instance.ScrapingCampare(MousePos))
-                    {
-                        SetState(State.Release);
-                        return isCanceled;
-                    }
-                    else
-                    {
-                        InGameSkillManager.Instance.AddScraping(_secondCasting.transform, _range);
-                        _startPos = MousePos;
-                        _startTime = Time.time;
-                        isCanceled = true;
-                    }
-                }
-                else
-                {
-                    SetState(State.Release);
-                    return isCanceled;
-
-                }
-            }
-            return isCanceled;
-        });
-
-
-        if (isCanceled)
-            SetNextState();
-
+            InGameSkillManager.Instance.FragmentAllDestroy();
+            SetState(State.Release);
+        }
+        SetNextState();
     }
-
 
 
 
@@ -214,30 +150,53 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnRelease()
     {
-        InGameSkillManager.Instance.ScrapingAllSetActive(false);
         Destroy(gameObject);
-        yield return null;
+        yield break;
     }
 
     protected override IEnumerator OnUse()
     {
-        _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
-        _colliderParentTransform.gameObject.SetActive(true);
-        var startTime = System.DateTime.Now;
-        var nowTime = System.DateTime.Now;
-        while ((nowTime - startTime).TotalMilliseconds <= _onHitDuration * 1000)
+        bool isCanceled = false;
+        InGameSkillManager.Instance.FragmentEventStart();
+
+        yield return new WaitUntil(() =>
         {
-            _colliderParentTransform.transform.position = _startPos;
-            yield return null;
-            nowTime = System.DateTime.Now;
+            InGameSkillManager.Instance.FragmentDirection(GetMousePosition());
+            if (Input.GetMouseButtonDown(1))
+            {
+                isCanceled = true;
+                return isCanceled;
+            }
+            if (Input.GetMouseButton(0))
+            {
+                InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
+                return true;
+            }
+
+            return isCanceled;
+        });
+
+
+        if (isCanceled)
+        {
+            InGameSkillManager.Instance.CancelFragment();
+            SetState(State.Canceled);
         }
 
-        _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();
     }
 
 
+    private bool SetPosCompare(Vector3 Pos)
+    {
+        var startPos = GetMousePosition();
+        if (Vector3.Distance(Pos, transform.position) > _range)
+        {
+            return false;
+        }
 
+        return true;
+    }
 
     private void ActiveGameObjects(GameObject gameObjects, bool isActive = true)
     {
@@ -266,14 +225,5 @@ public class ThrowSkillObject : SkillObject
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
     {
         throw new System.NotImplementedException();
-    }
-
-    private bool SkillRangeCheck(Vector3 Target)
-    {
-        if (Vector3.Distance(_firstCasting.transform.position, Target) < _range)
-            return true;
-        return false;
-
-
     }
 }
