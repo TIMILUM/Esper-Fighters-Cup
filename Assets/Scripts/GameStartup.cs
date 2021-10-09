@@ -1,19 +1,24 @@
 using System.Text.RegularExpressions;
+using MessagePack;
+using MessagePack.Resolvers;
+using MessagePack.Unity;
+using MessagePack.Unity.Extension;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-public static class PhotonStartup
+public static class GameStartup
 {
-    private const string AppIdFilePath = "photon-cloud";
+    private const string PhotonAppIdFilePath = "photon-cloud";
 
     /// <summary>
     /// 최초로 게임이 실행될 때 씬이 로드되기 전 호출됩니다.
     /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void InitPhoton()
+    private static void InitGame()
     {
+        InitMessagePack();
         InitGameVersion();
         InitAppId();
         PhotonNetworkSettings();
@@ -23,9 +28,24 @@ public static class PhotonStartup
     /// 최초로 씬이 로드될 때 호출됩니다.
     /// </summary>
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void StartPhoton()
+    private static void StartGame()
     {
         CreatePhotonStatus();
+    }
+
+    private static void InitMessagePack()
+    {
+        StaticCompositeResolver.Instance.Register(
+            UnityResolver.Instance,
+            UnityBlitWithPrimitiveArrayResolver.Instance,
+            StandardResolver.Instance);
+
+        var options = MessagePackSerializerOptions
+            .Standard
+            .WithResolver(StaticCompositeResolver.Instance)
+            .WithSecurity(MessagePackSecurity.TrustedData);
+
+        MessagePackSerializer.DefaultOptions = options;
     }
 
     private static void InitGameVersion()
@@ -38,10 +58,10 @@ public static class PhotonStartup
 
     private static void InitAppId()
     {
-        var appIdFile = Resources.Load<TextAsset>(AppIdFilePath);
+        var appIdFile = Resources.Load<TextAsset>(PhotonAppIdFilePath);
         if (appIdFile is null)
         {
-            Debug.LogError($"Resources/{AppIdFilePath}.txt 파일이 존재하지 않습니다.");
+            Debug.LogError($"Resources/{PhotonAppIdFilePath}.txt 파일이 존재하지 않습니다.");
             return;
         }
 
@@ -50,7 +70,7 @@ public static class PhotonStartup
         // 빈 파일 여부 체크
         if (string.IsNullOrEmpty(appId))
         {
-            Debug.LogError($"Resources /{ AppIdFilePath}.txt 파일이 비어 있습니다.");
+            Debug.LogError($"Resources /{ PhotonAppIdFilePath}.txt 파일이 비어 있습니다.");
             return;
         }
 
@@ -70,7 +90,9 @@ public static class PhotonStartup
     {
         // 방에 입장한 플레이어와 씬 동기화
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
     }
+
 
     private static void CreatePhotonStatus()
     {
