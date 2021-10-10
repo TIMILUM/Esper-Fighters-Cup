@@ -95,11 +95,11 @@ public class MovementController : ControllerBase
         // 이 함수의 모든 코드는 모두 임시코드입니다. 잘 돌아가는지 확인해보려고 작성했습니다!
 
         // Q를 누르면 3초 스턴이 임시로 걸립니다.
-        if (Input.GetKey(KeyCode.Q) && _buffController.GetBuff(BuffObject.Type.Stun) == null)
-        {
-            var stun = _buffController.GenerateBuff(BuffObject.Type.Stun);
-            stun.Duration = 3;
-        }
+        //if (Input.GetKey(KeyCode.Q) && _buffController.GetBuff(BuffObject.Type.Stun) == null)
+        //{
+        //    var stun = _buffController.GenerateBuff(BuffObject.Type.Stun);
+        //    stun.Duration = 3;
+        //}
 
         // // E를 누르면 0.5초 동안 오른쪽으로 넉백이 임시로 걸립니다.
         // if (Input.GetKey(KeyCode.E) && _buffController.GetBuff(BuffObject.Type.KnockBack) == null)

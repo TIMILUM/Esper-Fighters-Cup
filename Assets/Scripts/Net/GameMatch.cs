@@ -1,4 +1,5 @@
 using System.Text;
+using EsperFightersCup.Net;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -63,31 +64,31 @@ public class GameMatch : MonoBehaviourPunCallbacks, IOnEventCallback
         var room = PhotonNetwork.CurrentRoom;
         if (PhotonNetwork.IsMasterClient && room.PlayerCount == room.MaxPlayers)
         {
-            PhotonEventUtils.BroadcastEvent(GameProtocol.GameMatchEvent, GameProtocol.GameMatch.Success, SendOptions.SendReliable);
+            var packet = new GameMatchPacket(GameMatchResults.Success);
+            PacketSender.Broadcast(GameProtocol.GameMatchEvent, in packet, SendOptions.SendReliable);
         }
     }
 
     public void OnEvent(EventData photonEvent)
     {
-        switch (photonEvent.Code)
+        if (photonEvent.Code == GameProtocol.GameMatchEvent)
         {
-            case GameProtocol.GameMatchEvent:
-                HandleMatchEvent(photonEvent.CustomData);
-                break;
+            HandleMatchEvent(photonEvent);
         }
     }
 
-    private void HandleMatchEvent(object data)
+    private void HandleMatchEvent(EventData received)
     {
-        var result = (GameProtocol.GameMatch)data;
+        var buffer = (byte[])received.CustomData;
+        var packet = PacketSerializer.Deserialize<GameMatchPacket>(buffer);
 
-        switch (result)
+        switch (packet.MatchResult)
         {
-            case GameProtocol.GameMatch.Success:
+            case GameMatchResults.Success:
                 OnMatched();
                 break;
 
-            case GameProtocol.GameMatch.Fail:
+            case GameMatchResults.Fail:
                 OnmatchFailed();
                 break;
         }
@@ -105,5 +106,6 @@ public class GameMatch : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void OnmatchFailed()
     {
+        // 매칭이 실패할 원인이 아직은 없음
     }
 }

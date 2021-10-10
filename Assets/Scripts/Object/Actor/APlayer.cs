@@ -1,10 +1,10 @@
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class APlayer : ACharacter
 {
-    [SerializeField, Tooltip("직접 컴포넌트를 넣어주세요.")]
-    private Rigidbody _rigidbody = null;
+    [SerializeField]
+    [Tooltip("직접 컴포넌트를 넣어주세요.")]
+    private Rigidbody _rigidbody;
 
     private CameraMovement _cameraMovement;
 
@@ -20,10 +20,5 @@ public class APlayer : ACharacter
     private void OnDestroy()
     {
         _cameraMovement.RemoveTarget(transform); // 카메라 타겟 삭제
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 }

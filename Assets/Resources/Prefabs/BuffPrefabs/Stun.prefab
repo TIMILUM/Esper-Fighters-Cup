@@ -47,11 +47,13 @@ MonoBehaviour:
   _buffOnCollision: []
   _name: Stun
   _buffStruct:
-    Type: 1
-    Duration: 1.5
-    ValueFloat: []
-    ValueVector3: []
-    AllowDuplicates: 1
+    _type: 1
+    _duration: 1.5
+    _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 1
+    _damage: 0
+    _isOnlyOnce: 0
 --- !u!1 &5475818330278905354
 GameObject:
   m_ObjectHideFlags: 0
