@@ -123,9 +123,21 @@ public class MovementController : ControllerBase
         //     knockBack.Speed = 3.0f;
         // }
 
+
+        var dirx = Input.GetAxisRaw("Horizontal");
+        var dirz = Input.GetAxisRaw("Vertical");
+
+
+        var dir = new Vector3(dirx, 0.0f, dirz).normalized;
+
+
         // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
         if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
         {
+            dir = Vector3.zero;
+            _currentDecreaseSpeed = 1.0f;
+            _currentIncreaseSpeed = 0.0f;
+
             return;
         }
 
@@ -134,16 +146,8 @@ public class MovementController : ControllerBase
 
         var playerPosition = _player.transform.position;
 
-
-
-        var dirx = Input.GetAxisRaw("Horizontal");
-        var dirz = Input.GetAxisRaw("Vertical");
-
         _player.CharacterAnimator.SetFloat("DirX", dirx);
         _player.CharacterAnimator.SetFloat("DirZ", dirz);
-        var dir = new Vector3(dirx, 0.0f, dirz).normalized;
-
-
 
         var currentSpeedTime = 0.0f;
 
