@@ -12,7 +12,7 @@ public class APlayer : ACharacter
     protected override void Start()
     {
         base.Start();
-        _rigidbody.isKinematic = !photonView?.IsMine ?? false;
+        _rigidbody.isKinematic = !photonView.IsMine;
         _cameraMovement = Camera.main.gameObject.GetComponent<CameraMovement>();
         _cameraMovement.AddTarget(transform); // 카메라 타겟 추가 설정
     }
