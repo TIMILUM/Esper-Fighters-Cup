@@ -19,10 +19,7 @@ public class ACharacter : Actor
     private Animator _animator = null;
     public Animator CharacterAnimator => _animator;
 
-
-
     // Start is called before the first frame update
-
     protected override void Start()
     {
         base.Start();

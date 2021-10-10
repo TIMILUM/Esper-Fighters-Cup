@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using ExitGames.Client.Photon;
 using UnityEngine;
 
 public class FragmentArea : AStaticObject
@@ -80,15 +78,19 @@ public class FragmentArea : AStaticObject
     private void CreateObject()
     {
 
-        if (!_colliderParentObject.activeInHierarchy) return;
+        if (!_colliderParentObject.activeInHierarchy)
+        {
+            return;
+        }
+
         if (_isNormalActive)
         {
             _currentStoneTime += Time.deltaTime * 1000;
             if (_currentStoneTime > _spawnStoneTime)
             {
-                var RandomPosition = Random.insideUnitSphere * Range;
-                RandomPosition.y = 0.0f;
-                InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position + RandomPosition);
+                var randomPosition = Random.insideUnitSphere * Range;
+                randomPosition.y = 0.0f;
+                InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position + randomPosition);
                 _currentStoneTime = 0.0f;
             }
         }
@@ -98,11 +100,9 @@ public class FragmentArea : AStaticObject
             _currentfragmentTime += Time.deltaTime * 1000;
             if (_currentfragmentTime > _spawnStoneTime)
             {
-
-
-                var RandomPosition = Random.insideUnitSphere * Range;
-                RandomPosition.y = 0.0f;
-                InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position + RandomPosition);
+                var randomPosition = Random.insideUnitSphere * Range;
+                randomPosition.y = 0.0f;
+                InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position + randomPosition);
                 _currentfragmentTime = 0.0f;
             }
         }
@@ -133,22 +133,27 @@ public class FragmentArea : AStaticObject
     /// <summary>
     /// 띄운 애들을 넉백을 하기 위한 함수입니다.
     /// </summary>
-    /// <param name="Buffstruct">띄운다음에 넉백을 적용하기 위해서 buffstruct를 받습니다.</param>
-    /// <param name="Target">마우스 위치를 말합니다.</param>
-    public void KnockBackObject(BuffObject.BuffStruct Buffstruct, Vector3 Target)
+    /// <param name="buffstruct">띄운다음에 넉백을 적용하기 위해서 buffstruct를 받습니다.</param>
+    /// <param name="target">마우스 위치를 말합니다.</param>
+    public void KnockBackObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
         _colliderParentObject.SetActive(false);
         foreach (var actor in _actors)
         {
-            if (actor == null) continue;
+            if (actor == null)
+            {
+                continue;
+            }
 
             if (actor.BuffController.GetBuff(BuffObject.Type.Raise) == null)
+            {
                 continue;
+            }
 
             actor.BuffController.ReleaseBuff(BuffObject.Type.Raise);
-            var _direction = Target - _frangmentArea.transform.position;
-            Buffstruct.ValueVector3[0] = _direction.normalized;
-            actor.BuffController.GenerateBuff(Buffstruct);
+            var direction = target - _frangmentArea.transform.position;
+            buffstruct.ValueVector3[0] = direction.normalized;
+            actor.BuffController.GenerateBuff(buffstruct);
         }
         if (_isFragmentActive)
         {

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ThrowSkillObject : SkillObject
@@ -55,8 +54,8 @@ public class ThrowSkillObject : SkillObject
 
         yield return new WaitUntil(() =>
        {
-           var MousePos = GetMousePosition();
-           TranslateGameObjects(_fragmentCasting, MousePos);
+           var mousePos = GetMousePosition();
+           TranslateGameObjects(_fragmentCasting, mousePos);
 
            if (Input.GetKeyDown(KeyCode.Mouse1))
            {
@@ -66,7 +65,7 @@ public class ThrowSkillObject : SkillObject
 
            if (Input.GetMouseButtonDown(0))
            {
-               if (SetPosCompare(MousePos) && InGameSkillManager.Instance.CreateFragmentCheck(MousePos))
+               if (SetPosCompare(mousePos) && InGameSkillManager.Instance.CreateFragmentCheck(mousePos))
                {
                    InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange);
                }
@@ -105,10 +104,10 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnFrontDelay()
     {
         bool isCanceled = false;
-        var StartTime = Time.time;
-        var CurrentTime = Time.time;
+        var startTime = Time.time;
+        var currentTime = Time.time;
 
-        while ((CurrentTime - StartTime) * 1000 <= _frontDelayTime)
+        while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -116,7 +115,7 @@ public class ThrowSkillObject : SkillObject
                 break;
             }
             yield return null;
-            CurrentTime = Time.time;
+            currentTime = Time.time;
         }
 
         if (isCanceled == true)
@@ -187,10 +186,10 @@ public class ThrowSkillObject : SkillObject
     }
 
 
-    private bool SetPosCompare(Vector3 Pos)
+    private bool SetPosCompare(Vector3 pos)
     {
         var startPos = GetMousePosition();
-        if (Vector3.Distance(Pos, transform.position) > _range)
+        if (Vector3.Distance(pos, transform.position) > _range)
         {
             return false;
         }

@@ -12,16 +12,13 @@ public class Actor : ObjectBase
     protected BuffController _buffController;
     public BuffController BuffController => _buffController;
 
-
     [SerializeField]
-    private float _Hp;
+    private float _hp;
     public float Hp
     {
-        get => _Hp;
-        set => _Hp = value;
+        get => _hp;
+        set => _hp = value;
     }
-
-
 
     protected virtual void Awake()
     {

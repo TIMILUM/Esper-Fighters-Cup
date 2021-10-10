@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
 /// 간단하게 오브젝트를 만들었습니다.
@@ -14,7 +12,7 @@ public class EnvironmentStaticObject : AStaticObject
     protected bool _isFloating = false;
 
     [SerializeField, Tooltip("직접 넣어주세여")]
-    private Collider _Collider;
+    private Collider _collider;
 
     private Vector3 _direction;
 

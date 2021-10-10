@@ -1,14 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
-
-
-
 
 public class ParticleManager : MonoBehaviour
 {
-
     /// <summary>
     /// 각각의 파티클 종류 정보
     /// </summary>
@@ -21,12 +15,10 @@ public class ParticleManager : MonoBehaviour
         [Tooltip("파티클 라이프 타임입니다. (단위는 밀리세컨드 입니다.)")]
         [SerializeField] private int _lifeTime = 3000;
 
-
         public string ParticleName { get => _particleName; set => _particleName = value; }
         public GameObject ParticleFrefab { get => _particleFrefab; set => _particleFrefab = value; }
         public int MaxNum { get => _maxNum; set => _maxNum = value; }
         public int LifeTime { get => _lifeTime; set => _lifeTime = value; }
-
     }
 
     /// <summary>
@@ -78,7 +70,7 @@ public class ParticleManager : MonoBehaviour
     /// <summary>
     /// 파티클 인스턴스
     /// </summary>
-    /// 
+    ///
 
     /// <summary>
     /// 삭제할 파티클 큐
@@ -118,9 +110,9 @@ public class ParticleManager : MonoBehaviour
     /// 파티클 실행
     /// </summary>
     /// <param name="particleName"> 파티클 이름</param>
-    /// <param name="Pos"> 파티클 시작 위치</param>
-    /// <param name="Angle">파티클 앵글 </param>
-    public void PullParticle(string particleName, Vector3 Pos, Quaternion Angle)
+    /// <param name="pos"> 파티클 시작 위치</param>
+    /// <param name="angle">파티클 앵글 </param>
+    public void PullParticle(string particleName, Vector3 pos, Quaternion angle)
     {
         if (!_paticleList.ContainsKey(particleName))
         {
@@ -137,7 +129,7 @@ public class ParticleManager : MonoBehaviour
         var clon = _paticleList[particleName].Dequeue();
         clon._particle.SetActive(true);
 
-        clon._particle.transform.SetPositionAndRotation(Pos, Angle);
+        clon._particle.transform.SetPositionAndRotation(pos, angle);
         clon.StartParticle(particleName);
         _activeParticle.Add(clon);
     }
@@ -149,7 +141,7 @@ public class ParticleManager : MonoBehaviour
     {
 
         /// <summary>
-        /// foreach에 List.remove함수 불러오면 에러 메시지 발생해서 큐를 만들어 
+        /// foreach에 List.remove함수 불러오면 에러 메시지 발생해서 큐를 만들어
         /// 삭제를 했습니다.
         /// </summary>
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +6,10 @@ public class SkillObjectFactory : MonoBehaviour
     [SerializeField]
     private GameObject _stonePrefab;
     [SerializeField]
-    private GameObject _FragmentStaticObjectPrefab;
+    private GameObject _fragmentStaticObjectPrefab;
 
-    private List<GameObject> _objectList = new List<GameObject>();
-    private List<GameObject> _compareList = new List<GameObject>();
+    private readonly List<GameObject> _objectList = new List<GameObject>();
+    private readonly List<GameObject> _compareList = new List<GameObject>();
 
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
     {
@@ -18,7 +17,7 @@ public class SkillObjectFactory : MonoBehaviour
         if (objectname == "Stone")
             clone = Instantiate(_stonePrefab, pos, Quaternion.identity);
         if (objectname == "Fragment")
-            clone = Instantiate(_FragmentStaticObjectPrefab, pos, Quaternion.identity);
+            clone = Instantiate(_fragmentStaticObjectPrefab, pos, Quaternion.identity);
 
         _objectList.Add(clone);
         return clone;

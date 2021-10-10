@@ -11,20 +11,16 @@ public class StunObject : BuffObject
         _buffStruct.Type = Type.Stun;
     }
 
-    // Start is called before the first frame update
-    protected override void Start()
+    protected override void OnRegistered()
     {
-        base.Start();
-        _character = _controller.ControllerManager.GetActor() as ACharacter;
-        _character?.CharacterAnimator.SetTrigger("Hit");
-    }
+        base.OnRegistered();
+        _character = Author as ACharacter;
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
+        if (!(_character is null))
+        {
+            _character.CharacterAnimator.SetTrigger("Hit");
+        }
     }
-
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
     {

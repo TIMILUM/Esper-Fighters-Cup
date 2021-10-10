@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -61,12 +60,12 @@ public class FragmentAreaManager : MonoBehaviour
 
 
 
-    public bool CreateFragmentCheck(Vector3 Pos)
+    public bool CreateFragmentCheck(Vector3 pos)
     {
         foreach (var item in _currentfragmentList)
         {
-            var FragmentPos = item._fragment.transform.position;
-            if (Vector3.Distance(Pos, FragmentPos) < item._range)
+            var fragmentPos = item._fragment.transform.position;
+            if (Vector3.Distance(pos, fragmentPos) < item._range)
             {
                 return false;
             }
@@ -104,12 +103,12 @@ public class FragmentAreaManager : MonoBehaviour
     /// </summary>
     public void SetFragmentAreaActive(Vector3 pos, float range)
     {
-        var CreatefragmentPosList = new Queue<Vector3>();
+        var createfragmentPosList = new Queue<Vector3>();
 
         foreach (var currentFragment in _currentfragmentList)
         {
 
-            bool _isCheck = false;
+            bool isCheck = false;
             var currentFragmentPos = currentFragment._fragment.transform.position;
 
             if (Vector3.Distance(currentFragmentPos, pos) > range)
@@ -117,28 +116,28 @@ public class FragmentAreaManager : MonoBehaviour
                 _currentFragmentremoveQue.Enqueue(currentFragment);
                 continue;
             }
-            foreach (var Fragment in _fragmentList)
+            foreach (var fragment in _fragmentList)
             {
-                if (!Fragment._fragment.GetComponent<FragmentArea>().GetActive())
+                if (!fragment._fragment.GetComponent<FragmentArea>().GetActive())
                 {
-                    _fragmentremoveQue.Enqueue(Fragment);
+                    _fragmentremoveQue.Enqueue(fragment);
                     continue;
                 }
 
-                var FragmentPos = Fragment._fragment.transform.position;
-                var HalfPos = (FragmentPos - currentFragmentPos) * 0.5f;
-                if (Vector3.Distance(currentFragmentPos, FragmentPos) < currentFragment._range * 2)
+                var fragmentPos = fragment._fragment.transform.position;
+                var halfPos = (fragmentPos - currentFragmentPos) * 0.5f;
+                if (Vector3.Distance(currentFragmentPos, fragmentPos) < currentFragment._range * 2)
                 {
-                    var CreatePos = currentFragment._fragment.transform.position + HalfPos;
-                    CreatefragmentPosList.Enqueue(CreatePos);
-                    _isCheck = true;
+                    var createPos = currentFragment._fragment.transform.position + halfPos;
+                    createfragmentPosList.Enqueue(createPos);
+                    isCheck = true;
                 }
             }
 
 
-            if (!_isCheck)
+            if (!isCheck)
                 currentFragment._fragment.GetComponent<FragmentArea>().FragmentAreaActive();
-            if (_isCheck)
+            if (isCheck)
                 _currentFragmentremoveQue.Enqueue(currentFragment);
 
         }
@@ -149,9 +148,9 @@ public class FragmentAreaManager : MonoBehaviour
             Destroy(removeobj._fragment);
             _currentfragmentList.Remove(removeobj);
         }
-        while (CreatefragmentPosList.Count != 0)
+        while (createfragmentPosList.Count != 0)
         {
-            AddFragmentList(CreatefragmentPosList.Dequeue(), _shardsOfDebris).GetComponent<FragmentArea>().FragmentActive();
+            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris).GetComponent<FragmentArea>().FragmentActive();
         }
     }
     /// <summary>
@@ -170,13 +169,13 @@ public class FragmentAreaManager : MonoBehaviour
     /// <summary>
     /// 던지기 함수 입니다.
     /// </summary>
-    /// <param name="Buffstruct"></param>
-    /// <param name="Target"></param>
-    public void ThrowObject(BuffObject.BuffStruct Buffstruct, Vector3 Target)
+    /// <param name="buffstruct"></param>
+    /// <param name="target"></param>
+    public void ThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
-        foreach (var FragmentAare in _currentfragmentList)
+        foreach (var fragmentAare in _currentfragmentList)
         {
-            FragmentAare._fragment.GetComponent<FragmentArea>().KnockBackObject(Buffstruct, Target);
+            fragmentAare._fragment.GetComponent<FragmentArea>().KnockBackObject(buffstruct, target);
         }
         //던지고 파편지대의 리스트로 옮깁니다.
         _fragmentList.AddRange(_currentfragmentList);
@@ -188,9 +187,9 @@ public class FragmentAreaManager : MonoBehaviour
     /// </summary>
     public void CancelFragment()
     {
-        foreach (var FragmentAare in _currentfragmentList)
+        foreach (var fragmentAare in _currentfragmentList)
         {
-            FragmentAare._fragment.GetComponent<FragmentArea>().CancelEvent();
+            fragmentAare._fragment.GetComponent<FragmentArea>().CancelEvent();
         }
     }
 
@@ -201,9 +200,9 @@ public class FragmentAreaManager : MonoBehaviour
 
     public void FragmentDirection(Vector3 pos)
     {
-        foreach (var FragmentAare in _currentfragmentList)
+        foreach (var fragmentArea in _currentfragmentList)
         {
-            FragmentAare._fragment.GetComponent<FragmentArea>().DirectionLookAt(pos);
+            fragmentArea._fragment.GetComponent<FragmentArea>().DirectionLookAt(pos);
         }
     }
 }
