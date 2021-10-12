@@ -5,8 +5,5 @@ public class StoneStaticObject : EnvironmentStaticObject
         base.Start();
     }
 
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-    {
-        base.OnHit(from, to, appendBuff);
-    }
+
 }

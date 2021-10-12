@@ -39,7 +39,6 @@ public class FragmentArea : AStaticObject
 
     private new void Start()
     {
-
         // range랑 크기랑 똑같기 때문에 임의의 좌표로 초기화 해줬습니다.
         // 크기는 지름을 나타내기 때문에 2를 나눠줍니다.
         Range = _nomalArea.transform.localScale.x * 0.5f;
@@ -106,6 +105,7 @@ public class FragmentArea : AStaticObject
                 _currentfragmentTime = 0.0f;
             }
         }
+
     }
 
 
@@ -137,7 +137,7 @@ public class FragmentArea : AStaticObject
     /// <param name="target">마우스 위치를 말합니다.</param>
     public void KnockBackObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
-        _colliderParentObject.SetActive(false);
+
         foreach (var actor in _actors)
         {
             if (actor == null)
@@ -155,25 +155,28 @@ public class FragmentArea : AStaticObject
             buffstruct.ValueVector3[0] = direction.normalized;
             actor.BuffController.GenerateBuff(buffstruct);
         }
+
+        ClearFragmentArea();
+    }
+
+    public void ClearFragmentArea()
+    {
         if (_isFragmentActive)
         {
             _frangmentArea.SetActive(false);
             _nomalArea.SetActive(false);
         }
 
+        _colliderParentObject.SetActive(false);
         _isNormalActive = false;
         _isFragmentActive = false;
         _direction.SetActive(false);
         _actors.Clear();
     }
 
-
-    //원안에 있는 객체들 한번만 띄우게 만들기위해서 List로 관리 해줬습니다.
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-    {
-        base.OnHit(from, to, appendBuff);
-    }
-
+    /// <summary>
+    /// 원안에 있는 객체들 한번만 띄우게 만들기위해서 List로 관리 해줬습니다.
+    /// </summary>
     public override void SetHit(ObjectBase to)
     {
         if (!_actors.Contains((Actor)to))

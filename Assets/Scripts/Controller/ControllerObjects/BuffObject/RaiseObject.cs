@@ -25,7 +25,6 @@ public class RaiseObject : BuffObject
         _actor = Controller.ControllerManager.GetActor();
         _rigidbody = _actor.GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
-        _buffStruct.Type = Type.Raise;
         _startPos = _actor.transform.position;
         _startTime = Time.time;
     }

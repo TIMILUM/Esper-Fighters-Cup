@@ -109,22 +109,24 @@ public class InGameSkillManager : MonoBehaviour
     {
         _fragmentArea.FragmentDirection(pos);
     }
+    public void FragmentClear()
+    {
+        _fragmentArea.CurrentFragmentAreaClear();
+    }
 
 
 
 
-
+    /// <summary>
+    /// 오브젝트 생성하는 함수
+    /// </summary>
+    /// <param name="objectname"></param>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
     {
         return _skillObjectfactory.CreateSkillObject(objectname, pos);
     }
-    public List<GameObject> CompareSkillObject(Vector3 pos, float range)
-    {
-        return _skillObjectfactory.CompareSkillObject(pos, range);
-    }
-    public void RemoveSkillObject(GameObject removeObject)
-    {
-        _skillObjectfactory.RemoveSkillObject(removeObject);
-    }
+
 
 }

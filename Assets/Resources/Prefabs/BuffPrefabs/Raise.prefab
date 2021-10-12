@@ -44,14 +44,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buffOnCollision: []
-  _name: 
+  _name: Raise
   _buffStruct:
-    Type: 6
-    Duration: 0
-    ValueFloat: []
-    ValueVector3: []
-    AllowDuplicates: 1
-    Damage: 0
-    isOnlyonce: 0
+    _type: 6
+    _duration: 0
+    _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 0
+    _damage: 0
+    _isOnlyOnce: 0
   _raiseDate: 0
-  _actor: {fileID: 0}

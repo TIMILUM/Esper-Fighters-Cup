@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
+
 
 
 /// <summary>
 /// 파편 지형을 만들어 주는 클래스 입니다.
 /// </summary>
-public class FragmentAreaManager : MonoBehaviour
+public class FragmentAreaManager : MonoBehaviourPunCallbacks
 {
 
     [SerializeField]
@@ -204,5 +206,15 @@ public class FragmentAreaManager : MonoBehaviour
         {
             fragmentArea._fragment.GetComponent<FragmentArea>().DirectionLookAt(pos);
         }
+    }
+
+    public void CurrentFragmentAreaClear()
+    {
+        foreach (var item in _currentfragmentList)
+        {
+            item._fragment.GetComponent<FragmentArea>().ClearFragmentArea();
+        }
+        _fragmentList.AddRange(_currentfragmentList);
+        _currentfragmentList.Clear();
     }
 }

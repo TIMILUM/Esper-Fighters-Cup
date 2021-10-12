@@ -163,12 +163,14 @@ public class ThrowSkillObject : SkillObject
             InGameSkillManager.Instance.FragmentDirection(GetMousePosition());
             if (Input.GetMouseButtonDown(1))
             {
+                InGameSkillManager.Instance.FragmentClear();
                 isCanceled = true;
                 return isCanceled;
             }
             if (Input.GetMouseButton(0))
             {
                 InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
+
                 return true;
             }
 

@@ -11,28 +11,6 @@ public class EnvironmentStaticObject : AStaticObject
     private Vector3 _maxRandomScale;
     protected bool _isFloating = false;
 
-    [SerializeField, Tooltip("직접 넣어주세여")]
-    private Collider _collider;
-
-    private Vector3 _direction;
-
-
-
-    private void RaiseObject()
-    {
-
-    }
-
-    private void DropObject()
-    {
-
-    }
-
-    private void ThrowObject()
-    {
-
-    }
-
 
     protected override void Start()
     {
@@ -40,16 +18,17 @@ public class EnvironmentStaticObject : AStaticObject
         transform.localScale = RandomScale(_minRandomScale, _maxRandomScale);
     }
 
+    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
+    {
+        base.OnHit(from, to, appendBuff);
+    }
 
     protected Vector3 RandomScale(Vector3 min, Vector3 max)
     {
         return new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
     }
 
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-    {
-        base.OnHit(from, to, appendBuff);
-    }
+
 
 
 
