@@ -1,25 +1,21 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Photon.Pun;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class SawBladeSystem : MonoBehaviour
 {
     [SerializeField]
-    private SawBladeObject _sawBladeObjectPrefab = null;
+    private SawBladeObject _sawBladeObjectPrefab;
 
     [SerializeField]
-    private Transform _positionRoot = null;
+    private Transform _positionRoot;
 
     [SerializeField]
-    private Transform _sawBladeRoot = null;
+    private Transform _sawBladeRoot;
 
     [SerializeField]
-    private Transform _patternRoot = null;
-    
-    private List<SawBladePattern> _bladePatterns = new List<SawBladePattern>();
+    private Transform _patternRoot;
+
+    private readonly List<SawBladePattern> _bladePatterns = new List<SawBladePattern>();
 
     // Start is called before the first frame update
     private void Start()
@@ -31,9 +27,9 @@ public class SawBladeSystem : MonoBehaviour
             _bladePatterns.Add(child);
         }
     }
-    
+
     /// <summary>
-    /// 톱날 오브젝트를 패턴을 통해 생성합니다.
+    ///     톱날 오브젝트를 패턴을 통해 생성합니다.
     /// </summary>
     public void GenerateSawBlade()
     {
@@ -49,7 +45,7 @@ public class SawBladeSystem : MonoBehaviour
 
     private class SawBladePosition
     {
-        public Transform _startTransform;
         public Transform _endTransform;
+        public Transform _startTransform;
     }
 }
