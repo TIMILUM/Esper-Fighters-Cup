@@ -41,10 +41,7 @@ public class SawBladeOnLiftState : SawBladeFSMBase
             ChangeState(SawBladeFSMSystem.StateEnum.HitWall);
             return;
         }
-
         var position = _rigidbody.position;
-        position += direction * _sawBladeObject.Speed * Time.deltaTime;
-        _rigidbody.position = position;
 
         // 끝지점에 다다르면 움직임을 종료하고 HitWall상태로 전환
         var endDistance = Vector3.Distance(_endPosition, position);
@@ -52,6 +49,9 @@ public class SawBladeOnLiftState : SawBladeFSMBase
         {
             ChangeState(SawBladeFSMSystem.StateEnum.HitWall);
         }
+
+        position += direction * _sawBladeObject.Speed * Time.deltaTime;
+        _rigidbody.position = position;
     }
 
     protected override void Initialize()
