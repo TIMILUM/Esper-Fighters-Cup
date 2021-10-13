@@ -87,6 +87,9 @@ public class ShockWaveSkillObject : SkillObject
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
+                //충격파 애니메이션
+                _player.CharacterAnimator.SetTrigger("ShockWaveSkill");
+                ParticleManager.Instance.PullParticle("ShockWave", _player.transform.position + _player.transform.forward, _player.transform.rotation);
                 return true;
             }
 
@@ -116,12 +119,9 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.gameObject.SetActive(true);
         var startTime = DateTime.Now;
         var nowTime = DateTime.Now;
-        while ((nowTime - startTime).TotalMilliseconds <= _onHitDuration * 1000)
-        {
-            _colliderParentTransform.transform.position = _startPos;
-            yield return null;
-            nowTime = DateTime.Now;
-        }
+        _colliderParentTransform.transform.position = _startPos;
+        yield return new WaitUntil(() => WaitPhysicsUpdate());
+        nowTime = DateTime.Now;
 
         _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();

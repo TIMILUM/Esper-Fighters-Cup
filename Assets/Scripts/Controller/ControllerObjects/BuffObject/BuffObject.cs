@@ -14,7 +14,8 @@ public abstract class BuffObject : ControllerObject
         KnockBack,
         Slow,
         DecreaseHp,
-        IncreaseHp
+        IncreaseHp,
+        Raise
     }
 
     [SerializeField]
@@ -59,6 +60,10 @@ public abstract class BuffObject : ControllerObject
 
     protected virtual void Update()
     {
+        /**
+         * @todo Update 용 abstract 메소드 만들기
+         * @body abstract로 Update 메소드를 만들어서 자식 클래스에서는 아래 조건문 생략
+         */
         if (!IsRegistered || !Author.photonView.IsMine)
         {
             return;
@@ -74,6 +79,9 @@ public abstract class BuffObject : ControllerObject
 
         if (ElapsedMilliseconds > _buffStruct.Duration * 1000)
         {
+            // BUG: 특정 상황에서 연속으로 메소드를 실행함
+            // 아마 ReleaseBuff를 보내고 나서 다시 이벤트를 받기까지 시간 간격이 있는데,
+            // 그 동안 이 오브젝트가 해제되지 못해서 생기는 버그인듯?
             ControllerCast<BuffController>().ReleaseBuff(BuffId);
         }
 
