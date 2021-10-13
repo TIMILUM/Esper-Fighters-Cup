@@ -12,6 +12,7 @@ public abstract class ControllerObject : ObjectBase
 
     protected virtual void OnDestroy()
     {
+        Debug.Log(Author.photonView);
         if (Author.photonView.IsMine)
         {
             Controller.PlayerHitEnterEvent -= OnPlayerHitEnter;
@@ -29,7 +30,6 @@ public abstract class ControllerObject : ObjectBase
         }
 
         IsRegistered = true;
-
         OnRegistered();
     }
 

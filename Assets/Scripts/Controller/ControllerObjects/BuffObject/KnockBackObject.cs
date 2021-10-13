@@ -23,6 +23,7 @@ public class KnockBackObject : BuffObject
 
     public Vector3 NormalizedDirection
     {
+        get => _normalizedDirection;
         set => _normalizedDirection = value;
     }
 
@@ -91,6 +92,8 @@ public class KnockBackObject : BuffObject
             GenerateAfterBuff(myController);
             myController.ReleaseBuff(BuffId);
         }
+
+
 
         if (otherActor is null)
         {
