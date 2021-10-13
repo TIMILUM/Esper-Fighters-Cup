@@ -16,6 +16,11 @@ public abstract class SkillObject : ControllerObject
         Release = 5
     }
 
+    /// <summary>
+    ///  플레이어
+    /// </summary>
+    protected APlayer _player;
+
     [SerializeField]
     private State _currentState = State.ReadyToUse;
 
@@ -56,6 +61,7 @@ public abstract class SkillObject : ControllerObject
     protected override void OnRegistered()
     {
         _buffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _player = Author.GetComponent<APlayer>();
     }
 
     /// <summary>

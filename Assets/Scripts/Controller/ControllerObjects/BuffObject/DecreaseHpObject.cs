@@ -2,20 +2,19 @@ using UnityEngine;
 
 public class DecreaseHpObject : BuffObject
 {
-
     private ACharacter _character = null;
     private float _damage = 0;
-
-    protected override void Start()
-    {
-        base.Start();
-        _character = Controller.ControllerManager.GetActor().GetComponent<ACharacter>();
-    }
 
     private void Reset()
     {
         _name = "";
         _buffStruct.Type = Type.DecreaseHp;
+    }
+
+    protected override void OnRegistered()
+    {
+        base.OnRegistered();
+        _character = Author.GetComponent<ACharacter>();
     }
 
     protected override void Update()
@@ -26,15 +25,15 @@ public class DecreaseHpObject : BuffObject
             return;
         }
 
-        if (_character == null)
+        if (_character is null) // is: Unity.Object의 null check 건너뛰고 바로 System.Object의 null check
         {
             Debug.Log("HP does not found!");
             ControllerCast<BuffController>().ReleaseBuff(BuffId);
             return;
         }
 
-        _character.CharacterHP -= _damage;
-        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.CharacterHP);
+        _character.Hp -= _damage;
+        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.Hp);
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
@@ -45,11 +44,9 @@ public class DecreaseHpObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-
     }
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
     {
-
     }
 }
