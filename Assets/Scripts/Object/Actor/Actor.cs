@@ -1,7 +1,11 @@
+using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
+[RequireComponent(typeof(PhotonTransformView))]
+[RequireComponent(typeof(PhotonRigidbodyView))]
+[RequireComponent(typeof(StudioEventEmitter))]
 public class Actor : ObjectBase
 {
     [SerializeField]
@@ -20,10 +24,14 @@ public class Actor : ObjectBase
         set => _hp = value;
     }
 
+    public StudioEventEmitter AudioEmitter { get; private set; }
+
     protected virtual void Awake()
     {
         Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");
         _controllerManager.SetActor(this);
+
+        AudioEmitter = GetComponent<StudioEventEmitter>();
     }
 
     protected virtual void Start()

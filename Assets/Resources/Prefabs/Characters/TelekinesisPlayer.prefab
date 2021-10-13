@@ -11,9 +11,11 @@ GameObject:
   - component: {fileID: 4314589049664778600}
   - component: {fileID: 4314589049664778606}
   - component: {fileID: 4314589049664778643}
-  - component: {fileID: 4314589049664778607}
   - component: {fileID: 8211835443746325872}
   - component: {fileID: 8663577832037187048}
+  - component: {fileID: 6623127734546534237}
+  - component: {fileID: 6646747819659544057}
+  - component: {fileID: 4314589049664778607}
   m_Layer: 0
   m_Name: TelekinesisPlayer
   m_TagString: Object
@@ -105,6 +107,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8663577832037187048}
+  - {fileID: 6646747819659544057}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -124,6 +127,62 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &6623127734546534237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
+--- !u!114 &6646747819659544057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &4314589049664778607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cca0438132b4514fbd47bd9a4de468d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buffOnCollision: []
+  _controllerManager: {fileID: 4314589049991569685}
+  _characterType: 1
+  _characterHp: 100
+  _rigidbody: {fileID: 4314589049664778643}
 --- !u!1 &4314589049991569687
 GameObject:
   m_ObjectHideFlags: 0

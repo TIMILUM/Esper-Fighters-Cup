@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class APlayer : ACharacter
@@ -15,8 +16,13 @@ public class APlayer : ACharacter
         _rigidbody.isKinematic = !photonView.IsMine;
         _cameraMovement = Camera.main.gameObject.GetComponent<CameraMovement>();
         _cameraMovement.AddTarget(transform); // 카메라 타겟 추가 설정
+        
+        if (photonView.IsMine)
+        {
+            Camera.main.GetComponent<StudioListener>().attenuationObject = gameObject;
+        }
     }
-
+    
     private void OnDestroy()
     {
         _cameraMovement.RemoveTarget(transform); // 카메라 타겟 삭제
