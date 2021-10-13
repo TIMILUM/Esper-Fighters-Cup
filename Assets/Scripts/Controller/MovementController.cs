@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovementController : ControllerBase
 {
 
-    [SerializeField] private bool _isMousePickLooking;
+    [SerializeField] private bool _isMousePickLookAt = true;
 
     [SerializeField, Range(0.001f, 30.0f)] private float _moveSpeed;
     [SerializeField, Range(0.001f, 30.0f), Header("속도 0까지 시간(단위는 초)")] private float _decreaseSpeedTime;
@@ -46,13 +46,13 @@ public class MovementController : ControllerBase
         }
 
         UpdateMine();
-        MousePickLookAt();
-        DirectionLookAt();
+
     }
 
+    //마우스 바라보기
     private void MousePickLookAt()
     {
-        if (!_isMousePickLooking)
+        if (!_isMousePickLookAt)
         {
             return;
         }
@@ -68,15 +68,28 @@ public class MovementController : ControllerBase
             {
                 var lookAtDirection = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f) - playerPosition;
                 playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(lookAtDirection), _smoothLookat);
+
+
+                //바라보는 방향에 맞게 애니메이션 적용
+                var tempPos = Vector3.forward.normalized;
+                var targetDirctionNormal = lookAtDirection.normalized;
+
+                var crossProduct = Vector3.Cross(tempPos, targetDirctionNormal);
+                float sin = Vector3.Dot(crossProduct, Vector3.up);
+                float cos = Vector3.Dot(tempPos, targetDirctionNormal);
+
+                _player.CharacterAnimator.SetFloat("Cos", cos);
+                _player.CharacterAnimator.SetFloat("Sin", sin);
             }
         }
 
         _player.transform.rotation = playerRotation;
     }
 
+    //이동 방향에 따라 앵글 변경
     private void DirectionLookAt()
     {
-        if (_isMousePickLooking || _currentMoveDir == Vector3.zero)
+        if (_isMousePickLookAt || _currentMoveDir == Vector3.zero)
         {
             return;
         }
@@ -110,38 +123,51 @@ public class MovementController : ControllerBase
         //     knockBack.Speed = 3.0f;
         // }
 
-        // 스턴 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null)
-        {
-            return;
-        }
-
-        var playerPosition = _player.transform.position;
-
-
 
         var dirx = Input.GetAxisRaw("Horizontal");
         var dirz = Input.GetAxisRaw("Vertical");
 
+
         var dir = new Vector3(dirx, 0.0f, dirz).normalized;
 
 
+        // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
+        {
+            dir = Vector3.zero;
+            _currentDecreaseSpeed = 1.0f;
+            _currentIncreaseSpeed = 0.0f;
+
+            return;
+        }
+
+
+
+
+        var playerPosition = _player.transform.position;
+
+        _player.CharacterAnimator.SetFloat("DirX", dirx);
+        _player.CharacterAnimator.SetFloat("DirZ", dirz);
+
         var currentSpeedTime = 0.0f;
+
         var tempDirection = Vector3.zero;
         if (dir == Vector3.zero)
         {
-            _currentIncreaseSpeed = 0.0f;
+            _currentIncreaseSpeed -= Time.deltaTime / _increaseSpeedTime;
             _currentDecreaseSpeed += Time.deltaTime / _decreaseSpeedTime;
             _currentDecreaseSpeed = Mathf.Clamp(_currentDecreaseSpeed, 0.0f, 1.0f);
+            _currentIncreaseSpeed = Mathf.Clamp(_currentIncreaseSpeed, 0.0f, 1.0f);
             tempDirection = _beforeMoveDirection;
             currentSpeedTime = _currentDecreaseSpeed;
 
         }
         else
         {
-            _currentDecreaseSpeed = 0.0f;
+            _currentDecreaseSpeed -= Time.deltaTime / _decreaseSpeedTime;
             _currentIncreaseSpeed += Time.deltaTime / _increaseSpeedTime;
             _currentIncreaseSpeed = Mathf.Clamp(_currentIncreaseSpeed, 0.0f, 1.0f);
+            _currentDecreaseSpeed = Mathf.Clamp(_currentDecreaseSpeed, 0.0f, 1.0f);
             _beforeMoveDirection = _currentMoveDir;
             currentSpeedTime = _currentIncreaseSpeed;
         }
@@ -151,6 +177,10 @@ public class MovementController : ControllerBase
         playerPosition += _moveSpeed * Time.deltaTime * _currentMoveDir;
 
         _player.transform.position = playerPosition;
+
+
+        MousePickLookAt();
+        DirectionLookAt();
     }
 
 }

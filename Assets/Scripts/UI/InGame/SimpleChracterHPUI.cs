@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +19,7 @@ public class SimpleChracterHPUI : MonoBehaviour
     {
         foreach (var data in _characterUIStruct)
         {
-            data.Text.text = data.Name + " : " + data.Chracter.CharacterHP.ToString();
+            data.Text.text = data.Name + " : " + data.Chracter.Hp.ToString();
         }
     }
 }

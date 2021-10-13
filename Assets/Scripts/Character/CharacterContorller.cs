@@ -122,7 +122,7 @@ public class CharacterContorller : MonoBehaviour
     {
         foreach (var skill in _skills)
         {
-            if (skill.isSkillUsing)
+            if (skill.IsSkillUsing)
             {
                 skill.SkillExecute();
             }
@@ -208,7 +208,7 @@ public class CharacterContorller : MonoBehaviour
     {
         foreach (var skill in _skills)
         {
-            if (!skill.isSkillUsing)
+            if (!skill.IsSkillUsing)
             {
                 continue;
             }
