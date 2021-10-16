@@ -62,25 +62,15 @@ public class ThrowSkillObject : SkillObject
                isCanceled = true;
                return isCanceled;
            }
-
-           if (Input.GetMouseButtonDown(0))
-           {
-               if (SetPosCompare(mousePos) && InGameSkillManager.Instance.CreateFragmentCheck(mousePos))
-               {
-                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange);
-               }
-           }
-
-
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
                InGameSkillManager.Instance.FragmentAllActive(transform.position, _range);
                ActiveGameObjects(_fragmentCasting, false);
                ActiveGameObjects(_casting, false);
-               if (InGameSkillManager.Instance.FragmentCount() == 0)
+               if (SetPosCompare(mousePos))
                {
-                   isCanceled = true;
-                   return isCanceled;
+                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player);
+                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range);
                }
 
                return true;

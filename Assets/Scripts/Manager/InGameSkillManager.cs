@@ -41,9 +41,9 @@ public class InGameSkillManager : MonoBehaviour
     /// </summary>
     /// <param name="trans"></param>
     /// <param name="range"></param>
-    public void AddFragmentArea(Transform trans, float range)
+    public void AddFragmentArea(Transform trans, float range, Actor costSkill)
     {
-        _fragmentArea.AddFragmentList(trans, range);
+        _fragmentArea.AddFragmentList(trans, range, costSkill);
     }
     /// <summary>
     /// 파편지대 시작 event 띄움

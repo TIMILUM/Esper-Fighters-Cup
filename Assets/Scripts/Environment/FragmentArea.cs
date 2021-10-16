@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class FragmentArea : AStaticObject
 {
-    [SerializeField]
-    private GameObject _nomalArea;
+
     [SerializeField]
     private GameObject _frangmentArea;
     [SerializeField]
@@ -16,33 +15,23 @@ public class FragmentArea : AStaticObject
     [SerializeField]
     private GameObject _direction;
 
-    [SerializeField, Header("단위 : Millisecond")]
-    private float _spawnStoneTime;
-    [SerializeField, Header("단위 : Millisecond")]
-    private float _spawnFragmentTime;
-
-
-    private float _currentStoneTime;
-    private float _currentfragmentTime;
-
     private List<Actor> _actors = new List<Actor>();
 
-
     public GameObject FrangmentArea => _frangmentArea;
-    public float Range { get; set; }
+
 
     private bool _isFragmentActive;
     private bool _isNormalActive;
 
 
+    public float Range { get; set; }
 
+    private bool _isObjectSpawn = false;
 
     private new void Start()
     {
-        // range랑 크기랑 똑같기 때문에 임의의 좌표로 초기화 해줬습니다.
-        // 크기는 지름을 나타내기 때문에 2를 나눠줍니다.
-        Range = _nomalArea.transform.localScale.x * 0.5f;
         _collider.OnCollision += SetHit;
+        Range = transform.localScale.x / 2.0f;
     }
 
     private void Update()
@@ -53,7 +42,6 @@ public class FragmentArea : AStaticObject
     public void FragmentAreaActive()
     {
         _frangmentArea.SetActive(true);
-        _nomalArea.SetActive(false);
         _isNormalActive = true;
     }
 
@@ -61,7 +49,7 @@ public class FragmentArea : AStaticObject
     {
         _isFragmentActive = true;
         _frangmentArea.SetActive(false);
-        _nomalArea.SetActive(true);
+
     }
 
 
@@ -69,6 +57,11 @@ public class FragmentArea : AStaticObject
     {
         _colliderParentObject.SetActive(true);
         _direction.SetActive(true);
+    }
+
+    public void NotFloatObject(Actor castSkill)
+    {
+        _actors.Add(castSkill);
     }
 
     /// <summary>
@@ -84,25 +77,27 @@ public class FragmentArea : AStaticObject
 
         if (_isNormalActive)
         {
-            _currentStoneTime += Time.deltaTime * 1000;
-            if (_currentStoneTime > _spawnStoneTime)
+
+            if (!_isObjectSpawn)
             {
                 var randomPosition = Random.insideUnitSphere * Range;
                 randomPosition.y = 0.0f;
-                InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position + randomPosition);
-                _currentStoneTime = 0.0f;
+                InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position);
+                _isObjectSpawn = true;
             }
+
+
         }
 
         if (_isFragmentActive)
         {
-            _currentfragmentTime += Time.deltaTime * 1000;
-            if (_currentfragmentTime > _spawnStoneTime)
+            if (!_isObjectSpawn)
             {
-                var randomPosition = Random.insideUnitSphere * Range;
-                randomPosition.y = 0.0f;
-                InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position + randomPosition);
-                _currentfragmentTime = 0.0f;
+                if (!_isObjectSpawn)
+                {
+                    InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position);
+                    _isObjectSpawn = true;
+                }
             }
         }
 
@@ -140,7 +135,9 @@ public class FragmentArea : AStaticObject
 
         foreach (var actor in _actors)
         {
-            if (actor == null)
+            var character = actor as ACharacter;
+
+            if (actor == null || character != null)
             {
                 continue;
             }
@@ -164,7 +161,7 @@ public class FragmentArea : AStaticObject
         if (_isFragmentActive)
         {
             _frangmentArea.SetActive(false);
-            _nomalArea.SetActive(false);
+
         }
 
         _colliderParentObject.SetActive(false);

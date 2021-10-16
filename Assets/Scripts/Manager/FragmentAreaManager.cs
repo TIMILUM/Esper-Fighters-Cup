@@ -23,6 +23,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
 
 
 
+
     private class FragmentAreaInfo
     {
 
@@ -44,10 +45,12 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="trans"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public GameObject AddFragmentList(Transform trans, float range)
+    public GameObject AddFragmentList(Transform trans, float range, Actor costSkill)
     {
-        var clone = Instantiate(_fregmentFrefab, trans.position, trans.rotation);
+        var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
+
         clone.transform.localScale = trans.localScale;
+        clone.GetComponent<FragmentArea>().NotFloatObject(costSkill);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
         return clone;
     }
