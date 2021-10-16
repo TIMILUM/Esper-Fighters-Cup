@@ -12,7 +12,7 @@ AvatarMask:
   - m_Path: 
     m_Weight: 1
   - m_Path: Bip001
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Bip001/Bip001 Footsteps
     m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis
@@ -46,9 +46,9 @@ AvatarMask:
       R Foot/Bip001 R Toe0/Bip001 R Toe0Nub
     m_Weight: 0
   - m_Path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2
-    m_Weight: 0
+    m_Weight: 1
   - m_Path: Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Spine2/Bip001
       Neck
     m_Weight: 1
@@ -274,7 +274,41 @@ AvatarMask:
     m_Weight: 1
   - m_Path: body_skulp_7_low
     m_Weight: 1
-  - m_Path: Jumper
+  - m_Path: Dummy001
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone001
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone001/Bone002
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone001/Bone002/Bone003
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone004
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone004/Bone005
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone004/Bone005/Bone006
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone004(mirrored)
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone004(mirrored)/Bone005(mirrored)
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone004(mirrored)/Bone005(mirrored)/Bone006(mirrored)
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone010
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone010/Bone011
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone010/Bone011/Bone012
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone010(mirrored)
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone010(mirrored)/Bone011(mirrored)
+    m_Weight: 1
+  - m_Path: Dummy001/Jumper_Bip001/Bone010(mirrored)/Bone011(mirrored)/Bone012(mirrored)
+    m_Weight: 1
+  - m_Path: Jumper002
     m_Weight: 1
   - m_Path: Point001
     m_Weight: 1

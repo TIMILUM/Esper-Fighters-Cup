@@ -14,11 +14,13 @@ public class MovementController : ControllerBase
     private Vector3 _currentMoveDir;
     private Vector3 _beforeMoveDirection;
 
+    private Vector3 _fragmentPos;
+
     private APlayer _player = null;
     private BuffController _buffController = null;
 
 
-    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.3f;
+    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.1f;
 
 
     private void Reset()
@@ -52,15 +54,26 @@ public class MovementController : ControllerBase
     //마우스 바라보기
     private void MousePickLookAt()
     {
-        if (!_isMousePickLookAt)
-        {
-            return;
-        }
+
 
         var playerRotation = _player.transform.rotation;
         var playerPosition = _player.transform.position;
         var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hitinfos = Physics.RaycastAll(screentoRay);
+
+
+        if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_A")
+    || _player.CharacterAnimator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_R"))
+        {
+            var direction = _fragmentPos - playerPosition;
+            playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direction), _smoothLookat);
+            _player.transform.rotation = playerRotation;
+            return;
+        }
+        if (!_isMousePickLookAt)
+        {
+            return;
+        }
 
         foreach (var hitinfo in hitinfos)
         {
@@ -80,6 +93,7 @@ public class MovementController : ControllerBase
 
                 _player.CharacterAnimator.SetFloat("Cos", cos);
                 _player.CharacterAnimator.SetFloat("Sin", sin);
+                _fragmentPos = hitinfo.point;
             }
         }
 
@@ -140,6 +154,8 @@ public class MovementController : ControllerBase
 
             return;
         }
+
+
 
 
 

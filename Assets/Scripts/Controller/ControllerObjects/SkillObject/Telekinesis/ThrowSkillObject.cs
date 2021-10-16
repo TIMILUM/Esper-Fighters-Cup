@@ -22,6 +22,7 @@ public class ThrowSkillObject : SkillObject
         base.Start();
         ScaleGameObjects(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
         ScaleGameObjects(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
+
     }
     public override void SetHit(ObjectBase to)
     {
@@ -64,13 +65,18 @@ public class ThrowSkillObject : SkillObject
            }
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
-               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range);
+               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range, _player);
                ActiveGameObjects(_fragmentCasting, false);
                ActiveGameObjects(_casting, false);
                if (SetPosCompare(mousePos))
                {
                    InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player);
-                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range);
+                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range, _player);
+               }
+               else
+               {
+                   isCanceled = true;
+                   return isCanceled;
                }
 
                return true;
@@ -96,7 +102,11 @@ public class ThrowSkillObject : SkillObject
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
-
+        if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            _player.CharacterAnimator.SetTrigger("ReverseGravityA");
+        }
+        _player.CharacterAnimator.SetTrigger("ReverseGravity");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))

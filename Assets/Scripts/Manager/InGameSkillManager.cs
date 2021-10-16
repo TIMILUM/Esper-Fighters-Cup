@@ -63,9 +63,9 @@ public class InGameSkillManager : MonoBehaviour
     /// <summary>
     /// 파편지대 모두 활성화
     /// </summary>
-    public void FragmentAllActive(Vector3 pos, float range)
+    public void FragmentAllActive(Vector3 pos, float range, Actor castActor)
     {
-        _fragmentArea.SetFragmentAreaActive(pos, range);
+        _fragmentArea.SetFragmentAreaActive(pos, range, castActor);
     }
     /// <summary>
     /// 파편지대 위치 설정한 파편지대 삭제
