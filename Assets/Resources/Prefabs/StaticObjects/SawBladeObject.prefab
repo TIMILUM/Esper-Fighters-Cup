@@ -209,6 +209,8 @@ GameObject:
   - component: {fileID: 6309777745093915248}
   - component: {fileID: 6171526705020637558}
   - component: {fileID: 2095926083156067989}
+  - component: {fileID: 9141026591053911480}
+  - component: {fileID: 3034873545151092570}
   m_Layer: 0
   m_Name: SawBladeObject
   m_TagString: Untagged
@@ -311,6 +313,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -9178771105032117353}
+  - {fileID: 9141026591053911480}
   - {fileID: 4562843916058014608}
   sceneViewId: 0
   InstantiationId: 0
@@ -389,6 +392,45 @@ MonoBehaviour:
   _transformObject: {fileID: 5070644869560437771}
   _speed: 4
   _rayMinDistance: 0.1
+--- !u!114 &9141026591053911480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &3034873545151092570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1 &6804647049068734126
 GameObject:
   m_ObjectHideFlags: 0
