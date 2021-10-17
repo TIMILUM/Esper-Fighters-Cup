@@ -51,7 +51,7 @@ public class CSVData
         {
             Type.INT => int.Parse(value),
             Type.FLOAT => float.Parse(value),
-            Type.BOOL => value == "true" || value == "TRUE",
+            Type.BOOL => value == "true",
             Type.STRING => value,
             _ => null
         };
@@ -64,7 +64,7 @@ public class CSVData
             return Type.FLOAT;
         }
         
-        if (value == "true" || value == "TRUE")
+        if (value == "true" || value == "false")
         {
             return Type.BOOL;
         }
