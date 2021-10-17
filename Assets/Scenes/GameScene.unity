@@ -600,6 +600,7 @@ GameObject:
   - component: {fileID: 33337935}
   - component: {fileID: 33337936}
   - component: {fileID: 33337933}
+  - component: {fileID: 33337937}
   m_Layer: 0
   m_Name: EnemyDummy
   m_TagString: Object
@@ -684,6 +685,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 996294837}
   _hp: 0
+  _id: 101
   _characterType: 0
   _animator: {fileID: 0}
   _rigidbody: {fileID: 33337931}
@@ -750,6 +752,20 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &33337937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33337928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
 --- !u!1 &36197364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,6 +1133,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 1072159231}
   _hp: 0
+  _id: 0
 --- !u!54 &104796448
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1625,6 +1642,18 @@ PrefabInstance:
     - target: {fileID: 5971018023291929727, guid: 7097b5aac3a107b40aca8e601cde30bd, type: 3}
       propertyPath: sceneViewId
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971018023291929727, guid: 7097b5aac3a107b40aca8e601cde30bd, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971018023291929727, guid: 7097b5aac3a107b40aca8e601cde30bd, type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5971018023291929727, guid: 7097b5aac3a107b40aca8e601cde30bd, type: 3}
+      propertyPath: ObservedComponents.Array.data[1]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7097b5aac3a107b40aca8e601cde30bd, type: 3}
@@ -3395,6 +3424,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 1694672935}
   _hp: 0
+  _id: 0
 --- !u!54 &378060652
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4073,6 +4103,7 @@ GameObject:
   - component: {fileID: 451200563}
   - component: {fileID: 451200565}
   - component: {fileID: 451200564}
+  - component: {fileID: 451200566}
   m_Layer: 0
   m_Name: Collisions_Bottom
   m_TagString: Wall
@@ -4123,6 +4154,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &451200566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451200562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 1
 --- !u!1001 &458037812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11787,6 +11832,7 @@ GameObject:
   - component: {fileID: 1505638686}
   - component: {fileID: 1505638688}
   - component: {fileID: 1505638687}
+  - component: {fileID: 1505638689}
   m_Layer: 0
   m_Name: Collisions_Left
   m_TagString: Wall
@@ -11837,6 +11883,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1505638689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505638685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 1
 --- !u!1 &1531701716
 GameObject:
   m_ObjectHideFlags: 0
@@ -14615,6 +14675,7 @@ GameObject:
   - component: {fileID: 1881396953}
   - component: {fileID: 1881396952}
   - component: {fileID: 1881396947}
+  - component: {fileID: 1881396956}
   m_Layer: 0
   m_Name: 1x1 Cube
   m_TagString: Object
@@ -14652,6 +14713,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 711545835}
   _hp: 0
+  _id: 2
 --- !u!54 &1881396948
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14810,6 +14872,20 @@ MonoBehaviour:
   sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1881396956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881396945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
 --- !u!1001 &1885208093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15430,6 +15506,7 @@ GameObject:
   - component: {fileID: 1978624326}
   - component: {fileID: 1978624328}
   - component: {fileID: 1978624327}
+  - component: {fileID: 1978624329}
   m_Layer: 0
   m_Name: Collisions_Right
   m_TagString: Wall
@@ -15480,6 +15557,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1978624329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978624325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 1
 --- !u!1 &2002514152
 GameObject:
   m_ObjectHideFlags: 0
@@ -16361,6 +16452,7 @@ GameObject:
   - component: {fileID: 2112045551}
   - component: {fileID: 2112045552}
   - component: {fileID: 2112045553}
+  - component: {fileID: 2112045554}
   m_Layer: 0
   m_Name: Collisions_Top
   m_TagString: Wall
@@ -16411,6 +16503,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2112045554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112045550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 1
 --- !u!4 &2119374219 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 59b2dc1ba009bf340872f2104f24bbdb, type: 3}
