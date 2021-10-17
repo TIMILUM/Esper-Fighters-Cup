@@ -35,9 +35,13 @@ public class ShockWaveSkillObject : SkillObject
     protected override void Start()
     {
         base.Start();
+        // 사거리
+        _range = GetCSVData<float>("Range");
+        // 판정 범위 가로 세로
+        _colliderSize = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
         ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
 
-        var colliderScale = new Vector3(_colliderSize.y, 1, _colliderSize.x);
+        var colliderScale = new Vector3(_colliderSize.x, 1, _colliderSize.y);
         ScaleGameObjects(_secondCasting, colliderScale);
         _colliderParentTransform.localScale = colliderScale;
         _collider.OnCollision += SetHit;
@@ -109,6 +113,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnFrontDelay()
     {
+        yield return new WaitForSeconds(FrontDelayMilliseconds / 1000.0f);
         SetNextState();
         yield break;
     }
@@ -129,6 +134,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnEndDelay()
     {
+        yield return new WaitForSeconds(EndDelayMilliseconds / 1000.0f);
         SetNextState();
         yield break;
     }

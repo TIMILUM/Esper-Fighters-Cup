@@ -56,8 +56,39 @@ public abstract class SkillObject : ControllerObject
     /// </summary>
     public string Name { get; set; }
 
+    [SerializeField]
+    private int _id = 0;
+    public int ID => _id;
+
+    private int _commonCsvIndex = 0;
+
+    private int _frontDelayMilliseconds = 0;
+    private int _endDelayMilliseconds = 0;
+    private int _frontDelayMoveSpeed = 0;
+    private int _endDelayMoveSpeed = 0;
+
+    /// <summary>
+    ///     해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
+    ///     @Todo 나중에 스킬 작업 내용 모두 머지하면 SkillObject에서 데이터 적용하도록 수정이 필요함.
+    /// </summary>
+    protected int FrontDelayMilliseconds
+    {
+        get => _frontDelayMilliseconds;
+    }
+
+    /// <summary>
+    ///     해당 스킬이 사용되고 난 뒤 딜레이 밀리초 입니다.
+    /// </summary>
+    protected int EndDelayMilliseconds
+    {
+        get => _endDelayMilliseconds;
+    }
+
+    private CSVData _commonCsvData = null;
+
     protected virtual void Start()
     {
+        SetCSVData();
         SetState(State.ReadyToUse);
     }
 
@@ -180,5 +211,54 @@ public abstract class SkillObject : ControllerObject
             State.Release => OnRelease(),
             _ => null,
         };
+    }
+
+    private void SetCSVData()
+    {
+        // CSV 데이터 적용
+        _commonCsvData = CSVUtil.GetData("SkillDataTable");
+        // csv 위치값
+        _commonCsvData.Get<float>("Skill_ID", out var idList);
+        _commonCsvIndex = idList.FindIndex(x => (int)x == _id);
+        
+        // 이름
+        Name = GetCSVData<string>("Name");
+        // 선 딜레이
+        _frontDelayMilliseconds = (int)GetCSVData<float>("Pre_Delay_Duration");
+        // 후 딜레이
+        _endDelayMilliseconds = (int)GetCSVData<float>("After_Delay_Duration");
+        // 선 딜레이 이동 속도
+        _frontDelayMoveSpeed = (int)GetCSVData<float>("Pre_Delay_MoveSpeed");
+        // 후 딜레이 이동 속도
+        _endDelayMoveSpeed = (int)GetCSVData<float>("After_Delay_MoveSpeed");
+        // 스턴 지속 시간
+        var stunBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.Stun);
+        if(stunBuff != null)
+        {
+            stunBuff.Duration = (int)GetCSVData<float>("Groggy_Duration");
+        }
+
+        // 데미지
+        var decreaseHpBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.DecreaseHp);
+        if (decreaseHpBuff != null)
+        {
+            decreaseHpBuff.Damage = (int)GetCSVData<float>("Damage");
+        }
+    }
+
+    /// <summary>
+    /// 해당 스킬의 CSV 데이터를 들고옵니다.
+    /// 캐스팅 시 float, bool, string만 허용됩니다.
+    /// </summary>
+    /// <param name="key">가져올 데이터의 이름입니다.</param>
+    /// <typeparam name="T">캐스팅 시 float, bool, string만 허용됩니다.</typeparam>
+    protected T GetCSVData<T>(string key)
+    {
+        if (!_commonCsvData.Get<T>(key, out var valueList))
+        {
+            throw new Exception("Error to parse csv data.");
+        }
+        
+        return valueList[_commonCsvIndex];
     }
 }
