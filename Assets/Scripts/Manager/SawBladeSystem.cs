@@ -42,10 +42,4 @@ public class SawBladeSystem : MonoBehaviour
         var index = Random.Range(0, _bladePatterns.Count);
         return _bladePatterns[index];
     }
-
-    private class SawBladePosition
-    {
-        public Transform _endTransform;
-        public Transform _startTransform;
-    }
 }

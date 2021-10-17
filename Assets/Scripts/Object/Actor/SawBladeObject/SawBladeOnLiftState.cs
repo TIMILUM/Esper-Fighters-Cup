@@ -48,6 +48,7 @@ public class SawBladeOnLiftState : SawBladeFSMBase
         if (endDistance < 0.5f)
         {
             ChangeState(SawBladeFSMSystem.StateEnum.HitWall);
+            return;
         }
 
         position += direction * _sawBladeObject.Speed * Time.deltaTime;
