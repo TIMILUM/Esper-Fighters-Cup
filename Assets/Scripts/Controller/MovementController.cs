@@ -16,7 +16,6 @@ public class MovementController : ControllerBase
 
     private APlayer _player = null;
     private BuffController _buffController = null;
-    private Rigidbody _rigidbody = null;
 
 
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.3f;
@@ -35,7 +34,6 @@ public class MovementController : ControllerBase
         base.Start();
         _player = _controllerManager.GetActor() as APlayer;
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-        _rigidbody = _player.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -48,6 +46,7 @@ public class MovementController : ControllerBase
         }
 
         UpdateMine();
+
     }
 
     //마우스 바라보기
@@ -145,7 +144,7 @@ public class MovementController : ControllerBase
 
 
 
-        var playerPosition = _rigidbody.position;
+        var playerPosition = _player.transform.position;
 
         _player.CharacterAnimator.SetFloat("DirX", dirx);
         _player.CharacterAnimator.SetFloat("DirZ", dirz);
@@ -177,7 +176,7 @@ public class MovementController : ControllerBase
 
         playerPosition += _moveSpeed * Time.deltaTime * _currentMoveDir;
 
-        _rigidbody.position = playerPosition;
+        _player.transform.position = playerPosition;
 
 
         MousePickLookAt();
