@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -16,8 +17,15 @@ public abstract class SkillObject : ControllerObject
         Release = 5
     }
 
+    /// <summary>
+    ///  플레이어
+    /// </summary>
+    protected APlayer _player;
+
     [SerializeField]
     private State _currentState = State.ReadyToUse;
+
+    private short _physicsCount = -1;
 
     /// <summary>
     ///     플레이어의 버프 컨트롤러입니다.
@@ -53,11 +61,18 @@ public abstract class SkillObject : ControllerObject
         SetState(State.ReadyToUse);
     }
 
-    public override void Register(ControllerBase controller)
+    protected override void OnRegistered()
     {
-        base.Register(controller);
-        _buffController =
-            controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _buffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _player = Author.GetComponent<APlayer>();
+    }
+	
+	protected void FixedUpdate()
+    {
+        if (_physicsCount > 0)
+        {
+            --_physicsCount;
+        }
     }
 
     /// <summary>
@@ -126,6 +141,31 @@ public abstract class SkillObject : ControllerObject
 
         var currentEnumerator = GetStateFunction();
         _currentCoroutine = StartCoroutine(currentEnumerator);
+    }
+
+    /// <summary>
+    /// WaitPhysicsUpdate()를 초기화시켜주는 함수입니다.
+    /// WaitPhysicsUpdate() 함수를 재활용할 때 해당 함수를 실행시켜야합니다.
+    /// </summary>
+    protected void ResetPhysicsUpdateCount()
+    {
+        _physicsCount = -1;
+    }
+    
+    /// <summary>
+    /// 코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
+    /// 해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
+    /// </summary>
+    /// <param name="waitCount">해당 정수만큼 연산 횟수를 기다립니다.</param>
+    /// <returns></returns>
+    protected bool WaitPhysicsUpdate(short waitCount = 1)
+    {
+        if (_physicsCount < 0)
+        {
+            _physicsCount = waitCount;
+        }
+
+        return _physicsCount <= 0;
     }
 
     private IEnumerator GetStateFunction()

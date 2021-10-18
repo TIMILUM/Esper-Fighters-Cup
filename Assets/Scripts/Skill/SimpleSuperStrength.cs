@@ -19,7 +19,7 @@ public class SimpleSuperStrength : SkillBase
     public override bool EndSkill()
     {
 
-        isSkillUsing = false;
+        IsSkillUsing = false;
         return true;
 
 
@@ -40,7 +40,7 @@ public class SimpleSuperStrength : SkillBase
     public void MousePicking()
     {
         //물건을 잡을때 거리를 계산해서 던지기
-        if (Vector3.Distance(transform.position, _EndPos) > _SKillRange)
+        if (Vector3.Distance(transform.position, _EndPos) > _sKillRange)
             return;
 
         MousePick();
@@ -58,13 +58,13 @@ public class SimpleSuperStrength : SkillBase
         {
 
             //컨트롤이랑 태그를 판별
-            if (Hitinfo.transform.tag == "Object" && _SkillKeyCode != SKILLKEYCODE.CONTROL)
+            if (Hitinfo.transform.tag == "Object" && _skillKeyCode != SKILLKEYCODE.CONTROL)
             {
 
                 if (_TargetObj == null)
                 {
                     // 객체가 앞에 있는지 판별
-                    if (Physics.Raycast(transform.position, transform.forward, _SKillRange))
+                    if (Physics.Raycast(transform.position, transform.forward, _sKillRange))
                     {
                         Debug.Log(Hitinfo.transform.name);
                         if (Hitinfo.transform.tag != "Object")
@@ -88,9 +88,9 @@ public class SimpleSuperStrength : SkillBase
         }
 
         // 스킬 키코드가 컨트롤일때 
-        if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
+        if (_skillKeyCode == SKILLKEYCODE.CONTROL)
         {
-            if (Physics.Raycast(transform.position, transform.forward, out Hitinfo, _SKillRange))
+            if (Physics.Raycast(transform.position, transform.forward, out Hitinfo, _sKillRange))
             {
                 if (Hitinfo.transform.tag == "Object")
                 {

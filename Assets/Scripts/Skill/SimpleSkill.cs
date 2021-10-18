@@ -27,7 +27,7 @@ public class SimpleSkill : SkillBase
     //마우스 피킹
     public void MousePicking()
     {
-        if (Vector3.Distance(transform.position, _endPos) > _SKillRange && _targetObj == null)
+        if (Vector3.Distance(transform.position, _endPos) > _sKillRange && _targetObj == null)
         {
             return;
         }
@@ -51,7 +51,7 @@ public class SimpleSkill : SkillBase
     // 스킬 키를 놓았을때 이벤트 적용
     public bool MouseEndSkill()
     {
-        if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
+        if (_skillKeyCode == SKILLKEYCODE.CONTROL)
         {
             if (Input.GetKeyUp(KeyCode.LeftControl))
             {
@@ -59,7 +59,7 @@ public class SimpleSkill : SkillBase
                 return true;
             }
         }
-        else if (_SkillKeyCode == SKILLKEYCODE.LEFTMOUSEBUTTONDOWN)
+        else if (_skillKeyCode == SKILLKEYCODE.LEFTMOUSEBUTTONDOWN)
         {
             if (Input.GetButtonUp("Fire1"))
             {
@@ -67,7 +67,7 @@ public class SimpleSkill : SkillBase
                 return true;
             }
         }
-        else if (_SkillKeyCode == SKILLKEYCODE.RIGHTMOUSEBUTTONDOWN)
+        else if (_skillKeyCode == SKILLKEYCODE.RIGHTMOUSEBUTTONDOWN)
         {
             if (Input.GetButtonUp("Fire2"))
             {
@@ -89,7 +89,7 @@ public class SimpleSkill : SkillBase
         }
         ThrowObject();
         _targetObj = null;
-        isSkillUsing = false;
+        IsSkillUsing = false;
     }
     private void ThrowObject()
     {
