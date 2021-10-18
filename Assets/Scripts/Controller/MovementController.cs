@@ -128,14 +128,7 @@ public class MovementController : ControllerBase
         //    stun.Duration = 3;
         //}
 
-        // // E를 누르면 0.5초 동안 오른쪽으로 넉백이 임시로 걸립니다.
-        // if (Input.GetKey(KeyCode.E) && _buffController.GetBuff(BuffObject.Type.KnockBack) == null)
-        // {
-        //     var knockBack = _buffController.GenerateBuff(BuffObject.Type.KnockBack) as KnockBackObject;
-        //     knockBack.Duration = 0.5f;
-        //     knockBack.NormalizedDirection = Vector3.right;
-        //     knockBack.Speed = 3.0f;
-        // }
+
 
 
         var dirx = Input.GetAxisRaw("Horizontal");

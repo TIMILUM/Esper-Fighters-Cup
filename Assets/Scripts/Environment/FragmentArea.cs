@@ -83,6 +83,8 @@ public class FragmentArea : AStaticObject
                 var randomPosition = Random.insideUnitSphere * Range;
                 randomPosition.y = 0.0f;
                 InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position);
+                ParticleManager.Instance.PullParticle("ReverseGravityFiled", transform.position, Quaternion.identity);
+                ParticleManager.Instance.PullParticle("ReverseGravityBreak", transform.position, Quaternion.identity);
                 _isObjectSpawn = true;
             }
 
@@ -96,6 +98,8 @@ public class FragmentArea : AStaticObject
                 if (!_isObjectSpawn)
                 {
                     InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position);
+                    ParticleManager.Instance.PullParticle("ReverseGravityFiled", transform.position, Quaternion.identity);
+                    ParticleManager.Instance.PullParticle("ReverseGravityBreak", transform.position, Quaternion.identity);
                     _isObjectSpawn = true;
                 }
             }

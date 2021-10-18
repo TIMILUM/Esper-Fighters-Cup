@@ -15,6 +15,9 @@ public class ThrowSkillObject : SkillObject
     [SerializeField]
     private float _frontDelayTime;
 
+    [SerializeField]
+    private float _EndDelayTime;
+
 
 
     protected override void Start()
@@ -42,10 +45,33 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnEndDelay()
     {
+        bool isCanceled = false;
+        var startTime = Time.time;
+        var currentTime = Time.time;
 
-        SetState(State.Release);
-        yield return null;
+        while ((currentTime - startTime) * 1000 <= _EndDelayTime)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                isCanceled = true;
+                break;
+            }
+            yield return null;
+            currentTime = Time.time;
+        }
+
+        if (isCanceled == true)
+        {
+            InGameSkillManager.Instance.FragmentAllDestroy();
+            SetState(State.Release);
+        }
+
+
+        SetState(State.Use);
     }
+
+
+
     protected override IEnumerator OnReadyToUse()
     {
         var isCanceled = false;
@@ -123,7 +149,7 @@ public class ThrowSkillObject : SkillObject
             InGameSkillManager.Instance.FragmentAllDestroy();
             SetState(State.Release);
         }
-        SetNextState();
+        SetState(State.EndDelay);
     }
 
 
@@ -184,7 +210,7 @@ public class ThrowSkillObject : SkillObject
             SetState(State.Canceled);
         }
 
-        SetNextState();
+        SetState(State.Canceled);
     }
 
 
