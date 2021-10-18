@@ -24,6 +24,10 @@ public class Actor : ObjectBase
         set => _hp = value;
     }
 
+    [SerializeField, Tooltip("해당 오브젝트의 ID 값입니다.")]
+    private int _id;
+    public int ID => _id;
+
     public StudioEventEmitter AudioEmitter { get; private set; }
 
     protected virtual void Awake()
