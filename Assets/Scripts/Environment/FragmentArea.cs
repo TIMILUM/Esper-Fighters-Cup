@@ -24,6 +24,7 @@ public class FragmentArea : AStaticObject
     private bool _isNormalActive;
 
 
+
     public float Range { get; set; }
 
     private bool _isObjectSpawn = false;
@@ -38,6 +39,8 @@ public class FragmentArea : AStaticObject
     {
         CreateObject();
     }
+
+
 
     public void FragmentAreaActive()
     {
