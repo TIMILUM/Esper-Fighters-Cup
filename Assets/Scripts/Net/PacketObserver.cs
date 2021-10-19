@@ -28,6 +28,11 @@ namespace EsperFightersCup.Net
 
         public void OnEvent(EventData photonEvent)
         {
+            if (photonEvent.Code >= 200)
+            {
+                return;
+            }
+
             Debug.Log($"<color=grey>[Packet Check] received: {photonEvent.Code} from actor {photonEvent.Sender}</color>");
         }
     }
