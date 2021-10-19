@@ -21,7 +21,7 @@ public class SawBladeMoveState : SawBladeFSMBase
         var endDistance = Vector3.Distance(endPosition.position, position);
         if (endDistance < 0.5f)
         {
-            ChangeState(SawBladeFSMSystem.StateEnum.HitWall);
+            Destroy(gameObject);
         }
     }
 
