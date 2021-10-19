@@ -17,8 +17,8 @@ GameObject:
   - component: {fileID: 6623127734546534237}
   - component: {fileID: 6646747819659544057}
   - component: {fileID: 8872094472445942069}
-  - component: {fileID: 9204984790445417244}
   - component: {fileID: 4573762489192822212}
+  - component: {fileID: 9204984790445417244}
   m_Layer: 0
   m_Name: TelekinesisPlayer
   m_TagString: Object
@@ -115,6 +115,7 @@ MonoBehaviour:
   - {fileID: 8663577832037187048}
   - {fileID: 6646747819659544057}
   - {fileID: 9204984790445417244}
+  - {fileID: 7363788457405380186}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -192,6 +193,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4573762489192822212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
 --- !u!114 &9204984790445417244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,25 +255,14 @@ MonoBehaviour:
   - Type: 9
     SynchronizeType: 0
     Name: New Trigger
+  - Type: 4
+    SynchronizeType: 0
+    Name: Nockdown
   m_SynchronizeLayers:
   - SynchronizeType: 2
     LayerIndex: 0
   - SynchronizeType: 2
     LayerIndex: 1
---- !u!114 &4573762489192822212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4314589049664778601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _strength: 0
-  _objectID: 0
 --- !u!1 &4314589049991569687
 GameObject:
   m_ObjectHideFlags: 0
