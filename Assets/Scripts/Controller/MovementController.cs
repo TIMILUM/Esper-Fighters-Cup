@@ -123,24 +123,16 @@ public class MovementController : ControllerBase
 
     private void UpdateMine()
     {
-        // 이 함수의 모든 코드는 모두 임시코드입니다. 잘 돌아가는지 확인해보려고 작성했습니다!
-
-        // Q를 누르면 3초 스턴이 임시로 걸립니다.
-        //if (Input.GetKey(KeyCode.Q) && _buffController.GetBuff(BuffObject.Type.Stun) == null)
-        //{
-        //    var stun = _buffController.GenerateBuff(BuffObject.Type.Stun);
-        //    stun.Duration = 3;
-        //}
-
-
-
-
         var dirx = Input.GetAxisRaw("Horizontal");
         var dirz = Input.GetAxisRaw("Vertical");
-
-
         var dir = new Vector3(dirx, 0.0f, dirz).normalized;
 
+        if (IngameFSMSystem.CurrentState != IngameFSMSystem.State.InBattle)
+        {
+            _currentDecreaseSpeed = 1.0f;
+            _currentIncreaseSpeed = 0.0f;
+            return;
+        }
 
         // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
         if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
@@ -151,12 +143,7 @@ public class MovementController : ControllerBase
 
             return;
         }
-
-
-
-
-
-
+        
         var playerPosition = _player.transform.position;
 
         _player.CharacterAnimator.SetFloat("DirX", dirx);

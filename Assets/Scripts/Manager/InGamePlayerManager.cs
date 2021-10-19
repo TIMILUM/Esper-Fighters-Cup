@@ -15,6 +15,8 @@ public class InGamePlayerManager : MonoBehaviourPunCallbacks
     private ACharacter.Type _currentCharacterType = ACharacter.Type.Telekinesis;
     [SerializeField]
     private Transform _spawnTransform;
+    [SerializeField]
+    private IngameFSMSystem _ingameFsmSystem;
 
 
     private static ACharacter s_myCharacter = null;

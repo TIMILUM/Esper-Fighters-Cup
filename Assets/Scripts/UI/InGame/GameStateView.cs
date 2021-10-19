@@ -7,10 +7,12 @@ namespace EsperFightersCup.UI.InGame
     [RequireComponent(typeof(Text))]
     public class GameStateView : MonoBehaviour
     {
+        [SerializeField]
         private Text _stateText;
+        [SerializeField]
         private RectTransform _transform;
 
-        private void Start()
+        private void Awake()
         {
             _stateText = GetComponent<Text>();
             _transform = GetComponent<RectTransform>();
@@ -19,9 +21,9 @@ namespace EsperFightersCup.UI.InGame
             _transform.DOAnchorPos(Vector2.zero, 0f);
             gameObject.SetActive(false);
 
-            CoroutineTimer.SetTimerOnce(() => Show("Ready?", Vector2.left * 20f), 3f);
-            CoroutineTimer.SetTimerOnce(() => Show("Fight!", Vector2.left * 20f), 4f);
-            CoroutineTimer.SetTimerOnce(() => Show("K.O", Vector2.up * 20f), 10f);
+            // CoroutineTimer.SetTimerOnce(() => Show("Ready?", Vector2.left * 20f), 3f);
+            // CoroutineTimer.SetTimerOnce(() => Show("Fight!", Vector2.left * 20f), 4f);
+            // CoroutineTimer.SetTimerOnce(() => Show("K.O", Vector2.up * 20f), 10f);
         }
 
         public void Show(string text, Vector2 transitionStart)

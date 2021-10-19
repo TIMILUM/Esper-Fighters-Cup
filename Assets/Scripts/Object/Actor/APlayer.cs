@@ -9,6 +9,12 @@ public class APlayer : ACharacter
 
     private CameraMovement _cameraMovement;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        IngameFSMSystem.SetPlayer(this);
+    }
+
     // Start is called before the first frame update
     protected override void Start()
     {

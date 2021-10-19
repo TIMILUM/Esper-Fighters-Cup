@@ -40,7 +40,7 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : MonoBehaviour
     ///     해당 FSM 시스템의 State를 바꿉니다.
     /// </summary>
     /// <param name="state">바꿀 State를 설정합니다.</param>
-    public void ChangeState(TStateEnum state)
+    public virtual void ChangeState(TStateEnum state)
     {
         if (!StatePool.TryGetValue(state, out var nextState))
         {
