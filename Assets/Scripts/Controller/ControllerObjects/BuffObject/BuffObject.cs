@@ -111,6 +111,7 @@ public abstract class BuffObject : ControllerObject
         [SerializeField] private float _damage;
         [SerializeField] private bool _isOnlyOnce;
 
+
         public Type Type { get => _type; set => _type = value; }
         public float Duration { get => _duration; set => _duration = value; }
         public float[] ValueFloat { get => _valueFloat; set => _valueFloat = value; }
@@ -120,4 +121,6 @@ public abstract class BuffObject : ControllerObject
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
     }
+
+
 }
