@@ -128,7 +128,7 @@ namespace EsperFightersCup.UI.Match
                 // TODO: PhotonNetwork.LoadLevel 대신 따로 씬 로더를 만들어서 씬 전환 애니메이션 구현 대비하기
                 // https://doc.photonengine.com/ko-kr/pun/current/gameplay/rpcsandraiseevent#_messageQ
                 // 1.5초 뒤 게임씬으로 이동
-                CoroutineTimer.SetTimerOnce(() => PhotonNetwork.LoadLevel("CharactersScene"), 2f);
+                CoroutineTimer.SetTimerOnce(() => PhotonNetwork.LoadLevel("GameScene"), 2f);
             }
             else
             {

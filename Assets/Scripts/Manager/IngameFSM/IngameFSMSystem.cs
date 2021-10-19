@@ -30,13 +30,34 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     private List<APlayer> _playerList = new List<APlayer>();
     public List<APlayer> PlayerList => _playerList;
 
+    [SerializeField]
+    private SawBladeSystem _sawBladeSystem;
+
+    private DateTime _sawUsingStartTime = DateTime.MinValue;
+
     public int RoundCount { get; set; }
 
     public static void SetPlayer(APlayer player)
     {
         _setPlayer?.Invoke(player);
     }
-    
+
+    private void Update()
+    {
+        foreach (var player in _playerList)
+        {
+            if (player.Hp < 30)
+            {
+                var currentTime = (DateTime.Now - _sawUsingStartTime).TotalSeconds;
+                if (currentTime > 5)
+                {
+                    _sawUsingStartTime = DateTime.Now;
+                    _sawBladeSystem.GenerateSawBlade();
+                }
+            }
+        }
+    }
+
     private void SetPlayerFunction(APlayer player)
     {
         _playerList.Add(player);

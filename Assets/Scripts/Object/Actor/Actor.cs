@@ -18,7 +18,7 @@ public class Actor : ObjectBase
 
     [SerializeField]
     private float _hp;
-    public float Hp
+    public virtual float Hp
     {
         get => _hp;
         set => _hp = value;
