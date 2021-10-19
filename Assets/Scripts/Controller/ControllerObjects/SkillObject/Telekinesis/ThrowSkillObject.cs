@@ -130,9 +130,9 @@ public class ThrowSkillObject : SkillObject
         var currentTime = Time.time;
         if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
-            _player.CharacterAnimator.SetTrigger("ReverseGravityA");
+            _player.CharacterAnimator.SetTrigger("ReverseGravityUnder");
         }
-        _player.CharacterAnimator.SetTrigger("ReverseGravity");
+        _player.CharacterAnimator.SetTrigger("ReverseGravityA");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))

@@ -93,7 +93,7 @@ public class MovementController : ControllerBase
 
                 _player.CharacterAnimator.SetFloat("Cos", cos);
                 _player.CharacterAnimator.SetFloat("Sin", sin);
-                _fragmentPos = hitinfo.point;
+                _fragmentPos = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f);
             }
         }
 
