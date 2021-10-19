@@ -51,7 +51,7 @@ public class SawBladeOnLiftState : SawBladeFSMBase
             return;
         }
 
-        position += direction * _sawBladeObject.Speed * Time.deltaTime;
+        position += direction * _speed * Time.deltaTime;
         _rigidbody.position = position;
     }
 
