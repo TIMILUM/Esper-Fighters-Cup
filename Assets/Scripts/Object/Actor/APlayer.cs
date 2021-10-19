@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(PhotonRigidbodyView))]
-public class APlayer : ACharacter
+public class APlayer : ACharacter, IPunObservable
 {
     private Rigidbody _rigidbody;
 
@@ -50,5 +50,18 @@ public class APlayer : ACharacter
     private void OnDestroy()
     {
         _cameraMovement.RemoveTarget(transform); // 카메라 타겟 삭제
+    }
+
+    // 임시 동기화
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(Hp);
+        }
+        else
+        {
+            Hp = (float)stream.ReceiveNext();
+        }
     }
 }
