@@ -1,5 +1,7 @@
+using Photon.Pun;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonRigidbodyView))]
 public class FragmentStaticObject : EnvironmentStaticObject
 {
     [SerializeField]
