@@ -179,10 +179,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="target"></param>
     public void ThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
-        foreach (var fragmentAare in _currentfragmentList)
-        {
-            fragmentAare._fragment.GetComponent<FragmentArea>().KnockBackObject(buffstruct, target);
-        }
+
         //던지고 파편지대의 리스트로 옮깁니다.
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();

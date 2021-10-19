@@ -13,7 +13,7 @@ public class FragmentArea : AStaticObject
     [SerializeField]
     private float _fragmentRatio;
     [SerializeField]
-    private GameObject _direction;
+
 
     private List<Actor> _actors = new List<Actor>();
 
@@ -25,6 +25,9 @@ public class FragmentArea : AStaticObject
 
 
 
+
+
+
     public float Range { get; set; }
 
     private bool _isObjectSpawn = false;
@@ -33,6 +36,7 @@ public class FragmentArea : AStaticObject
     {
         _collider.OnCollision += SetHit;
         Range = transform.localScale.x / 2.0f;
+
     }
 
     private void Update()
@@ -59,7 +63,7 @@ public class FragmentArea : AStaticObject
     public void StartEvent()
     {
         _colliderParentObject.SetActive(true);
-        _direction.SetActive(true);
+
     }
 
     public void NotFloatObject(Actor castSkill)
@@ -85,9 +89,11 @@ public class FragmentArea : AStaticObject
             {
                 var randomPosition = Random.insideUnitSphere * Range;
                 randomPosition.y = 0.0f;
+                _frangmentArea.SetActive(false);
                 InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position);
                 ParticleManager.Instance.PullParticle("ReverseGravityFiled", transform.position, Quaternion.identity);
                 ParticleManager.Instance.PullParticle("ReverseGravityBreak", transform.position, Quaternion.identity);
+                ParticleManager.Instance.PullParticle("ReverseGravityFiledAfter", transform.position + new Vector3(0.0f, 0.01f, 0.0f), Quaternion.identity);
                 _isObjectSpawn = true;
             }
 
@@ -116,20 +122,20 @@ public class FragmentArea : AStaticObject
     {
         _isNormalActive = false;
         _isFragmentActive = false;
-        _direction.SetActive(false);
+
         _colliderParentObject.SetActive(false);
 
     }
 
     public bool GetActive()
     {
-        return _frangmentArea.activeInHierarchy;
+        return _isNormalActive;
     }
 
     public void DirectionLookAt(Vector3 pos)
     {
         var lookDirection = pos - transform.position;
-        _direction.transform.rotation = Quaternion.LookRotation(lookDirection);
+
     }
 
     /// <summary>
@@ -137,31 +143,7 @@ public class FragmentArea : AStaticObject
     /// </summary>
     /// <param name="buffstruct">띄운다음에 넉백을 적용하기 위해서 buffstruct를 받습니다.</param>
     /// <param name="target">마우스 위치를 말합니다.</param>
-    public void KnockBackObject(BuffObject.BuffStruct buffstruct, Vector3 target)
-    {
 
-        foreach (var actor in _actors)
-        {
-            var character = actor as ACharacter;
-
-            if (actor == null || character != null)
-            {
-                continue;
-            }
-
-            if (actor.BuffController.GetBuff(BuffObject.Type.Raise) == null)
-            {
-                continue;
-            }
-
-            actor.BuffController.ReleaseBuff(BuffObject.Type.Raise);
-            var direction = target - _frangmentArea.transform.position;
-            buffstruct.ValueVector3[0] = direction.normalized;
-            actor.BuffController.GenerateBuff(buffstruct);
-        }
-
-        ClearFragmentArea();
-    }
 
     public void ClearFragmentArea()
     {
@@ -174,7 +156,6 @@ public class FragmentArea : AStaticObject
         _colliderParentObject.SetActive(false);
         _isNormalActive = false;
         _isFragmentActive = false;
-        _direction.SetActive(false);
         _actors.Clear();
     }
 

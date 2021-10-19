@@ -182,34 +182,16 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnUse()
     {
         bool isCanceled = false;
+
         InGameSkillManager.Instance.FragmentEventStart();
-
-        yield return new WaitUntil(() =>
-        {
-            InGameSkillManager.Instance.FragmentDirection(GetMousePosition());
-            if (Input.GetMouseButtonDown(1))
-            {
-                InGameSkillManager.Instance.FragmentClear();
-                isCanceled = true;
-                return isCanceled;
-            }
-            if (Input.GetMouseButton(0))
-            {
-                InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
-
-                return true;
-            }
-
-            return isCanceled;
-        });
-
+        InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
 
         if (isCanceled)
         {
             InGameSkillManager.Instance.CancelFragment();
             SetState(State.Canceled);
         }
-
+        yield return null;
         SetState(State.Canceled);
     }
 
