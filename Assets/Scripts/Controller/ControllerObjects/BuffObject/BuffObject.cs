@@ -82,12 +82,12 @@ public abstract class BuffObject : ControllerObject
             // BUG: 특정 상황에서 연속으로 메소드를 실행함
             // 아마 ReleaseBuff를 보내고 나서 다시 이벤트를 받기까지 시간 간격이 있는데,
             // 그 동안 이 오브젝트가 해제되지 못해서 생기는 버그인듯?
-            ControllerCast<BuffController>().ReleaseBuff(BuffId);
+            ControllerCast<BuffController>().ReleaseBuff(this);
         }
 
         if (_buffStruct.IsOnlyOnce)
         {
-            ControllerCast<BuffController>().ReleaseBuff(BuffId);
+            ControllerCast<BuffController>().ReleaseBuff(this);
         }
     }
 

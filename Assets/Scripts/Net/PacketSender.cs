@@ -29,11 +29,11 @@ namespace EsperFightersCup.Net
         /// <param name="sendOption">이벤트를 보내는 옵션. Reliable or UnReliable</param>
         /// <param name="isCaching">이벤트를 캐싱하여 수신하지 못한 플레이어가 나중에 받을 수 있도록 합니다.</param>
         /// <returns></returns>
-        public static bool Broadcast<T>(byte eventCode, in T packet, SendOptions sendOption, bool isCaching = false) where T : IPacket
+        public static bool Broadcast<T>(in T packet, SendOptions sendOption, bool isCaching = false) where T : IPacket
         {
             var option = isCaching ? s_broadcastOptionCached : s_broadcastOption;
             var buffer = PacketSerializer.Serialize(in packet);
-            return PhotonNetwork.RaiseEvent(eventCode, buffer, option, sendOption);
+            return PhotonNetwork.RaiseEvent(packet.EventCode, buffer, option, sendOption);
         }
     }
 }

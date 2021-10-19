@@ -57,13 +57,13 @@ public class RaiseObject : BuffObject
         var buff = _actor.BuffController.GetBuff(BuffObject.Type.KnockBack);
         if (buff != null)
         {
-            _actor.BuffController.ReleaseBuff(BuffId);
+            _actor.BuffController.ReleaseBuff(this);
             GenerateAfterBuff(_actor.BuffController, buff);
         }
         else
         {
-            _actor.transform.position = Vector3.Lerp(_startPos, new Vector3(_actor.transform.position.x,
-    _limitPosy, _actor.transform.position.z), currentTime / Duration);
+            _actor.transform.position = Vector3.Lerp(
+                _startPos, new Vector3(_actor.transform.position.x, _limitPosy, _actor.transform.position.z), currentTime / Duration);
         }
     }
 
@@ -82,7 +82,7 @@ public class RaiseObject : BuffObject
         }
         for (int i = 0; i < buff.Count; i++)
         {
-            _actor.BuffController.ReleaseBuff(buff[i].BuffId);
+            _actor.BuffController.ReleaseBuff(buff[i]);
         }
         FloatValue[0] = _KnockBackSpeed;
         FloatValue[1] = _ShockwavedecreaseHp;

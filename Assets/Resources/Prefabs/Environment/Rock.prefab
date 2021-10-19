@@ -74,6 +74,10 @@ GameObject:
   - component: {fileID: 8100416200497721467}
   - component: {fileID: 253468095320911788}
   - component: {fileID: 6819613831527960332}
+  - component: {fileID: 8539521510519346714}
+  - component: {fileID: 6243129894480687826}
+  - component: {fileID: 5731568002550797624}
+  - component: {fileID: 9163902271404509405}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -106,9 +110,9 @@ BoxCollider:
   m_GameObject: {fileID: 7540981878553075838}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 1.5, z: 1.5}
+  m_Size: {x: 1.3, y: 1.3, z: 1.3}
   m_Center: {x: -0.25, y: 0.4, z: 0}
 --- !u!54 &6627632039222623937
 Rigidbody:
@@ -237,6 +241,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+--- !u!135 &8539521510519346714
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0.35, y: 0.2, z: 0}
+--- !u!135 &6243129894480687826
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.57
+  m_Center: {x: -0.1, y: 0.2, z: 0.46}
+--- !u!135 &5731568002550797624
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: -0.6, y: 0.35, z: 0.15}
+--- !u!135 &9163902271404509405
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: -0.18, y: 0.3, z: 0}
 --- !u!1001 &402237127510166391
 PrefabInstance:
   m_ObjectHideFlags: 0
