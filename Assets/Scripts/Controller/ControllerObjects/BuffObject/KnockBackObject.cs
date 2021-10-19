@@ -6,6 +6,7 @@ public class KnockBackObject : BuffObject
     [SerializeField]
     [Tooltip("넉백 방향 입니다.")]
     private Vector3 _normalizedDirection = Vector3.zero;
+    private ACharacter _character;
 
     [SerializeField]
     [Tooltip("최종 넉백 거리는 (스피드 * 지속시간) 입니다.")]
@@ -36,10 +37,20 @@ public class KnockBackObject : BuffObject
     {
         _name = "";
         _buffStruct.Type = Type.KnockBack;
+
+        _character = Author as ACharacter;
+
+        if (!(_character is null))
+        {
+            _character.CharacterAnimator.SetTrigger("Knockback");
+        }
     }
 
     protected override void OnRegistered()
     {
+
+
+
         _normalizedDirection = _normalizedDirection.normalized;
         _rigidbody = Author.GetComponent<Rigidbody>();
     }
@@ -53,6 +64,7 @@ public class KnockBackObject : BuffObject
         }
 
         _rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
+
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
@@ -84,6 +96,8 @@ public class KnockBackObject : BuffObject
         {
             return;
         }
+
+
 
         if (Author.ControllerManager.TryGetController(
             ControllerManager.Type.BuffController, out BuffController myController))

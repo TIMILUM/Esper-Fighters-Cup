@@ -23,6 +23,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
 
 
 
+
     private class FragmentAreaInfo
     {
 
@@ -44,18 +45,21 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="trans"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public GameObject AddFragmentList(Transform trans, float range)
+    public GameObject AddFragmentList(Transform trans, float range, Actor castSkill)
     {
-        var clone = Instantiate(_fregmentFrefab, trans.position, trans.rotation);
+        var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
+
         clone.transform.localScale = trans.localScale;
+        clone.GetComponent<FragmentArea>().NotFloatObject(castSkill);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
         return clone;
     }
 
-    public GameObject AddFragmentList(Vector3 trans, float range)
+    public GameObject AddFragmentList(Vector3 trans, float range, Actor castSkill)
     {
         var clone = Instantiate(_fregmentFrefab, trans, Quaternion.identity);
         clone.transform.localScale = new Vector3(range, 1.0f, range);
+        clone.GetComponent<FragmentArea>().NotFloatObject(castSkill);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
         return clone;
     }
@@ -103,7 +107,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <summary>
     /// 주변에 이미 파편지대가 있는지 확인후 맞는 이벤트를 적용하는함수입니다.
     /// </summary>
-    public void SetFragmentAreaActive(Vector3 pos, float range)
+    public void SetFragmentAreaActive(Vector3 pos, float range, Actor castSkill)
     {
         var createfragmentPosList = new Queue<Vector3>();
 
@@ -152,7 +156,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         }
         while (createfragmentPosList.Count != 0)
         {
-            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris).GetComponent<FragmentArea>().FragmentActive();
+            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, castSkill).GetComponent<FragmentArea>().FragmentActive();
         }
     }
     /// <summary>
@@ -175,10 +179,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="target"></param>
     public void ThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
-        foreach (var fragmentAare in _currentfragmentList)
-        {
-            fragmentAare._fragment.GetComponent<FragmentArea>().KnockBackObject(buffstruct, target);
-        }
+
         //던지고 파편지대의 리스트로 옮깁니다.
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();

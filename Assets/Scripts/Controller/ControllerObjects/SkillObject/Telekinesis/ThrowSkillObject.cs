@@ -15,6 +15,9 @@ public class ThrowSkillObject : SkillObject
     [SerializeField]
     private float _frontDelayTime;
 
+    [SerializeField]
+    private float _EndDelayTime;
+
 
 
     protected override void Start()
@@ -22,6 +25,7 @@ public class ThrowSkillObject : SkillObject
         base.Start();
         ScaleGameObjects(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
         ScaleGameObjects(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
+
     }
     public override void SetHit(ObjectBase to)
     {
@@ -41,10 +45,33 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnEndDelay()
     {
+        bool isCanceled = false;
+        var startTime = Time.time;
+        var currentTime = Time.time;
 
-        SetState(State.Release);
-        yield return null;
+        while ((currentTime - startTime) * 1000 <= _EndDelayTime)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                isCanceled = true;
+                break;
+            }
+            yield return null;
+            currentTime = Time.time;
+        }
+
+        if (isCanceled == true)
+        {
+            InGameSkillManager.Instance.FragmentAllDestroy();
+            SetState(State.Release);
+        }
+
+
+        SetState(State.Use);
     }
+
+
+
     protected override IEnumerator OnReadyToUse()
     {
         var isCanceled = false;
@@ -62,22 +89,17 @@ public class ThrowSkillObject : SkillObject
                isCanceled = true;
                return isCanceled;
            }
-
-           if (Input.GetMouseButtonDown(0))
-           {
-               if (SetPosCompare(mousePos) && InGameSkillManager.Instance.CreateFragmentCheck(mousePos))
-               {
-                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange);
-               }
-           }
-
-
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
-               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range);
+               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range, _player);
                ActiveGameObjects(_fragmentCasting, false);
                ActiveGameObjects(_casting, false);
-               if (InGameSkillManager.Instance.FragmentCount() == 0)
+               if (SetPosCompare(mousePos))
+               {
+                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player);
+                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range, _player);
+               }
+               else
                {
                    isCanceled = true;
                    return isCanceled;
@@ -106,7 +128,11 @@ public class ThrowSkillObject : SkillObject
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
-
+        if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            _player.CharacterAnimator.SetTrigger("ReverseGravityUnder");
+        }
+        _player.CharacterAnimator.SetTrigger("ReverseGravityA");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))
@@ -123,7 +149,7 @@ public class ThrowSkillObject : SkillObject
             InGameSkillManager.Instance.FragmentAllDestroy();
             SetState(State.Release);
         }
-        SetNextState();
+        SetState(State.EndDelay);
     }
 
 
@@ -156,35 +182,17 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnUse()
     {
         bool isCanceled = false;
+
         InGameSkillManager.Instance.FragmentEventStart();
-
-        yield return new WaitUntil(() =>
-        {
-            InGameSkillManager.Instance.FragmentDirection(GetMousePosition());
-            if (Input.GetMouseButtonDown(1))
-            {
-                InGameSkillManager.Instance.FragmentClear();
-                isCanceled = true;
-                return isCanceled;
-            }
-            if (Input.GetMouseButton(0))
-            {
-                InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
-
-                return true;
-            }
-
-            return isCanceled;
-        });
-
+        InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
 
         if (isCanceled)
         {
             InGameSkillManager.Instance.CancelFragment();
             SetState(State.Canceled);
         }
-
-        SetNextState();
+        yield return null;
+        SetState(State.Canceled);
     }
 
 
