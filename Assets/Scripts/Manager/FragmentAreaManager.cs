@@ -181,6 +181,10 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     {
 
         //던지고 파편지대의 리스트로 옮깁니다.
+        //foreach (var item in _currentfragmentList)
+        //{
+        //    item._fragment.GetComponent<FragmentArea>().ClearFragmentArea();
+        //}
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();
     }
