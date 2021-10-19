@@ -210,7 +210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 28038341}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7489629, y: -1.0156466, z: 8.551444}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -340,6 +340,8 @@ GameObject:
   - component: {fileID: 33337936}
   - component: {fileID: 33337933}
   - component: {fileID: 33337937}
+  - component: {fileID: 33337938}
+  - component: {fileID: 33337939}
   m_Layer: 0
   m_Name: EnemyDummy
   m_TagString: Object
@@ -425,6 +427,7 @@ MonoBehaviour:
   _controllerManager: {fileID: 996294837}
   _hp: 0
   _id: 101
+  _audioEmitter: {fileID: 0}
   _characterType: 0
   _animator: {fileID: 0}
   _rigidbody: {fileID: 33337931}
@@ -450,6 +453,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 33337930}
   - {fileID: 33337936}
+  - {fileID: 33337938}
   sceneViewId: 5
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -506,6 +510,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+--- !u!114 &33337938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33337928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
+--- !u!95 &33337939
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33337928}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &41382223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1014,6 +1053,7 @@ MonoBehaviour:
   _controllerManager: {fileID: 1072159231}
   _hp: 0
   _id: 0
+  _audioEmitter: {fileID: 0}
 --- !u!54 &104796448
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2741,6 +2781,7 @@ MonoBehaviour:
   _controllerManager: {fileID: 1694672935}
   _hp: 0
   _id: 0
+  _audioEmitter: {fileID: 0}
 --- !u!54 &378060652
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5305,7 +5346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705699736}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7489629, y: -1.0156466, z: 8.551444}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -12488,6 +12529,7 @@ MonoBehaviour:
   _controllerManager: {fileID: 711545835}
   _hp: 0
   _id: 2
+  _audioEmitter: {fileID: 0}
 --- !u!54 &1881396948
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13866,7 +13908,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2136998249}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5637474, y: 5.38, z: 1.46}
+  m_LocalPosition: {x: -4.44, y: 5.38, z: 25.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 156134469}
@@ -14317,15 +14359,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8472672500925258893, guid: 5505cd011305cc2418fb49320ae16b77, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.25578666
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8472672500925258893, guid: 5505cd011305cc2418fb49320ae16b77, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.9589357
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8472672500925258893, guid: 5505cd011305cc2418fb49320ae16b77, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.69323015
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8472672500925258893, guid: 5505cd011305cc2418fb49320ae16b77, type: 3}
       propertyPath: m_LocalRotation.w

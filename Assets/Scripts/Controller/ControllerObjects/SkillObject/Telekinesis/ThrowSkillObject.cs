@@ -68,19 +68,14 @@ public class ThrowSkillObject : SkillObject
             InGameSkillManager.Instance.FragmentAllDestroy();
             SetState(State.Release);
         }
-
-
         SetState(State.Use);
     }
-
-
 
     protected override IEnumerator OnReadyToUse()
     {
         var isCanceled = false;
         ActiveGameObjects(_casting);
         ActiveGameObjects(_fragmentCasting);
-
 
         yield return new WaitUntil(() =>
        {
@@ -155,12 +150,8 @@ public class ThrowSkillObject : SkillObject
         SetState(State.EndDelay);
     }
 
-
-
-
     private Vector3 GetMousePosition()
     {
-
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray);
 

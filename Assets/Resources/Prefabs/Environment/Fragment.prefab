@@ -57,11 +57,8 @@ GameObject:
   - component: {fileID: 5321458846510056528}
   - component: {fileID: 1055047741637954412}
   - component: {fileID: 7708205643618053825}
-  - component: {fileID: 5730257265122547042}
   - component: {fileID: 5451352787449924202}
-  - component: {fileID: 6825174241897690793}
-  - component: {fileID: 2019955701285741285}
-  - component: {fileID: 8422103024402621023}
+  - component: {fileID: 8524433635644955736}
   m_Layer: 0
   m_Name: Fragment
   m_TagString: Object
@@ -164,25 +161,10 @@ MonoBehaviour:
   _controllerManager: {fileID: 3946745091902172346}
   _hp: 0
   _id: 0
+  _audioEmitter: {fileID: 0}
   _minRandomScale: {x: 0.25, y: 0.25, z: 0.25}
   _maxRandomScale: {x: 0.4, y: 0.4, z: 0.4}
   _destoryTime: 2
---- !u!54 &5730257265122547042
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851603496711567382}
-  serializedVersion: 2
-  m_Mass: 0.0001
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &5451352787449924202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,12 +184,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6825174241897690793}
-  - {fileID: 2019955701285741285}
+  - {fileID: 8524433635644955736}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6825174241897690793
+--- !u!114 &8524433635644955736
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,46 +203,7 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
-  m_UseLocal: 0
---- !u!114 &2019955701285741285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851603496711567382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &8422103024402621023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851603496711567382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: 
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  m_UseLocal: 1
 --- !u!1 &5621490903234798928
 GameObject:
   m_ObjectHideFlags: 0

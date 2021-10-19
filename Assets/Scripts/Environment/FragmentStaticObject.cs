@@ -25,8 +25,4 @@ public class FragmentStaticObject : EnvironmentStaticObject
                 Destroy(gameObject);
         }
     }
-
-
-
-
 }

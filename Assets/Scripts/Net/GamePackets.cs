@@ -136,26 +136,23 @@ namespace EsperFightersCup.Net
             ViewID = viewID;
             BuffId = buffId;
         }
+    }
 
-        [MessagePackObject]
-        public readonly struct GameSkillGeneratePacket : IPacket, IPhotonViewPacket
+    [MessagePackObject]
+    public readonly struct GameParticlePacket : IPacket
+    {
+        [IgnoreMember] public byte EventCode => GameProtocol.GameParticleEvent;
+
+        [Key(0)] public string Name { get; }
+        [Key(1)] public Vector3 Position { get; }
+        [Key(2)] public Quaternion Angle { get; }
+
+        [SerializationConstructor]
+        public GameParticlePacket(string name, Vector3 pos, Quaternion angle)
         {
-            [IgnoreMember] public byte EventCode => GameProtocol.GameSkillGenerateEvent;
-
-            [Key(0)] public int ViewID { get; }
-
-            public GameSkillGeneratePacket(int viewID)
-            {
-                ViewID = viewID;
-            }
-        }
-
-        [MessagePackObject]
-        public readonly struct GameSkillStateChangedPacket : IPacket, IPhotonViewPacket
-        {
-            [IgnoreMember] public byte EventCode => GameProtocol.GameSkillStateChangedEvent;
-
-            [Key(0)] public int ViewID { get; }
+            Name = name;
+            Position = pos;
+            Angle = angle;
         }
     }
 }

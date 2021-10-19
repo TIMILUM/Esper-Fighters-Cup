@@ -9,7 +9,6 @@ using UnityEngine;
 /// </summary>
 public class FragmentAreaManager : MonoBehaviourPunCallbacks
 {
-
     [SerializeField]
     private GameObject _fregmentFrefab;
     [SerializeField]
@@ -21,23 +20,20 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     private Queue<FragmentAreaInfo> _currentFragmentremoveQue = new Queue<FragmentAreaInfo>();
     private Queue<FragmentAreaInfo> _fragmentremoveQue = new Queue<FragmentAreaInfo>();
 
-
-
-
     private class FragmentAreaInfo
     {
+        [SerializeField] private GameObject _fragment;
+        [SerializeField] private float _range;
 
-        public GameObject _fragment;
-        public float _range;
+        public GameObject Fragment => _fragment;
+        public float Range => _range;
 
         public FragmentAreaInfo(GameObject fragment, float range)
         {
             _fragment = fragment;
             _range = range;
-
         }
     }
-
 
     /// <summary>
     /// 파편지대를 추가합니다.
@@ -64,20 +60,19 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         return clone;
     }
 
-
-
     public bool CreateFragmentCheck(Vector3 pos)
     {
         foreach (var item in _currentfragmentList)
         {
-            var fragmentPos = item._fragment.transform.position;
-            if (Vector3.Distance(pos, fragmentPos) < item._range)
+            var fragmentPos = item.Fragment.transform.position;
+            if (Vector3.Distance(pos, fragmentPos) < item.Range)
             {
                 return false;
             }
         }
         return true;
     }
+
     /// <summary>
     /// 파편지대 삭제
     /// </summary>
@@ -94,16 +89,17 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         while (_currentFragmentremoveQue.Count != 0)
         {
             var removeobj = _currentFragmentremoveQue.Dequeue();
-            Destroy(removeobj._fragment);
+            Destroy(removeobj.Fragment);
             _currentfragmentList.Remove(removeobj);
         }
         while (_fragmentremoveQue.Count != 0)
         {
             var removeobj = _fragmentremoveQue.Dequeue();
-            Destroy(removeobj._fragment);
+            Destroy(removeobj.Fragment);
             _fragmentList.Remove(removeobj);
         }
     }
+
     /// <summary>
     /// 주변에 이미 파편지대가 있는지 확인후 맞는 이벤트를 적용하는함수입니다.
     /// </summary>
@@ -115,7 +111,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         {
 
             bool isCheck = false;
-            var currentFragmentPos = currentFragment._fragment.transform.position;
+            var currentFragmentPos = currentFragment.Fragment.transform.position;
 
             if (Vector3.Distance(currentFragmentPos, pos) > range)
             {
@@ -124,17 +120,17 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
             }
             foreach (var fragment in _fragmentList)
             {
-                if (!fragment._fragment.GetComponent<FragmentArea>().GetActive())
+                if (!fragment.Fragment.GetComponent<FragmentArea>().GetActive())
                 {
                     _fragmentremoveQue.Enqueue(fragment);
                     continue;
                 }
 
-                var fragmentPos = fragment._fragment.transform.position;
+                var fragmentPos = fragment.Fragment.transform.position;
                 var halfPos = (fragmentPos - currentFragmentPos) * 0.5f;
-                if (Vector3.Distance(currentFragmentPos, fragmentPos) < currentFragment._range * 2)
+                if (Vector3.Distance(currentFragmentPos, fragmentPos) < currentFragment.Range * 2)
                 {
-                    var createPos = currentFragment._fragment.transform.position + halfPos;
+                    var createPos = currentFragment.Fragment.transform.position + halfPos;
                     createfragmentPosList.Enqueue(createPos);
                     isCheck = true;
                 }
@@ -142,16 +138,15 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
 
 
             if (!isCheck)
-                currentFragment._fragment.GetComponent<FragmentArea>().FragmentAreaActive();
+                currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
             if (isCheck)
                 _currentFragmentremoveQue.Enqueue(currentFragment);
-
         }
 
         while (_currentFragmentremoveQue.Count != 0)
         {
             var removeobj = _currentFragmentremoveQue.Dequeue();
-            Destroy(removeobj._fragment);
+            Destroy(removeobj.Fragment);
             _currentfragmentList.Remove(removeobj);
         }
         while (createfragmentPosList.Count != 0)
@@ -159,6 +154,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
             AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, castSkill).GetComponent<FragmentArea>().FragmentActive();
         }
     }
+
     /// <summary>
     /// 주변에 뭐가 있는지 확인
     /// </summary>
@@ -168,7 +164,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     {
         foreach (var item in _currentfragmentList)
         {
-            item._fragment.GetComponent<FragmentArea>().StartEvent();
+            item.Fragment.GetComponent<FragmentArea>().StartEvent();
         }
     }
 
@@ -179,7 +175,6 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="target"></param>
     public void ThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
-
         //던지고 파편지대의 리스트로 옮깁니다.
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();
@@ -192,7 +187,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     {
         foreach (var fragmentAare in _currentfragmentList)
         {
-            fragmentAare._fragment.GetComponent<FragmentArea>().CancelEvent();
+            fragmentAare.Fragment.GetComponent<FragmentArea>().CancelEvent();
         }
     }
 
@@ -205,7 +200,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     {
         foreach (var fragmentArea in _currentfragmentList)
         {
-            fragmentArea._fragment.GetComponent<FragmentArea>().DirectionLookAt(pos);
+            fragmentArea.Fragment.GetComponent<FragmentArea>().DirectionLookAt(pos);
         }
     }
 
@@ -213,7 +208,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     {
         foreach (var item in _currentfragmentList)
         {
-            item._fragment.GetComponent<FragmentArea>().ClearFragmentArea();
+            item.Fragment.GetComponent<FragmentArea>().ClearFragmentArea();
         }
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();

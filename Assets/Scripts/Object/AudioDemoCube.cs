@@ -5,6 +5,11 @@ namespace EsperFightersCup.Object
         protected override void Start()
         {
             base.Start();
+
+            if (AudioEmitter is null)
+            {
+                return;
+            }
             AudioEmitter.Event = "event:/Jukebox";
             AudioEmitter.Play();
         }
@@ -12,7 +17,7 @@ namespace EsperFightersCup.Object
         protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
         {
             base.OnHit(from, to, appendBuff);
-            AudioEmitter.SetParameter("Punched", 1f);
+            AudioEmitter?.SetParameter("Punched", 1f);
         }
     }
 }

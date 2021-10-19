@@ -6,8 +6,8 @@ namespace EsperFightersCup.Net
         public const byte GamePlayerEvent = 0x02;
         public const byte GameBuffGenerateEvent = 0x03;
         public const byte GameBuffReleaseEvent = 0x04;
-        public const byte GameSkillGenerateEvent = 0x04;
-        public const byte GameSkillStateChangedEvent = 0x05;
+        public const byte GameParticleEvent = 0x05;
+        public const byte GameFragmentEvent = 0x06;
 
         /*
         public enum GamePlayer

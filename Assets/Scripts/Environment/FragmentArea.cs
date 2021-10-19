@@ -3,34 +3,19 @@ using UnityEngine;
 
 public class FragmentArea : AStaticObject
 {
-
-    [SerializeField]
-    private GameObject _frangmentArea;
-    [SerializeField]
-    private GameObject _colliderParentObject;
-    [SerializeField]
-    private ColliderChecker _collider;
-    [SerializeField]
-    private float _fragmentRatio;
-    [SerializeField]
-
-
-    private List<Actor> _actors = new List<Actor>();
-
-    public GameObject FrangmentArea => _frangmentArea;
+    [SerializeField] private GameObject _frangmentArea;
+    [SerializeField] private GameObject _colliderParentObject;
+    [SerializeField] private ColliderChecker _collider;
+    [SerializeField] private float _fragmentRatio;
+    [SerializeField] private List<Actor> _actors = new List<Actor>();
 
 
     private bool _isFragmentActive;
     private bool _isNormalActive;
-
-
-
-
-
+    private bool _isObjectSpawn = false;
 
     public float Range { get; set; }
-
-    private bool _isObjectSpawn = false;
+    public GameObject FrangmentArea => _frangmentArea;
 
     private new void Start()
     {
@@ -43,8 +28,6 @@ public class FragmentArea : AStaticObject
     {
         CreateObject();
     }
-
-
 
     public void FragmentAreaActive()
     {
@@ -76,7 +59,6 @@ public class FragmentArea : AStaticObject
     /// </summary>
     private void CreateObject()
     {
-
         if (!_colliderParentObject.activeInHierarchy)
         {
             return;

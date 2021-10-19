@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
@@ -33,6 +34,7 @@ namespace EsperFightersCup.Net
         {
             var option = isCaching ? s_broadcastOptionCached : s_broadcastOption;
             var buffer = PacketSerializer.Serialize(in packet);
+            Debug.Log($"<color=grey>[Packet Check] send: {packet.EventCode}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
             return PhotonNetwork.RaiseEvent(packet.EventCode, buffer, option, sendOption);
         }
     }
