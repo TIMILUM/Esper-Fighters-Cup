@@ -5,7 +5,7 @@ namespace EsperFightersCup.Net
 {
     public interface IPacket
     {
-        byte EventCode { get; }
+        [IgnoreMember] byte EventCode { get; }
     }
 
     public interface IPhotonViewPacket
@@ -53,8 +53,9 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameMatchPacket : IPacket
     {
-        [Key(0)] public byte EventCode => GameProtocol.GameMatchEvent;
-        [Key(1)] public GameMatchResults MatchResult { get; }
+        [IgnoreMember] public byte EventCode => GameProtocol.GameMatchEvent;
+
+        [Key(0)] public GameMatchResults MatchResult { get; }
 
         [SerializationConstructor]
         public GameMatchPacket(GameMatchResults result)
@@ -66,16 +67,17 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffGeneratePacket : IPacket, IPhotonViewPacket
     {
-        [Key(0)] public byte EventCode => GameProtocol.GameBuffGenerateEvent;
-        [Key(1)] public int ViewID { get; }
-        [Key(2)] public BuffObject.Type Type { get; }
-        [Key(3)] public string BuffId { get; }
-        [Key(4)] public float Duration { get; }
-        [Key(5)] public float[] ValueFloat { get; }
-        [Key(6)] public Vector3[] ValueVector3 { get; }
-        [Key(7)] public bool AllowDuplicates { get; }
-        [Key(8)] public float Damage { get; }
-        [Key(9)] public bool IsOnlyOnce { get; }
+        [IgnoreMember] public byte EventCode => GameProtocol.GameBuffGenerateEvent;
+
+        [Key(0)] public int ViewID { get; }
+        [Key(1)] public BuffObject.Type Type { get; }
+        [Key(2)] public string BuffId { get; }
+        [Key(3)] public float Duration { get; }
+        [Key(4)] public float[] ValueFloat { get; }
+        [Key(5)] public Vector3[] ValueVector3 { get; }
+        [Key(6)] public bool AllowDuplicates { get; }
+        [Key(7)] public float Damage { get; }
+        [Key(8)] public bool IsOnlyOnce { get; }
 
         [SerializationConstructor]
         public GameBuffGeneratePacket(int viewID, BuffObject.Type type, string buffId, float duration, float[] valueFloat,
@@ -123,9 +125,10 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffReleasePacket : IPacket, IPhotonViewPacket
     {
-        [Key(0)] public byte EventCode => GameProtocol.GameBuffReleaseEvent;
-        [Key(1)] public int ViewID { get; }
-        [Key(2)] public string BuffId { get; }
+        [IgnoreMember] public byte EventCode => GameProtocol.GameBuffReleaseEvent;
+
+        [Key(0)] public int ViewID { get; }
+        [Key(1)] public string BuffId { get; }
 
         [SerializationConstructor]
         public GameBuffReleasePacket(int viewID, string buffId)
@@ -137,16 +140,22 @@ namespace EsperFightersCup.Net
         [MessagePackObject]
         public readonly struct GameSkillGeneratePacket : IPacket, IPhotonViewPacket
         {
-            [Key(0)] public byte EventCode => GameProtocol.GameMatchEvent;
-            [Key(1)] public int ViewID { get; }
+            [IgnoreMember] public byte EventCode => GameProtocol.GameSkillGenerateEvent;
 
+            [Key(0)] public int ViewID { get; }
+
+            public GameSkillGeneratePacket(int viewID)
+            {
+                ViewID = viewID;
+            }
         }
 
         [MessagePackObject]
         public readonly struct GameSkillStateChangedPacket : IPacket, IPhotonViewPacket
         {
-            [Key(0)] public byte EventCode => GameProtocol.GameMatchEvent;
-            [Key(1)] public int ViewID { get; }
+            [IgnoreMember] public byte EventCode => GameProtocol.GameSkillStateChangedEvent;
+
+            [Key(0)] public int ViewID { get; }
         }
     }
 }
