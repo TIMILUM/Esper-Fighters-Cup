@@ -169,6 +169,7 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnRelease()
     {
+        InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
         Destroy(gameObject);
         yield break;
     }
@@ -178,7 +179,7 @@ public class ThrowSkillObject : SkillObject
         bool isCanceled = false;
 
         InGameSkillManager.Instance.FragmentEventStart();
-        InGameSkillManager.Instance.FragmentAreaThrowObject(_buffOnCollision[0], GetMousePosition());
+
 
         if (isCanceled)
         {
