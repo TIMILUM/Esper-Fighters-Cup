@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 5170956225755725696}
   - component: {fileID: 8100416200497721467}
   - component: {fileID: 253468095320911788}
+  - component: {fileID: 6819613831527960332}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -164,7 +165,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 6820238161038408815}
   _hp: 0
-  _id: 0
+  _id: 2
   _minRandomScale: {x: 0.5, y: 0.5, z: 0.5}
   _maxRandomScale: {x: 1, y: 1, z: 1}
 --- !u!114 &5170956225755725696
@@ -222,6 +223,20 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: -1
   OverrideMaxDistance: -1
+--- !u!114 &6819613831527960332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
 --- !u!1001 &402237127510166391
 PrefabInstance:
   m_ObjectHideFlags: 0
