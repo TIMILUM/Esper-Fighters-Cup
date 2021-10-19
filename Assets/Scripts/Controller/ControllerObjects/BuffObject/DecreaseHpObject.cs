@@ -28,7 +28,7 @@ public class DecreaseHpObject : BuffObject
         if (_character is null) // is: Unity.Object의 null check 건너뛰고 바로 System.Object의 null check
         {
             Debug.Log("HP does not found!");
-            ControllerCast<BuffController>().ReleaseBuff(BuffId);
+            ControllerCast<BuffController>().ReleaseBuff(this);
             return;
         }
 

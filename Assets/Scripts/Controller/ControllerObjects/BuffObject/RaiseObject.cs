@@ -52,7 +52,7 @@ public class RaiseObject : BuffObject
         if (buff != null)
         {
             GenerateAfterBuff(_actor.BuffController);
-            _actor.BuffController.ReleaseBuff(BuffId);
+            _actor.BuffController.ReleaseBuff(this);
 
         }
         else
