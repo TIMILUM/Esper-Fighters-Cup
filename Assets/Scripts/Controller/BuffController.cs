@@ -70,9 +70,10 @@ public class BuffController : ControllerBase, IOnEventCallback
 
         var id = $"{buffStruct.Type}{PhotonNetwork.ServerTimestamp}";
         var packet = new GameBuffGeneratePacket(photonView.ViewID, id, buffStruct);
-        PacketSender.Broadcast(GameProtocol.GameBuffGenerateEvent, in packet, SendOptions.SendReliable);
+        PacketSender.Broadcast(in packet, SendOptions.SendReliable);
     }
 
+    /*
     [Obsolete("아이디를 통해 해제하는 방식을 사용해주세요.", true)]
     public void ReleaseBuff(BuffObject buffObject)
     {
@@ -85,6 +86,7 @@ public class BuffController : ControllerBase, IOnEventCallback
         _buffObjects[type].Remove(buffObject);
         Destroy(buffObject.gameObject);
     }
+    */
 
     /// <summary>
     /// 버프 타입과 일치하는 모든 버프를 해제합니다.
@@ -99,7 +101,7 @@ public class BuffController : ControllerBase, IOnEventCallback
 
         foreach (var buffObject in buffList.ToList())
         {
-            ReleaseBuff(buffObject.BuffId);
+            ReleaseBuff(buffObject);
         }
     }
 
@@ -108,7 +110,7 @@ public class BuffController : ControllerBase, IOnEventCallback
     /// </summary>
     /// <param name="id">버프오브젝트 아이디</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public void ReleaseBuff(string id)
+    public void ReleaseBuff(BuffObject buff)
     {
         if (photonView is null)
         {
@@ -116,9 +118,16 @@ public class BuffController : ControllerBase, IOnEventCallback
             return;
         }
 
-        Debug.Log($"Send buff release event - {id}");
-        var packet = new GameBuffReleasePacket(photonView.ViewID, id);
-        PacketSender.Broadcast(GameProtocol.GameBuffReleaseEvent, in packet, SendOptions.SendReliable);
+        if (!buff)
+        {
+            throw new ArgumentNullException(nameof(buff));
+        }
+
+        Debug.Log($"Send buff release event - {buff.BuffId}");
+        var packet = new GameBuffReleasePacket(photonView.ViewID, buff.BuffId);
+
+        buff.gameObject.SetActive(false);
+        PacketSender.Broadcast(in packet, SendOptions.SendReliable);
     }
 
     /// <summary>

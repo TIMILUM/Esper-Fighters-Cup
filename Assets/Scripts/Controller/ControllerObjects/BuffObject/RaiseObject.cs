@@ -57,8 +57,8 @@ public class RaiseObject : BuffObject
         var buff = _actor.BuffController.GetBuff(BuffObject.Type.KnockBack);
         if (buff != null)
         {
-            _actor.BuffController.ReleaseBuff(BuffId);
-            GenerateAfterBuff(_actor.BuffController, buff);
+            _actor.BuffController.ReleaseBuff(this);
+            GenerateAfterBuff(_actor.BuffController);
         }
         else
         {

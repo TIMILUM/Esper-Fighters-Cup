@@ -5,6 +5,7 @@ namespace EsperFightersCup.Net
 {
     public interface IPacket
     {
+        [IgnoreMember] byte EventCode { get; }
     }
 
     public interface IPhotonViewPacket
@@ -52,8 +53,9 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameMatchPacket : IPacket
     {
-        [Key(0)] public GameMatchResults MatchResult { get; }
+        [IgnoreMember] public byte EventCode => GameProtocol.GameMatchEvent;
 
+        [Key(0)] public GameMatchResults MatchResult { get; }
 
         [SerializationConstructor]
         public GameMatchPacket(GameMatchResults result)
@@ -65,6 +67,8 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffGeneratePacket : IPacket, IPhotonViewPacket
     {
+        [IgnoreMember] public byte EventCode => GameProtocol.GameBuffGenerateEvent;
+
         [Key(0)] public int ViewID { get; }
         [Key(1)] public BuffObject.Type Type { get; }
         [Key(2)] public string BuffId { get; }
@@ -121,6 +125,8 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffReleasePacket : IPacket, IPhotonViewPacket
     {
+        [IgnoreMember] public byte EventCode => GameProtocol.GameBuffReleaseEvent;
+
         [Key(0)] public int ViewID { get; }
         [Key(1)] public string BuffId { get; }
 
@@ -129,6 +135,27 @@ namespace EsperFightersCup.Net
         {
             ViewID = viewID;
             BuffId = buffId;
+        }
+
+        [MessagePackObject]
+        public readonly struct GameSkillGeneratePacket : IPacket, IPhotonViewPacket
+        {
+            [IgnoreMember] public byte EventCode => GameProtocol.GameSkillGenerateEvent;
+
+            [Key(0)] public int ViewID { get; }
+
+            public GameSkillGeneratePacket(int viewID)
+            {
+                ViewID = viewID;
+            }
+        }
+
+        [MessagePackObject]
+        public readonly struct GameSkillStateChangedPacket : IPacket, IPhotonViewPacket
+        {
+            [IgnoreMember] public byte EventCode => GameProtocol.GameSkillStateChangedEvent;
+
+            [Key(0)] public int ViewID { get; }
         }
     }
 }
