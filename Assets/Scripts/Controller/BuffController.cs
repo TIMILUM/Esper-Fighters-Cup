@@ -70,7 +70,7 @@ public class BuffController : ControllerBase, IOnEventCallback
 
         var id = $"{buffStruct.Type}{PhotonNetwork.ServerTimestamp}";
         var packet = new GameBuffGeneratePacket(photonView.ViewID, id, buffStruct);
-        PacketSender.Broadcast(GameProtocol.GameBuffGenerateEvent, in packet, SendOptions.SendReliable);
+        PacketSender.Broadcast(in packet, SendOptions.SendReliable);
     }
 
     [Obsolete("아이디를 통해 해제하는 방식을 사용해주세요.", true)]
@@ -118,7 +118,7 @@ public class BuffController : ControllerBase, IOnEventCallback
 
         Debug.Log($"Send buff release event - {id}");
         var packet = new GameBuffReleasePacket(photonView.ViewID, id);
-        PacketSender.Broadcast(GameProtocol.GameBuffReleaseEvent, in packet, SendOptions.SendReliable);
+        PacketSender.Broadcast(in packet, SendOptions.SendReliable);
     }
 
     /// <summary>
