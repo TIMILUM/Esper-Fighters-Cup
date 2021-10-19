@@ -63,7 +63,7 @@ namespace EsperFightersCup.UI.Match
                 CoroutineTimer.Stop(ref _matchFaildTimer);
 
                 var packet = new GameMatchPacket(GameMatchResults.Success);
-                PacketSender.Broadcast(GameProtocol.GameMatchEvent, in packet, SendOptions.SendReliable);
+                PacketSender.Broadcast(in packet, SendOptions.SendReliable);
             }
         }
 
