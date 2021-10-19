@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using UnityEngine;
-
 public class RaiseObject : BuffObject
 {
     [SerializeField, Tooltip("높이 데이터 입니다.")]
@@ -11,6 +11,12 @@ public class RaiseObject : BuffObject
     private Vector3 _startPos;
     private float _startTime;
     private float _endTime;
+
+    [SerializeField, Header("ShockWave의 값입니다. 모두 0을 할 경우 캐릭터의 충격파 변수값이 들어갑니다.")]
+    private float _KnockBackSpeed;
+    [SerializeField] private float _ShockwavedecreaseHp;
+    [SerializeField] private float _ShockwavedurationStunSeconds;
+    [SerializeField] private float _Shockwaveduration;
 
 
 
@@ -51,9 +57,8 @@ public class RaiseObject : BuffObject
         var buff = _actor.BuffController.GetBuff(BuffObject.Type.KnockBack);
         if (buff != null)
         {
-            GenerateAfterBuff(_actor.BuffController);
             _actor.BuffController.ReleaseBuff(BuffId);
-
+            GenerateAfterBuff(_actor.BuffController, buff);
         }
         else
         {
@@ -63,16 +68,25 @@ public class RaiseObject : BuffObject
     }
 
 
-    private void GenerateAfterBuff(BuffController controller)
+    private void GenerateAfterBuff(BuffController controller, List<BuffObject> buff)
     {
 
         Vector3 dir = GetMousePosition() - transform.position;
         float[] FloatValue = new float[3];
         Vector3[] Vector = new Vector3[1];
         Vector[0] = dir;
-        FloatValue[0] = 5;
-        FloatValue[1] = 10;
-        FloatValue[2] = 0.5f;
+
+        if (_KnockBackSpeed == 0 && _ShockwavedecreaseHp == 0 && _ShockwavedurationStunSeconds == 0 && _Shockwaveduration == 0)
+        {
+            return;
+        }
+        for (int i = 0; i < buff.Count; i++)
+        {
+            _actor.BuffController.ReleaseBuff(buff[i].BuffId);
+        }
+        FloatValue[0] = _KnockBackSpeed;
+        FloatValue[1] = _ShockwavedecreaseHp;
+        FloatValue[2] = _ShockwavedurationStunSeconds;
 
 
 
