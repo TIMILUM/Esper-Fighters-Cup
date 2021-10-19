@@ -22,6 +22,8 @@ public class MovementController : ControllerBase
 
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.1f;
 
+    [SerializeField] private GameObject _playerUiPrefabs;
+    private GameObject _playerUi;
 
     private void Reset()
     {
@@ -36,6 +38,8 @@ public class MovementController : ControllerBase
         base.Start();
         _player = _controllerManager.GetActor() as APlayer;
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+
+        _playerUi = Instantiate(_playerUiPrefabs, transform);
     }
 
     // Update is called once per frame
@@ -46,7 +50,7 @@ public class MovementController : ControllerBase
         {
             return;
         }
-
+        _playerUi.transform.position = transform.position + new Vector3(0.0f, 0.01f, 0.0f);
         UpdateMine();
 
     }
