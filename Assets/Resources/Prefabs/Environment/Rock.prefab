@@ -70,6 +70,9 @@ GameObject:
   - component: {fileID: 6627632039222623937}
   - component: {fileID: 1038122133462450610}
   - component: {fileID: 995461028500740938}
+  - component: {fileID: 5170956225755725696}
+  - component: {fileID: 8100416200497721467}
+  - component: {fileID: 253468095320911788}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -141,8 +144,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 5170956225755725696}
+  - {fileID: 8100416200497721467}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -164,6 +167,61 @@ MonoBehaviour:
   _id: 0
   _minRandomScale: {x: 0.5, y: 0.5, z: 0.5}
   _maxRandomScale: {x: 1, y: 1, z: 1}
+--- !u!114 &5170956225755725696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &8100416200497721467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &253468095320911788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1001 &402237127510166391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -177,15 +235,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36b71e0fa1525924095f13e9f65afb7a, type: 3}
       propertyPath: m_LocalScale.x
-      value: 50
+      value: 90.364006
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36b71e0fa1525924095f13e9f65afb7a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 50
+      value: 155.39752
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36b71e0fa1525924095f13e9f65afb7a, type: 3}
       propertyPath: m_LocalScale.z
-      value: 50
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 36b71e0fa1525924095f13e9f65afb7a, type: 3}
       propertyPath: m_LocalPosition.x
