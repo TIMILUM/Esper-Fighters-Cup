@@ -17,11 +17,12 @@ public class FragmentArea : AStaticObject
     public float Range { get; set; }
     public GameObject FrangmentArea => _frangmentArea;
 
-    private new void Start()
+    protected override void Start()
     {
+        base.Start();
         _collider.OnCollision += SetHit;
         Range = transform.localScale.x / 2.0f;
-
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     private void Update()

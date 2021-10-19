@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using EsperFightersCup.UI.InGame;
 using UnityEngine;
@@ -19,7 +17,7 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
     private void Start()
     {
-        
+
     }
 
     public override void StartState()
@@ -36,6 +34,7 @@ public class IngameRoundIntroState : InGameFSMStateBase
             player.transform.position = startPosition.position;
         }
 
+        // 몇초 뒤에 보이게 해야 잘 보임.
         _gameStateView.Show($"Round {round}", Vector2.left * 20f);
         CoroutineTimer.SetTimerOnce(() =>
         {

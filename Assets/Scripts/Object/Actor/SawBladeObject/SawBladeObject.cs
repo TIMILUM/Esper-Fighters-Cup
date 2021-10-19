@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SawBladeObject : AStaticObject
@@ -32,6 +30,7 @@ public class SawBladeObject : AStaticObject
     {
         base.Start();
         _collider.OnCollision += SetHit;
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     public override void SetHit(ObjectBase to)
