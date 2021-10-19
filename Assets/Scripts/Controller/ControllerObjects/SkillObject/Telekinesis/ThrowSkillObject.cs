@@ -89,13 +89,13 @@ public class ThrowSkillObject : SkillObject
            }
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
-               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range, _player);
+               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range, _player.photonView.ViewID);
                ActiveGameObjects(_fragmentCasting, false);
                ActiveGameObjects(_casting, false);
                if (SetPosCompare(mousePos))
                {
-                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player);
-                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range, _player);
+                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player.photonView.ViewID);
+                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range, _player.photonView.ViewID);
                }
                else
                {

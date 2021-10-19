@@ -41,21 +41,22 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="trans"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public GameObject AddFragmentList(Transform trans, float range, Actor castSkill)
+    public GameObject AddFragmentList(Transform trans, float range, int ActorViewID)
     {
         var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
-
+        clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
         clone.transform.localScale = trans.localScale;
-        clone.GetComponent<FragmentArea>().NotFloatObject(castSkill);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
         return clone;
     }
 
-    public GameObject AddFragmentList(Vector3 trans, float range, Actor castSkill)
+
+
+    public GameObject AddFragmentList(Vector3 trans, float range, int ActorViewID)
     {
         var clone = Instantiate(_fregmentFrefab, trans, Quaternion.identity);
+        clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
         clone.transform.localScale = new Vector3(range, 1.0f, range);
-        clone.GetComponent<FragmentArea>().NotFloatObject(castSkill);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
         return clone;
     }
@@ -101,9 +102,9 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
-    /// 주변에 이미 파편지대가 있는지 확인후 맞는 이벤트를 적용하는함수입니다.
+    /// 주변에 있는 파편지대 판별하여 파편뭉치 생성
     /// </summary>
-    public void SetFragmentAreaActive(Vector3 pos, float range, Actor castSkill)
+    public void SetFragmentAreaActive(Vector3 pos, float range, int ActorViewID)
     {
         var createfragmentPosList = new Queue<Vector3>();
 
@@ -151,7 +152,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         }
         while (createfragmentPosList.Count != 0)
         {
-            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, castSkill).GetComponent<FragmentArea>().FragmentActive();
+            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, ActorViewID).GetComponent<FragmentArea>().FragmentActive();
         }
     }
 

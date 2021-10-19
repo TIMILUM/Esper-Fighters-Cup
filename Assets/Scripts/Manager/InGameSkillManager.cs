@@ -41,9 +41,9 @@ public class InGameSkillManager : MonoBehaviour
     /// </summary>
     /// <param name="trans"></param>
     /// <param name="range"></param>
-    public void AddFragmentArea(Transform trans, float range, Actor costSkill)
+    public void AddFragmentArea(Transform trans, float range, int ActorID)
     {
-        _fragmentArea.AddFragmentList(trans, range, costSkill);
+        _fragmentArea.AddFragmentList(trans, range, ActorID);
     }
     /// <summary>
     /// 파편지대 시작 event 띄움
@@ -63,9 +63,9 @@ public class InGameSkillManager : MonoBehaviour
     /// <summary>
     /// 파편지대 모두 활성화
     /// </summary>
-    public void FragmentAllActive(Vector3 pos, float range, Actor castActor)
+    public void FragmentAllActive(Vector3 pos, float range, int ActorID)
     {
-        _fragmentArea.SetFragmentAreaActive(pos, range, castActor);
+        _fragmentArea.SetFragmentAreaActive(pos, range, ActorID);
     }
     /// <summary>
     /// 파편지대 위치 설정한 파편지대 삭제
