@@ -35,9 +35,13 @@ public class ShockWaveSkillObject : SkillObject
     protected override void Start()
     {
         base.Start();
+        // 사거리
+        _range = GetCSVData<float>("Range");
+        // 판정 범위 가로 세로
+        _colliderSize = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
         ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
 
-        var colliderScale = new Vector3(_colliderSize.y, 1, _colliderSize.x);
+        var colliderScale = new Vector3(_colliderSize.x, 1, _colliderSize.y);
         ScaleGameObjects(_secondCasting, colliderScale);
         _colliderParentTransform.localScale = colliderScale;
         _collider.OnCollision += SetHit;
@@ -87,6 +91,9 @@ public class ShockWaveSkillObject : SkillObject
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
+                //충격파 애니메이션
+                _player.CharacterAnimator.SetTrigger("ShockWaveSkill");
+                ParticleManager.Instance.PullParticle("ShockWave", _player.transform.position + _player.transform.forward, _player.transform.rotation);
                 return true;
             }
 
@@ -106,6 +113,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnFrontDelay()
     {
+        yield return new WaitForSeconds(FrontDelayMilliseconds / 1000.0f);
         SetNextState();
         yield break;
     }
@@ -116,12 +124,9 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.gameObject.SetActive(true);
         var startTime = DateTime.Now;
         var nowTime = DateTime.Now;
-        while ((nowTime - startTime).TotalMilliseconds <= _onHitDuration * 1000)
-        {
-            _colliderParentTransform.transform.position = _startPos;
-            yield return null;
-            nowTime = DateTime.Now;
-        }
+        _colliderParentTransform.transform.position = _startPos;
+        yield return new WaitUntil(() => WaitPhysicsUpdate());
+        nowTime = DateTime.Now;
 
         _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();
@@ -129,6 +134,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnEndDelay()
     {
+        yield return new WaitForSeconds(EndDelayMilliseconds / 1000.0f);
         SetNextState();
         yield break;
     }
@@ -203,7 +209,9 @@ public class ShockWaveSkillObject : SkillObject
         }
     }
 
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) { }
+    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
+    {
+    }
 
     public override void OnPlayerHitEnter(GameObject other)
     {

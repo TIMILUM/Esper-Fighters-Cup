@@ -3,23 +3,23 @@ using UnityEngine;
 
 public class StunObject : BuffObject
 {
+    private ACharacter _character;
+
     private void Reset()
     {
         _name = "Stun";
         _buffStruct.Type = Type.Stun;
     }
 
-
-    // Start is called before the first frame update
-    private new void Start()
+    protected override void OnRegistered()
     {
-        base.Start();
-    }
+        base.OnRegistered();
+        _character = Author as ACharacter;
 
-    // Update is called once per frame
-    private new void Update()
-    {
-        base.Update();
+        if (!(_character is null))
+        {
+            _character.CharacterAnimator.SetTrigger("Hit");
+        }
     }
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)

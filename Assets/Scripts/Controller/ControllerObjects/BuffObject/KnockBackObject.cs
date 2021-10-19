@@ -6,16 +6,15 @@ public class KnockBackObject : BuffObject
     [SerializeField]
     [Tooltip("넉백 방향 입니다.")]
     private Vector3 _normalizedDirection = Vector3.zero;
+    private ACharacter _character;
 
     [SerializeField]
     [Tooltip("최종 넉백 거리는 (스피드 * 지속시간) 입니다.")]
     private float _speed = 1;
 
-    private Actor _actor;
-    private Vector3 _endPosition;
+    // private Vector3 _endPosition;
+    // private Vector3 _startPosition;
     private Rigidbody _rigidbody;
-
-    private Vector3 _startPosition;
 
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 HP가 줄어듬
     private float _decreaseHp = 0;
@@ -25,6 +24,7 @@ public class KnockBackObject : BuffObject
 
     public Vector3 NormalizedDirection
     {
+        get => _normalizedDirection;
         set => _normalizedDirection = value;
     }
 
@@ -37,29 +37,34 @@ public class KnockBackObject : BuffObject
     {
         _name = "";
         _buffStruct.Type = Type.KnockBack;
+
+        _character = Author as ACharacter;
+
+        if (!(_character is null))
+        {
+            _character.CharacterAnimator.SetTrigger("Knockback");
+        }
     }
 
-    // Start is called before the first frame update
-    private new void Start()
+    protected override void OnRegistered()
     {
-        base.Start();
+
+
+
         _normalizedDirection = _normalizedDirection.normalized;
-        _actor = _controller.ControllerManager.GetActor();
-        _rigidbody = _actor.GetComponent<Rigidbody>();
-        _startPosition = _rigidbody.position;
-        _endPosition = _startPosition + (_buffStruct.Duration * _speed * _normalizedDirection);
+        _rigidbody = Author.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    private new void Update()
+    protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine)
+        if (!IsRegistered || !Author.photonView.IsMine)
         {
             return;
         }
 
         _rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
+
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
@@ -92,13 +97,17 @@ public class KnockBackObject : BuffObject
             return;
         }
 
-        if (_actor.ControllerManager.TryGetController(
+
+
+        if (Author.ControllerManager.TryGetController(
             ControllerManager.Type.BuffController, out BuffController myController))
         {
             _rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
             GenerateAfterBuff(myController);
-            myController.ReleaseBuff(this);
+            myController.ReleaseBuff(BuffId);
         }
+
+
 
         if (otherActor is null)
         {

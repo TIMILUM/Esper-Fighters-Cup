@@ -39,9 +39,9 @@ public class CoroutineTimer : MonoBehaviour
     /// </summary>
     /// <param name="timerAction">실행할 메소드</param>
     /// <param name="delay">메소드 실행 전 딜레이 시간</param>
-    public static void SetTimerOnce(UnityAction timerAction, float delay)
+    public static Coroutine SetTimerOnce(UnityAction timerAction, float delay)
     {
-        Instance.StartCoroutine(SetTimerOnceCoroutine(timerAction, delay));
+        return Instance.StartCoroutine(SetTimerOnceCoroutine(timerAction, delay));
     }
 
     /// <summary>
@@ -54,6 +54,21 @@ public class CoroutineTimer : MonoBehaviour
     public static Coroutine SetTimerRepeat(UnityAction timerAction, float interval, float startDelay)
     {
         return Instance.StartCoroutine(SetTimerRepeatCoroutine(timerAction, interval, startDelay));
+    }
+
+    /// <summary>
+    /// CoroutineTimer에서 생성한 타이머 코루틴을 정지합니다. 정지된 타이머는 null을 참조합니다.
+    /// </summary>
+    /// <param name="timer"><see cref="CoroutineTimer"/>에서 생성한 타이머</param>
+    public static void Stop(ref Coroutine timer)
+    {
+        if (timer is null)
+        {
+            return;
+        }
+
+        Instance.StopCoroutine(timer);
+        timer = null;
     }
 
     private static IEnumerator SetTimerOnceCoroutine(UnityAction timerAction, float delay)

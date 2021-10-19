@@ -7,12 +7,12 @@ public enum SKILLKEYCODE
 
 public abstract class SkillBase : MonoBehaviour
 {
-    [SerializeField, TextArea] private string _SkillDesc; // 스킬 설명
-    [SerializeField] private string _SkillName; // 스킬 이름
-    [SerializeField] private string _SkillAnimation; // 스킬에 적용할 애니메이션
-    [SerializeField] protected float _SKillRange; // 스킬 사거리
-    [SerializeField] protected SKILLKEYCODE _SkillKeyCode; // 스킬 키 코드
-    public bool isSkillUsing { get; set; } // 스킬 사용중인지 아닌지 판별
+    [SerializeField, TextArea] private string _skillDesc; // 스킬 설명
+    [SerializeField] private string _skillName; // 스킬 이름
+    [SerializeField] private string _skillAnimation; // 스킬에 적용할 애니메이션
+    [SerializeField] protected float _sKillRange; // 스킬 사거리
+    [SerializeField] protected SKILLKEYCODE _skillKeyCode; // 스킬 키 코드
+    public bool IsSkillUsing { get; set; } // 스킬 사용중인지 아닌지 판별
 
 
     public abstract void SkillExecute();
@@ -20,28 +20,28 @@ public abstract class SkillBase : MonoBehaviour
     public bool TrySkill()
     {
 
-        if (_SkillKeyCode == SKILLKEYCODE.CONTROL)
+        if (_skillKeyCode == SKILLKEYCODE.CONTROL)
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                isSkillUsing = true;
+                IsSkillUsing = true;
                 return true;
             }
 
         }
-        else if (_SkillKeyCode == SKILLKEYCODE.LEFTMOUSEBUTTONDOWN)
+        else if (_skillKeyCode == SKILLKEYCODE.LEFTMOUSEBUTTONDOWN)
         {
             if (Input.GetButtonDown("Fire1"))
             {
-                isSkillUsing = true;
+                IsSkillUsing = true;
                 return true;
             }
         }
-        else if (_SkillKeyCode == SKILLKEYCODE.RIGHTMOUSEBUTTONDOWN)
+        else if (_skillKeyCode == SKILLKEYCODE.RIGHTMOUSEBUTTONDOWN)
         {
             if (Input.GetButtonDown("Fire2"))
             {
-                isSkillUsing = true;
+                IsSkillUsing = true;
                 return true;
 
             }

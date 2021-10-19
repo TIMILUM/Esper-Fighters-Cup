@@ -299,18 +299,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buffOnCollision:
-  - Type: 2
-    Duration: 0.3
-    ValueFloat:
+  - _type: 2
+    _duration: 0.3
+    _valueFloat:
     - 5
     - 10
     - 0.5
-    ValueVector3:
+    _valueVector3:
     - {x: 0, y: 0, z: 0}
-    AllowDuplicates: 0
-    Damage: 0
-    isOnlyonce: 0
+    _allowDuplicates: 0
+    _damage: 0
+    _isOnlyOnce: 0
   _currentState: 0
+  _id: 1
   _range: 3
   _onHitDuration: 0.5
   _firstCasting:
