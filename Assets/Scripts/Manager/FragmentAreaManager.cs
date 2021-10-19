@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using EsperFightersCup.Net;
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 
@@ -7,7 +10,7 @@ using UnityEngine;
 /// <summary>
 /// 파편 지형을 만들어 주는 클래스 입니다.
 /// </summary>
-public class FragmentAreaManager : MonoBehaviourPunCallbacks
+public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     [SerializeField]
     private GameObject _fregmentFrefab;
@@ -106,54 +109,8 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void SetFragmentAreaActive(Vector3 pos, float range, int ActorViewID)
     {
-        var createfragmentPosList = new Queue<Vector3>();
-
-        foreach (var currentFragment in _currentfragmentList)
-        {
-
-            bool isCheck = false;
-            var currentFragmentPos = currentFragment.Fragment.transform.position;
-
-            if (Vector3.Distance(currentFragmentPos, pos) > range)
-            {
-                _currentFragmentremoveQue.Enqueue(currentFragment);
-                continue;
-            }
-            foreach (var fragment in _fragmentList)
-            {
-                if (!fragment.Fragment.GetComponent<FragmentArea>().GetActive())
-                {
-                    _fragmentremoveQue.Enqueue(fragment);
-                    continue;
-                }
-
-                var fragmentPos = fragment.Fragment.transform.position;
-                var halfPos = (fragmentPos - currentFragmentPos) * 0.5f;
-                if (Vector3.Distance(currentFragmentPos, fragmentPos) < currentFragment.Range * 2)
-                {
-                    var createPos = currentFragment.Fragment.transform.position + halfPos;
-                    createfragmentPosList.Enqueue(createPos);
-                    isCheck = true;
-                }
-            }
-
-
-            if (!isCheck)
-                currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
-            if (isCheck)
-                _currentFragmentremoveQue.Enqueue(currentFragment);
-        }
-
-        while (_currentFragmentremoveQue.Count != 0)
-        {
-            var removeobj = _currentFragmentremoveQue.Dequeue();
-            Destroy(removeobj.Fragment);
-            _currentfragmentList.Remove(removeobj);
-        }
-        while (createfragmentPosList.Count != 0)
-        {
-            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, ActorViewID).GetComponent<FragmentArea>().FragmentActive();
-        }
+        PacketSender.Broadcast(new GameFragmentAreaPacket(ActorViewID, pos, range), SendOptions.SendReliable);
+        // 아래 코드 HandleFragmentAreaEvent()로 옮기기
     }
 
     /// <summary>
@@ -203,5 +160,71 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
 
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        if (photonEvent.Code != GameProtocol.GameFragmentAreaEvent)
+        {
+            return;
+        }
+
+        HandleFragmentAreaEvent(photonEvent);
+    }
+
+    private void HandleFragmentAreaEvent(EventData photonEvent)
+    {
+        var packet = PacketSerializer.Deserialize<GameFragmentAreaPacket>((byte[])photonEvent.CustomData);
+
+        // SetFragmentAreaActive코드 실행
+        var createfragmentPosList = new Queue<Vector3>();
+
+        foreach (var currentFragment in _currentfragmentList)
+        {
+
+            bool isCheck = false;
+            var currentFragmentPos = currentFragment.Fragment.transform.position;
+
+            if (Vector3.Distance(currentFragmentPos, packet.Position) > packet.Range)
+            {
+                _currentFragmentremoveQue.Enqueue(currentFragment);
+                continue;
+            }
+            foreach (var fragment in _fragmentList)
+            {
+                if (!fragment.Fragment.GetComponent<FragmentArea>().GetActive())
+                {
+                    _fragmentremoveQue.Enqueue(fragment);
+                    continue;
+                }
+
+                var fragmentPos = fragment.Fragment.transform.position;
+                var halfPos = (fragmentPos - currentFragmentPos) * 0.5f;
+                if (Vector3.Distance(currentFragmentPos, fragmentPos) < currentFragment.Range * 2)
+                {
+                    var createPos = currentFragment.Fragment.transform.position + halfPos;
+                    createfragmentPosList.Enqueue(createPos);
+                    isCheck = true;
+                }
+            }
+
+
+            if (!isCheck)
+                currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
+            if (isCheck)
+                _currentFragmentremoveQue.Enqueue(currentFragment);
+        }
+
+        while (_currentFragmentremoveQue.Count != 0)
+        {
+            var removeobj = _currentFragmentremoveQue.Dequeue();
+            Destroy(removeobj.Fragment);
+            _currentfragmentList.Remove(removeobj);
+        }
+        while (createfragmentPosList.Count != 0)
+        {
+            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, packet.ViewID).GetComponent<FragmentArea>().FragmentActive();
+        }
+
     }
 }
