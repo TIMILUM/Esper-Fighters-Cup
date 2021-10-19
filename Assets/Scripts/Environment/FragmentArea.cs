@@ -97,7 +97,11 @@ public class FragmentArea : AStaticObject
             }
         }
 
+        Invoke("ClearFragmentArea", 0.03f);
+
+
     }
+
 
 
 
@@ -110,16 +114,13 @@ public class FragmentArea : AStaticObject
 
     }
 
+
+
     public bool GetActive()
     {
         return _isNormalActive;
     }
 
-    public void DirectionLookAt(Vector3 pos)
-    {
-        var lookDirection = pos - transform.position;
-
-    }
 
     /// <summary>
     /// 띄운 애들을 넉백을 하기 위한 함수입니다.
@@ -137,8 +138,6 @@ public class FragmentArea : AStaticObject
         }
 
         _colliderParentObject.SetActive(false);
-        _isNormalActive = false;
-        _isFragmentActive = false;
         _actors.Clear();
     }
 

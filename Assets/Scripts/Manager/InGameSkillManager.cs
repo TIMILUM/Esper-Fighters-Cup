@@ -84,14 +84,9 @@ public class InGameSkillManager : MonoBehaviour
         return _fragmentArea.CreateFragmentCheck(pos);
     }
 
-    /// <summary>
-    /// 오브젝트 던지기는 함수
-    /// </summary>
-    /// <param name="buffstruct"></param>
-    /// <param name="target"></param>
-    public void FragmentAreaThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
+    public void FragmentAreaClear()
     {
-        _fragmentArea.ThrowObject(buffstruct, target);
+        _fragmentArea.CurrentFragmentAreaClear();
     }
     /// <summary>
     /// 취소함수
@@ -101,14 +96,7 @@ public class InGameSkillManager : MonoBehaviour
         _fragmentArea.CancelFragment();
     }
 
-    /// <summary>
-    /// 방향을 나타내는 함수
-    /// </summary>
-    /// <param name="pos"></param>
-    public void FragmentDirection(Vector3 pos)
-    {
-        _fragmentArea.FragmentDirection(pos);
-    }
+
     public void FragmentClear()
     {
         _fragmentArea.CurrentFragmentAreaClear();

@@ -175,11 +175,6 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <param name="target"></param>
     public void ThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
     {
-        //던지고 파편지대의 리스트로 옮깁니다.
-        foreach (var item in _currentfragmentList)
-        {
-            item.Fragment.GetComponent<FragmentArea>().ClearFragmentArea();
-        }
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();
     }
@@ -200,20 +195,11 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         return _currentfragmentList.Count;
     }
 
-    public void FragmentDirection(Vector3 pos)
-    {
-        foreach (var fragmentArea in _currentfragmentList)
-        {
-            fragmentArea.Fragment.GetComponent<FragmentArea>().DirectionLookAt(pos);
-        }
-    }
+
 
     public void CurrentFragmentAreaClear()
     {
-        foreach (var item in _currentfragmentList)
-        {
-            item.Fragment.GetComponent<FragmentArea>().ClearFragmentArea();
-        }
+
         _fragmentList.AddRange(_currentfragmentList);
         _currentfragmentList.Clear();
     }

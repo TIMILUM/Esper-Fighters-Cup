@@ -93,7 +93,7 @@ public class RaiseObject : BuffObject
         controller.GenerateBuff(new BuffStruct()
         {
             Type = Type.KnockBack,
-            Duration = 0.3f,
+            Duration = _Shockwaveduration,
             ValueFloat = FloatValue,
             ValueVector3 = Vector,
         });
