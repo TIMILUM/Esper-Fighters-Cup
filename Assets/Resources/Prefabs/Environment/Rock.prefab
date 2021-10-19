@@ -140,7 +140,9 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 0}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -159,6 +161,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 6820238161038408815}
   _hp: 0
+  _id: 0
   _minRandomScale: {x: 0.5, y: 0.5, z: 0.5}
   _maxRandomScale: {x: 1, y: 1, z: 1}
 --- !u!1001 &402237127510166391

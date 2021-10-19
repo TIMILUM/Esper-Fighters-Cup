@@ -159,6 +159,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 3946745091902172346}
   _hp: 0
+  _id: 0
   _minRandomScale: {x: 0.25, y: 0.25, z: 0.25}
   _maxRandomScale: {x: 0.4, y: 0.4, z: 0.4}
   _destoryTime: 2
@@ -196,7 +197,9 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 0}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

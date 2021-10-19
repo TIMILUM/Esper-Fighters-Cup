@@ -287,6 +287,7 @@ MonoBehaviour:
     _isOnlyOnce: 0
   _controllerManager: {fileID: 5379164118364086428}
   _hp: 0
+  _id: 0
   _frangmentArea: {fileID: 1644626723994473451}
   _colliderParentObject: {fileID: 9206503533570105302}
   _collider: {fileID: 3841514931392701258}
@@ -310,7 +311,9 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 0}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
