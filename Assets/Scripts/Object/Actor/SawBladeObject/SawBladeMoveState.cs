@@ -32,6 +32,7 @@ public class SawBladeMoveState : SawBladeFSMBase
 
     public override void StartState()
     {
+        _sawBladeObject.SawBladeAnimator.SetBool("isActive", true);
     }
 
     public override void EndState()

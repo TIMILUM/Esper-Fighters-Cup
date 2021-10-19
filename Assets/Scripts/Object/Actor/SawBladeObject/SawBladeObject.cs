@@ -23,6 +23,10 @@ public class SawBladeObject : AStaticObject
     private Transform _endPosition;
     public Transform EndPosition => _endPosition;
 
+    [SerializeField]
+    private Animator _animator = null;
+    public Animator SawBladeAnimator => _animator;
+
     // Start is called before the first frame update
     protected override void Start()
     {

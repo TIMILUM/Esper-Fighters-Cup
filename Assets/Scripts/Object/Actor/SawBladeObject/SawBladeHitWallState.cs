@@ -7,6 +7,7 @@ public class SawBladeHitWallState : SawBladeFSMBase
 
     public override void StartState()
     {
+        _sawBladeObject.SawBladeAnimator.SetBool("isActive", false);
     }
 
     public override void EndState()
