@@ -23,6 +23,9 @@ public class ThrowSkillObject : SkillObject
     protected override void Start()
     {
         base.Start();
+        _range = GetCSVData<float>("Range");
+        _frontDelayTime = FrontDelayMilliseconds;
+        _EndDelayTime = EndDelayMilliseconds;
         ScaleGameObjects(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
         ScaleGameObjects(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
 
