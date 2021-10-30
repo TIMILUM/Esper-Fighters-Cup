@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class SawBladeMoveState : SawBladeFSMBase
@@ -21,7 +22,7 @@ public class SawBladeMoveState : SawBladeFSMBase
         var endDistance = Vector3.Distance(endPosition.position, position);
         if (endDistance < 0.5f)
         {
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
