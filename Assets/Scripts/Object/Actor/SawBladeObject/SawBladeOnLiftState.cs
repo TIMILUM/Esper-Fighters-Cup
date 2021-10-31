@@ -69,7 +69,7 @@ public class SawBladeOnLiftState : SawBladeFSMBase
         }
 
         _sawBladeObject.SawBladeAnimator.SetBool("isActive", true);
-        
+
         _transformObject.localPosition = new Vector3(0, _yUpScalar, 0);
         _transformObject.localRotation = Quaternion.Euler(0, 0, 90);
         transform.rotation = Quaternion.LookRotation(FsmSystem.Direction);

@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class ObjectHitSystem : MonoBehaviour
@@ -8,7 +7,7 @@ public class ObjectHitSystem : MonoBehaviour
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
     private bool _isDestroyable = true;
-    
+
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
     private int _csvIndex = 0;
@@ -19,7 +18,7 @@ public class ObjectHitSystem : MonoBehaviour
     private void Awake()
     {
         _actor = GetComponentInParent<Actor>();
-        if(_actor != null)
+        if (_actor != null)
         {
             _objectID = _actor.ID;
         }
@@ -36,14 +35,22 @@ public class ObjectHitSystem : MonoBehaviour
 
     private void Update()
     {
-        if (!_isDestroyable || !(_actor?.photonView.IsMine ?? true)) 
+        if (!_isDestroyable || !(_actor?.photonView.IsMine ?? true))
         {
             return;
         }
 
         if (_isDestroy)
         {
-            Destroy(gameObject);
+            // BUG: SawBlade에는 ObjectHitSystem이 PhotonView컴포넌트가 있는 오브젝트에 위치해 있지 않음
+            if (gameObject.TryGetComponent<PhotonView>(out var photonView))
+            {
+                PhotonNetwork.Destroy(photonView);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -73,20 +80,20 @@ public class ObjectHitSystem : MonoBehaviour
             _isDestroy = true;
         }
         // 둘 다 강도값이 같은 경우
-        else if(difference == 0)
+        else if (difference == 0)
         {
             _isDestroy = _isDestroyable;
             otherHitSystem._isDestroy = otherHitSystem._isDestroyable;
         }
     }
-    
+
     private T GetCSVData<T>(CSVData csvData, string key)
     {
         if (!csvData.Get<T>(key, out var valueList))
         {
             throw new Exception("Error to parse csv data.");
         }
-        
+
         return valueList[_csvIndex];
     }
 }

@@ -66,8 +66,8 @@ public class MovementController : ControllerBase
         var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hitinfos = Physics.RaycastAll(screentoRay);
 
-        if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_A")
-            || _player.CharacterAnimator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_R"))
+        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_A")
+            || _player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_R"))
         {
             var direction = _fragmentPos - playerPosition;
             playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direction), _smoothLookat);
@@ -95,8 +95,8 @@ public class MovementController : ControllerBase
                 float sin = Vector3.Dot(crossProduct, Vector3.up);
                 float cos = Vector3.Dot(tempPos, targetDirctionNormal);
 
-                _player.CharacterAnimator.SetFloat("Cos", cos);
-                _player.CharacterAnimator.SetFloat("Sin", sin);
+                _player.CharacterAnimatorSync.SetFloat("Cos", cos);
+                _player.CharacterAnimatorSync.SetFloat("Sin", sin);
                 _fragmentPos = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f);
             }
         }
@@ -146,8 +146,8 @@ public class MovementController : ControllerBase
 
         var playerPosition = _player.transform.position;
 
-        _player.CharacterAnimator.SetFloat("DirX", dirx);
-        _player.CharacterAnimator.SetFloat("DirZ", dirz);
+        _player.CharacterAnimatorSync.SetFloat("DirX", dirx);
+        _player.CharacterAnimatorSync.SetFloat("DirZ", dirz);
 
         var currentSpeedTime = 0.0f;
 

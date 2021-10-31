@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using EsperFightersCup.Net;
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
 
@@ -10,7 +9,7 @@ using UnityEngine;
 /// <summary>
 /// 파편 지형을 만들어 주는 클래스 입니다.
 /// </summary>
-public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
+public class FragmentAreaManager : PunEventCallbacks
 {
     [SerializeField]
     private GameObject _fregmentFrefab;
@@ -93,13 +92,13 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
         while (_currentFragmentremoveQue.Count != 0)
         {
             var removeobj = _currentFragmentremoveQue.Dequeue();
-            Destroy(removeobj.Fragment);
+            PhotonNetwork.Destroy(removeobj.Fragment);
             _currentfragmentList.Remove(removeobj);
         }
         while (_fragmentremoveQue.Count != 0)
         {
             var removeobj = _fragmentremoveQue.Dequeue();
-            Destroy(removeobj.Fragment);
+            PhotonNetwork.Destroy(removeobj.Fragment);
             _fragmentList.Remove(removeobj);
         }
     }
@@ -109,7 +108,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
     /// </summary>
     public void SetFragmentAreaActive(Vector3 pos, float range, int ActorViewID)
     {
-        PacketSender.Broadcast(new GameFragmentAreaPacket(ActorViewID, pos, range), SendOptions.SendReliable);
+        PacketSender.Broadcast(new GameFragmentAreaGenEvent(ActorViewID, pos, range), SendOptions.SendUnreliable);
         // 아래 코드 HandleFragmentAreaEvent()로 옮기기
     }
 
@@ -153,8 +152,6 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
         return _currentfragmentList.Count;
     }
 
-
-
     public void CurrentFragmentAreaClear()
     {
 
@@ -162,34 +159,29 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
         _currentfragmentList.Clear();
     }
 
-    public void OnEvent(EventData photonEvent)
+    protected override void OnGameEventReceived(GameEventArguments args)
     {
-        if (photonEvent.Code != GameProtocol.GameFragmentAreaEvent)
+        if (args.Code != GameProtocol.FragmentAreaGen)
         {
             return;
         }
 
-        HandleFragmentAreaEvent(photonEvent);
-    }
-
-    private void HandleFragmentAreaEvent(EventData photonEvent)
-    {
-        var packet = PacketSerializer.Deserialize<GameFragmentAreaPacket>((byte[])photonEvent.CustomData);
+        var data = (GameFragmentAreaGenEvent)args.EventData;
 
         // SetFragmentAreaActive코드 실행
         var createfragmentPosList = new Queue<Vector3>();
 
         foreach (var currentFragment in _currentfragmentList)
         {
-
             bool isCheck = false;
             var currentFragmentPos = currentFragment.Fragment.transform.position;
 
-            if (Vector3.Distance(currentFragmentPos, packet.Position) > packet.Range)
+            if (Vector3.Distance(currentFragmentPos, data.Position) > data.Range)
             {
                 _currentFragmentremoveQue.Enqueue(currentFragment);
                 continue;
             }
+
             foreach (var fragment in _fragmentList)
             {
                 if (!fragment.Fragment.GetComponent<FragmentArea>().GetActive())
@@ -208,23 +200,26 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks, IOnEventCallback
                 }
             }
 
-
-            if (!isCheck)
-                currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
             if (isCheck)
+            {
                 _currentFragmentremoveQue.Enqueue(currentFragment);
+            }
+            else
+            {
+                currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
+            }
         }
 
         while (_currentFragmentremoveQue.Count != 0)
         {
             var removeobj = _currentFragmentremoveQue.Dequeue();
-            Destroy(removeobj.Fragment);
+            PhotonNetwork.Destroy(removeobj.Fragment);
             _currentfragmentList.Remove(removeobj);
         }
+
         while (createfragmentPosList.Count != 0)
         {
-            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, packet.ViewID).GetComponent<FragmentArea>().FragmentActive();
+            AddFragmentList(createfragmentPosList.Dequeue(), _shardsOfDebris, data.FragmentAuthorViewID).GetComponent<FragmentArea>().FragmentActive();
         }
-
     }
 }

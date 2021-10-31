@@ -126,11 +126,11 @@ public class ThrowSkillObject : SkillObject
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
-        if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
-            _player.CharacterAnimator.SetTrigger("ReverseGravityUnder");
+            _player.CharacterAnimatorSync.SetTrigger("ReverseGravityUnder");
         }
-        _player.CharacterAnimator.SetTrigger("ReverseGravityA");
+        _player.CharacterAnimatorSync.SetTrigger("ReverseGravityA");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))

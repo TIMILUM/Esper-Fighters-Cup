@@ -42,7 +42,7 @@ public class KnockBackObject : BuffObject
 
         if (!(_character is null))
         {
-            _character.CharacterAnimator.SetTrigger("Knockback");
+            _character.CharacterAnimatorSync.SetTrigger("Knockback");
         }
     }
 

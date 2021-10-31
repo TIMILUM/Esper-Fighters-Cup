@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace EsperFightersCup.UI.Match
 {
     [RequireComponent(typeof(GoToScene))]
-    public class RandomMatch : MonoBehaviourPunCallbacks, IOnEventCallback
+    public class RandomMatch : PunEventCallbacks
     {
         public const byte MaxPlayers = 2;
 
@@ -30,6 +30,11 @@ namespace EsperFightersCup.UI.Match
             }
 #endif
             CoroutineTimer.SetTimerOnce(StartRandomMatch, 1f);
+        }
+
+        public override void OnConnectedToMaster()
+        {
+            Debug.Log("Master서버와 연결되어 있음");
         }
 
         public override void OnDisconnected(DisconnectCause cause)
@@ -62,16 +67,20 @@ namespace EsperFightersCup.UI.Match
                 // 타이밍 때문에 실패 메시지가 뜨지 않도록 MasterClient에서 먼저 faildTimer 제거
                 CoroutineTimer.Stop(ref _matchFaildTimer);
 
-                var packet = new GameMatchPacket(GameMatchResults.Success);
+                var packet = new GameMatchEvent(true);
                 PacketSender.Broadcast(in packet, SendOptions.SendReliable);
             }
         }
 
-        public void OnEvent(EventData photonEvent)
+        protected override void OnGameEventReceived(GameEventArguments args)
         {
-            if (photonEvent.Code == GameProtocol.GameMatchEvent)
+            if (args.Code == GameProtocol.GameMatch)
             {
-                HandleMatchEvent(photonEvent);
+                var data = (GameMatchEvent)args.EventData;
+                if (data.IsMatched)
+                {
+                    OnMatched();
+                }
             }
         }
 
@@ -100,23 +109,6 @@ namespace EsperFightersCup.UI.Match
                 popup.OnYesButtonClicked += () => GetComponent<GoToScene>().LoadScene("TitleScene");
                 popup.Open("<color=red>매칭에 실패했습니다.</color>", cause);
                 return;
-            }
-        }
-
-        private void HandleMatchEvent(EventData received)
-        {
-            var buffer = (byte[])received.CustomData;
-            var packet = PacketSerializer.Deserialize<GameMatchPacket>(buffer);
-
-            switch (packet.MatchResult)
-            {
-                case GameMatchResults.Success:
-                    OnMatched();
-                    break;
-
-                case GameMatchResults.Fail:
-                    // TODO: 사용하지 않기 때문에 추후에 패킷을 받으면 바로 매칭 성공하도록 리팩토링
-                    break;
             }
         }
 

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using Photon.Pun;
+using EsperFightersCup.Net;
 using UnityEngine;
 
-public abstract class ObjectBase : MonoBehaviourPunCallbacks
+public abstract class ObjectBase : PunEventCallbacks
 {
     [SerializeField]
     [Header("이 오브젝트와 충돌한 오브젝트에게 부여되는 버프목록입니다.")]
