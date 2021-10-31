@@ -40,10 +40,10 @@ public abstract class SkillObject : ControllerObject
     /// <summary>
     ///     현재 해당 스킬의 FSM입니다.
     /// </summary>
-    protected State CurrentState
+    public State CurrentState
     {
         get => _currentState;
-        set => SetState(_currentState);
+        protected set => SetState(_currentState);
     }
 
     /// <summary>
@@ -104,6 +104,12 @@ public abstract class SkillObject : ControllerObject
         {
             --_physicsCount;
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        ControllerCast<SkillController>().ReleaseSkill(this);
     }
 
     /// <summary>
