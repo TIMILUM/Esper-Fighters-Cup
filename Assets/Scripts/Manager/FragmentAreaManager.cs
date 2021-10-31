@@ -35,12 +35,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         }
     }
 
-    /// <summary>
-    /// 파편지대를 추가합니다.
-    /// </summary>
-    /// <param name="trans"></param>
-    /// <param name="range"></param>
-    /// <returns></returns>
+
     public GameObject AddFragmentList(Transform trans, float range, Actor castSkill)
     {
         var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
@@ -73,9 +68,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         return true;
     }
 
-    /// <summary>
-    /// 파편지대 삭제
-    /// </summary>
+
     public void AllDestory()
     {
         foreach (var item in _currentfragmentList)
@@ -107,10 +100,11 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     {
         var createfragmentPosList = new Queue<Vector3>();
 
+
+
         foreach (var currentFragment in _currentfragmentList)
         {
 
-            bool isCheck = false;
             var currentFragmentPos = currentFragment.Fragment.transform.position;
 
             if (Vector3.Distance(currentFragmentPos, pos) > range)
@@ -118,29 +112,8 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
                 _currentFragmentremoveQue.Enqueue(currentFragment);
                 continue;
             }
-            foreach (var fragment in _fragmentList)
-            {
-                if (!fragment.Fragment.GetComponent<FragmentArea>().GetActive())
-                {
-                    _fragmentremoveQue.Enqueue(fragment);
-                    continue;
-                }
+            currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
 
-                var fragmentPos = fragment.Fragment.transform.position;
-                var halfPos = (fragmentPos - currentFragmentPos) * 0.5f;
-                if (Vector3.Distance(currentFragmentPos, fragmentPos) < currentFragment.Range * 2)
-                {
-                    var createPos = currentFragment.Fragment.transform.position + halfPos;
-                    createfragmentPosList.Enqueue(createPos);
-                    isCheck = true;
-                }
-            }
-
-
-            if (!isCheck)
-                currentFragment.Fragment.GetComponent<FragmentArea>().FragmentAreaActive();
-            if (isCheck)
-                _currentFragmentremoveQue.Enqueue(currentFragment);
         }
 
         while (_currentFragmentremoveQue.Count != 0)
