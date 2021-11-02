@@ -15,7 +15,8 @@ public abstract class BuffObject : ControllerObject
         Slow,
         DecreaseHp,
         IncreaseHp,
-        Raise
+        Raise,
+        MoveSpeed,
     }
 
     [SerializeField]

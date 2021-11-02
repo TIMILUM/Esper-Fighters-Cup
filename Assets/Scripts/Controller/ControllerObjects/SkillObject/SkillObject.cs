@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class SkillObject : ControllerObject
@@ -62,16 +63,16 @@ public abstract class SkillObject : ControllerObject
 
     private int _commonCsvIndex = 0;
 
-    private int _frontDelayMilliseconds = 0;
-    private int _endDelayMilliseconds = 0;
-    private int _frontDelayMoveSpeed = 0;
-    private int _endDelayMoveSpeed = 0;
+    private float _frontDelayMilliseconds = 0;
+    private float _endDelayMilliseconds = 0;
+    private float _frontDelayMoveSpeed = 0;
+    private float _endDelayMoveSpeed = 0;
 
     /// <summary>
     ///     해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
     ///     @Todo 나중에 스킬 작업 내용 모두 머지하면 SkillObject에서 데이터 적용하도록 수정이 필요함.
     /// </summary>
-    protected int FrontDelayMilliseconds
+    protected float FrontDelayMilliseconds
     {
         get => _frontDelayMilliseconds;
     }
@@ -79,10 +80,15 @@ public abstract class SkillObject : ControllerObject
     /// <summary>
     ///     해당 스킬이 사용되고 난 뒤 딜레이 밀리초 입니다.
     /// </summary>
-    protected int EndDelayMilliseconds
+    protected float EndDelayMilliseconds
     {
         get => _endDelayMilliseconds;
     }
+
+    /// <summary>
+    ///     스킬 캐스팅 중 움직임 관련하여 주어진 버프를 따로 모아 안전하게 해지하고자 합니다.
+    /// </summary>
+    private List<MoveSpeedObject> _moveSpeedObjects = new List<MoveSpeedObject>();
 
     private CSVData _commonCsvData = null;
 
@@ -109,6 +115,7 @@ public abstract class SkillObject : ControllerObject
     protected override void OnDestroy()
     {
         base.OnDestroy();
+        ReleaseMoveSpeedBuffAll();
         ControllerCast<SkillController>().ReleaseSkill(this);
     }
 
@@ -230,25 +237,25 @@ public abstract class SkillObject : ControllerObject
         // 이름
         Name = GetCSVData<string>("Name");
         // 선 딜레이
-        _frontDelayMilliseconds = (int)GetCSVData<float>("Pre_Delay_Duration");
+        _frontDelayMilliseconds = GetCSVData<float>("Pre_Delay_Duration");
         // 후 딜레이
-        _endDelayMilliseconds = (int)GetCSVData<float>("After_Delay_Duration");
+        _endDelayMilliseconds = GetCSVData<float>("After_Delay_Duration");
         // 선 딜레이 이동 속도
-        _frontDelayMoveSpeed = (int)GetCSVData<float>("Pre_Delay_MoveSpeed");
+        _frontDelayMoveSpeed = GetCSVData<float>("Pre_Delay_MoveSpeed");
         // 후 딜레이 이동 속도
-        _endDelayMoveSpeed = (int)GetCSVData<float>("After_Delay_MoveSpeed");
+        _endDelayMoveSpeed = GetCSVData<float>("After_Delay_MoveSpeed");
         // 스턴 지속 시간
         var stunBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.Stun);
         if(stunBuff != null)
         {
-            stunBuff.Duration = (int)GetCSVData<float>("Groggy_Duration");
+            stunBuff.Duration = GetCSVData<float>("Groggy_Duration");
         }
 
         // 데미지
         var decreaseHpBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.DecreaseHp);
         if (decreaseHpBuff != null)
         {
-            decreaseHpBuff.Damage = (int)GetCSVData<float>("Damage");
+            decreaseHpBuff.Damage = GetCSVData<float>("Damage");
         }
     }
 
@@ -266,5 +273,47 @@ public abstract class SkillObject : ControllerObject
         }
         
         return valueList[_commonCsvIndex];
+    }
+
+    protected void ApplyMovementSpeed(State state)
+    {
+        // 나머지 상태인 경우 움직임 버프와 관련한 요소가 없으므로 버프요소 삭제
+        if (state != State.FrontDelay && state != State.EndDelay)
+        {
+            ReleaseMoveSpeedBuffAll();
+            return;
+        }
+
+        var value = state == State.FrontDelay ? _frontDelayMoveSpeed : _endDelayMoveSpeed;
+        ReleaseMoveSpeedBuffAll();
+
+        if (value <= 0)
+        {
+            return;
+        }
+            
+        _buffController.GenerateBuff(new BuffObject.BuffStruct()
+        {
+            Type = BuffObject.Type.MoveSpeed,
+            Duration = 0,
+            AllowDuplicates = true,
+            Damage = 0,
+            IsOnlyOnce = false,
+            ValueFloat = new [] { value },
+        });
+        var moveSpeedBuffList = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
+        if (moveSpeedBuffList != null)
+        {
+            _moveSpeedObjects.Add(moveSpeedBuffList[moveSpeedBuffList.Count - 1] as MoveSpeedObject);
+        }
+    }
+
+    protected void ReleaseMoveSpeedBuffAll()
+    {
+        foreach (var speedObject in _moveSpeedObjects)
+        {
+            _buffController.ReleaseBuff(speedObject);
+        }
+        _moveSpeedObjects.Clear();
     }
 }
