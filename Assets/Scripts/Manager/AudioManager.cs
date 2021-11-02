@@ -37,10 +37,18 @@ namespace EsperFightersCup.Manager
 
         private void Start()
         {
-            _masterVCAController = RuntimeManager.GetVCA("vca:/Master");
-            if (_masterVCAController.isValid())
+            try
             {
-                _masterVCAController.getVolume(out _masterVolume);
+                _masterVCAController = RuntimeManager.GetVCA("vca:/Master");
+                if (_masterVCAController.isValid())
+                {
+                    _masterVCAController.getVolume(out _masterVolume);
+                }
+            }
+            catch (VCANotFoundException)
+            {
+                Debug.LogWarning("MasterVolume을 찾을 수 없습니다.");
+                return;
             }
         }
 

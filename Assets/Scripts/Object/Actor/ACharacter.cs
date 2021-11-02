@@ -1,8 +1,7 @@
-using Photon.Pun;
+using EsperFightersCup.Net;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(PhotonAnimatorView))]
+[RequireComponent(typeof(AnimatorSync))]
 public class ACharacter : Actor
 {
     public enum Type
@@ -17,16 +16,12 @@ public class ACharacter : Actor
 
     public Type CharacterType => _characterType;
 
-
-    //캐릭터 애니메이터
-    [SerializeField, Tooltip("직접 컴포넌트를 넣어주세요.")]
-    private Animator _animator = null;
-    public Animator CharacterAnimator => _animator;
+    public AnimatorSync CharacterAnimatorSync { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
-        _animator = GetComponent<Animator>();
+        CharacterAnimatorSync = GetComponent<AnimatorSync>();
     }
 
     // Start is called before the first frame update

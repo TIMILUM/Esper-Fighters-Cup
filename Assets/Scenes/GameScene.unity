@@ -342,6 +342,7 @@ GameObject:
   - component: {fileID: 33337937}
   - component: {fileID: 33337938}
   - component: {fileID: 33337939}
+  - component: {fileID: 33337940}
   m_Layer: 0
   m_Name: EnemyDummy
   m_TagString: Object
@@ -429,7 +430,6 @@ MonoBehaviour:
   _id: 101
   _audioEmitter: {fileID: 0}
   _characterType: 0
-  _animator: {fileID: 0}
   _hpDummy: {fileID: 0}
 --- !u!114 &33337934
 MonoBehaviour:
@@ -545,6 +545,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &33337940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33337928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2112b5df1b378439d4526b64127f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
+  _parameters: []
 --- !u!1001 &41382223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2333,7 +2347,7 @@ GameObject:
   - component: {fileID: 368677733}
   - component: {fileID: 368677732}
   - component: {fileID: 368677736}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -5360,7 +5374,7 @@ MonoBehaviour:
   _offset: {x: 0, y: 20, z: -11}
   _smoothTime: 0.1
   _minZoom: 130
-  _maxZoom: 15
+  _maxZoom: 25
   _zoomLimiter: 100
 --- !u!1001 &826275897
 PrefabInstance:
