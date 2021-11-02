@@ -48,9 +48,16 @@ MonoBehaviour:
   _buffStruct:
     _type: 6
     _duration: 0
-    _valueFloat: []
+    _valueFloat:
+    - 5
+    - 10
+    - 10
     _valueVector3: []
     _allowDuplicates: 0
     _damage: 0
     _isOnlyOnce: 0
   _raiseDate: 0
+  _KnockBackSpeed: 14
+  _ShockwavedecreaseHp: 5
+  _ShockwavedurationStunSeconds: 0.5
+  _Shockwaveduration: 1

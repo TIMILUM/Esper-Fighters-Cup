@@ -38,6 +38,12 @@ public class SkillController : ControllerBase
 
     private void UpdateMine()
     {
+        if (IngameFSMSystem.CurrentState != IngameFSMSystem.State.InBattle)
+        {
+            ReleaseAllSkills();
+            return;
+        }
+        
         // 스턴 확인 시 스킬 사용을 멈춥니다.
         if (_buffController.GetBuff(BuffObject.Type.Stun) != null)
         {

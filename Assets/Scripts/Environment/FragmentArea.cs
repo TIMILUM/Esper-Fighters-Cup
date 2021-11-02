@@ -3,48 +3,32 @@ using UnityEngine;
 
 public class FragmentArea : AStaticObject
 {
-
-    [SerializeField]
-    private GameObject _frangmentArea;
-    [SerializeField]
-    private GameObject _colliderParentObject;
-    [SerializeField]
-    private ColliderChecker _collider;
-    [SerializeField]
-    private float _fragmentRatio;
-    [SerializeField]
-
-
-    private List<Actor> _actors = new List<Actor>();
-
-    public GameObject FrangmentArea => _frangmentArea;
+    [SerializeField] private GameObject _frangmentArea;
+    [SerializeField] private GameObject _colliderParentObject;
+    [SerializeField] private ColliderChecker _collider;
+    [SerializeField] private float _fragmentRatio;
+    [SerializeField] private List<int> _actors = new List<int>();
 
 
     private bool _isFragmentActive;
     private bool _isNormalActive;
-
-
-
-
-
-
-    public float Range { get; set; }
-
     private bool _isObjectSpawn = false;
 
-    private new void Start()
+    public float Range { get; set; }
+    public GameObject FrangmentArea => _frangmentArea;
+
+    protected override void Start()
     {
+        base.Start();
         _collider.OnCollision += SetHit;
         Range = transform.localScale.x / 2.0f;
-
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     private void Update()
     {
         CreateObject();
     }
-
-
 
     public void FragmentAreaActive()
     {
@@ -66,9 +50,9 @@ public class FragmentArea : AStaticObject
 
     }
 
-    public void NotFloatObject(Actor castSkill)
+    public void NotFloatObject(int ActorViewID)
     {
-        _actors.Add(castSkill);
+        _actors.Add(ActorViewID);
     }
 
     /// <summary>
@@ -76,7 +60,6 @@ public class FragmentArea : AStaticObject
     /// </summary>
     private void CreateObject()
     {
-
         if (!_colliderParentObject.activeInHierarchy)
         {
             return;
@@ -114,7 +97,11 @@ public class FragmentArea : AStaticObject
             }
         }
 
+        Invoke("ClearFragmentArea", 0.03f);
+
+
     }
+
 
 
 
@@ -127,16 +114,13 @@ public class FragmentArea : AStaticObject
 
     }
 
+
+
     public bool GetActive()
     {
         return _isNormalActive;
     }
 
-    public void DirectionLookAt(Vector3 pos)
-    {
-        var lookDirection = pos - transform.position;
-
-    }
 
     /// <summary>
     /// 띄운 애들을 넉백을 하기 위한 함수입니다.
@@ -154,8 +138,6 @@ public class FragmentArea : AStaticObject
         }
 
         _colliderParentObject.SetActive(false);
-        _isNormalActive = false;
-        _isFragmentActive = false;
         _actors.Clear();
     }
 
@@ -164,10 +146,10 @@ public class FragmentArea : AStaticObject
     /// </summary>
     public override void SetHit(ObjectBase to)
     {
-        if (!_actors.Contains((Actor)to))
+        if (!_actors.Contains(to.photonView.ViewID))
         {
-            base.SetHit((Actor)to);
-            _actors.Add((Actor)to);
+            base.SetHit(to);
+            _actors.Add(to.photonView.ViewID);
         }
     }
 

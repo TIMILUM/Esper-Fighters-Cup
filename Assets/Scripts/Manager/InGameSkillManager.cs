@@ -41,9 +41,9 @@ public class InGameSkillManager : MonoBehaviour
     /// </summary>
     /// <param name="trans"></param>
     /// <param name="range"></param>
-    public void AddFragmentArea(Transform trans, float range, Actor costSkill)
+    public void AddFragmentArea(Transform trans, float range, int ActorID)
     {
-        _fragmentArea.AddFragmentList(trans, range, costSkill);
+        _fragmentArea.AddFragmentList(trans, range, ActorID);
     }
     /// <summary>
     /// 파편지대 시작 event 띄움
@@ -63,9 +63,9 @@ public class InGameSkillManager : MonoBehaviour
     /// <summary>
     /// 파편지대 모두 활성화
     /// </summary>
-    public void FragmentAllActive(Vector3 pos, float range, Actor castActor)
+    public void FragmentAllActive(Vector3 pos, float range, int ActorID)
     {
-        _fragmentArea.SetFragmentAreaActive(pos, range, castActor);
+        _fragmentArea.SetFragmentAreaActive(pos, range, ActorID);
     }
     /// <summary>
     /// 파편지대 위치 설정한 파편지대 삭제
@@ -84,14 +84,9 @@ public class InGameSkillManager : MonoBehaviour
         return _fragmentArea.CreateFragmentCheck(pos);
     }
 
-    /// <summary>
-    /// 오브젝트 던지기는 함수
-    /// </summary>
-    /// <param name="buffstruct"></param>
-    /// <param name="target"></param>
-    public void FragmentAreaThrowObject(BuffObject.BuffStruct buffstruct, Vector3 target)
+    public void FragmentAreaClear()
     {
-        _fragmentArea.ThrowObject(buffstruct, target);
+        _fragmentArea.CurrentFragmentAreaClear();
     }
     /// <summary>
     /// 취소함수
@@ -101,14 +96,7 @@ public class InGameSkillManager : MonoBehaviour
         _fragmentArea.CancelFragment();
     }
 
-    /// <summary>
-    /// 방향을 나타내는 함수
-    /// </summary>
-    /// <param name="pos"></param>
-    public void FragmentDirection(Vector3 pos)
-    {
-        _fragmentArea.FragmentDirection(pos);
-    }
+
     public void FragmentClear()
     {
         _fragmentArea.CurrentFragmentAreaClear();

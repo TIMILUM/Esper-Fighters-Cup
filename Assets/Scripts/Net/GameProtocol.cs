@@ -2,29 +2,12 @@ namespace EsperFightersCup.Net
 {
     public static class GameProtocol
     {
-        public const byte GameMatchEvent = 0x01;
-        public const byte GamePlayerEvent = 0x02;
-        public const byte GameBuffGenerateEvent = 0x03;
-        public const byte GameBuffReleaseEvent = 0x04;
-        public const byte GameSkillEvent = 0x04;
-
-        /*
-        public enum GamePlayer
-        {
-            Join,
-            Ready,
-            Leave
-        }
-
-        public enum GameSkill
-        {
-            OnReadyToUse,
-            OnFrontDelay,
-            OnUse,
-            OnEndDelay,
-            OnCanceled,
-            OnRelease
-        }
-        */
+        public const byte GameMatch = 0x01;
+        public const byte GamePlayer = 0x02;
+        public const byte BuffGenerate = 0x03;
+        public const byte BuffRelease = 0x04;
+        public const byte ParticlePlay = 0x05;
+        public const byte FragmentAreaGen = 0x06;
+        public const byte AnimatorTriggerSync = 0x07;
     }
 }

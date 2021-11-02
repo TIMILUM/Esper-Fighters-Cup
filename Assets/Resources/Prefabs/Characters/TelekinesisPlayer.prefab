@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6623127734546534237}
   - component: {fileID: 6646747819659544057}
   - component: {fileID: 4573762489192822212}
+  - component: {fileID: 4771311192888277670}
   m_Layer: 0
   m_Name: TelekinesisPlayer
   m_TagString: Object
@@ -37,6 +38,7 @@ Transform:
   m_Children:
   - {fileID: 4314589049991569686}
   - {fileID: 2571203696124029763}
+  - {fileID: 1798782088056480914}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -84,11 +86,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buffOnCollision: []
   _controllerManager: {fileID: 4314589049991569685}
-  _hp: 0
+  _hp: 100
   _id: 101
+  _audioEmitter: {fileID: 0}
   _characterType: 1
-  _animator: {fileID: 8452954096454414649}
-  _rigidbody: {fileID: 4314589049664778643}
+  _hpDummy: {fileID: 1798782088056480914}
 --- !u!114 &8211835443746325872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,8 +110,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 4314589049664778607}
   - {fileID: 8663577832037187048}
   - {fileID: 6646747819659544057}
+  - {fileID: 4771311192888277670}
+  - {fileID: 7363788457405380186}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -182,6 +187,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+--- !u!114 &4771311192888277670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2112b5df1b378439d4526b64127f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 8452954096454414649}
+  _parameters:
+  - _name: DirX
+    _type: 1
+  - _name: DirZ
+    _type: 1
+  - _name: Cos
+    _type: 1
+  - _name: Sin
+    _type: 1
+  - _name: Nockdown
+    _type: 4
+  - _name: ShockWaveSkill
+    _type: 9
+  - _name: Hit
+    _type: 9
+  - _name: ReverseGravityA
+    _type: 9
+  - _name: ReverseGravityUnder
+    _type: 9
+  - _name: Knockback
+    _type: 9
 --- !u!1 &4314589049991569687
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,10 +281,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 1
   _isMousePickLookAt: 1
-  _moveSpeed: 10
-  _decreaseSpeedTime: 1
-  _increaseSpeedTime: 1
-  _smoothLookat: 0.1
+  _moveSpeed: 5
+  _decreaseSpeedTime: 0.001
+  _increaseSpeedTime: 0.001
+  _smoothLookat: 0.01
+  _playerUiPrefabs: {fileID: 9160332585402660720, guid: c6d128b4662dad944beb4dcb345b4596, type: 3}
 --- !u!1 &4314589050214799942
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,6 +381,53 @@ MonoBehaviour:
   - _name: Skill 2
     _key: 304
     _skillPrefab: {fileID: 8362198494138024948, guid: 46a3bd322c7104e4eb86fd0236497da2, type: 3}
+--- !u!1 &5292001714685375169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1798782088056480914}
+  - component: {fileID: 7363788457405380186}
+  m_Layer: 0
+  m_Name: hp_dummy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1798782088056480914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5292001714685375169}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 100, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4314589049664778600}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7363788457405380186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5292001714685375169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1001 &2604339933289745576
 PrefabInstance:
   m_ObjectHideFlags: 0

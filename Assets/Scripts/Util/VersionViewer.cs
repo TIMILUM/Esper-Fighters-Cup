@@ -46,12 +46,12 @@ namespace EsperFightersCup
                 return;
             }
 
-            Destroy(this);
+            Destroy(gameObject);
         }
 
         private void OnGUI()
         {
-            GUI.Label(new Rect(Screen.width / 2, Screen.height - 10, 0, 0), _version, _blackStyle);
+            // GUI.Label(new Rect(Screen.width / 2, Screen.height - 10, 0, 0), _version, _blackStyle);
             GUI.Label(new Rect(Screen.width / 2, Screen.height - 10, 0, 0), _version, _whiteStyle);
         }
     }

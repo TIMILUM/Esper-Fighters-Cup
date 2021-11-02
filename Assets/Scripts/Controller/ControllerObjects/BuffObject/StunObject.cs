@@ -16,9 +16,9 @@ public class StunObject : BuffObject
         base.OnRegistered();
         _character = Author as ACharacter;
 
-        if (!(_character is null))
+        if (_character && _character.CharacterAnimatorSync)
         {
-            _character.CharacterAnimator.SetTrigger("Hit");
+            _character.CharacterAnimatorSync.SetTrigger("Hit");
         }
     }
 

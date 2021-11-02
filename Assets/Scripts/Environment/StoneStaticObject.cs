@@ -4,6 +4,4 @@ public class StoneStaticObject : EnvironmentStaticObject
     {
         base.Start();
     }
-
-
 }
