@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using EsperFightersCup.Net;
 using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
-public class ParticleManager : MonoBehaviourPunCallbacks, IOnEventCallback
+public class ParticleManager : PunEventCallbacks
 {
     /// <summary>
     /// 각각의 파티클 종류 정보
@@ -113,7 +111,7 @@ public class ParticleManager : MonoBehaviourPunCallbacks, IOnEventCallback
     /// <param name="angle">파티클 앵글 </param>
     public void PullParticle(string particleName, Vector3 pos, Quaternion angle)
     {
-        PacketSender.Broadcast(new GameParticlePacket(particleName, pos, angle), SendOptions.SendUnreliable);
+        PacketSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
     }
 
     /// <summary>
@@ -145,20 +143,16 @@ public class ParticleManager : MonoBehaviourPunCallbacks, IOnEventCallback
         PutParticle();
     }
 
-    public void OnEvent(EventData photonEvent)
+    protected override void OnGameEventReceived(GameEventArguments args)
     {
-        if (photonEvent.Code != GameProtocol.GameParticleEvent)
+        if (args.Code != GameProtocol.ParticlePlay)
         {
             return;
         }
-        HandlePullParticle(photonEvent);
-    }
 
-    private void HandlePullParticle(EventData photonEvent)
-    {
-        var packet = PacketSerializer.Deserialize<GameParticlePacket>((byte[])photonEvent.CustomData);
+        var data = (GameParticlePlayEvent)args.EventData;
 
-        if (!_particleList.TryGetValue(packet.Name, out var particleQueue))
+        if (!_particleList.TryGetValue(data.Name, out var particleQueue))
         {
             Debug.LogError("동일한 파티클 이름이 없습니다.");
             return;
@@ -173,8 +167,8 @@ public class ParticleManager : MonoBehaviourPunCallbacks, IOnEventCallback
         var clon = particleQueue.Dequeue();
         clon.Object.SetActive(true);
 
-        clon.Object.transform.SetPositionAndRotation(packet.Position, packet.Angle);
-        clon.StartParticle(packet.Name);
+        clon.Object.transform.SetPositionAndRotation(data.Position, Quaternion.Euler(data.Angle));
+        clon.StartParticle(data.Name);
         _activeParticle.Add(clon);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -26,7 +25,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     private IngameTopUI _ingameTopUI;
 
     public IngameTopUI IngameTopUIObject => _ingameTopUI;
-    
+
     private List<APlayer> _playerList = new List<APlayer>();
     public List<APlayer> PlayerList => _playerList;
 

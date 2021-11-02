@@ -1,3 +1,4 @@
+using EsperFightersCup.UI.InGame;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -23,7 +24,6 @@ public class MovementController : ControllerBase
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.1f;
 
     [SerializeField] private GameObject _playerUiPrefabs;
-    private GameObject _playerUi;
 
     private void Reset()
     {
@@ -39,35 +39,35 @@ public class MovementController : ControllerBase
         _player = _controllerManager.GetActor() as APlayer;
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
 
-        _playerUi = Instantiate(_playerUiPrefabs, transform);
+
+        if (_player.photonView.IsMine)
+        {
+            var characterUI = Instantiate(_playerUiPrefabs).GetComponent<PlayerPositionUI>();
+            characterUI.TargetPlayer = _player.transform;
+            // 본인 여부에 따라 세팅
+        }
     }
 
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine)
+        if (_player.photonView.IsMine)
         {
-            return;
+            UpdateMine();
         }
-        _playerUi.transform.position = transform.position + new Vector3(0.0f, 0.01f, 0.0f);
-        UpdateMine();
-
     }
 
     //마우스 바라보기
     private void MousePickLookAt()
     {
-
-
         var playerRotation = _player.transform.rotation;
         var playerPosition = _player.transform.position;
         var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hitinfos = Physics.RaycastAll(screentoRay);
 
-
-        if (_player.CharacterAnimator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_A")
-    || _player.CharacterAnimator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_R"))
+        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_A")
+            || _player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_R"))
         {
             var direction = _fragmentPos - playerPosition;
             playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direction), _smoothLookat);
@@ -95,8 +95,8 @@ public class MovementController : ControllerBase
                 float sin = Vector3.Dot(crossProduct, Vector3.up);
                 float cos = Vector3.Dot(tempPos, targetDirctionNormal);
 
-                _player.CharacterAnimator.SetFloat("Cos", cos);
-                _player.CharacterAnimator.SetFloat("Sin", sin);
+                _player.CharacterAnimatorSync.SetFloat("Cos", cos);
+                _player.CharacterAnimatorSync.SetFloat("Sin", sin);
                 _fragmentPos = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f);
             }
         }
@@ -143,11 +143,11 @@ public class MovementController : ControllerBase
 
             return;
         }
-        
+
         var playerPosition = _player.transform.position;
 
-        _player.CharacterAnimator.SetFloat("DirX", dirx);
-        _player.CharacterAnimator.SetFloat("DirZ", dirz);
+        _player.CharacterAnimatorSync.SetFloat("DirX", dirx);
+        _player.CharacterAnimatorSync.SetFloat("DirZ", dirz);
 
         var currentSpeedTime = 0.0f;
 

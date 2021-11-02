@@ -2,8 +2,6 @@ using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
 
-
-[RequireComponent(typeof(PhotonRigidbodyView))]
 public class APlayer : ACharacter, IPunObservable
 {
     private Rigidbody _rigidbody;

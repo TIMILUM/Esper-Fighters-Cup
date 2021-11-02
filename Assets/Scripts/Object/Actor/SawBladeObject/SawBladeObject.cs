@@ -1,3 +1,4 @@
+using EsperFightersCup.Net;
 using UnityEngine;
 
 public class SawBladeObject : AStaticObject
@@ -22,8 +23,8 @@ public class SawBladeObject : AStaticObject
     public Transform EndPosition => _endPosition;
 
     [SerializeField]
-    private Animator _animator = null;
-    public Animator SawBladeAnimator => _animator;
+    private AnimatorSync _animator = null;
+    public AnimatorSync SawBladeAnimator => _animator;
 
     // Start is called before the first frame update
     protected override void Start()

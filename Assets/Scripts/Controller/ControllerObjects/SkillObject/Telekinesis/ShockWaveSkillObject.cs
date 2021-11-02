@@ -92,7 +92,7 @@ public class ShockWaveSkillObject : SkillObject
             else if (Input.GetMouseButtonUp(0))
             {
                 //충격파 애니메이션
-                _player.CharacterAnimator.SetTrigger("ShockWaveSkill");
+                _player.CharacterAnimatorSync.SetTrigger("ShockWaveSkill");
                 ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
                 return true;
             }
