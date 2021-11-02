@@ -19,7 +19,6 @@ public abstract class BuffObject : ControllerObject
         Falling,
         Sliding,
         Grab
-
     }
 
     [SerializeField]

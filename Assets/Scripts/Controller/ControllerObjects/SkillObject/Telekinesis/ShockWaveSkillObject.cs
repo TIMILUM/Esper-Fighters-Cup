@@ -125,6 +125,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnFrontDelay()
     {
+        ApplyMovementSpeed(State.FrontDelay);
         yield return new WaitForSeconds(FrontDelayMilliseconds / 1000.0f);
         SetNextState();
         yield break;
@@ -132,6 +133,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnUse()
     {
+        ApplyMovementSpeed(State.Use);
         _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
         _colliderParentTransform.gameObject.SetActive(true);
         var startTime = DateTime.Now;
@@ -147,6 +149,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnEndDelay()
     {
+        ApplyMovementSpeed(State.EndDelay);
         yield return new WaitForSeconds(EndDelayMilliseconds / 1000.0f);
         SetNextState();
         yield break;
@@ -154,12 +157,14 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnCanceled()
     {
+        ApplyMovementSpeed(State.Canceled);
         SetState(State.Release);
         yield return null;
     }
 
     protected override IEnumerator OnRelease()
     {
+        ApplyMovementSpeed(State.Release);
         Destroy(_shockwaveUI);
         Destroy(gameObject);
         yield return null;

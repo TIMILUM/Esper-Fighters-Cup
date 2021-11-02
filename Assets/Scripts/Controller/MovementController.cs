@@ -20,6 +20,10 @@ public class MovementController : ControllerBase
     private APlayer _player = null;
     private BuffController _buffController = null;
 
+    /// <summary>
+    /// 움직임 관련 버프를 통해 추가적으로 붙은 스피드 값입니다.
+    /// </summary>
+    private float _addedMoveSpeed = 0;
 
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat;
 
@@ -131,6 +135,13 @@ public class MovementController : ControllerBase
             return;
         }
 
+        {   // 움직임 버프 관련 요소 확인 후 추가적인 스피드를 지정합니다.
+            var moveSpeedBuff = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
+            _addedMoveSpeed = moveSpeedBuff != null
+                ? _moveSpeed * (((MoveSpeedObject)moveSpeedBuff[moveSpeedBuff.Count - 1]).AddedSpeed / 100.0f)
+                : 0;
+        }
+
         var playerPosition = _player.transform.position;
 
         _player.CharacterAnimatorSync.SetFloat("DirX", dirx);
@@ -161,7 +172,7 @@ public class MovementController : ControllerBase
 
         _currentMoveDir = Vector3.Lerp(tempDirection, dir, currentSpeedTime);
 
-        playerPosition += _moveSpeed * Time.deltaTime * _currentMoveDir;
+        playerPosition += (_moveSpeed + _addedMoveSpeed) * Time.deltaTime * _currentMoveDir;
 
         _player.transform.position = playerPosition;
 

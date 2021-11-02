@@ -42,12 +42,14 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnCanceled()
     {
+        ApplyMovementSpeed(State.Canceled);
         SetState(State.Release);
         yield return null;
     }
 
     protected override IEnumerator OnEndDelay()
     {
+        ApplyMovementSpeed(State.EndDelay);
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
@@ -123,6 +125,7 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnFrontDelay()
     {
+        ApplyMovementSpeed(State.FrontDelay);
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
@@ -169,6 +172,7 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnRelease()
     {
+        ApplyMovementSpeed(State.Release);
         InGameSkillManager.Instance.FragmentAreaClear();
         Destroy(gameObject);
         yield break;
@@ -176,6 +180,7 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnUse()
     {
+        ApplyMovementSpeed(State.Use);
         bool isCanceled = false;
 
         InGameSkillManager.Instance.FragmentEventStart();
