@@ -1,4 +1,5 @@
 using System.Collections;
+using EsperFightersCup;
 using UnityEngine;
 
 public class ThrowSkillObject : SkillObject
@@ -26,8 +27,8 @@ public class ThrowSkillObject : SkillObject
         _range = GetCSVData<float>("Range");
         _frontDelayTime = FrontDelayMilliseconds;
         _EndDelayTime = EndDelayMilliseconds;
-        ScaleGameObjects(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
-        ScaleGameObjects(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
+        GameObjectUtil.ScaleGameObject(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
+        GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
 
     }
     public override void SetHit(ObjectBase to)
@@ -76,13 +77,13 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnReadyToUse()
     {
         var isCanceled = false;
-        ActiveGameObjects(_casting);
-        ActiveGameObjects(_fragmentCasting);
+        GameObjectUtil.ActiveGameObject(_casting);
+        GameObjectUtil.ActiveGameObject(_fragmentCasting);
 
         yield return new WaitUntil(() =>
        {
            var mousePos = GetMousePosition();
-           TranslateGameObjects(_fragmentCasting, mousePos);
+           GameObjectUtil.TranslateGameObject(_fragmentCasting, mousePos);
 
            if (Input.GetKeyDown(KeyCode.Mouse1))
            {
@@ -92,8 +93,8 @@ public class ThrowSkillObject : SkillObject
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
                InGameSkillManager.Instance.FragmentAllActive(transform.position, _range, _player.photonView.ViewID);
-               ActiveGameObjects(_fragmentCasting, false);
-               ActiveGameObjects(_casting, false);
+               GameObjectUtil.ActiveGameObject(_fragmentCasting, false);
+               GameObjectUtil.ActiveGameObject(_casting, false);
                if (SetPosCompare(mousePos))
                {
                    InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player.photonView.ViewID);
@@ -118,8 +119,8 @@ public class ThrowSkillObject : SkillObject
             yield break;
         }
 
-        ActiveGameObjects(_fragmentCasting, false);
-        ActiveGameObjects(_casting, false);
+        GameObjectUtil.ActiveGameObject(_fragmentCasting, false);
+        GameObjectUtil.ActiveGameObject(_casting, false);
         SetNextState();
     }
 
@@ -205,29 +206,6 @@ public class ThrowSkillObject : SkillObject
         }
 
         return true;
-    }
-
-    private void ActiveGameObjects(GameObject gameObjects, bool isActive = true)
-    {
-        gameObjects.SetActive(isActive);
-    }
-
-    private void RotateGameObjects(GameObject gameObjects, Quaternion rotation)
-    {
-
-        gameObjects.transform.rotation = rotation;
-
-    }
-
-    private void ScaleGameObjects(GameObject gameObjects, Vector3 scale)
-    {
-        gameObjects.transform.localScale = scale;
-    }
-
-
-    private void TranslateGameObjects(GameObject gameObjects, Vector3 position)
-    {
-        gameObjects.transform.position = position;
     }
 
 
