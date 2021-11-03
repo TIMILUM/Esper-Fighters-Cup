@@ -93,7 +93,6 @@ namespace EsperFightersCup.Net
 
             Debug.Log($"<color=grey>[Packet Check] received: {photonEvent.Code} from actor {photonEvent.Sender}</color>");
             var receivedEvent = PacketSerializer.Deserialize((byte[])photonEvent.CustomData);
-
             GameEventReceived?.Invoke(new GameEventArguments(photonEvent.Code, photonEvent.Sender, receivedEvent));
         }
     }

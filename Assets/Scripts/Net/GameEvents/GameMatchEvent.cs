@@ -15,7 +15,7 @@ namespace EsperFightersCup.Net
 
         public byte EventCode()
         {
-            return GameProtocol.GameMatch;
+            return GameProtocol.Match;
         }
     }
 }

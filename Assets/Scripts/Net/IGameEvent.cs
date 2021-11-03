@@ -2,7 +2,7 @@ using MessagePack;
 
 namespace EsperFightersCup.Net
 {
-    [Union(GameProtocol.GameMatch, typeof(GameMatchEvent))]
+    [Union(GameProtocol.Match, typeof(GameMatchEvent))]
     [Union(GameProtocol.BuffGenerate, typeof(GameBuffGenerateEvent))]
     [Union(GameProtocol.BuffRelease, typeof(GameBuffReleaseEvent))]
     [Union(GameProtocol.ParticlePlay, typeof(GameParticlePlayEvent))]
