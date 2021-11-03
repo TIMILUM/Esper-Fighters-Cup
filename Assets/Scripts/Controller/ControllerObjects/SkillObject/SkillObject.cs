@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class SkillObject : ControllerObject
@@ -18,25 +19,44 @@ public abstract class SkillObject : ControllerObject
         Release = 5
     }
 
-    /// <summary>
-    ///  플레이어
-    /// </summary>
-    protected APlayer _player;
-
     [SerializeField]
     private State _currentState = State.ReadyToUse;
 
-    private short _physicsCount = -1;
+    [SerializeField]
+    private int _id;
 
     /// <summary>
     ///     플레이어의 버프 컨트롤러입니다.
     /// </summary>
     protected BuffController _buffController;
 
+    private CSVData _commonCsvData;
+
+    private int _commonCsvIndex;
+
     /// <summary>
     ///     이 스킬에서 현재 실행 중인 코루틴입니다. (코루틴의 수정은 지정된 함수로 진행하는걸 권장합니다.)
     /// </summary>
     protected Coroutine _currentCoroutine;
+
+    private float _endDelayMoveSpeed;
+
+    private float _frontDelayMoveSpeed;
+
+    // 움직임 버프 관련하여 안전하게 생성하는 코루틴 함수입니다.
+    private Coroutine _generateMoveSpeedCoroutine;
+
+    /// <summary>
+    ///     스킬 캐스팅 중 움직임 관련하여 주어진 버프를 따로 모아 안전하게 해지하고자 합니다.
+    /// </summary>
+    private readonly List<MoveSpeedObject> _moveSpeedObjects = new List<MoveSpeedObject>();
+
+    private short _physicsCount = -1;
+
+    /// <summary>
+    ///     플레이어
+    /// </summary>
+    protected APlayer _player;
 
     /// <summary>
     ///     현재 해당 스킬의 FSM입니다.
@@ -57,40 +77,18 @@ public abstract class SkillObject : ControllerObject
     /// </summary>
     public string Name { get; set; }
 
-    [SerializeField]
-    private int _id = 0;
     public int ID => _id;
-
-    private int _commonCsvIndex = 0;
-
-    private float _frontDelayMilliseconds = 0;
-    private float _endDelayMilliseconds = 0;
-    private float _frontDelayMoveSpeed = 0;
-    private float _endDelayMoveSpeed = 0;
 
     /// <summary>
     ///     해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
     ///     @Todo 나중에 스킬 작업 내용 모두 머지하면 SkillObject에서 데이터 적용하도록 수정이 필요함.
     /// </summary>
-    protected float FrontDelayMilliseconds
-    {
-        get => _frontDelayMilliseconds;
-    }
+    protected float FrontDelayMilliseconds { get; private set; }
 
     /// <summary>
     ///     해당 스킬이 사용되고 난 뒤 딜레이 밀리초 입니다.
     /// </summary>
-    protected float EndDelayMilliseconds
-    {
-        get => _endDelayMilliseconds;
-    }
-
-    /// <summary>
-    ///     스킬 캐스팅 중 움직임 관련하여 주어진 버프를 따로 모아 안전하게 해지하고자 합니다.
-    /// </summary>
-    private List<MoveSpeedObject> _moveSpeedObjects = new List<MoveSpeedObject>();
-
-    private CSVData _commonCsvData = null;
+    protected float EndDelayMilliseconds { get; private set; }
 
     protected virtual void Start()
     {
@@ -117,6 +115,13 @@ public abstract class SkillObject : ControllerObject
         base.OnDestroy();
         ReleaseMoveSpeedBuffAll();
         ControllerCast<SkillController>().ReleaseSkill(this);
+    }
+
+    protected override void OnRegistered()
+    {
+        _buffController =
+            Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _player = Author.GetComponent<APlayer>();
     }
 
     /// <summary>
@@ -188,8 +193,8 @@ public abstract class SkillObject : ControllerObject
     }
 
     /// <summary>
-    /// WaitPhysicsUpdate()를 초기화시켜주는 함수입니다.
-    /// WaitPhysicsUpdate() 함수를 재활용할 때 해당 함수를 실행시켜야합니다.
+    ///     WaitPhysicsUpdate()를 초기화시켜주는 함수입니다.
+    ///     WaitPhysicsUpdate() 함수를 재활용할 때 해당 함수를 실행시켜야합니다.
     /// </summary>
     protected void ResetPhysicsUpdateCount()
     {
@@ -197,8 +202,8 @@ public abstract class SkillObject : ControllerObject
     }
 
     /// <summary>
-    /// 코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
-    /// 해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
+    ///     코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
+    ///     해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
     /// </summary>
     /// <param name="waitCount">해당 정수만큼 연산 횟수를 기다립니다.</param>
     /// <returns></returns>
@@ -222,7 +227,7 @@ public abstract class SkillObject : ControllerObject
             State.EndDelay => OnEndDelay(),
             State.Canceled => OnCanceled(),
             State.Release => OnRelease(),
-            _ => null,
+            _ => null
         };
     }
 
@@ -237,9 +242,9 @@ public abstract class SkillObject : ControllerObject
         // 이름
         Name = GetCSVData<string>("Name");
         // 선 딜레이
-        _frontDelayMilliseconds = GetCSVData<float>("Pre_Delay_Duration");
+        FrontDelayMilliseconds = GetCSVData<float>("Pre_Delay_Duration");
         // 후 딜레이
-        _endDelayMilliseconds = GetCSVData<float>("After_Delay_Duration");
+        EndDelayMilliseconds = GetCSVData<float>("After_Delay_Duration");
         // 선 딜레이 이동 속도
         _frontDelayMoveSpeed = GetCSVData<float>("Pre_Delay_MoveSpeed");
         // 후 딜레이 이동 속도
@@ -260,8 +265,8 @@ public abstract class SkillObject : ControllerObject
     }
 
     /// <summary>
-    /// 해당 스킬의 CSV 데이터를 들고옵니다.
-    /// 캐스팅 시 float, bool, string만 허용됩니다.
+    ///     해당 스킬의 CSV 데이터를 들고옵니다.
+    ///     캐스팅 시 float, bool, string만 허용됩니다.
     /// </summary>
     /// <param name="key">가져올 데이터의 이름입니다.</param>
     /// <typeparam name="T">캐스팅 시 float, bool, string만 허용됩니다.</typeparam>
@@ -291,21 +296,14 @@ public abstract class SkillObject : ControllerObject
         {
             return;
         }
-            
-        _buffController.GenerateBuff(new BuffObject.BuffStruct()
+
+        if (_generateMoveSpeedCoroutine != null)
         {
-            Type = BuffObject.Type.MoveSpeed,
-            Duration = 0,
-            AllowDuplicates = true,
-            Damage = 0,
-            IsOnlyOnce = false,
-            ValueFloat = new [] { value },
-        });
-        var moveSpeedBuffList = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
-        if (moveSpeedBuffList != null)
-        {
-            _moveSpeedObjects.Add(moveSpeedBuffList[moveSpeedBuffList.Count - 1] as MoveSpeedObject);
+            StopCoroutine(_generateMoveSpeedCoroutine);
+            _generateMoveSpeedCoroutine = null;
         }
+
+        _generateMoveSpeedCoroutine = StartCoroutine(GenerateMoveSpeedBuffCoroutine(value));
     }
 
     protected void ReleaseMoveSpeedBuffAll()
@@ -314,6 +312,37 @@ public abstract class SkillObject : ControllerObject
         {
             _buffController.ReleaseBuff(speedObject);
         }
+
         _moveSpeedObjects.Clear();
+    }
+
+    private IEnumerator GenerateMoveSpeedBuffCoroutine(float value)
+    {
+        var leastMoveSpeedBuff = _buffController.GetBuff(BuffObject.Type.MoveSpeed)?.Last() ?? null;
+        _buffController.GenerateBuff(new BuffObject.BuffStruct
+        {
+            Type = BuffObject.Type.MoveSpeed,
+            Duration = 0,
+            AllowDuplicates = true,
+            Damage = 0,
+            IsOnlyOnce = false,
+            ValueFloat = new[] { value }
+        });
+
+        List<BuffObject> moveSpeedBuffList = null;
+
+        // 만들기 전 최신의 움직임 버프 ID값과 비교하여 실제로 구현이 되었는지 확인합니다.
+        yield return new WaitUntil(() =>
+        {
+            var leastBuffId = leastMoveSpeedBuff?.BuffId;
+            moveSpeedBuffList = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
+            var currentBuffId = moveSpeedBuffList?.Last().BuffId;
+            return currentBuffId != null && !currentBuffId.Equals(leastBuffId);
+        });
+
+        if (moveSpeedBuffList != null)
+        {
+            _moveSpeedObjects.Add(moveSpeedBuffList[moveSpeedBuffList.Count - 1] as MoveSpeedObject);
+        }
     }
 }

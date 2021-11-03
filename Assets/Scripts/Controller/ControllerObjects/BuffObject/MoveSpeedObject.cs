@@ -1,13 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveSpeedObject : BuffObject
 {
+    public float AddedSpeed { get; private set; }
 
-    private float _addedSpeed = 0;
-    public float AddedSpeed => _addedSpeed;
+    private void Reset()
+    {
+        _name = "";
+        _buffStruct.Type = Type.MoveSpeed;
+    }
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -20,26 +22,17 @@ public class MoveSpeedObject : BuffObject
         base.Update();
     }
 
-    private void Reset()
-    {
-        _name = "";
-        _buffStruct.Type = Type.MoveSpeed;
-        
-    }
-    
     public override void SetBuffStruct(BuffStruct buffStruct)
     {
         base.SetBuffStruct(buffStruct);
-        _addedSpeed = buffStruct.ValueFloat[0] / 10.0f;
+        AddedSpeed = buffStruct.ValueFloat[0] / 10.0f;
     }
 
-    protected override void OnHit(ObjectBase @from, ObjectBase to, BuffStruct[] appendBuff)
+    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
     {
-        throw new System.NotImplementedException();
     }
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        throw new System.NotImplementedException();
     }
 }
