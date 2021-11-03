@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using EsperFightersCup;
 using UnityEngine;
 
 public class ShockWaveSkillObject : SkillObject
@@ -42,10 +43,10 @@ public class ShockWaveSkillObject : SkillObject
         _range = GetCSVData<float>("Range");
         // 판정 범위 가로 세로
         _colliderSize = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
-        ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
+        GameObjectUtil.ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
 
         var colliderScale = new Vector3(_colliderSize.x, 1, _colliderSize.y);
-        ScaleGameObjects(_secondCasting, colliderScale);
+        GameObjectUtil.ScaleGameObjects(_secondCasting, colliderScale);
         _colliderParentTransform.localScale = colliderScale;
         _collider.OnCollision += SetHit;
     }
@@ -61,7 +62,7 @@ public class ShockWaveSkillObject : SkillObject
         var isCanceled = false;
         Vector3 endPos;
 
-        ActiveGameObjects(_firstCasting);
+        GameObjectUtil.ActiveGameObjects(_firstCasting);
 
         yield return new WaitUntil(() =>
         {
@@ -80,18 +81,17 @@ public class ShockWaveSkillObject : SkillObject
                     isCanceled = true;
                 }
 
-                ActiveGameObjects(_firstCasting, false);
-                ActiveGameObjects(_secondCasting);
+                GameObjectUtil.ActiveGameObjects(_firstCasting, false);
+                GameObjectUtil.ActiveGameObjects(_secondCasting);
             }
             // 끝점 설정
             else if (Input.GetMouseButton(0) && _startPos != Vector3.positiveInfinity)
             {
                 endPos = GetMousePosition();
                 _direction = Vector3.Normalize(endPos - _startPos);
-                TranslateGameObjects(_secondCasting, _startPos);
-
+                GameObjectUtil.TranslateGameObjects(_secondCasting, _startPos);
                 var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
-                RotateGameObjects(_secondCasting, rotation);
+                GameObjectUtil.RotateGameObjects(_secondCasting, rotation);
             }
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
@@ -112,8 +112,8 @@ public class ShockWaveSkillObject : SkillObject
             yield break;
         }
 
-        ActiveGameObjects(_firstCasting, false);
-        ActiveGameObjects(_secondCasting, false);
+        GameObjectUtil.ActiveGameObjects(_firstCasting, false);
+        GameObjectUtil.ActiveGameObjects(_secondCasting, false);
         _shockwaveUI.SetActive(true);
 
         _shockwaveUI.transform.SetParent(GameObject.Find("UiObject").transform);
@@ -194,38 +194,6 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         return Vector3.positiveInfinity;
-    }
-
-    private void ActiveGameObjects(IEnumerable<GameObject> gameObjects, bool isActive = true)
-    {
-        foreach (var gameObj in gameObjects)
-        {
-            gameObj.SetActive(isActive);
-        }
-    }
-
-    private void RotateGameObjects(IEnumerable<GameObject> gameObjects, Quaternion rotation)
-    {
-        foreach (var gameObj in gameObjects)
-        {
-            gameObj.transform.rotation = rotation;
-        }
-    }
-
-    private void ScaleGameObjects(IEnumerable<GameObject> gameObjects, Vector3 scale)
-    {
-        foreach (var gameObj in gameObjects)
-        {
-            gameObj.transform.localScale = scale;
-        }
-    }
-
-    private void TranslateGameObjects(IEnumerable<GameObject> gameObjects, Vector3 position)
-    {
-        foreach (var gameObj in gameObjects)
-        {
-            gameObj.transform.position = position;
-        }
     }
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
