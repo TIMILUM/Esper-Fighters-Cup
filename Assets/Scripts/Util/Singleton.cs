@@ -9,19 +9,32 @@ namespace EsperFightersCup.Util
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         /// <summary>
-        /// 현재 씬에 존재하는 싱글톤 오브젝트입니다.
+        /// 현재 씬에 존재하는 싱글톤 오브젝트입니다.<para/>
+        /// 존재하지 않는 경우 새로운 싱글톤 오브젝트를 생성하고 반환합니다.
         /// </summary>
-        public static T Instance { get; private set; } = null;
+        public static T Instance { get; private set; }
+        public static string SingletonName { get; } = typeof(T).Name;
 
         protected virtual void Awake()
         {
-            Instance = FindObjectOfType<T>();
-            Debug.Assert(Instance, $"{typeof(T)} 싱글톤 오브젝트를 찾지 못했습니다.");
+            if (Instance)
+            {
+                Debug.LogWarning($"Destory old one and create new {SingletonName} singleton game object");
+                Destroy(Instance.gameObject);
+            }
+
+            Instance = gameObject.GetComponent<T>();
+            Debug.Assert(Instance, $"Cannot found {SingletonName} singleton game object");
         }
 
         protected virtual void OnDestroy()
         {
             Instance = null;
+        }
+
+        protected static void CreateNewSingleton()
+        {
+            new GameObject(SingletonName).AddComponent<T>();
         }
     }
 }

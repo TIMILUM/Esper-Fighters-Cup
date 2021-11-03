@@ -1,5 +1,6 @@
 using EsperFightersCup.Net;
 using EsperFightersCup.UI.Popup;
+using EsperFightersCup.Util;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
