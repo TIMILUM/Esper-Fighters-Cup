@@ -32,11 +32,6 @@ namespace EsperFightersCup.UI.Match
             CoroutineTimer.SetTimerOnce(StartRandomMatch, 1f);
         }
 
-        public override void OnConnectedToMaster()
-        {
-            Debug.Log("Master서버와 연결되어 있음");
-        }
-
         public override void OnDisconnected(DisconnectCause cause)
         {
             var popup = Instantiate(_popup, FindObjectOfType<Canvas>().transform);
@@ -74,7 +69,7 @@ namespace EsperFightersCup.UI.Match
 
         protected override void OnGameEventReceived(GameEventArguments args)
         {
-            if (args.Code == GameProtocol.GameMatch)
+            if (args.Code == GameProtocol.Match)
             {
                 var data = (GameMatchEvent)args.EventData;
                 if (data.IsMatched)

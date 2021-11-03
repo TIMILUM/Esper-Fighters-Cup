@@ -1,4 +1,6 @@
+using System.Text;
 using MessagePack;
+using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
@@ -15,17 +17,29 @@ namespace EsperFightersCup.Net
         /// <returns>직렬화된 byte 배열</returns>
         public static byte[] Serialize<T>(in T eventData) where T : IGameEvent
         {
-            return MessagePackSerializer.Serialize<IGameEvent>(eventData);
+            var bytes = MessagePackSerializer.Serialize<IGameEvent>(eventData);
+            var sb = new StringBuilder();
+            foreach (var b in bytes)
+            {
+                sb.Append($"{b} ");
+            }
+            Debug.Log($"<color=grey>Serialize bytes: {sb}</color>");
+            return bytes;
         }
 
         /// <summary>
         /// byte 배열을 역직렬화하여 반환합니다.
         /// </summary>
-        /// <typeparam name="T">게임패킷 타입</typeparam>
         /// <param name="buffer">역직렬화할 byte 배열</param>
         /// <returns>역직렬화된 게임패킷</returns>
         public static IGameEvent Deserialize(byte[] buffer)
         {
+            var sb = new StringBuilder();
+            foreach (var b in buffer)
+            {
+                sb.Append($"{b} ");
+            }
+            Debug.Log($"<color=grey>Deserialize bytes: {sb}</color>");
             return MessagePackSerializer.Deserialize<IGameEvent>(buffer);
         }
     }
