@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EsperFightersCup.Util;
 using UnityEngine;
 
 public interface InspectorFSMInterface<TStateEnum, TBaseClass>
@@ -18,16 +19,17 @@ public interface InspectorFSMInterface<TStateEnum, TBaseClass>
 /// </summary>
 /// <typeparam name="TStateEnum">Enum 형식의 FSM의 State입니다.</typeparam>
 /// <typeparam name="TBaseClass">InspectorFSMBase를 상속한 클래스입니다.</typeparam>
-public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : MonoBehaviour,
+public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : Singleton<InspectorFSMSystem<TStateEnum, TBaseClass>>,
     InspectorFSMInterface<TStateEnum, TBaseClass>
     where TStateEnum : Enum
-    where TBaseClass : InspectorFSMBaseInterface<TStateEnum>
+    where TBaseClass : MonoBehaviour, InspectorFSMBaseInterface<TStateEnum>
 {
     [SerializeField]
     private TStateEnum _startState;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         StatePool = new Dictionary<TStateEnum, TBaseClass>();
         InitStatePool();
     }
