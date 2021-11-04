@@ -12,7 +12,7 @@ namespace EsperFightersCup.Util
         {
             if (Debug.isDebugBuild)
             {
-                CreateNewSingleton();
+                CreateNewSingletonObject();
             }
         }
 

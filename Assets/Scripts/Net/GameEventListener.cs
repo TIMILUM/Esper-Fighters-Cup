@@ -40,10 +40,10 @@ namespace EsperFightersCup.Net
     /// </summary>
     public sealed class GameEventListener : Singleton<GameEventListener>, IOnEventCallback
     {
-        [RuntimeInitializeOnLoadMethod]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void InitInstance()
         {
-            CreateNewSingleton();
+            CreateNewSingletonObject();
         }
 
         /// <summary>

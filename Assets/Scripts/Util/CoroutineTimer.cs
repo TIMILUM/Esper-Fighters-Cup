@@ -9,10 +9,10 @@ namespace EsperFightersCup.Util
     /// </summary>
     public class CoroutineTimer : Singleton<CoroutineTimer>
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void InitInstance()
         {
-            CreateNewSingleton();
+            CreateNewSingletonObject();
         }
 
         protected override void Awake()

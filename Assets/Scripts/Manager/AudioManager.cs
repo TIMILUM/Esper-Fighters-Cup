@@ -18,10 +18,10 @@ namespace EsperFightersCup.Manager
         private float _cachedMasterVolume;
         private VCA _masterVCAController;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void InitInstance()
         {
-            CreateNewSingleton();
+            CreateNewSingletonObject();
         }
 
         protected override void Awake()
