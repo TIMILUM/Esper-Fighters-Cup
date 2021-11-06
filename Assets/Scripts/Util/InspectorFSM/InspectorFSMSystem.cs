@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using EsperFightersCup.Util;
+using Photon.Pun;
 using UnityEngine;
 
 public interface InspectorFSMInterface<TStateEnum, TBaseClass>
@@ -9,7 +10,7 @@ public interface InspectorFSMInterface<TStateEnum, TBaseClass>
 {
     Dictionary<TStateEnum, TBaseClass> StatePool { get; }
     TStateEnum StartState { get; }
-    TStateEnum CurrState { get; }
+    TStateEnum CurrentState { get; }
 
     void ChangeState(TStateEnum state);
 }
@@ -19,13 +20,18 @@ public interface InspectorFSMInterface<TStateEnum, TBaseClass>
 /// </summary>
 /// <typeparam name="TStateEnum">Enum 형식의 FSM의 State입니다.</typeparam>
 /// <typeparam name="TBaseClass">InspectorFSMBase를 상속한 클래스입니다.</typeparam>
-public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : Singleton<InspectorFSMSystem<TStateEnum, TBaseClass>>,
-    InspectorFSMInterface<TStateEnum, TBaseClass>
+[RequireComponent(typeof(PhotonView))]
+public abstract class InspectorFSMSystem<TStateEnum, TBaseClass>
+    : PunEventSingleton<InspectorFSMSystem<TStateEnum, TBaseClass>>, InspectorFSMInterface<TStateEnum, TBaseClass>
     where TStateEnum : Enum
     where TBaseClass : MonoBehaviour, InspectorFSMBaseInterface<TStateEnum>
 {
     [SerializeField]
     private TStateEnum _startState;
+
+    public Dictionary<TStateEnum, TBaseClass> StatePool { get; private set; }
+    public TStateEnum StartState => _startState;
+    public TStateEnum CurrentState { get; private set; }
 
     protected override void Awake()
     {
@@ -33,10 +39,6 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : Singleton<Ins
         StatePool = new Dictionary<TStateEnum, TBaseClass>();
         InitStatePool();
     }
-
-    public Dictionary<TStateEnum, TBaseClass> StatePool { get; private set; }
-    public TStateEnum StartState => _startState;
-    public TStateEnum CurrState { get; private set; }
 
     /// <summary>
     ///     해당 FSM 시스템의 State를 바꿉니다.
@@ -50,20 +52,18 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : Singleton<Ins
             return;
         }
 
-        var nextStateObject = CastToMonoBehavior(nextState);
-
-        if (StatePool.TryGetValue(CurrState, out var currentState))
+        if (StatePool.TryGetValue(CurrentState, out var currentState))
         {
             currentState.EndState();
         }
 
         foreach (var pair in StatePool)
         {
-            CastToMonoBehavior(pair.Value).enabled = false;
+            pair.Value.enabled = false;
         }
 
-        CurrState = state;
-        nextStateObject.enabled = true;
+        CurrentState = state;
+        nextState.enabled = true;
         nextState.StartState();
     }
 
@@ -73,7 +73,7 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : Singleton<Ins
         foreach (var state in states)
         {
             // 모든 스테이트를 비활성화 시킵니다.
-            var stateObject = CastToMonoBehavior(state);
+            var stateObject = state as MonoBehaviour;
             stateObject.enabled = false;
 
             if (StatePool.ContainsKey(state.State))
@@ -86,10 +86,5 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : Singleton<Ins
 
         // 첫 스테이트로 전환해줍니다.
         ChangeState(StartState);
-    }
-
-    private MonoBehaviour CastToMonoBehavior(TBaseClass state)
-    {
-        return state as MonoBehaviour;
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using EsperFightersCup;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Events;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -20,23 +19,16 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     }
 
     [SerializeField] private SawBladeSystem _sawBladeSystem;
-    public static State CurrentState;
-    [Obsolete] private static UnityAction<APlayer> s_setPlayer = null;
+    [SerializeField] private IngameTopUI _ingameTopUI;
 
-    [SerializeField]
-    private short[] _winPoint = new short[2];
-
-    [SerializeField]
-    private IngameTopUI _ingameTopUI;
+    private DateTime _sawUsingStartTime = DateTime.MinValue;
 
     public IngameTopUI IngameTopUIObject => _ingameTopUI;
 
-    [Obsolete] public List<APlayer> PlayerList { get; } = new List<APlayer>();
-
-    // 게임 시작할 때 각 플레이어의 PhotonViewID를 가져와서 캐싱
-    public Dictionary<int, Photon.Realtime.Player> GamePlayers => PhotonNetwork.CurrentRoom.Players;
-
-    private DateTime _sawUsingStartTime = DateTime.MinValue;
+    /// <summary>
+    /// 키가 Actor Number, 값이 PhotonView인 플레이어 목록입니다.
+    /// </summary>
+    public Dictionary<int, PhotonView> GamePlayers { get; } = new Dictionary<int, PhotonView>();
 
     /// <summary>
     /// 현재 게임의 라운드 수를 가져오거나 설정합니다.<para/>
@@ -66,13 +58,23 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         }
     }
 
-    public static void SetPlayer(APlayer player)
+    protected override void Awake()
     {
-        s_setPlayer?.Invoke(player);
+        base.Awake();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 
     private void Update()
     {
+        foreach (var player in GamePlayers)
+        {
+
+        }
+
         foreach (var player in PlayerList)
         {
             if (player.Hp < 30)
@@ -84,6 +86,15 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
                     _sawBladeSystem.GenerateSawBlade();
                 }
             }
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value) && value is int viewID)
+        {
+            // 이미 존재하는 경우 덮어 씀
+            GamePlayers[targetPlayer.ActorNumber] = PhotonNetwork.GetPhotonView(viewID);
         }
     }
 
@@ -107,17 +118,5 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     {
         base.ChangeState(state);
         CurrentState = state;
-    }
-
-    protected override void Awake()
-    {
-        base.Awake();
-        s_setPlayer += SetPlayerFunction;
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        s_setPlayer = null;
     }
 }
