@@ -1,3 +1,4 @@
+using EsperFightersCup.Util;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -37,32 +38,12 @@ namespace EsperFightersCup.Net
     /// <summary>
     /// 이벤트를 받아서 가공 후 뿌리는 매니저 클래스입니다.
     /// </summary>
-    public sealed class GameEventListener : MonoBehaviourPunCallbacks, IOnEventCallback
+    public sealed class GameEventListener : Singleton<GameEventListener>, IOnEventCallback
     {
-        /// <summary>
-        /// <see cref="GameEventListener"/>의 인스턴스를 가져옵니다.
-        /// </summary>
-        public static GameEventListener Instance
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void InitInstance()
         {
-            get
-            {
-                if (!s_instance)
-                {
-                    CreateInstance();
-                }
-                return s_instance;
-            }
-        }
-
-        private static GameEventListener s_instance;
-
-        [RuntimeInitializeOnLoadMethod]
-        public static void CreateInstance()
-        {
-            if (!s_instance)
-            {
-                s_instance = new GameObject("Game Event Listener").AddComponent<GameEventListener>();
-            }
+            CreateNewSingletonObject();
         }
 
         /// <summary>
@@ -70,18 +51,20 @@ namespace EsperFightersCup.Net
         /// </summary>
         public event UnityAction<GameEventArguments> GameEventReceived;
 
-        private void Awake()
+        protected override void Awake()
         {
-            // BUG: 유니티 에디터 상에서 게임 종료 시 OnDestroy가 호출될 때 또 Awake가 호출되는 바람에 에러가 남
-            Debug.Log("Try create Event Listener", gameObject);
-            if (s_instance)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            s_instance = this;
+            base.Awake();
             DontDestroyOnLoad(gameObject);
+        }
 
+        private void OnEnable()
+        {
+            PhotonNetwork.AddCallbackTarget(this);
+        }
+
+        private void OnDisable()
+        {
+            PhotonNetwork.RemoveCallbackTarget(this);
         }
 
         public void OnEvent(EventData photonEvent)
