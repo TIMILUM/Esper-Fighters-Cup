@@ -47,7 +47,15 @@ namespace EsperFightersCup
                 _buffStruct.Duration = 0.1f;
             }
 
+            if (Author.ControllerManager.TryGetController(
+ControllerManager.Type.BuffController, out BuffController myController))
+            {
 
+                if (myController.GetBuff(Type.KnockBack) != null)
+                {
+                    myController.ReleaseBuff(this);
+                }
+            }
         }
 
         public override void OnPlayerHitEnter(GameObject other)

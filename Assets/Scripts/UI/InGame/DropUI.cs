@@ -36,6 +36,12 @@ namespace EsperFightersCup
                 {
                     return;
                 }
+                if (_object == null)
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                    return;
+                }
+
 
                 var perSceond = Vector3.Distance(_objectStartPos, _object.transform.position) / _startDistance;
 
@@ -66,6 +72,8 @@ namespace EsperFightersCup
                 }
                 yield return null;
             }
+            PhotonNetwork.Destroy(gameObject);
+
         }
 
 
