@@ -32,6 +32,7 @@ namespace EsperFightersCup
 
 
         private GameObject _targetObj = null;
+        private float _targetRange = 1.5f;
 
 
 
@@ -46,8 +47,17 @@ namespace EsperFightersCup
 
         public override void OnPlayerHitEnter(GameObject other)
         {
+
+        }
+
+        protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
+        {
             throw new System.NotImplementedException();
         }
+
+
+
+
 
         protected override IEnumerator OnCanceled()
         {
@@ -158,7 +168,7 @@ namespace EsperFightersCup
                 if (_targetObj != null)
                 {
                     _targetObj.transform.position = Vector3.Lerp(targetStartPos,
-                         Author.transform.position + Author.transform.forward, (currentTime - startTime) * 1000 / _grapEndDelay);
+                         Author.transform.position + Author.transform.forward * _targetRange, (currentTime - startTime) * 1000 / _grapEndDelay);
                 }
 
                 yield return null;
@@ -169,10 +179,7 @@ namespace EsperFightersCup
             yield break;
         }
 
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-        {
-            throw new System.NotImplementedException();
-        }
+
 
 
         /// <summary>
@@ -228,7 +235,7 @@ namespace EsperFightersCup
             /// 던지기 선딜레이
             while ((currentTime - startTime) * 1000 <= _throwFrontDelay)
             {
-                _targetObj.transform.position = Author.transform.position + Author.transform.forward;
+                _targetObj.transform.position = Author.transform.position + Author.transform.forward * _targetRange;
                 currentTime = Time.time;
                 yield return null;
             }
@@ -237,7 +244,7 @@ namespace EsperFightersCup
             yield return new WaitUntil(() =>
             {
                 var mousePos = GetMousePosition();
-                _targetObj.transform.position = Author.transform.position + Author.transform.forward;
+                _targetObj.transform.position = Author.transform.position + Author.transform.forward * _targetRange;
                 if (Input.GetMouseButtonDown(0))
                 {
                     _buffOnCollision[2].ValueVector3[0] = (mousePos - Author.transform.position).normalized;

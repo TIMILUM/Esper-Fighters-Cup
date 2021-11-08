@@ -284,7 +284,7 @@ MonoBehaviour:
   _moveSpeed: 5
   _decreaseSpeedTime: 0.001
   _increaseSpeedTime: 0.001
-  _smoothLookat: 0.01
+  _smoothLookat: 0.3
   _playerUiPrefabs: {fileID: 9160332585402660720, guid: c6d128b4662dad944beb4dcb345b4596, type: 3}
 --- !u!1 &4314589050214799942
 GameObject:
@@ -374,7 +374,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 2
-  _skills: []
+  _skills:
+  - _name: 
+    _key: 323
+    _skillPrefab: {fileID: 21849732020840252, guid: ccd0d07e82152ce46b88ca0c5fee9009, type: 3}
 --- !u!1 &5292001714685375169
 GameObject:
   m_ObjectHideFlags: 0
