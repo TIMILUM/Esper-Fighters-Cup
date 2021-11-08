@@ -47,7 +47,7 @@ namespace EsperFightersCup
                 }
 
 
-                photonView.RPC("DropPreSeondRPC", RpcTarget.AllBuffered, perSceond);
+                photonView.RPC(nameof(DropPreSeondRPC), RpcTarget.AllBuffered, perSceond);
             }
 
         }
