@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -97,8 +97,8 @@ public abstract class SkillObject : ControllerObject
         _buffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
         _player = Author.GetComponent<APlayer>();
     }
-	
-	protected void FixedUpdate()
+
+    protected void FixedUpdate()
     {
         if (_physicsCount > 0)
         {
@@ -182,7 +182,7 @@ public abstract class SkillObject : ControllerObject
     {
         _physicsCount = -1;
     }
-    
+
     /// <summary>
     /// 코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
     /// 해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
@@ -220,7 +220,7 @@ public abstract class SkillObject : ControllerObject
         // csv 위치값
         _commonCsvData.Get<float>("Skill_ID", out var idList);
         _commonCsvIndex = idList.FindIndex(x => (int)x == _id);
-        
+
         // 이름
         Name = GetCSVData<string>("Name");
         // 선 딜레이
@@ -233,7 +233,7 @@ public abstract class SkillObject : ControllerObject
         _endDelayMoveSpeed = (int)GetCSVData<float>("After_Delay_MoveSpeed");
         // 스턴 지속 시간
         var stunBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.Stun);
-        if(stunBuff != null)
+        if (stunBuff != null)
         {
             stunBuff.Duration = (int)GetCSVData<float>("Groggy_Duration");
         }
@@ -258,7 +258,7 @@ public abstract class SkillObject : ControllerObject
         {
             throw new Exception("Error to parse csv data.");
         }
-        
+
         return valueList[_commonCsvIndex];
     }
 }
