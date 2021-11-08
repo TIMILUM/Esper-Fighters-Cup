@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
-
 namespace EsperFightersCup
 {
-    public class DropUI : MonoBehaviour
+    public class DropUI : MonoBehaviourPunCallbacks
     {
         private GameObject _object;
         [SerializeField]
@@ -13,44 +13,68 @@ namespace EsperFightersCup
         private Vector3 _objectStartPos;
         private float _startDistance;
 
+        private Vector3 _currentScale;
+
         public void InitDropUI(GameObject obj)
         {
+            StartCoroutine(ObjFallingBuffCheck());
+
             _object = obj;
             _objectStartPos = obj.transform.position;
-            _startDistance = Vector3.Distance(_objectStartPos, transform.position);
         }
+
+
 
         public void Update()
         {
 
 
-            var perSceond = Vector3.Distance(_objectStartPos, _object.transform.position) / _startDistance;
-            _perSceondUI.transform.localScale = new Vector3(perSceond, perSceond, perSceond);
 
-            StartCoroutine(ObjFallingBuffCheck());
-            if (perSceond > 0.9f)
+            if (photonView.IsMine)
             {
-                StopCoroutine(ObjFallingBuffCheck());
-                Destroy(gameObject);
+                if (_startDistance == 0)
+                {
+                    return;
+                }
+
+                var perSceond = Vector3.Distance(_objectStartPos, _object.transform.position) / _startDistance;
+
+
+                if (perSceond > 0.9f)
+                {
+                    StopCoroutine(ObjFallingBuffCheck());
+                    PhotonNetwork.Destroy(gameObject);
+                }
+
+
+                photonView.RPC("DropPreSeondRPC", RpcTarget.AllBuffered, perSceond);
             }
 
         }
 
         private IEnumerator ObjFallingBuffCheck()
         {
-            yield return new WaitForSeconds(0.03f);
-
+            _perSceondUI.transform.localScale = Vector3.zero;
+            yield return new WaitForSeconds(0.3f);
+            _startDistance = Vector3.Distance(_objectStartPos, transform.position);
             while (true)
             {
+
                 if (_object.GetComponent<Actor>().BuffController.GetBuff(BuffObject.Type.Falling) == null)
                 {
                     break;
                 }
                 yield return null;
             }
-            Destroy(gameObject);
         }
 
+
+        [PunRPC]
+        public void DropPreSeondRPC(float Persceond)
+        {
+            _perSceondUI.transform.localScale = new Vector3(Persceond, Persceond, Persceond);
+
+        }
 
 
 

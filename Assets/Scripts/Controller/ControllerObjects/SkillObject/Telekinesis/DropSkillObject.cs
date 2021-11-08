@@ -165,7 +165,7 @@ namespace EsperFightersCup
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = _endMousePoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
             var obj = InGameSkillManager.Instance.CreateSkillObject("DropObject", createObjectPos);
-            var UI = Instantiate(_dropUIPrefab);
+            var UI = InGameSkillManager.Instance.CreateSkillUI("DropUI", createObjectPos);
 
 
             UI.GetComponent<DropUI>().InitDropUI(obj);

@@ -114,6 +114,10 @@ public class InGameSkillManager : MonoBehaviour
     {
         return _skillObjectfactory.CreateSkillObject(objectname, pos);
     }
+    public GameObject CreateSkillUI(string objectname, Vector3 pos)
+    {
+        return _skillObjectfactory.CreateSkillUI(objectname, pos);
+    }
 
 
 }
