@@ -8,7 +8,8 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     private GameObject _stonePrefab;
     [SerializeField]
     private GameObject _fragmentStaticObjectPrefab;
-
+    [SerializeField]
+    private GameObject _dropStaticObjectPrefab;
 
 
 
@@ -20,7 +21,8 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
             clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _stonePrefab.name, pos, Quaternion.identity);
         if (objectname == "Fragment")
             clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fragmentStaticObjectPrefab.name, pos, Quaternion.identity);
-
+        if (objectname == "DropObject")
+            clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _dropStaticObjectPrefab.name, pos, Quaternion.identity);
 
         return clone;
     }
