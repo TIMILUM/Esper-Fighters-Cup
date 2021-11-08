@@ -45,7 +45,7 @@ public class FragmentAreaManager : PunEventCallbacks
     /// <returns></returns>
     public GameObject AddFragmentList(Transform trans, float range, int ActorViewID)
     {
-        var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
+        var clone = PhotonNetwork.Instantiate("Prefabs/SkillPrefabs/" + _fregmentFrefab.name, trans.position, trans.rotation);
         clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
         clone.transform.localScale = trans.localScale;
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));

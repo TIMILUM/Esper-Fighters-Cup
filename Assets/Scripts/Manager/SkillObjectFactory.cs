@@ -17,9 +17,9 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
 
         GameObject clone = null;
         if (objectname == "Stone")
-            clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _stonePrefab.name, pos, Quaternion.identity);
+            clone = PhotonNetwork.Instantiate("Prefabs/StaticObjects/" + _stonePrefab.name, pos, Quaternion.identity);
         if (objectname == "Fragment")
-            clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fragmentStaticObjectPrefab.name, pos, Quaternion.identity);
+            clone = PhotonNetwork.Instantiate("Prefabs/StaticObjects/" + _fragmentStaticObjectPrefab.name, pos, Quaternion.identity);
 
 
         return clone;
