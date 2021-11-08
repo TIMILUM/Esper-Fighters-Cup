@@ -66,14 +66,6 @@ public class MovementController : ControllerBase
         var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hitinfos = Physics.RaycastAll(screentoRay);
 
-        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_A")
-            || _player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(1).IsName("Elena_ReverseGravity_R"))
-        {
-            var direction = _fragmentPos - playerPosition;
-            playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(direction), _smoothLookat);
-            _player.transform.rotation = playerRotation;
-            return;
-        }
         if (!_isMousePickLookAt)
         {
             return;
