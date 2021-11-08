@@ -126,8 +126,9 @@ public class MovementController : ControllerBase
             return;
         }
 
-        // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
+        //스턴 띄움 슬라이딩 상태일때 움직임 멈춤 
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null
+            || _buffController.GetBuff(BuffObject.Type.Sliding) != null)
         {
             dir = Vector3.zero;
             _currentDecreaseSpeed = 1.0f;
