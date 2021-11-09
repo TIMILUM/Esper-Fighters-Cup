@@ -124,7 +124,8 @@ public class MovementController : ControllerBase
         }
 
         // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null ||
+            _buffController.GetBuff(BuffObject.Type.Sliding) != null || _buffController.GetBuff(BuffObject.Type.Grab) != null)
         {
             dir = Vector3.zero;
             _currentDecreaseSpeed = 1.0f;
