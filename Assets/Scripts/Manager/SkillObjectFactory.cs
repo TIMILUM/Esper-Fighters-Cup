@@ -8,8 +8,13 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     private GameObject _stonePrefab;
     [SerializeField]
     private GameObject _fragmentStaticObjectPrefab;
+    [SerializeField]
+    private GameObject _dropStaticObjectPrefab;
 
-
+    [SerializeField]
+    private GameObject _uiPrefabs;
+    [SerializeField]
+    private GameObject _enemyUiPrefabs;
 
 
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
@@ -17,11 +22,22 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
 
         GameObject clone = null;
         if (objectname == "Stone")
-            clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _stonePrefab.name, pos, Quaternion.identity);
+            clone = PhotonNetwork.Instantiate($"Prefabs/Environment/{ _stonePrefab.name}", pos, Quaternion.identity);
         if (objectname == "Fragment")
-            clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fragmentStaticObjectPrefab.name, pos, Quaternion.identity);
+            clone = PhotonNetwork.Instantiate($"Prefabs/Environment/{_fragmentStaticObjectPrefab.name}", pos, Quaternion.identity);
+        if (objectname == "DropObject")
+            clone = PhotonNetwork.Instantiate($"Prefabs/Environment/{_dropStaticObjectPrefab.name}", pos, Quaternion.identity);
 
+        return clone;
+    }
 
+    public GameObject CreateSkillUI(string objectname, Vector3 pos)
+    {
+        GameObject clone = null;
+        if (objectname == "DropUI")
+            clone = PhotonNetwork.Instantiate($"Prefabs/UI/{_uiPrefabs.name}", pos, Quaternion.identity);
+        if (objectname == "EnemyDropUI")
+            clone = PhotonNetwork.Instantiate($"Prefabs/UI/{_enemyUiPrefabs.name}", pos, Quaternion.identity);
         return clone;
     }
 
