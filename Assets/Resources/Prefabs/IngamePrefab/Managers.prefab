@@ -50,6 +50,7 @@ MonoBehaviour:
   _startState: 1
   _winPoint: 00000000
   _ingameTopUI: {fileID: 0}
+  _sawBladeSystem: {fileID: 0}
 --- !u!114 &4083775375490554126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +67,7 @@ MonoBehaviour:
   _activeGameObjects: []
   _inactiveGameObjects: []
   _gameStateView: {fileID: 0}
+  _startPosition: []
 --- !u!114 &4604871633556672916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +123,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8472672499965354024}
-  - component: {fileID: 8472672499965354031}
   - component: {fileID: 8472672499965354030}
   m_Layer: 0
   m_Name: IngamePlayerManager
@@ -144,28 +145,6 @@ Transform:
   m_Father: {fileID: 8472672500925258893}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8472672499965354031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8472672499965354025}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &8472672499965354030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +159,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterPrefabs:
   - {fileID: 4314589049664778607, guid: b75f5f4c7208ff8458901ed9faa37b6f, type: 3}
-  _currentCharacterType: 1
   _spawnTransform: {fileID: 0}
   _ingameFsmSystem: {fileID: 6341048001645598867}
   _cameraMovement: {fileID: 0}
