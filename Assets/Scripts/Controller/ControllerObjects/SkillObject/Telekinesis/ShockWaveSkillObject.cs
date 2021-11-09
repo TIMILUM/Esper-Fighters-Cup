@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using EsperFightersCup;
 using UnityEngine;
@@ -25,6 +25,9 @@ public class ShockWaveSkillObject : SkillObject
 
     [SerializeField]
     private ColliderChecker _collider;
+
+    [SerializeField]
+    private GameObject _shockwaveUI;
 
     [SerializeField]
     [Tooltip("[세로, 가로]")]
@@ -97,15 +100,17 @@ public class ShockWaveSkillObject : SkillObject
                 endPos = GetMousePosition();
                 _direction = Vector3.Normalize(endPos - _startPos);
                 GameObjectUtil.TranslateGameObjects(_secondCasting, _startPos);
-                GameObjectUtil.RotateGameObjects(_secondCasting, Quaternion.LookRotation(_direction));
+
+                var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
+                GameObjectUtil.RotateGameObjects(_secondCasting, rotation);
             }
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
                 //충격파 애니메이션
                 _player.CharacterAnimatorSync.SetTrigger("ShockWaveSkill");
-                ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2),
-                    Quaternion.LookRotation(_direction));
+                ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
+
                 return true;
             }
 
@@ -120,6 +125,12 @@ public class ShockWaveSkillObject : SkillObject
 
         GameObjectUtil.ActiveGameObjects(_firstCasting, false);
         GameObjectUtil.ActiveGameObjects(_secondCasting, false);
+        _shockwaveUI.SetActive(true);
+
+        _shockwaveUI.transform.SetParent(GameObject.Find("UiObject").transform);
+
+        _shockwaveUI.transform.SetPositionAndRotation(_startPos + (_direction), _secondCasting[0].transform.rotation);
+        _shockwaveUI.transform.localScale = _secondCasting[0].transform.localScale * 0.1f;
         SetNextState();
     }
 
@@ -137,6 +148,7 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.gameObject.SetActive(true);
         _colliderParentTransform.transform.position = _startPos;
         yield return new WaitUntil(() => WaitPhysicsUpdate());
+        ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
 
         _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();
@@ -159,6 +171,7 @@ public class ShockWaveSkillObject : SkillObject
     protected override IEnumerator OnRelease()
     {
         ApplyMovementSpeed(State.Release);
+        Destroy(_shockwaveUI);
         Destroy(gameObject);
         yield return null;
     }

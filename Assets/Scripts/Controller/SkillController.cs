@@ -43,7 +43,7 @@ public class SkillController : ControllerBase
             ReleaseAllSkills();
             return;
         }
-        
+
         // 스턴 확인 시 스킬 사용을 멈춥니다.
         if (_buffController.GetBuff(BuffObject.Type.Stun) != null)
         {

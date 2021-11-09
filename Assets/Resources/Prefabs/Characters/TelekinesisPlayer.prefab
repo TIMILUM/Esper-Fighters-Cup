@@ -52,8 +52,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.3
-  m_Height: 2
+  m_Radius: 0.6
+  m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4314589049664778643
@@ -285,7 +285,7 @@ MonoBehaviour:
   _decreaseSpeedTime: 0.001
   _increaseSpeedTime: 0.001
   _smoothLookat: 0.01
-  _playerUiPrefabs: {fileID: 9160332585402660720, guid: c6d128b4662dad944beb4dcb345b4596, type: 3}
+  _positionUIPrefab: {fileID: 9160332585402660720, guid: c6d128b4662dad944beb4dcb345b4596, type: 3}
 --- !u!1 &4314589050214799942
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,6 +381,9 @@ MonoBehaviour:
   - _name: Skill 2
     _key: 304
     _skillPrefab: {fileID: 8362198494138024948, guid: 46a3bd322c7104e4eb86fd0236497da2, type: 3}
+  - _name: Skill 3
+    _key: 32
+    _skillPrefab: {fileID: 3839221633854377787, guid: cf2efe36a6e48ce4b9bd50d9a85f7c56, type: 3}
 --- !u!1 &5292001714685375169
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,15 +444,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.4
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.4
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.4
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
       propertyPath: m_LocalPosition.x

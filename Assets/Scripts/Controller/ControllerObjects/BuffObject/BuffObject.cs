@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Photon.Pun;
 using UnityEngine;
 
@@ -17,6 +17,10 @@ public abstract class BuffObject : ControllerObject
         IncreaseHp,
         Raise,
         MoveSpeed,
+        Falling,
+        Sliding,
+        Grab
+
     }
 
     [SerializeField]
