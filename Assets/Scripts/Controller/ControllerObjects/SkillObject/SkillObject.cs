@@ -291,6 +291,7 @@ public abstract class SkillObject : ControllerObject
             return;
         }
 
+        IngameDelayCursorObject.SetActiveCursor(true, value / 1000.0f);
         if (_generateMoveSpeedCoroutine != null)
         {
             StopCoroutine(_generateMoveSpeedCoroutine);
