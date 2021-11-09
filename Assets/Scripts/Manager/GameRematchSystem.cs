@@ -6,7 +6,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EsperFightersCup.Manager
 {
-    public class GameRematchManager : PunEventSingleton<GameRematchManager>
+    public class GameRematchSystem : PunEventSingleton<GameRematchSystem>
     {
         public const string RematchPropKey = "rematch";
 

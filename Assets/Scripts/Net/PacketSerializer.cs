@@ -1,6 +1,5 @@
 using System.Text;
 using MessagePack;
-using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
@@ -23,7 +22,7 @@ namespace EsperFightersCup.Net
             {
                 sb.Append($"{b} ");
             }
-            Debug.Log($"<color=grey>Serialize bytes: {sb}</color>");
+            // Debug.Log($"<color=grey>Serialize bytes: {sb}</color>");
             return bytes;
         }
 
@@ -39,7 +38,7 @@ namespace EsperFightersCup.Net
             {
                 sb.Append($"{b} ");
             }
-            Debug.Log($"<color=grey>Deserialize bytes: {sb}</color>");
+            // Debug.Log($"<color=grey>Deserialize bytes: {sb}</color>");
             return MessagePackSerializer.Deserialize<IGameEvent>(buffer);
         }
     }
