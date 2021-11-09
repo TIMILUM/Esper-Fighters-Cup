@@ -89,7 +89,9 @@ public class ShockWaveSkillObject : SkillObject
                 endPos = GetMousePosition();
                 _direction = Vector3.Normalize(endPos - _startPos);
                 TranslateGameObjects(_secondCasting, _startPos);
-                RotateGameObjects(_secondCasting, Quaternion.LookRotation(_direction));
+
+                var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
+                RotateGameObjects(_secondCasting, rotation);
             }
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
