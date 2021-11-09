@@ -190,7 +190,6 @@ MonoBehaviour:
   _fragmentStaticObjectPrefab: {fileID: 1851603496711567382, guid: 2fd4acb7d61ae2848b05c2469db23904, type: 3}
   _dropStaticObjectPrefab: {fileID: 7540981878553075838, guid: a9b8632111a24574d87023ced9fe46d6, type: 3}
   _uiPrefabs: {fileID: 1830693600371288693, guid: fd36db764b0743b48914d86a169708a7, type: 3}
-  _enemyUiPrefabs: {fileID: 1830693600371288693, guid: bf70df6eae0913c4fbe73fb8b81c8846, type: 3}
 --- !u!114 &28038343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4920,7 +4919,15 @@ MonoBehaviour:
   - _particleName: ReverseGravityFiledAfter
     _particleFrefab: {fileID: 7206864135028122236, guid: 3793a3533e331804eaa05995c0e35c2d, type: 3}
     _maxNum: 100
-    _lifeTime: 300000
+    _lifeTime: 0
+  - _particleName: Hit
+    _particleFrefab: {fileID: 740977408721668117, guid: acbe955bffe485e47be46ee42dacdf44, type: 3}
+    _maxNum: 100
+    _lifeTime: 1500
+  - _particleName: ShockWaveHand
+    _particleFrefab: {fileID: 8508841593130726734, guid: 79af6b9abf16f2f48b3737cbd13c1e14, type: 3}
+    _maxNum: 100
+    _lifeTime: 1500
 --- !u!4 &705699738
 Transform:
   m_ObjectHideFlags: 0

@@ -18,7 +18,10 @@ public class StunObject : BuffObject
 
         if (_character && _character.CharacterAnimatorSync)
         {
+            var data = transform.transform.position;
+            data.y = 0.01f;
             _character.CharacterAnimatorSync.SetTrigger("Hit");
+            ParticleManager.Instance.PullParticle("Hit", data, Quaternion.identity);
         }
     }
 
