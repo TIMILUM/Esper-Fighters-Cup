@@ -81,7 +81,7 @@ namespace EsperFightersCup.Net
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            if (_animator == null)
+            if (_animator == null || !photonView)
             {
                 return;
             }

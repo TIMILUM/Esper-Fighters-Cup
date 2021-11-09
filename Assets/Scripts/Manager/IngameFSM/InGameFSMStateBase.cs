@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class InGameFSMStateBase : InspectorFSMBase<IngameFSMSystem.State, IngameFSMSystem>
 {
     [SerializeField, Tooltip("해당 상태일 때 활성화 하고자 하는 오브젝트를 담는 리스트입니다.(해당 상태에서 나가면 비활성화)")]
     private GameObject[] _activeGameObjects;
-    
+
     [SerializeField, Tooltip("해당 상태일 때 비활성화 하고자 하는 오브젝트를 담는 리스트입니다.(해당 상태에서 나가면 활성화)")]
     private GameObject[] _inactiveGameObjects;
 

@@ -1,12 +1,13 @@
+using EsperFightersCup.Net;
 using UnityEngine;
 
 namespace EsperFightersCup.Util
 {
     /// <summary>
-    /// Awake를 통해 생성되는 싱글톤입니다.
+    /// Awake를 통해 생성되는 <see cref="PunEventCallbacks"/> 기반의 싱글톤입니다.
     /// </summary>
     /// <typeparam name="T">싱글톤을 사용하려는 컴포넌트</typeparam>
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class PunEventSingleton<T> : PunEventCallbacks where T : PunEventCallbacks
     {
         private static T s_instance;
 

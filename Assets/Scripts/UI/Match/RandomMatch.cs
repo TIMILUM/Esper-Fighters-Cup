@@ -1,5 +1,6 @@
 using EsperFightersCup.Net;
 using EsperFightersCup.UI.Popup;
+using EsperFightersCup.Util;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -30,11 +31,6 @@ namespace EsperFightersCup.UI.Match
             }
 #endif
             CoroutineTimer.SetTimerOnce(StartRandomMatch, 1f);
-        }
-
-        public override void OnConnectedToMaster()
-        {
-            Debug.Log("Master서버와 연결되어 있음");
         }
 
         public override void OnDisconnected(DisconnectCause cause)
@@ -74,7 +70,7 @@ namespace EsperFightersCup.UI.Match
 
         protected override void OnGameEventReceived(GameEventArguments args)
         {
-            if (args.Code == GameProtocol.GameMatch)
+            if (args.Code == GameProtocol.Match)
             {
                 var data = (GameMatchEvent)args.EventData;
                 if (data.IsMatched)
