@@ -15,15 +15,15 @@ public class MovementController : ControllerBase
     private Vector3 _currentMoveDir;
     private Vector3 _beforeMoveDirection;
 
-    private Vector3 _fragmentPos;
+
 
     private APlayer _player = null;
     private BuffController _buffController = null;
 
 
-    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.1f;
+    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat;
 
-    [SerializeField] private GameObject _playerUiPrefabs;
+    [SerializeField] private GameObject _positionUIPrefab;
 
     private void Reset()
     {
@@ -39,13 +39,9 @@ public class MovementController : ControllerBase
         _player = _controllerManager.GetActor() as APlayer;
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
 
-
-        if (_player.photonView.IsMine)
-        {
-            var characterUI = Instantiate(_playerUiPrefabs).GetComponent<PlayerPositionUI>();
-            characterUI.TargetPlayer = _player.transform;
-            // 본인 여부에 따라 세팅
-        }
+        var positionUI = Instantiate(_positionUIPrefab).GetComponent<CharacterPositionUI>();
+        positionUI.TargetPlayer = _player.transform;
+        positionUI.IsLocalPlayer = photonView.IsMine;
     }
 
     // Update is called once per frame
@@ -65,6 +61,8 @@ public class MovementController : ControllerBase
         var playerPosition = _player.transform.position;
         var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hitinfos = Physics.RaycastAll(screentoRay);
+
+
 
         if (!_isMousePickLookAt)
         {
@@ -89,7 +87,6 @@ public class MovementController : ControllerBase
 
                 _player.CharacterAnimatorSync.SetFloat("Cos", cos);
                 _player.CharacterAnimatorSync.SetFloat("Sin", sin);
-                _fragmentPos = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f);
             }
         }
 
@@ -126,9 +123,8 @@ public class MovementController : ControllerBase
             return;
         }
 
-        //스턴 띄움 슬라이딩 상태일때 움직임 멈춤 
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null
-            || _buffController.GetBuff(BuffObject.Type.Sliding) != null)
+        // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
         {
             dir = Vector3.zero;
             _currentDecreaseSpeed = 1.0f;

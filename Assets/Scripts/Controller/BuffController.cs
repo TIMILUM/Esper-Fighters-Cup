@@ -70,7 +70,7 @@ public class BuffController : ControllerBase
         var id = $"{buffStruct.Type}{PhotonNetwork.ServerTimestamp}";
         var packet = new GameBuffGenerateEvent(photonView.ViewID, id, buffStruct);
         PacketSender.Broadcast(in packet, SendOptions.SendUnreliable);
-        Debug.Log("Generate buff", gameObject);
+        Debug.Log($"Send buff generate event - {id}");
     }
 
     /*
@@ -123,11 +123,11 @@ public class BuffController : ControllerBase
             throw new ArgumentNullException(nameof(buff));
         }
 
-        Debug.Log($"Send buff release event - {buff.BuffId}");
         var packet = new GameBuffReleaseEvent(photonView.ViewID, buff.BuffId);
 
         buff.gameObject.SetActive(false);
         PacketSender.Broadcast(in packet, SendOptions.SendUnreliable);
+        Debug.Log($"Send buff release event - {buff.BuffId}");
     }
 
     protected override void OnGameEventReceived(GameEventArguments args)

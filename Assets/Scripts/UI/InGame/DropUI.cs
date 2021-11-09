@@ -7,20 +7,53 @@ namespace EsperFightersCup
     public class DropUI : MonoBehaviourPunCallbacks
     {
         private GameObject _object;
+
+
         [SerializeField]
-        GameObject _perSceondUI;
+        private GameObject _dropUISceondUI;
+        [SerializeField]
+        private GameObject _perSceondUI;
+
+
+
+        [SerializeField]
+        private GameObject _enemyPerdropUISceondUI;
+        [SerializeField]
+        private GameObject _enemyPerSceondUI;
+
+        private GameObject _currentUI;
 
         private Vector3 _objectStartPos;
         private float _startDistance;
 
         private Vector3 _currentScale;
 
+
+        public void Start()
+        {
+            if (photonView.IsMine)
+            {
+                _dropUISceondUI.SetActive(true);
+                _currentUI = _perSceondUI;
+                _currentUI.transform.localScale = Vector3.zero;
+
+            }
+            else
+            {
+                _enemyPerdropUISceondUI.SetActive(true);
+                _currentUI = _enemyPerSceondUI;
+                _currentUI.transform.localScale = Vector3.zero;
+
+            }
+        }
         public void InitDropUI(GameObject obj)
         {
-            StartCoroutine(ObjFallingBuffCheck());
 
             _object = obj;
             _objectStartPos = obj.transform.position;
+
+            StartCoroutine(ObjFallingBuffCheck());
+
         }
 
 
@@ -60,8 +93,9 @@ namespace EsperFightersCup
 
         private IEnumerator ObjFallingBuffCheck()
         {
-            _perSceondUI.transform.localScale = Vector3.zero;
+
             yield return new WaitForSeconds(0.3f);
+            _currentUI.transform.localScale = Vector3.zero;
             _startDistance = Vector3.Distance(_objectStartPos, transform.position);
             while (true)
             {
@@ -80,7 +114,7 @@ namespace EsperFightersCup
         [PunRPC]
         public void DropPreSeondRPC(float Persceond)
         {
-            _perSceondUI.transform.localScale = new Vector3(Persceond, Persceond, Persceond);
+            _currentUI.transform.localScale = new Vector3(Persceond, Persceond, Persceond);
 
         }
 

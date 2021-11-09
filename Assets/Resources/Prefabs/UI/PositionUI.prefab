@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8994365637681476723}
   - component: {fileID: 812894969863898371}
   m_Layer: 0
-  m_Name: PlayerPosition
+  m_Name: PositionUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,3 +110,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088690a1a8fcf5d4fb2669b9931eee5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _localPlayerUI: {fileID: 2100000, guid: c87422375160bd34d8ddab96edcd1a72, type: 2}
+  _enemyUI: {fileID: 2100000, guid: 5360576dde1911f41962f1d05d37416d, type: 2}

@@ -35,7 +35,6 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         if (objectname == "DropUI")
             clone = PhotonNetwork.Instantiate($"Prefabs/UI/{_uiPrefabs.name}", pos, Quaternion.identity);
         return clone;
-
     }
 
 

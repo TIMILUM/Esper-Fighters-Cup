@@ -16,7 +16,7 @@ public class ThrowSkillObject : SkillObject
     private float _frontDelayTime;
 
     [SerializeField]
-    private float _EndDelayTime;
+    private float _endDelayTime;
 
 
 
@@ -25,7 +25,7 @@ public class ThrowSkillObject : SkillObject
         base.Start();
         _range = GetCSVData<float>("Range");
         _frontDelayTime = FrontDelayMilliseconds;
-        _EndDelayTime = EndDelayMilliseconds;
+        _endDelayTime = EndDelayMilliseconds;
         ScaleGameObjects(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
         ScaleGameObjects(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
 
@@ -52,7 +52,7 @@ public class ThrowSkillObject : SkillObject
         var startTime = Time.time;
         var currentTime = Time.time;
 
-        while ((currentTime - startTime) * 1000 <= _EndDelayTime)
+        while ((currentTime - startTime) * 1000 <= _endDelayTime)
         {
             if (Input.GetMouseButtonDown(1))
             {

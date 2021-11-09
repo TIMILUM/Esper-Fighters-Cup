@@ -76,9 +76,7 @@ public class FragmentAreaManager : PunEventCallbacks
         return true;
     }
 
-    /// <summary>
-    /// 파편지대 삭제
-    /// </summary>
+
     public void AllDestory()
     {
         foreach (var item in _currentfragmentList)

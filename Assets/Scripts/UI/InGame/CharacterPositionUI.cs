@@ -2,9 +2,22 @@ using UnityEngine;
 
 namespace EsperFightersCup.UI.InGame
 {
-    public class PlayerPositionUI : MonoBehaviour
+    public class CharacterPositionUI : MonoBehaviour
     {
+        [SerializeField] private Material _localPlayerUI;
+        [SerializeField] private Material _enemyUI;
+
         public Transform TargetPlayer { get; set; }
+        public bool IsLocalPlayer
+        {
+            get => _isLocalPlayer;
+            set
+            {
+                GetComponent<Renderer>().material = value ? _localPlayerUI : _enemyUI;
+                _isLocalPlayer = value;
+            }
+        }
+        private bool _isLocalPlayer;
 
         private void Update()
         {

@@ -76,7 +76,7 @@ public class FragmentArea : AStaticObject
                 InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position);
                 ParticleManager.Instance.PullParticle("ReverseGravityFiled", transform.position, Quaternion.identity);
                 ParticleManager.Instance.PullParticle("ReverseGravityBreak", transform.position, Quaternion.identity);
-                ParticleManager.Instance.PullParticle("ReverseGravityFiledAfter", transform.position + new Vector3(0.0f, 0.01f, 0.0f), Quaternion.identity);
+
                 _isObjectSpawn = true;
             }
 
