@@ -23,7 +23,7 @@ public class MovementController : ControllerBase
 
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.1f;
 
-    [SerializeField] private GameObject _playerUiPrefabs;
+    [SerializeField] private GameObject _positionUIPrefab;
 
     private void Reset()
     {
@@ -39,13 +39,9 @@ public class MovementController : ControllerBase
         _player = _controllerManager.GetActor() as APlayer;
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
 
-
-        if (_player.photonView.IsMine)
-        {
-            var characterUI = Instantiate(_playerUiPrefabs).GetComponent<PlayerPositionUI>();
-            characterUI.TargetPlayer = _player.transform;
-            // 본인 여부에 따라 세팅
-        }
+        var positionUI = Instantiate(_positionUIPrefab).GetComponent<CharacterPositionUI>();
+        positionUI.TargetPlayer = _player.transform;
+        positionUI.IsLocalPlayer = photonView.IsMine;
     }
 
     // Update is called once per frame
