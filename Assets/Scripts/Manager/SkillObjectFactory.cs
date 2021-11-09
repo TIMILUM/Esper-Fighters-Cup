@@ -13,6 +13,8 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
 
     [SerializeField]
     private GameObject _uiPrefabs;
+    [SerializeField]
+    private GameObject _enemyUiPrefabs;
 
 
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
@@ -34,8 +36,9 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         GameObject clone = null;
         if (objectname == "DropUI")
             clone = PhotonNetwork.Instantiate($"Prefabs/UI/{_uiPrefabs.name}", pos, Quaternion.identity);
+        if (objectname == "EnemyDropUI")
+            clone = PhotonNetwork.Instantiate($"Prefabs/UI/{_enemyUiPrefabs.name}", pos, Quaternion.identity);
         return clone;
-
     }
 
 
