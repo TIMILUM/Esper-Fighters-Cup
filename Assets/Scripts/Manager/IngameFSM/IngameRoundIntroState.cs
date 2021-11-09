@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using EsperFightersCup.UI.InGame;
+using EsperFightersCup.Util;
 using UnityEngine;
 
 public class IngameRoundIntroState : InGameFSMStateBase
@@ -35,12 +37,15 @@ public class IngameRoundIntroState : InGameFSMStateBase
         }
 
         // 몇초 뒤에 보이게 해야 잘 보임.
-        _gameStateView.Show($"Round {round}", Vector2.left * 20f);
-        CoroutineTimer.SetTimerOnce(() =>
-        {
-            _gameStateView.Show("Fight!", Vector2.left * 20f);
-            ChangeState(IngameFSMSystem.State.InBattle);
-        }, 2f);
+        DOTween.Sequence()
+            .AppendInterval(3.0f)
+            .AppendCallback(() => _gameStateView.Show($"Round {round}", Vector2.left * 20f))
+            .AppendInterval(1.5f)
+            .AppendCallback(() =>
+            {
+                _gameStateView.Show("Fight!", Vector2.left * 20f);
+                ChangeState(IngameFSMSystem.State.InBattle);
+            });
     }
 
     public override void EndState()

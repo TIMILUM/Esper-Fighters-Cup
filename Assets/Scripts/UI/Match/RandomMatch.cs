@@ -1,5 +1,6 @@
 using EsperFightersCup.Net;
 using EsperFightersCup.UI.Popup;
+using EsperFightersCup.Util;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -30,11 +31,6 @@ namespace EsperFightersCup.UI.Match
             }
 #endif
             CoroutineTimer.SetTimerOnce(StartRandomMatch, 1f);
-        }
-
-        public override void OnConnectedToMaster()
-        {
-            Debug.Log("Master서버와 연결되어 있음");
         }
 
         public override void OnDisconnected(DisconnectCause cause)
@@ -74,7 +70,7 @@ namespace EsperFightersCup.UI.Match
 
         protected override void OnGameEventReceived(GameEventArguments args)
         {
-            if (args.Code == GameProtocol.GameMatch)
+            if (args.Code == GameProtocol.Match)
             {
                 var data = (GameMatchEvent)args.EventData;
                 if (data.IsMatched)
@@ -120,7 +116,7 @@ namespace EsperFightersCup.UI.Match
                 // TODO: PhotonNetwork.LoadLevel 대신 따로 씬 로더를 만들어서 씬 전환 애니메이션 구현 대비하기
                 // https://doc.photonengine.com/ko-kr/pun/current/gameplay/rpcsandraiseevent#_messageQ
                 // 1.5초 뒤 게임씬으로 이동
-                CoroutineTimer.SetTimerOnce(() => PhotonNetwork.LoadLevel("GameScene"), 2f);
+                CoroutineTimer.SetTimerOnce(() => PhotonNetwork.LoadLevel("CharacterChoiceScene"), 2f);
             }
             else
             {

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using EsperFightersCup;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;
+
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameFSMStateBase>
 {
@@ -15,8 +19,9 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         Result,
     }
 
+    [SerializeField] private SawBladeSystem _sawBladeSystem;
     public static State CurrentState;
-    private static UnityAction<APlayer> _setPlayer = null;
+    [Obsolete] private static UnityAction<APlayer> s_setPlayer = null;
 
     [SerializeField]
     private short[] _winPoint = new short[2];
@@ -26,24 +31,49 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
 
     public IngameTopUI IngameTopUIObject => _ingameTopUI;
 
-    private List<APlayer> _playerList = new List<APlayer>();
-    public List<APlayer> PlayerList => _playerList;
+    [Obsolete] public List<APlayer> PlayerList { get; } = new List<APlayer>();
 
-    [SerializeField]
-    private SawBladeSystem _sawBladeSystem;
+    // 게임 시작할 때 각 플레이어의 PhotonViewID를 가져와서 캐싱
+    public Dictionary<int, Photon.Realtime.Player> GamePlayers => PhotonNetwork.CurrentRoom.Players;
 
     private DateTime _sawUsingStartTime = DateTime.MinValue;
 
-    public int RoundCount { get; set; }
+    /// <summary>
+    /// 현재 게임의 라운드 수를 가져오거나 설정합니다.<para/>
+    /// 가져오는데 실패했을 경우 0을 반환합니다. 라운드 설정은 MasterClient만 가능합니다.
+    /// </summary>
+    public int RoundCount
+    {
+        get
+        {
+            var room = PhotonNetwork.CurrentRoom;
+            if (room is null)
+            {
+                return 0;
+            }
+            return (int)(room.CustomProperties[CustomPropertyKeys.GameRound] ?? 0);
+        }
+        set
+        {
+            var room = PhotonNetwork.CurrentRoom;
+            if (!PhotonNetwork.IsMasterClient || room is null)
+            {
+                return;
+            }
+
+            int round = value < 1 ? 1 : value;
+            room.SetCustomProperties(new Hashtable { [CustomPropertyKeys.GameRound] = round });
+        }
+    }
 
     public static void SetPlayer(APlayer player)
     {
-        _setPlayer?.Invoke(player);
+        s_setPlayer?.Invoke(player);
     }
 
     private void Update()
     {
-        foreach (var player in _playerList)
+        foreach (var player in PlayerList)
         {
             if (player.Hp < 30)
             {
@@ -59,7 +89,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
 
     private void SetPlayerFunction(APlayer player)
     {
-        _playerList.Add(player);
+        PlayerList.Add(player);
         _ingameTopUI.SetPlayer(player);
     }
 
@@ -82,11 +112,12 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     protected override void Awake()
     {
         base.Awake();
-        _setPlayer += SetPlayerFunction;
+        s_setPlayer += SetPlayerFunction;
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
-        _setPlayer = null;
+        base.OnDestroy();
+        s_setPlayer = null;
     }
 }

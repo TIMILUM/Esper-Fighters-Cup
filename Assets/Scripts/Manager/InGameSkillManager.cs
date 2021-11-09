@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -114,6 +113,10 @@ public class InGameSkillManager : MonoBehaviour
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
     {
         return _skillObjectfactory.CreateSkillObject(objectname, pos);
+    }
+    public GameObject CreateSkillUI(string objectname, Vector3 pos)
+    {
+        return _skillObjectfactory.CreateSkillUI(objectname, pos);
     }
 
 
