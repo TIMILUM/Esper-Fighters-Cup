@@ -1,8 +1,7 @@
 using System;
 using Photon.Pun;
 using UnityEngine;
-
-public class ObjectHitSystem : MonoBehaviour
+public class ObjectHitSystem : MonoBehaviourPunCallbacks
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;

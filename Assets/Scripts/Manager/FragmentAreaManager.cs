@@ -4,8 +4,6 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
-
-
 /// <summary>
 /// 파편 지형을 만들어 주는 클래스 입니다.
 /// </summary>
@@ -76,9 +74,7 @@ public class FragmentAreaManager : PunEventCallbacks
         return true;
     }
 
-    /// <summary>
-    /// 파편지대 삭제
-    /// </summary>
+
     public void AllDestory()
     {
         foreach (var item in _currentfragmentList)
@@ -108,7 +104,7 @@ public class FragmentAreaManager : PunEventCallbacks
     /// </summary>
     public void SetFragmentAreaActive(Vector3 pos, float range, int ActorViewID)
     {
-        PacketSender.Broadcast(new GameFragmentAreaGenEvent(ActorViewID, pos, range), SendOptions.SendUnreliable);
+        // PacketSender.Broadcast(new GameFragmentAreaGenEvent(ActorViewID, pos, range), SendOptions.SendUnreliable);
         // 아래 코드 HandleFragmentAreaEvent()로 옮기기
     }
 
