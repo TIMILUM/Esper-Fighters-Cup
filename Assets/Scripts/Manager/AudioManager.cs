@@ -1,17 +1,16 @@
+using EsperFightersCup.Util;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
 namespace EsperFightersCup.Manager
 {
-    public sealed class AudioManager : MonoBehaviour
+    public sealed class AudioManager : Singleton<AudioManager>
     {
-        private static AudioManager s_instance;
-
         public static float MasterVolume
         {
-            get => s_instance._masterVolume;
-            set => s_instance._masterVolume = value;
+            get => Instance._masterVolume;
+            set => Instance._masterVolume = value;
         }
 
         [SerializeField, Range(0f, 1f)] private float _masterVolume;
@@ -19,28 +18,32 @@ namespace EsperFightersCup.Manager
         private float _cachedMasterVolume;
         private VCA _masterVCAController;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void InitInstance()
         {
-            new GameObject("Audio Manager").AddComponent<AudioManager>();
+            CreateNewSingletonObject();
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            if (s_instance)
-            {
-                Destroy(s_instance);
-            }
-            s_instance = this;
-            DontDestroyOnLoad(s_instance);
+            base.Awake();
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
         {
-            _masterVCAController = RuntimeManager.GetVCA("vca:/Master");
-            if (_masterVCAController.isValid())
+            try
             {
-                _masterVCAController.getVolume(out _masterVolume);
+                _masterVCAController = RuntimeManager.GetVCA("vca:/Master");
+                if (_masterVCAController.isValid())
+                {
+                    _masterVCAController.getVolume(out _masterVolume);
+                }
+            }
+            catch (VCANotFoundException)
+            {
+                Debug.LogWarning("MasterVolume을 찾을 수 없습니다.");
+                return;
             }
         }
 

@@ -7,7 +7,7 @@ public class FragmentArea : AStaticObject
     [SerializeField] private GameObject _colliderParentObject;
     [SerializeField] private ColliderChecker _collider;
     [SerializeField] private float _fragmentRatio;
-    [SerializeField] private List<Actor> _actors = new List<Actor>();
+    [SerializeField] private List<int> _actors = new List<int>();
 
 
     private bool _isFragmentActive;
@@ -17,11 +17,12 @@ public class FragmentArea : AStaticObject
     public float Range { get; set; }
     public GameObject FrangmentArea => _frangmentArea;
 
-    private new void Start()
+    protected override void Start()
     {
+        base.Start();
         _collider.OnCollision += SetHit;
         Range = transform.localScale.x / 2.0f;
-
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     private void Update()
@@ -49,9 +50,9 @@ public class FragmentArea : AStaticObject
 
     }
 
-    public void NotFloatObject(Actor castSkill)
+    public void NotFloatObject(int ActorViewID)
     {
-        _actors.Add(castSkill);
+        _actors.Add(ActorViewID);
     }
 
     /// <summary>
@@ -145,10 +146,10 @@ public class FragmentArea : AStaticObject
     /// </summary>
     public override void SetHit(ObjectBase to)
     {
-        if (!_actors.Contains((Actor)to))
+        if (!_actors.Contains(to.photonView.ViewID))
         {
-            base.SetHit((Actor)to);
-            _actors.Add((Actor)to);
+            base.SetHit(to);
+            _actors.Add(to.photonView.ViewID);
         }
     }
 

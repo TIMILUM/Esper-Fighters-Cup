@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
-public class ObjectHitSystem : MonoBehaviourPunCallbacks
+
+public class ObjectHitSystem : MonoBehaviour
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
@@ -43,7 +42,15 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
 
         if (_isDestroy)
         {
-            PhotonNetwork.Destroy(gameObject);
+            // BUG: SawBlade에는 ObjectHitSystem이 PhotonView컴포넌트가 있는 오브젝트에 위치해 있지 않음
+            if (gameObject.TryGetComponent<PhotonView>(out var photonView))
+            {
+                PhotonNetwork.Destroy(photonView);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

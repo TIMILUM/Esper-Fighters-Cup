@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(PhotonTransformView))]
+[RequireComponent(typeof(PhotonRigidbodyView))]
 public class Actor : ObjectBase
 {
     [SerializeField]
@@ -71,4 +72,18 @@ public class Actor : ObjectBase
     {
         _controllerManager.OnPlayerHitEnter(other);
     }
+
+    /* HP 동기화용
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(_hp);
+        }
+        else
+        {
+            _hp = (float)stream.ReceiveNext();
+        }
+    }
+    */
 }
