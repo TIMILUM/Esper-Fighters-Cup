@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using EsperFightersCup.Net;
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ using UnityEngine;
 public class FragmentAreaManager : PunEventCallbacks
 {
     [SerializeField]
-    private GameObject _fregmentFrefab;
+    private GameObject _fragmentPrefab;
     [SerializeField]
     private float _shardsOfDebris;
 
@@ -43,7 +42,7 @@ public class FragmentAreaManager : PunEventCallbacks
     /// <returns></returns>
     public GameObject AddFragmentList(Transform trans, float range, int ActorViewID)
     {
-        var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
+        var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fragmentPrefab.name, trans.position, trans.rotation);
         clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
         clone.transform.localScale = trans.localScale;
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
@@ -54,7 +53,7 @@ public class FragmentAreaManager : PunEventCallbacks
 
     public GameObject AddFragmentList(Vector3 trans, float range, int ActorViewID)
     {
-        var clone = Instantiate(_fregmentFrefab, trans, Quaternion.identity);
+        var clone = Instantiate(_fragmentPrefab, trans, Quaternion.identity);
         clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
         clone.transform.localScale = new Vector3(range, 1.0f, range);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
