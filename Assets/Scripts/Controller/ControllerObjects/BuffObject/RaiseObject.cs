@@ -58,7 +58,7 @@ public class RaiseObject : BuffObject
         if (buff != null)
         {
             _actor.BuffController.ReleaseBuff(this);
-            GenerateAfterBuff(_actor.BuffController, buff);
+            
         }
         else
         {
@@ -68,38 +68,6 @@ public class RaiseObject : BuffObject
     }
 
 
-    private void GenerateAfterBuff(BuffController controller, List<BuffObject> buff)
-    {
-
-        Vector3 dir = GetMousePosition() - transform.position;
-        float[] FloatValue = new float[3];
-        Vector3[] Vector = new Vector3[1];
-        Vector[0] = dir;
-
-        if (_KnockBackSpeed == 0 && _ShockwavedecreaseHp == 0 && _ShockwavedurationStunSeconds == 0 && _Shockwaveduration == 0)
-        {
-            return;
-        }
-        for (int i = 0; i < buff.Count; i++)
-        {
-            _actor.BuffController.ReleaseBuff(buff[i]);
-        }
-        FloatValue[0] = _KnockBackSpeed;
-        FloatValue[1] = _ShockwavedecreaseHp;
-        FloatValue[2] = _ShockwavedurationStunSeconds;
-
-
-
-        controller.GenerateBuff(new BuffStruct()
-        {
-            Type = Type.KnockBack,
-            Duration = _Shockwaveduration,
-            ValueFloat = FloatValue,
-            ValueVector3 = Vector,
-        });
-
-
-    }
 
 
 

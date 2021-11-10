@@ -36,7 +36,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     }
 
 
-    public GameObject AddFragmentList(Transform trans, float range, Actor castSkill)
+    public GameObject AddFragmentList(Transform trans, float range, int castSkill)
     {
         var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
 
@@ -46,7 +46,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
         return clone;
     }
 
-    public GameObject AddFragmentList(Vector3 trans, float range, Actor castSkill)
+    public GameObject AddFragmentList(Vector3 trans, float range, int castSkill)
     {
         var clone = Instantiate(_fregmentFrefab, trans, Quaternion.identity);
         clone.transform.localScale = new Vector3(range, 1.0f, range);
@@ -96,7 +96,7 @@ public class FragmentAreaManager : MonoBehaviourPunCallbacks
     /// <summary>
     /// 주변에 이미 파편지대가 있는지 확인후 맞는 이벤트를 적용하는함수입니다.
     /// </summary>
-    public void SetFragmentAreaActive(Vector3 pos, float range, Actor castSkill)
+    public void SetFragmentAreaActive(Vector3 pos, float range, int castSkill)
     {
         var createfragmentPosList = new Queue<Vector3>();
 
