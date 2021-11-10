@@ -48,9 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startState: 1
+  _sawBladeSystem: {fileID: 0}
   _winPoint: 00000000
   _ingameTopUI: {fileID: 0}
-  _sawBladeSystem: {fileID: 0}
 --- !u!114 &4083775375490554126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterPrefabs:
   - {fileID: 4314589049664778607, guid: b75f5f4c7208ff8458901ed9faa37b6f, type: 3}
+  - {fileID: 4314589049664778607, guid: 990729782a20e234fae0c3a6f804c7e1, type: 3}
   _spawnTransform: {fileID: 0}
   _ingameFsmSystem: {fileID: 6341048001645598867}
   _cameraMovement: {fileID: 0}

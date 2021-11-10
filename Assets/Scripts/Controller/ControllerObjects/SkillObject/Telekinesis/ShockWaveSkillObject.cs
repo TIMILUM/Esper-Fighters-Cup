@@ -147,7 +147,6 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.gameObject.SetActive(true);
         _colliderParentTransform.transform.position = _startPos;
         yield return new WaitUntil(() => WaitPhysicsUpdate());
-        nowTime = DateTime.Now;
         ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
 
         _colliderParentTransform.gameObject.SetActive(false);

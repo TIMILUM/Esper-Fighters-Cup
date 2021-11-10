@@ -18,7 +18,8 @@ public abstract class BuffObject : ControllerObject
         Raise,
         Falling,
         Sliding,
-        Grab
+        Grab,
+        MoveSpeed
     }
 
     [SerializeField]

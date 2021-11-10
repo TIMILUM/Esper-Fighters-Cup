@@ -117,13 +117,6 @@ public abstract class SkillObject : ControllerObject
         ControllerCast<SkillController>().ReleaseSkill(this);
     }
 
-    protected override void OnRegistered()
-    {
-        _buffController =
-            Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-        _player = Author.GetComponent<APlayer>();
-    }
-
     /// <summary>
     ///     스킬 사용 전 캐스팅 단계입니다.
     /// </summary>

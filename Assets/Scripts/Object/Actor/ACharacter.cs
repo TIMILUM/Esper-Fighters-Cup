@@ -7,7 +7,8 @@ public class ACharacter : Actor
     public enum Type
     {
         None,
-        Telekinesis
+        Telekinesis,
+        Plank
     }
 
     [SerializeField]
