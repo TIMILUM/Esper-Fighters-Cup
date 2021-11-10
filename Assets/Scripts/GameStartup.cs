@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using MessagePack;
 using MessagePack.Resolvers;
 using MessagePack.Unity;
@@ -20,7 +19,7 @@ public static class GameStartup
     {
         InitMessagePack();
         InitGameVersion();
-        InitAppId();
+        // InitAppId();
         PhotonNetworkSettings();
     }
 
@@ -56,6 +55,7 @@ public static class GameStartup
         Debug.Log($"Game Version: {PhotonNetwork.GameVersion}");
     }
 
+    /*
     private static void InitAppId()
     {
         var appIdFile = Resources.Load<TextAsset>(PhotonAppIdFilePath);
@@ -85,6 +85,7 @@ public static class GameStartup
         Debug.Log($"Photon Cloud App Id를 성공적으로 로드했습니다.");
         // Debug.Log($"Photon Cloud App Id: {appId}");
     }
+    */
 
     private static void PhotonNetworkSettings()
     {
