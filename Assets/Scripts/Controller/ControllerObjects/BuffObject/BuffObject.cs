@@ -16,7 +16,9 @@ public abstract class BuffObject : ControllerObject
         DecreaseHp,
         IncreaseHp,
         Raise,
-        Falling
+        Falling,
+        Sliding,
+        Grab
 
     }
 
