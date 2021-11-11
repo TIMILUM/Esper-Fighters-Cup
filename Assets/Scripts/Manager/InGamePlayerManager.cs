@@ -9,6 +9,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 {
+    private const string CharacterPrefabLocation = "Prefab/Character/{0}";
+
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
 
@@ -58,7 +60,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
             throw new Exception("생성할 캐릭터의 타입을 찾을 수 없습니다.");
         }
 
-        var player = PhotonNetwork.Instantiate("Prefabs/Characters/" + prefab.name,
+        var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
             _spawnTransform.position + Vector3.up, Quaternion.identity);
 
         LocalPlayer = player.GetComponent<APlayer>();

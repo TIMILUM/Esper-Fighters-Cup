@@ -1,4 +1,4 @@
-using EsperFightersCup.UI.InGame;
+﻿using EsperFightersCup.UI.InGame;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -24,6 +24,7 @@ public class MovementController : ControllerBase
     /// 움직임 관련 버프를 통해 추가적으로 붙은 스피드 값입니다.
     /// </summary>
     private float _addedMoveSpeed = 0;
+
 
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat;
 
@@ -126,7 +127,8 @@ public class MovementController : ControllerBase
         }
 
         // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null ||
+            _buffController.GetBuff(BuffObject.Type.Sliding) != null || _buffController.GetBuff(BuffObject.Type.Grab) != null)
         {
             dir = Vector3.zero;
             _currentDecreaseSpeed = 1.0f;
