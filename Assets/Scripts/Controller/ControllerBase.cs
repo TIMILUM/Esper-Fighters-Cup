@@ -1,8 +1,8 @@
-using Photon.Pun;
+using EsperFightersCup.Net;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class ControllerBase : MonoBehaviourPunCallbacks
+public abstract class ControllerBase : PunEventCallbacks
 {
     [SerializeField]
     private ControllerManager.Type _type = ControllerManager.Type.None;

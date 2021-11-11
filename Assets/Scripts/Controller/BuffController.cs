@@ -4,10 +4,9 @@ using System.Linq;
 using EsperFightersCup.Net;
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
-public class BuffController : ControllerBase, IOnEventCallback
+public class BuffController : ControllerBase
 {
     // dictionary로 해야할 필요가 있을까요?
     private readonly Dictionary<BuffObject.Type, List<BuffObject>> _buffObjects =
@@ -69,10 +68,12 @@ public class BuffController : ControllerBase, IOnEventCallback
         }
 
         var id = $"{buffStruct.Type}{PhotonNetwork.ServerTimestamp}";
-        var packet = new GameBuffGeneratePacket(photonView.ViewID, id, buffStruct);
-        PacketSender.Broadcast(GameProtocol.GameBuffGenerateEvent, in packet, SendOptions.SendReliable);
+        var packet = new GameBuffGenerateEvent(photonView.ViewID, id, buffStruct);
+        PacketSender.Broadcast(in packet, SendOptions.SendUnreliable);
+        Debug.Log($"Send buff generate event - {id}");
     }
 
+    /*
     [Obsolete("아이디를 통해 해제하는 방식을 사용해주세요.", true)]
     public void ReleaseBuff(BuffObject buffObject)
     {
@@ -85,6 +86,7 @@ public class BuffController : ControllerBase, IOnEventCallback
         _buffObjects[type].Remove(buffObject);
         Destroy(buffObject.gameObject);
     }
+    */
 
     /// <summary>
     /// 버프 타입과 일치하는 모든 버프를 해제합니다.
@@ -99,7 +101,7 @@ public class BuffController : ControllerBase, IOnEventCallback
 
         foreach (var buffObject in buffList.ToList())
         {
-            ReleaseBuff(buffObject.BuffId);
+            ReleaseBuff(buffObject);
         }
     }
 
@@ -108,7 +110,7 @@ public class BuffController : ControllerBase, IOnEventCallback
     /// </summary>
     /// <param name="id">버프오브젝트 아이디</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public void ReleaseBuff(string id)
+    public void ReleaseBuff(BuffObject buff)
     {
         if (photonView is null)
         {
@@ -116,49 +118,47 @@ public class BuffController : ControllerBase, IOnEventCallback
             return;
         }
 
-        Debug.Log($"Send buff release event - {id}");
-        var packet = new GameBuffReleasePacket(photonView.ViewID, id);
-        PacketSender.Broadcast(GameProtocol.GameBuffReleaseEvent, in packet, SendOptions.SendReliable);
+        if (!buff)
+        {
+            throw new ArgumentNullException(nameof(buff));
+        }
+
+        var packet = new GameBuffReleaseEvent(photonView.ViewID, buff.BuffId);
+
+        buff.gameObject.SetActive(false);
+        PacketSender.Broadcast(in packet, SendOptions.SendUnreliable);
+        Debug.Log($"Send buff release event - {buff.BuffId}");
     }
 
-    /// <summary>
-    /// 버프 이벤트를 받아서 핸들링합니다.
-    /// </summary>
-    /// <param name="photonEvent"></param>
-    public void OnEvent(EventData photonEvent)
+    protected override void OnGameEventReceived(GameEventArguments args)
     {
+        base.OnGameEventReceived(args);
         if (photonView is null)
         {
             return;
         }
 
-        switch (photonEvent.Code)
+        switch (args.Code)
         {
-            case GameProtocol.GameBuffGenerateEvent:
-                HandleBuffGenerate(photonEvent);
+            case GameProtocol.BuffGenerate:
+                HandleBuffGenerate(args);
                 break;
 
-            case GameProtocol.GameBuffReleaseEvent:
-                HandleBuffRelease(photonEvent);
+            case GameProtocol.BuffRelease:
+                HandleBuffRelease(args);
                 break;
         }
     }
 
-    private void HandleBuffGenerate(EventData received)
+    private void HandleBuffGenerate(GameEventArguments args)
     {
-        // 본인이 버프 생성 이벤트를 생성했는가
-        // var player = PhotonNetwork.CurrentRoom.GetPlayer(sender);
-        // Debug.Log(player?.NickName ?? "null");
-        // var isMine = sender == photonView.ControllerActorNr;
-        var packet = PacketSerializer.Deserialize<GameBuffGeneratePacket>((byte[])received.CustomData);
-
-        // 이벤트는 이 스크립트가 붙은 모든 곳에서 실행되는데 처리는 ViewID가 같은 오브젝트만 처리
-        if (packet.ViewID != photonView.ViewID)
+        var data = (GameBuffGenerateEvent)args.EventData;
+        if (data.TargetViewID != photonView.ViewID) // 같은 ViewID에서 보낸 것인지 체크
         {
             return;
         }
 
-        var buffType = packet.Type;
+        var buffType = data.Type;
         if (!_buffPrefabLists.ContainsKey(buffType))
         {
             return;
@@ -170,62 +170,41 @@ public class BuffController : ControllerBase, IOnEventCallback
         }
 
         var buffObjectList = _buffObjects[buffType];
-        if (!packet.AllowDuplicates && buffObjectList.Count > 0)
+        if (!data.AllowDuplicates && buffObjectList.Count > 0)
         {
             ReleaseBuff(buffType);
         }
 
         var prefab = _buffPrefabLists[buffType];
         var buffObject = Instantiate(prefab, transform);
-        buffObject.name = packet.BuffId;
-        buffObject.BuffId = packet.BuffId;
-        buffObject.SetBuffStruct((BuffObject.BuffStruct)packet);
+        buffObject.name = data.BuffId;
+        buffObject.BuffId = data.BuffId;
+        buffObject.SetBuffStruct((BuffObject.BuffStruct)data);
         buffObject.Register(this);
 
         buffObjectList.Add(buffObject);
 
-        Debug.Log($"{photonView.gameObject.name}: {packet.BuffId} Buff generated via RaiseEvent");
+        Debug.Log($"{photonView.gameObject.name}: {data.BuffId} Buff generated via RaiseEvent");
     }
 
-    /*
-    private void HandleBuffGenerate(BuffObject.Type buffType)
+    private void HandleBuffRelease(GameEventArguments args)
     {
-        if (!_buffPrefabLists.ContainsKey(buffType))
-        {
-            return;
-        }
-
-        if (!_buffObjects.ContainsKey(buffType))
-        {
-            _buffObjects.Add(buffType, new List<BuffObject>());
-        }
-
-        var prefab = _buffPrefabLists[buffType];
-        var buffObject = Instantiate(prefab, transform);
-        buffObject.Register(this);
-
-        _buffObjects[buffType].Add(buffObject);
-    }
-    */
-
-    private void HandleBuffRelease(EventData received)
-    {
-        var packet = PacketSerializer.Deserialize<GameBuffReleasePacket>((byte[])received.CustomData);
-        if (packet.ViewID != photonView.ViewID)
+        var data = (GameBuffReleaseEvent)args.EventData;
+        if (data.TargetViewID != photonView.ViewID) // 같은 ViewID에서 보낸 것인지 체크
         {
             return;
         }
 
         foreach (var buffs in _buffObjects)
         {
-            var idx = buffs.Value.FindIndex(buff => buff.BuffId == packet.BuffId);
+            var idx = buffs.Value.FindIndex(buff => buff.BuffId == data.BuffId);
             if (idx != -1)
             {
                 var targetBuff = buffs.Value[idx];
                 buffs.Value.RemoveAt(idx);
                 Destroy(targetBuff.gameObject);
 
-                Debug.Log($"{photonView.gameObject.name}: {packet.BuffId} Buff released via RaiseEvent");
+                Debug.Log($"{photonView.gameObject.name}: {data.BuffId} Buff released via RaiseEvent");
                 return;
             }
         }

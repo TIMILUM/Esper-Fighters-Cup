@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Photon.Pun;
 using UnityEngine;
 
@@ -15,7 +15,11 @@ public abstract class BuffObject : ControllerObject
         Slow,
         DecreaseHp,
         IncreaseHp,
-        Raise
+        Raise,
+        Falling,
+        Sliding,
+        Grab,
+        MoveSpeed
     }
 
     [SerializeField]
@@ -82,12 +86,12 @@ public abstract class BuffObject : ControllerObject
             // BUG: 특정 상황에서 연속으로 메소드를 실행함
             // 아마 ReleaseBuff를 보내고 나서 다시 이벤트를 받기까지 시간 간격이 있는데,
             // 그 동안 이 오브젝트가 해제되지 못해서 생기는 버그인듯?
-            ControllerCast<BuffController>().ReleaseBuff(BuffId);
+            ControllerCast<BuffController>().ReleaseBuff(this);
         }
 
         if (_buffStruct.IsOnlyOnce)
         {
-            ControllerCast<BuffController>().ReleaseBuff(BuffId);
+            ControllerCast<BuffController>().ReleaseBuff(this);
         }
     }
 
@@ -111,6 +115,7 @@ public abstract class BuffObject : ControllerObject
         [SerializeField] private float _damage;
         [SerializeField] private bool _isOnlyOnce;
 
+
         public Type Type { get => _type; set => _type = value; }
         public float Duration { get => _duration; set => _duration = value; }
         public float[] ValueFloat { get => _valueFloat; set => _valueFloat = value; }
@@ -120,4 +125,6 @@ public abstract class BuffObject : ControllerObject
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
     }
+
+
 }

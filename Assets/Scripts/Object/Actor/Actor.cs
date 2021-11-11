@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(PhotonTransformView))]
 [RequireComponent(typeof(PhotonRigidbodyView))]
-[RequireComponent(typeof(StudioEventEmitter))]
 public class Actor : ObjectBase
 {
     [SerializeField]
@@ -18,20 +17,23 @@ public class Actor : ObjectBase
 
     [SerializeField]
     private float _hp;
-    public float Hp
+    public virtual float Hp
     {
         get => _hp;
         set => _hp = value;
     }
 
-    public StudioEventEmitter AudioEmitter { get; private set; }
+    [SerializeField, Tooltip("해당 오브젝트의 ID 값입니다.")]
+    private int _id;
+    public int ID => _id;
+
+    [SerializeField] private StudioEventEmitter _audioEmitter;
+    public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
 
     protected virtual void Awake()
     {
         Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");
         _controllerManager.SetActor(this);
-
-        AudioEmitter = GetComponent<StudioEventEmitter>();
     }
 
     protected virtual void Start()
@@ -70,4 +72,18 @@ public class Actor : ObjectBase
     {
         _controllerManager.OnPlayerHitEnter(other);
     }
+
+    /* HP 동기화용
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(_hp);
+        }
+        else
+        {
+            _hp = (float)stream.ReceiveNext();
+        }
+    }
+    */
 }

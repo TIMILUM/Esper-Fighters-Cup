@@ -8,7 +8,7 @@ public class SawBladePattern : MonoBehaviour
     private Transform[] _pathList;
 
     private readonly List<SawBladePosition> _bladePositions = new List<SawBladePosition>();
-    
+
     // Start is called before the first frame update
     private void Start()
     {

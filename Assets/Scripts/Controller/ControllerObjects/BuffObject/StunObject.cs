@@ -16,9 +16,12 @@ public class StunObject : BuffObject
         base.OnRegistered();
         _character = Author as ACharacter;
 
-        if (!(_character is null))
+        if (_character && _character.CharacterAnimatorSync)
         {
-            _character.CharacterAnimator.SetTrigger("Hit");
+            var data = transform.transform.position;
+            data.y = 0.01f;
+            _character.CharacterAnimatorSync.SetTrigger("Hit");
+            ParticleManager.Instance.PullParticle("Hit", data, Quaternion.identity);
         }
     }
 

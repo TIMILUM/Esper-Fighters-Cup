@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class FragmentStaticObject : EnvironmentStaticObject
@@ -22,11 +23,7 @@ public class FragmentStaticObject : EnvironmentStaticObject
         if (_currentTime > _destoryTime)
         {
             if (_buffController.GetBuff(BuffObject.Type.Raise) == null)
-                Destroy(gameObject);
+                PhotonNetwork.Destroy(gameObject);
         }
     }
-
-
-
-
 }

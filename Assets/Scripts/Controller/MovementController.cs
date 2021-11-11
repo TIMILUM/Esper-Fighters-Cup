@@ -1,3 +1,4 @@
+﻿using EsperFightersCup.UI.InGame;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -14,12 +15,20 @@ public class MovementController : ControllerBase
     private Vector3 _currentMoveDir;
     private Vector3 _beforeMoveDirection;
 
+
+
     private APlayer _player = null;
     private BuffController _buffController = null;
 
+    /// <summary>
+    /// 움직임 관련 버프를 통해 추가적으로 붙은 스피드 값입니다.
+    /// </summary>
+    private float _addedMoveSpeed = 0;
 
-    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat = 0.3f;
 
+    [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat;
+
+    [SerializeField] private GameObject _positionUIPrefab;
 
     private void Reset()
     {
@@ -34,33 +43,34 @@ public class MovementController : ControllerBase
         base.Start();
         _player = _controllerManager.GetActor() as APlayer;
         _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+
+        var positionUI = Instantiate(_positionUIPrefab).GetComponent<CharacterPositionUI>();
+        positionUI.TargetPlayer = _player.transform;
+        positionUI.IsLocalPlayer = photonView.IsMine;
     }
 
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        if (photonView != null && !photonView.IsMine)
+        if (_player.photonView.IsMine)
         {
-            return;
+            UpdateMine();
         }
-
-        UpdateMine();
-
     }
 
     //마우스 바라보기
     private void MousePickLookAt()
     {
-        if (!_isMousePickLookAt)
-        {
-            return;
-        }
-
         var playerRotation = _player.transform.rotation;
         var playerPosition = _player.transform.position;
         var screentoRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hitinfos = Physics.RaycastAll(screentoRay);
+
+        if (!_isMousePickLookAt)
+        {
+            return;
+        }
 
         foreach (var hitinfo in hitinfos)
         {
@@ -78,8 +88,8 @@ public class MovementController : ControllerBase
                 float sin = Vector3.Dot(crossProduct, Vector3.up);
                 float cos = Vector3.Dot(tempPos, targetDirctionNormal);
 
-                _player.CharacterAnimator.SetFloat("Cos", cos);
-                _player.CharacterAnimator.SetFloat("Sin", sin);
+                _player.CharacterAnimatorSync.SetFloat("Cos", cos);
+                _player.CharacterAnimatorSync.SetFloat("Sin", sin);
             }
         }
 
@@ -105,34 +115,20 @@ public class MovementController : ControllerBase
 
     private void UpdateMine()
     {
-        // 이 함수의 모든 코드는 모두 임시코드입니다. 잘 돌아가는지 확인해보려고 작성했습니다!
-
-        // Q를 누르면 3초 스턴이 임시로 걸립니다.
-        //if (Input.GetKey(KeyCode.Q) && _buffController.GetBuff(BuffObject.Type.Stun) == null)
-        //{
-        //    var stun = _buffController.GenerateBuff(BuffObject.Type.Stun);
-        //    stun.Duration = 3;
-        //}
-
-        // // E를 누르면 0.5초 동안 오른쪽으로 넉백이 임시로 걸립니다.
-        // if (Input.GetKey(KeyCode.E) && _buffController.GetBuff(BuffObject.Type.KnockBack) == null)
-        // {
-        //     var knockBack = _buffController.GenerateBuff(BuffObject.Type.KnockBack) as KnockBackObject;
-        //     knockBack.Duration = 0.5f;
-        //     knockBack.NormalizedDirection = Vector3.right;
-        //     knockBack.Speed = 3.0f;
-        // }
-
-
         var dirx = Input.GetAxisRaw("Horizontal");
         var dirz = Input.GetAxisRaw("Vertical");
-
-
         var dir = new Vector3(dirx, 0.0f, dirz).normalized;
 
+        if (IngameFSMSystem.CurrentState != IngameFSMSystem.State.InBattle)
+        {
+            _currentDecreaseSpeed = 1.0f;
+            _currentIncreaseSpeed = 0.0f;
+            return;
+        }
 
         // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null)
+        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null ||
+            _buffController.GetBuff(BuffObject.Type.Sliding) != null || _buffController.GetBuff(BuffObject.Type.Grab) != null)
         {
             dir = Vector3.zero;
             _currentDecreaseSpeed = 1.0f;
@@ -141,13 +137,17 @@ public class MovementController : ControllerBase
             return;
         }
 
-
-
+        {   // 움직임 버프 관련 요소 확인 후 추가적인 스피드를 지정합니다.
+            var moveSpeedBuff = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
+            _addedMoveSpeed = moveSpeedBuff != null
+                ? _moveSpeed * (((MoveSpeedObject)moveSpeedBuff[moveSpeedBuff.Count - 1]).AddedSpeed / 100.0f)
+                : 0;
+        }
 
         var playerPosition = _player.transform.position;
 
-        _player.CharacterAnimator.SetFloat("DirX", dirx);
-        _player.CharacterAnimator.SetFloat("DirZ", dirz);
+        _player.CharacterAnimatorSync.SetFloat("DirX", dirx);
+        _player.CharacterAnimatorSync.SetFloat("DirZ", dirz);
 
         var currentSpeedTime = 0.0f;
 
@@ -174,7 +174,7 @@ public class MovementController : ControllerBase
 
         _currentMoveDir = Vector3.Lerp(tempDirection, dir, currentSpeedTime);
 
-        playerPosition += _moveSpeed * Time.deltaTime * _currentMoveDir;
+        playerPosition += (_moveSpeed + _addedMoveSpeed) * Time.deltaTime * _currentMoveDir;
 
         _player.transform.position = playerPosition;
 

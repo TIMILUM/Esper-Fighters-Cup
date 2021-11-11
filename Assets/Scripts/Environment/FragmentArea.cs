@@ -3,46 +3,26 @@ using UnityEngine;
 
 public class FragmentArea : AStaticObject
 {
-    [SerializeField]
-    private GameObject _nomalArea;
-    [SerializeField]
-    private GameObject _frangmentArea;
-    [SerializeField]
-    private GameObject _colliderParentObject;
-    [SerializeField]
-    private ColliderChecker _collider;
-    [SerializeField]
-    private float _fragmentRatio;
-    [SerializeField]
-    private GameObject _direction;
+    [SerializeField] private GameObject _frangmentArea;
+    [SerializeField] private GameObject _colliderParentObject;
+    [SerializeField] private ColliderChecker _collider;
+    [SerializeField] private float _fragmentRatio;
+    [SerializeField] private List<int> _actors = new List<int>();
 
-    [SerializeField, Header("단위 : Millisecond")]
-    private float _spawnStoneTime;
-    [SerializeField, Header("단위 : Millisecond")]
-    private float _spawnFragmentTime;
-
-
-    private float _currentStoneTime;
-    private float _currentfragmentTime;
-
-    private List<Actor> _actors = new List<Actor>();
-
-
-    public GameObject FrangmentArea => _frangmentArea;
-    public float Range { get; set; }
 
     private bool _isFragmentActive;
     private bool _isNormalActive;
+    private bool _isObjectSpawn = false;
 
+    public float Range { get; set; }
+    public GameObject FrangmentArea => _frangmentArea;
 
-
-
-    private new void Start()
+    protected override void Start()
     {
-        // range랑 크기랑 똑같기 때문에 임의의 좌표로 초기화 해줬습니다.
-        // 크기는 지름을 나타내기 때문에 2를 나눠줍니다.
-        Range = _nomalArea.transform.localScale.x * 0.5f;
+        base.Start();
         _collider.OnCollision += SetHit;
+        Range = transform.localScale.x / 2.0f;
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     private void Update()
@@ -53,7 +33,6 @@ public class FragmentArea : AStaticObject
     public void FragmentAreaActive()
     {
         _frangmentArea.SetActive(true);
-        _nomalArea.SetActive(false);
         _isNormalActive = true;
     }
 
@@ -61,14 +40,19 @@ public class FragmentArea : AStaticObject
     {
         _isFragmentActive = true;
         _frangmentArea.SetActive(false);
-        _nomalArea.SetActive(true);
+
     }
 
 
     public void StartEvent()
     {
         _colliderParentObject.SetActive(true);
-        _direction.SetActive(true);
+
+    }
+
+    public void NotFloatObject(int ActorViewID)
+    {
+        _actors.Add(ActorViewID);
     }
 
     /// <summary>
@@ -76,7 +60,6 @@ public class FragmentArea : AStaticObject
     /// </summary>
     private void CreateObject()
     {
-
         if (!_colliderParentObject.activeInHierarchy)
         {
             return;
@@ -84,29 +67,41 @@ public class FragmentArea : AStaticObject
 
         if (_isNormalActive)
         {
-            _currentStoneTime += Time.deltaTime * 1000;
-            if (_currentStoneTime > _spawnStoneTime)
+
+            if (!_isObjectSpawn)
             {
                 var randomPosition = Random.insideUnitSphere * Range;
                 randomPosition.y = 0.0f;
-                InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position + randomPosition);
-                _currentStoneTime = 0.0f;
+                _frangmentArea.SetActive(false);
+                InGameSkillManager.Instance.CreateSkillObject("Stone", transform.position);
+                ParticleManager.Instance.PullParticle("ReverseGravityFiled", transform.position, Quaternion.identity);
+                ParticleManager.Instance.PullParticle("ReverseGravityBreak", transform.position, Quaternion.identity);
+
+                _isObjectSpawn = true;
             }
+
+
         }
 
         if (_isFragmentActive)
         {
-            _currentfragmentTime += Time.deltaTime * 1000;
-            if (_currentfragmentTime > _spawnStoneTime)
+            if (!_isObjectSpawn)
             {
-                var randomPosition = Random.insideUnitSphere * Range;
-                randomPosition.y = 0.0f;
-                InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position + randomPosition);
-                _currentfragmentTime = 0.0f;
+                if (!_isObjectSpawn)
+                {
+                    InGameSkillManager.Instance.CreateSkillObject("Fragment", transform.position);
+                    ParticleManager.Instance.PullParticle("ReverseGravityFiled", transform.position, Quaternion.identity);
+                    ParticleManager.Instance.PullParticle("ReverseGravityBreak", transform.position, Quaternion.identity);
+                    _isObjectSpawn = true;
+                }
             }
         }
 
+        Invoke("ClearFragmentArea", 0.03f);
+
+
     }
+
 
 
 
@@ -114,63 +109,35 @@ public class FragmentArea : AStaticObject
     {
         _isNormalActive = false;
         _isFragmentActive = false;
-        _direction.SetActive(false);
+
         _colliderParentObject.SetActive(false);
 
     }
 
+
+
     public bool GetActive()
     {
-        return _frangmentArea.activeInHierarchy;
+        return _isNormalActive;
     }
 
-    public void DirectionLookAt(Vector3 pos)
-    {
-        var lookDirection = pos - transform.position;
-        _direction.transform.rotation = Quaternion.LookRotation(lookDirection);
-    }
 
     /// <summary>
     /// 띄운 애들을 넉백을 하기 위한 함수입니다.
     /// </summary>
     /// <param name="buffstruct">띄운다음에 넉백을 적용하기 위해서 buffstruct를 받습니다.</param>
     /// <param name="target">마우스 위치를 말합니다.</param>
-    public void KnockBackObject(BuffObject.BuffStruct buffstruct, Vector3 target)
-    {
 
-        foreach (var actor in _actors)
-        {
-            if (actor == null)
-            {
-                continue;
-            }
-
-            if (actor.BuffController.GetBuff(BuffObject.Type.Raise) == null)
-            {
-                continue;
-            }
-
-            actor.BuffController.ReleaseBuff(BuffObject.Type.Raise);
-            var direction = target - _frangmentArea.transform.position;
-            buffstruct.ValueVector3[0] = direction.normalized;
-            actor.BuffController.GenerateBuff(buffstruct);
-        }
-
-        ClearFragmentArea();
-    }
 
     public void ClearFragmentArea()
     {
         if (_isFragmentActive)
         {
             _frangmentArea.SetActive(false);
-            _nomalArea.SetActive(false);
+
         }
 
         _colliderParentObject.SetActive(false);
-        _isNormalActive = false;
-        _isFragmentActive = false;
-        _direction.SetActive(false);
         _actors.Clear();
     }
 
@@ -179,10 +146,10 @@ public class FragmentArea : AStaticObject
     /// </summary>
     public override void SetHit(ObjectBase to)
     {
-        if (!_actors.Contains((Actor)to))
+        if (!_actors.Contains(to.photonView.ViewID))
         {
-            base.SetHit((Actor)to);
-            _actors.Add((Actor)to);
+            base.SetHit(to);
+            _actors.Add(to.photonView.ViewID);
         }
     }
 

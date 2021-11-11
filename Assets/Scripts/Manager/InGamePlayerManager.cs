@@ -1,31 +1,30 @@
 using System;
 using System.Collections.Generic;
+using EsperFightersCup;
+using EsperFightersCup.Util;
 using Photon.Pun;
 using UnityEngine;
 
-public class InGamePlayerManager : MonoBehaviourPunCallbacks
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
+public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 {
-    [Header("Player Generate")]
+    private const string CharacterPrefabLocation = "Prefab/Character/{0}";
 
-    [SerializeField]
-    private List<ACharacter> _characterPrefabs;
+    [Header("[Player Generate]")]
+    [SerializeField] private List<ACharacter> _characterPrefabs;
 
-    // TODO: 나중에 캐릭터 선택 구현 시 임시로 작성한 PlayerSpawnManager 해당 코드의 수정이 필요함
-    [SerializeField]
-    private ACharacter.Type _currentCharacterType = ACharacter.Type.Telekinesis;
-    [SerializeField]
-    private Transform _spawnTransform;
+    [SerializeField] private Transform _spawnTransform;
+    [SerializeField] private IngameFSMSystem _ingameFsmSystem;
 
+    [Header("[Player's Camera]")]
+    [SerializeField] private CameraMovement _cameraMovement;
 
-    private static ACharacter s_myCharacter = null;
-    private static ACharacter s_enemyCharacter = null;
+    /// <summary>
+    /// 현재 씬의 로컬 플레이어 인스턴스를 가져옵니다.
+    /// </summary>
+    public APlayer LocalPlayer { get; private set; }
 
-    [Header("Player's Camera")]
-
-    [SerializeField]
-    private CameraMovement _cameraMovement;
-
-    // Start is called before the first frame update
     private void Start()
     {
 #if UNITY_EDITOR
@@ -37,29 +36,36 @@ public class InGamePlayerManager : MonoBehaviourPunCallbacks
             PhotonNetwork.JoinRandomRoom();
         }
 #endif
-        SpawnPlayer();
+        SpawnLocalPlayer();
     }
 
-    private void SpawnPlayer()
+    private void SpawnLocalPlayer()
     {
-        var prefab = _characterPrefabs.Find(x => x.CharacterType == _currentCharacterType);
+        ACharacter.Type characterType;
+        var props = PhotonNetwork.LocalPlayer.CustomProperties;
+
+        if (props.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var characterTypeRaw))
+        {
+            characterType = (ACharacter.Type)(int)characterTypeRaw;
+        }
+        else
+        {
+            Debug.LogWarning($"Can not found local player's character type.");
+            characterType = ACharacter.Type.Telekinesis;
+        }
+
+        var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
         if (prefab == null)
         {
             throw new Exception("생성할 캐릭터의 타입을 찾을 수 없습니다.");
         }
 
-        var player = PhotonNetwork.Instantiate("Prefabs/Characters/" + prefab.name,
+        var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
             _spawnTransform.position + Vector3.up, Quaternion.identity);
-        // player.transform.SetParent(_spawnTransform);
-    }
 
-    public static void SetMyPlayer(ACharacter character)
-    {
-        s_myCharacter = character;
-    }
+        LocalPlayer = player.GetComponent<APlayer>();
 
-    public static void SetEnemyPlayer(ACharacter character)
-    {
-        s_enemyCharacter = character;
+        var pvID = LocalPlayer.photonView.ViewID;
+        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { [CustomPropertyKeys.PlayerPhotonView] = pvID });
     }
 }

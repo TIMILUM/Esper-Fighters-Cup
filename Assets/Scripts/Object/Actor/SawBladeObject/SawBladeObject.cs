@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using EsperFightersCup.Net;
 using UnityEngine;
 
 public class SawBladeObject : AStaticObject
@@ -23,11 +22,16 @@ public class SawBladeObject : AStaticObject
     private Transform _endPosition;
     public Transform EndPosition => _endPosition;
 
+    [SerializeField]
+    private AnimatorSync _animator = null;
+    public AnimatorSync SawBladeAnimator => _animator;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         _collider.OnCollision += SetHit;
+        GetComponent<Rigidbody>().useGravity = false;
     }
 
     public override void SetHit(ObjectBase to)
