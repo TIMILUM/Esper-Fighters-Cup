@@ -49,8 +49,6 @@ public class FragmentAreaManager : PunEventCallbacks
         return clone;
     }
 
-
-
     public GameObject AddFragmentList(Vector3 trans, float range, int ActorViewID)
     {
         var clone = Instantiate(_fragmentPrefab, trans, Quaternion.identity);
@@ -72,7 +70,6 @@ public class FragmentAreaManager : PunEventCallbacks
         }
         return true;
     }
-
 
     public void AllDestory()
     {
