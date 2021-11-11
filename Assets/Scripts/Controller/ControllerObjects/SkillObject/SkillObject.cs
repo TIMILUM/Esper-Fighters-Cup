@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,12 +96,6 @@ public abstract class SkillObject : ControllerObject
         SetState(State.ReadyToUse);
     }
 
-    protected override void OnRegistered()
-    {
-        _buffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-        _player = Author.GetComponent<APlayer>();
-    }
-
     protected void FixedUpdate()
     {
         if (_physicsCount > 0)
@@ -115,6 +109,13 @@ public abstract class SkillObject : ControllerObject
         base.OnDestroy();
         ReleaseMoveSpeedBuffAll();
         ControllerCast<SkillController>().ReleaseSkill(this);
+    }
+
+    protected override void OnRegistered()
+    {
+        _buffController =
+            Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _player = Author.GetComponent<APlayer>();
     }
 
     /// <summary>
@@ -290,6 +291,7 @@ public abstract class SkillObject : ControllerObject
             return;
         }
 
+        IngameDelayCursorObject.SetActiveCursor(true, value / 1000.0f);
         if (_generateMoveSpeedCoroutine != null)
         {
             StopCoroutine(_generateMoveSpeedCoroutine);

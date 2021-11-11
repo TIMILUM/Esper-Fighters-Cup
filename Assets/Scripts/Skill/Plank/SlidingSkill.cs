@@ -97,6 +97,8 @@ namespace EsperFightersCup
                 ///잡기 시킬 사용
                 if (Input.GetMouseButtonDown(0))
                 {
+                    _player.CharacterAnimatorSync.SetTrigger("Grab");
+
                     /// 박스로 체크 여기서 피봇을 맞춰줘서 뒤에있는 오브젝트가 잡히지 않도록 합니다.
                     var colliders = Physics.OverlapSphere(Author.transform.position, _grabRange);
 
@@ -193,6 +195,8 @@ namespace EsperFightersCup
                 SetState(State.Canceled);
                 yield break;
             }
+
+            _player.CharacterAnimatorSync.SetTrigger("Sliding");
             yield return new WaitForSeconds(_slidingFrontDelay / 1000.0f);
 
             var mousePos = GetMousePosition();
@@ -232,6 +236,8 @@ namespace EsperFightersCup
 
             _targetObj.GetComponent<Actor>().BuffController.GenerateBuff(_buffOnCollision[1]);
 
+
+
             /// 던지기 선딜레이
             while ((currentTime - startTime) * 1000 <= _throwFrontDelay)
             {
@@ -240,7 +246,7 @@ namespace EsperFightersCup
                 yield return null;
             }
 
-
+            _player.CharacterAnimatorSync.SetTrigger("Raise");
             yield return new WaitUntil(() =>
             {
                 var mousePos = GetMousePosition();
