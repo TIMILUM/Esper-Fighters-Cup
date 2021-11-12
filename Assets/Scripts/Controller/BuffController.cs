@@ -68,7 +68,7 @@ public class BuffController : ControllerBase
         }
 
         var id = $"{buffStruct.Type}{PhotonNetwork.ServerTimestamp}";
-        var packet = new GameBuffGenerateEvent(photonView.ViewID, id, buffStruct);
+        var packet = buffStruct.ToBuffEvent(photonView.ViewID, id);
         PacketSender.Broadcast(in packet, SendOptions.SendUnreliable);
         Debug.Log($"Send buff generate event - {id}");
     }
@@ -158,7 +158,7 @@ public class BuffController : ControllerBase
             return;
         }
 
-        var buffType = data.Type;
+        var buffType = (BuffObject.Type)data.Type;
         if (!_buffPrefabLists.ContainsKey(buffType))
         {
             return;
