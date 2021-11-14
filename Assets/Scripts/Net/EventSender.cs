@@ -1,7 +1,6 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
@@ -44,7 +43,7 @@ namespace EsperFightersCup.Net
         public static bool Broadcast<T>(in T eventData, SendOptions sendOption, RaiseEventOptions eventOption = null) where T : IGameEvent
         {
             eventOption ??= EventSendOptions.Broadcast;
-            Debug.Log($"<color=grey>[Packet Check] send: {eventData.EventCode}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
+            // Debug.Log($"<color=grey>[Packet Check] send: {eventData.EventCode}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
             return PhotonNetwork.RaiseEvent(eventData.EventCode, eventData, eventOption, sendOption);
         }
     }

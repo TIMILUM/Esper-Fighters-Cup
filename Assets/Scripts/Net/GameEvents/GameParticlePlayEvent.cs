@@ -9,9 +9,9 @@ namespace EsperFightersCup.Net
     {
         public byte EventCode => GameProtocol.ParticlePlay;
 
-        [Key("name")] public string Name { get; }
-        [Key("pos")] public Vector3 Position { get; }
-        [Key("angle")] public Vector3 Angle { get; }
+        [Key(0)] public string Name { get; }
+        [Key(1)] public Vector3 Position { get; }
+        [Key(2)] public Vector3 Angle { get; }
 
         [SerializationConstructor]
         public GameParticlePlayEvent(string name, Vector3 pos, Vector3 angle)

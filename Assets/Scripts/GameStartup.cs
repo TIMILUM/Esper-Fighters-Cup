@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 public static class GameStartup
 {
-    private const string PhotonAppIdFilePath = "photon-cloud";
+    // private const string PhotonAppIdFilePath = "photon-cloud";
 
     /// <summary>
     /// 최초로 게임이 실행될 때 씬의 오브젝트들이 초기화되기 전 호출됩니다.
@@ -70,10 +70,9 @@ public static class GameStartup
     private static void PhotonNetworkSettings()
     {
         // 방에 입장한 플레이어와 씬 동기화
-        // PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
     }
-
 
     private static void CreatePhotonStatus()
     {

@@ -38,7 +38,20 @@ namespace EsperFightersCup.Net
 
         private static void RegisterEvent<T>(byte code) where T : IGameEvent
         {
-            PhotonPeer.RegisterType(typeof(T), code, EventSerializer.Serialize<T>, EventSerializer.Deserialize<T>);
+            PhotonPeer.RegisterType(typeof(T), code, Serialize<T>, Deserialize<T>);
+        }
+
+        private static byte[] Serialize<T>(object customObjcet) where T : IGameEvent
+        {
+            var targetObject = (T)customObjcet;
+            var bytes = MessagePackSerializer.Serialize(targetObject);
+            return bytes;
+        }
+
+        private static object Deserialize<T>(byte[] buffer) where T : IGameEvent
+        {
+            var deserialized = MessagePackSerializer.Deserialize<T>(buffer);
+            return deserialized;
         }
     }
 }
