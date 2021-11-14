@@ -7,15 +7,17 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffGenerateEvent : IGameEvent
     {
-        [Key("target")] public int TargetViewID { get; }
-        [Key("type")] public int Type { get; }
-        [Key("id")] public string BuffId { get; }
-        [Key("duration")] public float Duration { get; }
-        [Key("vfloat")] public float[] ValueFloat { get; }
-        [Key("vvec3")] public Vector3[] ValueVector3 { get; }
-        [Key("dup")] public bool AllowDuplicates { get; }
-        [Key("damage")] public float Damage { get; }
-        [Key("onlyonce")] public bool IsOnlyOnce { get; }
+        public byte EventCode => GameProtocol.BuffGenerate;
+
+        [Key(0)] public int TargetViewID { get; }
+        [Key(1)] public int Type { get; }
+        [Key(2)] public string BuffId { get; }
+        [Key(3)] public float Duration { get; }
+        [Key(4)] public float[] ValueFloat { get; }
+        [Key(5)] public Vector3[] ValueVector3 { get; }
+        [Key(6)] public bool AllowDuplicates { get; }
+        [Key(7)] public float Damage { get; }
+        [Key(8)] public bool IsOnlyOnce { get; }
 
         [SerializationConstructor]
         public GameBuffGenerateEvent(int target, int type, string id, float duration,
@@ -30,11 +32,6 @@ namespace EsperFightersCup.Net
             AllowDuplicates = dup;
             Damage = damage;
             IsOnlyOnce = onlyonce;
-        }
-
-        public byte EventCode()
-        {
-            return GameProtocol.BuffGenerate;
         }
     }
 }

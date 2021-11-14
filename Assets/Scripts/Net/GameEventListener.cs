@@ -25,9 +25,9 @@ namespace EsperFightersCup.Net
         /// <summary>
         /// 게임이벤트 데이터
         /// </summary>
-        public IGameEvent EventData { get; }
+        public object EventData { get; }
 
-        public GameEventArguments(byte code, int sender, IGameEvent eventData)
+        public GameEventArguments(byte code, int sender, object eventData)
         {
             Code = code;
             Sender = sender;
@@ -75,7 +75,7 @@ namespace EsperFightersCup.Net
             }
 
             Debug.Log($"<color=grey>[Packet Check] received: {photonEvent.Code} from actor {photonEvent.Sender}</color>");
-            var receivedEvent = PacketSerializer.Deserialize((byte[])photonEvent.CustomData);
+            var receivedEvent = photonEvent.CustomData;
             GameEventReceived?.Invoke(new GameEventArguments(photonEvent.Code, photonEvent.Sender, receivedEvent));
         }
     }

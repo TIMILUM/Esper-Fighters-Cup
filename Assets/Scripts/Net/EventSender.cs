@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
-    public static class PacketEventOptions
+    public static class EventSendOptions
     {
         public static readonly RaiseEventOptions Broadcast = new RaiseEventOptions
         {
@@ -35,7 +35,7 @@ namespace EsperFightersCup.Net
     /// <summary>
     /// 패킷을 보내는 유틸 클래스입니다.
     /// </summary>
-    public static class PacketSender
+    public static class EventSender
     {
         /// <summary>
         /// 이벤트를 자신을 포함한 룸의 모든 플레이어에게 보냅니다.
@@ -43,11 +43,9 @@ namespace EsperFightersCup.Net
         /// <returns></returns>
         public static bool Broadcast<T>(in T eventData, SendOptions sendOption, RaiseEventOptions eventOption = null) where T : IGameEvent
         {
-            eventOption ??= PacketEventOptions.Broadcast;
-            var buffer = PacketSerializer.Serialize(in eventData);
-
-            Debug.Log($"<color=grey>[Packet Check] send: {eventData.EventCode()}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
-            return PhotonNetwork.RaiseEvent(eventData.EventCode(), buffer, eventOption, sendOption);
+            eventOption ??= EventSendOptions.Broadcast;
+            Debug.Log($"<color=grey>[Packet Check] send: {eventData.EventCode}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
+            return PhotonNetwork.RaiseEvent(eventData.EventCode, eventData, eventOption, sendOption);
         }
     }
 }

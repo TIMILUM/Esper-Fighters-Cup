@@ -1,4 +1,3 @@
-using System.Text;
 using MessagePack;
 
 namespace EsperFightersCup.Net
@@ -6,8 +5,21 @@ namespace EsperFightersCup.Net
     /// <summary>
     /// 게임패킷을 직렬화/역직렬화해주는 유틸 클래스입니다.
     /// </summary>
-    public static class PacketSerializer
+    public static class EventSerializer
     {
+        public static byte[] Serialize<T>(object customObjcet) where T : IGameEvent
+        {
+            var targetObject = (T)customObjcet;
+            var bytes = MessagePackSerializer.Serialize(targetObject);
+            return bytes;
+        }
+
+        public static object Deserialize<T>(byte[] buffer) where T : IGameEvent
+        {
+            var deserialized = MessagePackSerializer.Deserialize<T>(buffer);
+            return deserialized;
+        }
+        /*
         /// <summary>
         /// 매개변수로 받은 패킷을 직렬화하여 byte 배열로 반환합니다.
         /// </summary>
@@ -41,5 +53,6 @@ namespace EsperFightersCup.Net
             // Debug.Log($"<color=grey>Deserialize bytes: {sb}</color>");
             return MessagePackSerializer.Deserialize<IGameEvent>(buffer);
         }
+        */
     }
 }

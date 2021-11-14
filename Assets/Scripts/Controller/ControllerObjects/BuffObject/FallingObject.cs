@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EsperFightersCup
@@ -42,7 +40,7 @@ namespace EsperFightersCup
         protected override void Update()
         {
             base.Update();
-            if (transform.position.y < 0.5f)
+            if (transform.position.y < 0.5f) // TODO: transform.position 대신 rigidbody.position 사용
             {
                 _buffStruct.Duration = 0.1f;
             }
@@ -60,7 +58,6 @@ ControllerManager.Type.BuffController, out BuffController myController))
 
         public override void OnPlayerHitEnter(GameObject other)
         {
-
             if (!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall"))
             {
                 return;
@@ -75,7 +72,6 @@ ControllerManager.Type.BuffController, out BuffController myController))
             if (Author.ControllerManager.TryGetController(
     ControllerManager.Type.BuffController, out BuffController myController))
             {
-
                 GenerateAfterBuff(myController);
                 myController.ReleaseBuff(this);
             }
@@ -90,7 +86,6 @@ ControllerManager.Type.BuffController, out BuffController myController))
 
         protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
         {
-            throw new System.NotImplementedException();
         }
 
         private void GenerateAfterBuff(BuffController controller)

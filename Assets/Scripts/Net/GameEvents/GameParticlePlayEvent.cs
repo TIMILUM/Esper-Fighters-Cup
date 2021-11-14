@@ -7,6 +7,8 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameParticlePlayEvent : IGameEvent
     {
+        public byte EventCode => GameProtocol.ParticlePlay;
+
         [Key("name")] public string Name { get; }
         [Key("pos")] public Vector3 Position { get; }
         [Key("angle")] public Vector3 Angle { get; }
@@ -17,11 +19,6 @@ namespace EsperFightersCup.Net
             Name = name;
             Position = pos;
             Angle = angle;
-        }
-
-        public byte EventCode()
-        {
-            return GameProtocol.ParticlePlay;
         }
     }
 }

@@ -75,7 +75,7 @@ namespace EsperFightersCup.Net
             if (_syncTriggers.Contains(name))
             {
                 var packet = new GameAnimatorTriggerSyncEvent(_actor.photonView.ViewID, name);
-                PacketSender.Broadcast(in packet, SendOptions.SendUnreliable, PacketEventOptions.SendOthers);
+                EventSender.Broadcast(in packet, SendOptions.SendUnreliable, EventSendOptions.SendOthers);
             }
         }
 

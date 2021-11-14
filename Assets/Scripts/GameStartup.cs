@@ -1,7 +1,3 @@
-using MessagePack;
-using MessagePack.Resolvers;
-using MessagePack.Unity;
-using MessagePack.Unity.Extension;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
@@ -17,7 +13,6 @@ public static class GameStartup
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitGame()
     {
-        InitMessagePack();
         InitGameVersion();
         // InitAppId();
         PhotonNetworkSettings();
@@ -30,21 +25,6 @@ public static class GameStartup
     private static void StartGame()
     {
         CreatePhotonStatus();
-    }
-
-    private static void InitMessagePack()
-    {
-        StaticCompositeResolver.Instance.Register(
-            UnityResolver.Instance,
-            UnityBlitWithPrimitiveArrayResolver.Instance,
-            StandardResolver.Instance);
-
-        var options = MessagePackSerializerOptions
-            .Standard
-            .WithResolver(StaticCompositeResolver.Instance)
-            .WithSecurity(MessagePackSecurity.TrustedData);
-
-        MessagePackSerializer.DefaultOptions = options;
     }
 
     private static void InitGameVersion()
@@ -90,7 +70,7 @@ public static class GameStartup
     private static void PhotonNetworkSettings()
     {
         // 방에 입장한 플레이어와 씬 동기화
-        PhotonNetwork.AutomaticallySyncScene = true;
+        // PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
     }
 
