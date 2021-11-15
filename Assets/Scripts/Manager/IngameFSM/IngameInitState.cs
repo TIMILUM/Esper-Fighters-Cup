@@ -6,10 +6,5 @@ namespace EsperFightersCup
         {
             State = IngameFSMSystem.State.Init;
         }
-
-        public override void EndState()
-        {
-            base.EndState();
-        }
     }
 }

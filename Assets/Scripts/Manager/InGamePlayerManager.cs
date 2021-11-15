@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using EsperFightersCup.Util;
 using Photon.Pun;
@@ -15,7 +16,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
 
-    [SerializeField] private Transform _spawnTransform;
+    [SerializeField] private List<Transform> _startLocations;
     [SerializeField] private IngameFSMSystem _ingameFsmSystem;
 
     [Header("[Player's Camera]")]
@@ -31,32 +32,23 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     /// </summary>
     public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
 
+    /// <summary>
+    /// 인게임의 플레이어 시작 위치를 담고 있습니다.
+    /// </summary>
+    public List<Transform> StartLocations => _startLocations;
+
     private void Start()
     {
         LocalPlayer = SpawnLocalPlayer();
         var pvID = LocalPlayer.photonView.ViewID;
-
-        // 로컬 플레이어는 여기서 바로 저장
-        GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber] = LocalPlayer;
-        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { [CustomPropertyKeys.PlayerPhotonView] = pvID });
+        PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerPhotonView, pvID);
 
         Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
         Debug.Log($"GamePlayers count: {GamePlayers.Count}");
-        if (GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
-        {
-            IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
-            Debug.Log($"Change state to round intro");
-        }
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        // 로컬 플레이어가 아닐 때만 여기 통해서 저장
-        if (targetPlayer.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
-        {
-            return;
-        }
-
         if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value))
         {
             return;
@@ -66,6 +58,12 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
         GamePlayers[targetPlayer.ActorNumber] = playerInstance;
         Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
+        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+
+        if (PhotonNetwork.IsMasterClient && GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
+        {
+            NextStateAsync().Forget();
+        }
     }
 
     private APlayer SpawnLocalPlayer()
@@ -90,8 +88,18 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         }
 
         var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
-            _spawnTransform.position + Vector3.up, Quaternion.identity);
+            transform.position + (Vector3.up * 5f), Quaternion.identity);
 
-        return player.GetComponent<APlayer>();
+        var localplayer = player.GetComponent<APlayer>();
+        localplayer.ResetPositionAndRotation();
+
+        return localplayer;
+    }
+
+    private async UniTask NextStateAsync()
+    {
+        Debug.Log($"Change state to IntroCut");
+        await UniTask.Delay(1000);
+        IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
     }
 }

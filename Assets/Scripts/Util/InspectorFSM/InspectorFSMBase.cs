@@ -1,4 +1,5 @@
 using System;
+using EsperFightersCup.Net;
 using UnityEngine;
 
 public interface InspectorFSMBaseInterface<StateEnum>
@@ -15,7 +16,7 @@ public interface InspectorFSMBaseInterface<StateEnum>
 /// </summary>
 /// <typeparam name="TStateEnum">Enum 형식의 FSM의 State입니다.</typeparam>
 /// <typeparam name="TFSMSystem">InspectorFSMSystem을 상속한 클래스입니다.</typeparam>
-public abstract class InspectorFSMBase<TStateEnum, TFSMSystem> : MonoBehaviour, InspectorFSMBaseInterface<TStateEnum>
+public abstract class InspectorFSMBase<TStateEnum, TFSMSystem> : PunEventCallbacks, InspectorFSMBaseInterface<TStateEnum>
     where TStateEnum : Enum
     where TFSMSystem : MonoBehaviour
 {

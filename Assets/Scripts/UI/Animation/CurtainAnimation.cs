@@ -19,22 +19,24 @@ namespace EsperFightersCup
             _curtain.alpha = _showInStart ? 1f : 0f;
         }
 
-        public async UniTask FadeIn()
+        public UniTask FadeInAsync()
         {
-            await DOTween.Sequence()
+            return DOTween.Sequence()
                 .AppendCallback(() => _curtain.alpha = 0f)
                 .AppendCallback(() => _curtain.blocksRaycasts = true)
                 .Append(_curtain.DOFade(1f, _duration).SetEase(_fadeInEase))
-                .AsyncWaitForCompletion();
+                .AsyncWaitForCompletion()
+                .AsUniTask();
         }
 
-        public async UniTask FadeOut()
+        public UniTask FadeOutAsync()
         {
-            await DOTween.Sequence()
+            return DOTween.Sequence()
                 .AppendCallback(() => _curtain.alpha = 1f)
                 .Append(_curtain.DOFade(0f, _duration).SetEase(_fadeOutEase))
                 .AppendCallback(() => _curtain.blocksRaycasts = false)
-                .AsyncWaitForCompletion();
+                .AsyncWaitForCompletion()
+                .AsUniTask();
         }
 
         public void ForceShowCurtain()

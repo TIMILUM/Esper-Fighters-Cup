@@ -12,7 +12,7 @@ public class Actor : ObjectBase, IPunObservable
     protected ControllerManager _controllerManager;
 
     [SerializeField]
-    private float _hp;
+    private int _hp;
 
     [SerializeField, Tooltip("해당 오브젝트의 ID 값입니다.")]
     private int _id;
@@ -22,7 +22,7 @@ public class Actor : ObjectBase, IPunObservable
 
     public ControllerManager ControllerManager => _controllerManager;
     public BuffController BuffController { get; protected set; }
-    public float HP { get => _hp; set => _hp = Mathf.Clamp(value, 0, int.MaxValue); }
+    public int HP { get => _hp; set => _hp = Mathf.Clamp(value, 0, int.MaxValue); }
     public int ID => _id;
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
 
@@ -77,7 +77,7 @@ public class Actor : ObjectBase, IPunObservable
         }
         else
         {
-            _hp = (float)stream.ReceiveNext();
+            _hp = (int)stream.ReceiveNext();
         }
     }
 }

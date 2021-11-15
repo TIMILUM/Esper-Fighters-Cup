@@ -32,7 +32,7 @@ public class DecreaseHpObject : BuffObject
             return;
         }
 
-        _character.HP -= _damage;
+        _character.HP -= (int)_damage; // BUG: 대미지가 float보다는 int로 바뀌는게 좋음
         Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.HP);
     }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using Photon.Pun;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
 
     [SerializeField] private CurtainAnimation _curtain;
     [SerializeField] private SawBladeSystem _sawBladeSystem;
+
     // private DateTime _sawUsingStartTime = DateTime.MinValue;
 
     public static IngameFSMSystem Instance { get; private set; }
@@ -28,11 +30,12 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     // 게임 시작할 때 각 플레이어의 PhotonViewID를 가져와서 캐싱
     public Dictionary<int, Photon.Realtime.Player> GamePlayers => PhotonNetwork.CurrentRoom.Players;
 
+    public CurtainAnimation Curtain => _curtain;
+
     /// <summary>
     /// 현재 게임의 톱날 시스템을 가져옵니다.
     /// </summary>
     public SawBladeSystem SawBladeSystem => _sawBladeSystem;
-    public CurtainAnimation Curtain => _curtain;
 
     /// <summary>
     /// 현재 게임의 라운드 수를 가져오거나 설정합니다.<para/>
@@ -52,13 +55,14 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         set
         {
             var room = PhotonNetwork.CurrentRoom;
-            if (!PhotonNetwork.IsMasterClient || room is null)
+            if (room is null)
             {
                 return;
             }
 
-            int round = value < 1 ? 1 : value;
-            room.SetCustomProperties(new Hashtable { [CustomPropertyKeys.GameRound] = round });
+            int round = Mathf.Max(value, 0);
+            Debug.Log($"Set RoundCount = {round}");
+            room.SetCustomProperties(CustomPropertyKeys.GameRound, round);
         }
     }
 
@@ -106,22 +110,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
             return;
         }
 
-        var customProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-        var changeProp = new Hashtable
-        {
-            [CustomPropertyKeys.GameState] = (int)state
-        };
-
-        // Check And Swap
-        Hashtable oldProp = null;
-        if (customProperties.TryGetValue(CustomPropertyKeys.GameState, out var value))
-        {
-            oldProp = new Hashtable
-            {
-                [CustomPropertyKeys.GameState] = value
-            };
-        }
-        PhotonNetwork.CurrentRoom.SetCustomProperties(changeProp, oldProp);
+        PhotonNetwork.CurrentRoom.SetCustomPropertiesBySafe(CustomPropertyKeys.GameState, (int)state);
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
@@ -131,7 +120,16 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
             return;
         }
 
-        var nextState = (int)value;
-        base.ChangeState((State)nextState);
+        ChangeStateAsync((State)(int)value).Forget();
+    }
+
+    private async UniTask ChangeStateAsync(State state)
+    {
+        // Enumerator가 중간에 제거되는 불상사를 막기 위해
+        // OnRoomPropertiesUpdate가 모두 끝날 때까지 기다림
+        await UniTask.Yield();
+
+        Debug.Log($"Next GameState: {state}");
+        base.ChangeState(state);
     }
 }

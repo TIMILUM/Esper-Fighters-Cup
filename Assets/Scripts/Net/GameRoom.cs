@@ -19,7 +19,8 @@ namespace EsperFightersCup
         {
             [CustomPropertyKeys.GameStarted] = false,
             [CustomPropertyKeys.GameRound] = 0,
-            [CustomPropertyKeys.GameState] = 0
+            [CustomPropertyKeys.GameState] = 0,
+            [CustomPropertyKeys.GameRoundWinner] = 0
         };
     }
 }
