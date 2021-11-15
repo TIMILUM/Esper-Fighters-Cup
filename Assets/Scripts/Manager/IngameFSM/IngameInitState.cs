@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-
 namespace EsperFightersCup
 {
     public class IngameInitState : InGameFSMStateBase
@@ -11,7 +9,6 @@ namespace EsperFightersCup
 
         public override void EndState()
         {
-            UniTask.Run(FsmSystem.Curtain.FadeOut);
             base.EndState();
         }
     }
