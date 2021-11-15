@@ -5,10 +5,12 @@ using UnityEngine;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+[RequireComponent(typeof(PhotonView))]
 public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameFSMStateBase>
 {
     public enum State
     {
+        Init,
         IntroCut,
         RoundIntro,
         InBattle,
@@ -17,10 +19,11 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         Result,
     }
 
-    public static State CurrentState;
-
+    [SerializeField] private CurtainAnimation _curtain;
     [SerializeField] private SawBladeSystem _sawBladeSystem;
     // private DateTime _sawUsingStartTime = DateTime.MinValue;
+
+    public static IngameFSMSystem Instance { get; private set; }
 
     // 게임 시작할 때 각 플레이어의 PhotonViewID를 가져와서 캐싱
     public Dictionary<int, Photon.Realtime.Player> GamePlayers => PhotonNetwork.CurrentRoom.Players;
@@ -29,6 +32,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     /// 현재 게임의 톱날 시스템을 가져옵니다.
     /// </summary>
     public SawBladeSystem SawBladeSystem => _sawBladeSystem;
+    public CurtainAnimation Curtain => _curtain;
 
     /// <summary>
     /// 현재 게임의 라운드 수를 가져오거나 설정합니다.<para/>
@@ -76,9 +80,58 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     }
     */
 
+    protected override void Awake()
+    {
+        base.Awake();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+#if UNITY_EDITOR
+        // 연결되지 않고 인게임 화면이 나온다면 오프라인 모드를 통한 디버깅을 허용
+        if (!PhotonNetwork.IsConnected)
+        {
+            Debug.LogWarning("Enable Offline Mode!");
+            PhotonNetwork.OfflineMode = true;
+            PhotonNetwork.JoinRandomRoom();
+        }
+#endif
+    }
+
     public override void ChangeState(State state)
     {
-        base.ChangeState(state);
-        CurrentState = state;
+        if (state == CurrentState)
+        {
+            return;
+        }
+
+        var customProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+        var changeProp = new Hashtable
+        {
+            [CustomPropertyKeys.GameState] = (int)state
+        };
+
+        // Check And Swap
+        Hashtable oldProp = null;
+        if (customProperties.TryGetValue(CustomPropertyKeys.GameState, out var value))
+        {
+            oldProp = new Hashtable
+            {
+                [CustomPropertyKeys.GameState] = value
+            };
+        }
+        PhotonNetwork.CurrentRoom.SetCustomProperties(changeProp, oldProp);
+    }
+
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        if (!propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameState, out var value))
+        {
+            return;
+        }
+
+        var nextState = (int)value;
+        base.ChangeState((State)nextState);
     }
 }

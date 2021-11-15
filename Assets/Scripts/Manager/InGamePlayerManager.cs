@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EsperFightersCup;
 using EsperFightersCup.Util;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -25,21 +26,49 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     /// </summary>
     public APlayer LocalPlayer { get; private set; }
 
+    /// <summary>
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다ㅏ.
+    /// </summary>
+    public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
+
     private void Start()
     {
-#if UNITY_EDITOR
-        // 연결되지 않고 인게임 화면이 나온다면 오프라인 모드를 통한 디버깅을 허용
-        if (!PhotonNetwork.IsConnected)
+        LocalPlayer = SpawnLocalPlayer();
+        var pvID = LocalPlayer.photonView.ViewID;
+
+        // 로컬 플레이어는 여기서 바로 저장
+        GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber] = LocalPlayer;
+        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { [CustomPropertyKeys.PlayerPhotonView] = pvID });
+
+        Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
+        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+        if (GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
         {
-            Debug.LogWarning("Enable Offline Mode!");
-            PhotonNetwork.OfflineMode = true;
-            PhotonNetwork.JoinRandomRoom();
+            IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
+            Debug.Log($"Change state to round intro");
         }
-#endif
-        SpawnLocalPlayer();
     }
 
-    private void SpawnLocalPlayer()
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        // 로컬 플레이어가 아닐 때만 여기 통해서 저장
+        if (targetPlayer.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            return;
+        }
+
+        if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value))
+        {
+            return;
+        }
+
+        var targetPV = (int)value;
+        var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
+        GamePlayers[targetPlayer.ActorNumber] = playerInstance;
+        Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
+    }
+
+    private APlayer SpawnLocalPlayer()
     {
         ACharacter.Type characterType;
         var props = PhotonNetwork.LocalPlayer.CustomProperties;
@@ -63,9 +92,6 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
             _spawnTransform.position + Vector3.up, Quaternion.identity);
 
-        LocalPlayer = player.GetComponent<APlayer>();
-
-        var pvID = LocalPlayer.photonView.ViewID;
-        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { [CustomPropertyKeys.PlayerPhotonView] = pvID });
+        return player.GetComponent<APlayer>();
     }
 }

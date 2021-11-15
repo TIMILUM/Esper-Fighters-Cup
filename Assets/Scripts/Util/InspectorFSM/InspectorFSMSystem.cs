@@ -9,7 +9,7 @@ public interface InspectorFSMInterface<TStateEnum, TBaseClass>
 {
     Dictionary<TStateEnum, TBaseClass> StatePool { get; }
     TStateEnum StartState { get; }
-    TStateEnum CurrState { get; }
+    TStateEnum CurrentState { get; }
 
     void ChangeState(TStateEnum state);
 }
@@ -33,7 +33,7 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : PunEventCallb
 
     public Dictionary<TStateEnum, TBaseClass> StatePool { get; private set; }
     public TStateEnum StartState => _startState;
-    public TStateEnum CurrState { get; private set; }
+    public TStateEnum CurrentState { get; private set; }
 
     /// <summary>
     /// 해당 FSM 시스템의 State를 바꿉니다.
@@ -47,7 +47,7 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : PunEventCallb
             return;
         }
 
-        if (StatePool.TryGetValue(CurrState, out var currentState))
+        if (StatePool.TryGetValue(CurrentState, out var currentState))
         {
             currentState.EndState();
         }
@@ -57,7 +57,7 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : PunEventCallb
             pair.Value.enabled = false;
         }
 
-        CurrState = state;
+        CurrentState = state;
         nextState.enabled = true;
         nextState.StartState();
     }

@@ -32,7 +32,7 @@ namespace EsperFightersCup.UI.Match
             _matchFaildTimer = CoroutineTimer.SetTimerOnce(OnMatchFailed, 20f);
             GameMatchSystem.Instance.OnMatched += OnMatched;
 
-            var result = PhotonNetwork.JoinRandomOrCreateRoom(roomOptions: GameMatchSystem.RoomOptions);
+            var result = PhotonNetwork.JoinRandomOrCreateRoom(roomOptions: GameRoom.DefaultRoomOptions);
 
             if (!result)
             {

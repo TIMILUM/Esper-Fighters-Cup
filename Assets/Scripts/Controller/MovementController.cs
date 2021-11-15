@@ -1,4 +1,4 @@
-﻿using EsperFightersCup.UI.InGame;
+using EsperFightersCup.UI.InGame;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -119,7 +119,7 @@ public class MovementController : ControllerBase
         var dirz = Input.GetAxisRaw("Vertical");
         var dir = new Vector3(dirx, 0.0f, dirz).normalized;
 
-        if (IngameFSMSystem.CurrentState != IngameFSMSystem.State.InBattle)
+        if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle)
         {
             _currentDecreaseSpeed = 1.0f;
             _currentIncreaseSpeed = 0.0f;

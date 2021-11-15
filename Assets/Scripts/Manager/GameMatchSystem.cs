@@ -12,13 +12,9 @@ namespace EsperFightersCup
 {
     public class GameMatchSystem : PunEventSingleton<GameMatchSystem>
     {
-        public const byte MaxPlayers = 2;
-
         [SerializeField] private BasicPopup _popup;
 
         public event UnityAction OnMatched;
-
-        public static readonly RoomOptions RoomOptions = new RoomOptions { MaxPlayers = MaxPlayers, PublishUserId = true };
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
