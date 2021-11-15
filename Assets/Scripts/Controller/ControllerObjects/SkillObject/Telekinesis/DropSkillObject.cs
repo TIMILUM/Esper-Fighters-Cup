@@ -23,8 +23,7 @@ namespace EsperFightersCup
 
 
 
-        [SerializeField]
-        private GameObject[] _firstCasting;
+
         [SerializeField]
         private GameObject[] _secondCasting;
 
@@ -44,7 +43,7 @@ namespace EsperFightersCup
 
             ///아직 엘셀과 파싱하는 부분을 이해를 못해서 
             ///직접 계산해서 크기를 맞췄습니다.            
-            ScaleGameObjects(_firstCasting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
+
             ScaleGameObjects(_secondCasting, new Vector3(_secondrange * 2.0f, 1.0f, _secondrange * 2.0f));
 
         }
@@ -112,14 +111,14 @@ namespace EsperFightersCup
             var isCanceled = false;
 
             var MousePos = GetMousePosition();
-            ActiveGameObjects(_firstCasting);
+
             ActiveGameObjects(_secondCasting);
 
 
             yield return new WaitUntil(() =>
             {
                 MousePos = GetMousePosition();
-                TranslateGameObjects(_firstCasting, transform.position);
+
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
                     isCanceled = true;
@@ -127,11 +126,6 @@ namespace EsperFightersCup
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (SetStartPos())
-                    {
-                        isCanceled = true;
-                        return isCanceled;
-                    }
                     _endMousePoint = MousePos;
                     return true;
                 }
@@ -147,14 +141,14 @@ namespace EsperFightersCup
             }
 
             SetParentGameObjects(_secondCasting, "UiObject");
-            ActiveGameObjects(_firstCasting, false);
+
 
             SetNextState();
         }
 
         protected override IEnumerator OnRelease()
         {
-            ActiveGameObjects(_firstCasting, false);
+
             Destroy(gameObject);
             yield return null;
         }
