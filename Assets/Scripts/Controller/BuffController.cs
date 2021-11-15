@@ -18,7 +18,7 @@ public class BuffController : ControllerBase
 
     private void Awake()
     {
-        var prefabs = Resources.LoadAll<BuffObject>("Prefabs/BuffPrefabs");
+        var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
         foreach (var buffObject in prefabs)
         {
             _buffPrefabLists.Add(buffObject.BuffType, buffObject);
