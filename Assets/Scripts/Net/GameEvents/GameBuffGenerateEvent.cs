@@ -7,8 +7,6 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffGenerateEvent : IGameEvent
     {
-        public byte EventCode => GameProtocol.BuffGenerate;
-
         [Key(0)] public int TargetViewID { get; }
         [Key(1)] public int Type { get; }
         [Key(2)] public string BuffId { get; }
@@ -32,6 +30,11 @@ namespace EsperFightersCup.Net
             AllowDuplicates = dup;
             Damage = damage;
             IsOnlyOnce = onlyonce;
+        }
+
+        public byte GetEventCode()
+        {
+            return EventCode.BuffGenerate;
         }
     }
 }

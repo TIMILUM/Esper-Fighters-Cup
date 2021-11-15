@@ -75,8 +75,8 @@ namespace EsperFightersCup.Net
             }
 
             // Debug.Log($"<color=grey>[Packet Check] received: {photonEvent.Code} from actor {photonEvent.Sender}</color>");
-            var receivedEvent = photonEvent.CustomData;
-            GameEventReceived?.Invoke(new GameEventArguments(photonEvent.Code, photonEvent.Sender, (IGameEvent)receivedEvent));
+            GameEventReceived?.Invoke(
+                new GameEventArguments(photonEvent.Code, photonEvent.Sender, (IGameEvent)photonEvent.CustomData));
         }
     }
 }

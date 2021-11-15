@@ -5,6 +5,7 @@ namespace EsperFightersCup
         // Update is called once per frame
         private void Update()
         {
+            /*
             var playerList = FsmSystem.PlayerList;
             for (var i = 0; i < playerList.Count; i++)
             {
@@ -17,6 +18,7 @@ namespace EsperFightersCup
                 FsmSystem.AddWinPoint(i);
                 ChangeState(IngameFSMSystem.State.RoundEnd);
             }
+            */
         }
 
         protected override void Initialize()

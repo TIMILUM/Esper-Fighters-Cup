@@ -22,7 +22,7 @@ public class FragmentStaticObject : EnvironmentStaticObject
         _currentTime += Time.deltaTime;
         if (_currentTime > _destoryTime)
         {
-            if (_buffController.GetBuff(BuffObject.Type.Raise) == null)
+            if (BuffController.GetBuff(BuffObject.Type.Raise) == null)
                 PhotonNetwork.Destroy(gameObject);
         }
     }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using EsperFightersCup.UI.InGame;
-using EsperFightersCup.Util;
 using UnityEngine;
 
 public class IngameRoundIntroState : InGameFSMStateBase
@@ -17,17 +16,12 @@ public class IngameRoundIntroState : InGameFSMStateBase
         State = IngameFSMSystem.State.RoundIntro;
     }
 
-    private void Start()
-    {
-
-    }
-
     public override void StartState()
     {
         base.StartState();
         var round = ++FsmSystem.RoundCount;
-        FsmSystem.IngameTopUIObject.SetRoundCount(round);
-
+        Debug.Log($"Round: {round}");
+        /*
         for (var i = 0; i < FsmSystem.PlayerList.Count; i++)
         {
             var player = FsmSystem.PlayerList[i];
@@ -35,6 +29,7 @@ public class IngameRoundIntroState : InGameFSMStateBase
             player.Hp = 100;
             player.transform.position = startPosition.position;
         }
+        */
 
         // 몇초 뒤에 보이게 해야 잘 보임.
         DOTween.Sequence()

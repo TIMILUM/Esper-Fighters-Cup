@@ -1,6 +1,6 @@
 namespace EsperFightersCup.Net
 {
-    public static class GameProtocol
+    public static class EventCode
     {
         public const byte GamePlayer = 0x01;
         public const byte BuffGenerate = 0x02;

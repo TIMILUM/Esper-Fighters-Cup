@@ -53,7 +53,7 @@ public class SawBladeObject : AStaticObject
 
     protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
     {
-        if (_buffController == null)
+        if (BuffController == null)
         {
             return;
         }
@@ -62,7 +62,7 @@ public class SawBladeObject : AStaticObject
         {
             if (IsAllowBuff(buffStruct))
             {
-                _buffController.GenerateBuff(buffStruct);
+                BuffController.GenerateBuff(buffStruct);
             }
         }
     }

@@ -153,7 +153,7 @@ public class FragmentAreaManager : PunEventCallbacks
 
     protected override void OnGameEventReceived(GameEventArguments args)
     {
-        if (args.Code != GameProtocol.FragmentAreaGen)
+        if (args.Code != EventCode.FragmentAreaGen)
         {
             return;
         }

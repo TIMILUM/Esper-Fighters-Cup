@@ -5,8 +5,6 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameBuffReleaseEvent : IGameEvent
     {
-        public byte EventCode => GameProtocol.BuffRelease;
-
         [Key(0)] public int TargetViewID { get; }
         [Key(1)] public string BuffId { get; }
 
@@ -15,6 +13,11 @@ namespace EsperFightersCup.Net
         {
             TargetViewID = target;
             BuffId = id;
+        }
+
+        public byte GetEventCode()
+        {
+            return EventCode.BuffRelease;
         }
     }
 }

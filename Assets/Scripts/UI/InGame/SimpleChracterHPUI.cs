@@ -19,7 +19,7 @@ public class SimpleChracterHPUI : MonoBehaviour
     {
         foreach (var data in _characterUIStruct)
         {
-            data.Text.text = data.Name + " : " + data.Chracter.Hp.ToString();
+            data.Text.text = data.Name + " : " + data.Chracter.HP.ToString();
         }
     }
 }

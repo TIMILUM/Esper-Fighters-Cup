@@ -132,7 +132,7 @@ namespace EsperFightersCup.Net
 
         protected override void OnGameEventReceived(GameEventArguments args)
         {
-            if (args.Code != GameProtocol.AnimatorTriggerSync || !_animator || !_actor)
+            if (args.Code != EventCode.AnimatorTriggerSync || !_animator || !_actor)
             {
                 return;
             }

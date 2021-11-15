@@ -43,8 +43,8 @@ namespace EsperFightersCup.Net
         public static bool Broadcast<T>(in T eventData, SendOptions sendOption, RaiseEventOptions eventOption = null) where T : IGameEvent
         {
             eventOption ??= EventSendOptions.Broadcast;
-            // Debug.Log($"<color=grey>[Packet Check] send: {eventData.EventCode}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
-            return PhotonNetwork.RaiseEvent(eventData.EventCode, eventData, eventOption, sendOption);
+            // Debug.Log($"<color=grey>[Packet Check] send: {eventData.GetEventCode()}, {sendOption.DeliveryMode}, sender is {PhotonNetwork.LocalPlayer.ActorNumber}</color>");
+            return PhotonNetwork.RaiseEvent(eventData.GetEventCode(), eventData, eventOption, sendOption);
         }
     }
 }

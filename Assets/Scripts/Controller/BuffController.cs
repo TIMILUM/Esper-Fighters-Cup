@@ -132,7 +132,6 @@ public class BuffController : ControllerBase
 
     protected override void OnGameEventReceived(GameEventArguments args)
     {
-        base.OnGameEventReceived(args);
         if (photonView is null)
         {
             return;
@@ -140,11 +139,11 @@ public class BuffController : ControllerBase
 
         switch (args.Code)
         {
-            case GameProtocol.BuffGenerate:
+            case EventCode.BuffGenerate:
                 HandleBuffGenerate(args);
                 break;
 
-            case GameProtocol.BuffRelease:
+            case EventCode.BuffRelease:
                 HandleBuffRelease(args);
                 break;
         }
@@ -157,6 +156,7 @@ public class BuffController : ControllerBase
         {
             return;
         }
+        Debug.Log("HandleBuffGenerate");
 
         var buffType = (BuffObject.Type)data.Type;
         if (!_buffPrefabLists.ContainsKey(buffType))

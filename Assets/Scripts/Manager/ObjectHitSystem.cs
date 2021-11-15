@@ -34,15 +34,15 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (!_isDestroyable || !(_actor?.photonView.IsMine ?? true))
+        if (!_isDestroyable || !_actor.photonView.IsMine)
         {
             return;
         }
 
         if (_isDestroy)
         {
-            // BUG: SawBlade에는 ObjectHitSystem이 PhotonView컴포넌트가 있는 오브젝트에 위치해 있지 않음
-            if (gameObject.TryGetComponent<PhotonView>(out var photonView))
+            var pv = gameObject.GetComponentInChildren<PhotonView>();
+            if (pv != null)
             {
                 PhotonNetwork.Destroy(photonView);
             }

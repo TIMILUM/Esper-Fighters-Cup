@@ -14,11 +14,11 @@ namespace EsperFightersCup.Net
         {
             InitMessagePack();
 
-            RegisterEvent<GameBuffGenerateEvent>(GameProtocol.BuffGenerate);
-            RegisterEvent<GameBuffReleaseEvent>(GameProtocol.BuffRelease);
-            RegisterEvent<GameFragmentAreaGenEvent>(GameProtocol.FragmentAreaGen);
-            RegisterEvent<GameParticlePlayEvent>(GameProtocol.ParticlePlay);
-            RegisterEvent<GameAnimatorTriggerSyncEvent>(GameProtocol.AnimatorTriggerSync);
+            RegisterEvent<GameBuffGenerateEvent>(EventCode.BuffGenerate);
+            RegisterEvent<GameBuffReleaseEvent>(EventCode.BuffRelease);
+            RegisterEvent<GameFragmentAreaGenEvent>(EventCode.FragmentAreaGen);
+            RegisterEvent<GameParticlePlayEvent>(EventCode.ParticlePlay);
+            RegisterEvent<GameAnimatorTriggerSyncEvent>(EventCode.AnimatorTriggerSync);
         }
 
         private static void InitMessagePack()

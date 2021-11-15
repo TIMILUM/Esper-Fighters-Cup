@@ -32,8 +32,8 @@ public class DecreaseHpObject : BuffObject
             return;
         }
 
-        _character.Hp -= _damage;
-        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.Hp);
+        _character.HP -= _damage;
+        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.HP);
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)
