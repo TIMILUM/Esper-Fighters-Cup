@@ -8,6 +8,7 @@ namespace EsperFightersCup.Manager
     public class GameRematchSystem : PunEventSingleton<GameRematchSystem>
     {
         private bool _otherPlayerRematch;
+        private bool _localPlayerRematch;
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
@@ -18,13 +19,16 @@ namespace EsperFightersCup.Manager
 
             var rematch = (bool)value;
 
-            if (targetPlayer != PhotonNetwork.LocalPlayer)
+            if (targetPlayer == PhotonNetwork.LocalPlayer)
+            {
+                _localPlayerRematch = rematch;
+            }
+            else
             {
                 _otherPlayerRematch = rematch;
-                return;
             }
 
-            if (rematch && _otherPlayerRematch)
+            if (PhotonNetwork.IsMasterClient && _localPlayerRematch && _otherPlayerRematch && PhotonNetwork.CurrentRoom.PlayerCount > 1)
             {
                 PhotonNetwork.LoadLevel("CharacterChoiceScene");
             }
