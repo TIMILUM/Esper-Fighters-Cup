@@ -16,7 +16,10 @@ namespace EsperFightersCup.Net
         public override void OnDisable()
         {
             base.OnDisable();
-            GameEventListener.Instance.GameEventReceived -= OnGameEventReceived;
+            if (GameEventListener.Instance != null)
+            {
+                GameEventListener.Instance.GameEventReceived -= OnGameEventReceived;
+            }
         }
 
         /// <summary>

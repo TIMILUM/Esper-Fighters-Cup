@@ -1,4 +1,3 @@
-using System.Linq;
 using EsperFightersCup.Util;
 using Photon.Pun;
 using Photon.Realtime;
@@ -8,37 +7,27 @@ namespace EsperFightersCup.Manager
 {
     public class GameRematchSystem : PunEventSingleton<GameRematchSystem>
     {
-        public const string RematchPropKey = "rematch";
+        private bool _otherPlayerRematch;
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
-            if (changedProps[RematchPropKey] is null)
+            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerGameRematch, out var value))
             {
                 return;
             }
-            if (PhotonNetwork.IsMasterClient && CheckRematch())
-            {
-                foreach (var player in PhotonNetwork.CurrentRoom.Players)
-                {
-                    var activePlayer = player.Value;
-                    activePlayer.SetCustomProperties(new Hashtable { [RematchPropKey] = false });
-                }
-                PhotonNetwork.LoadLevel("GameScene");
-            }
-        }
 
-        private bool CheckRematch()
-        {
-            if (!PhotonNetwork.InRoom || PhotonNetwork.CurrentRoom.PlayerCount <= 1)
+            var rematch = (bool)value;
+
+            if (targetPlayer != PhotonNetwork.LocalPlayer)
             {
-                return false;
+                _otherPlayerRematch = rematch;
+                return;
             }
 
-            // 플레이어 중에 리매치를 원하지 않는 플레이어가 있는지 검색
-            var result = PhotonNetwork.CurrentRoom.Players.Any(
-                player => !player.Value.CustomProperties.TryGetValue(RematchPropKey, out var check) || !(bool)check);
-
-            return !result;
+            if (rematch && _otherPlayerRematch)
+            {
+                PhotonNetwork.LoadLevel("CharacterChoiceScene");
+            }
         }
     }
 }

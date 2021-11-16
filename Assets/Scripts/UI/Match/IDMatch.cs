@@ -23,7 +23,7 @@ namespace EsperFightersCup
 
         private void CreateRoom()
         {
-            var result = PhotonNetwork.CreateRoom(string.Empty, roomOptions: GameRoom.DefaultRoomOptions);
+            var result = PhotonNetwork.CreateRoom(string.Empty, roomOptions: GameRoomOptions.DefaultRoomOptions);
             if (!result && CheckServerConnected())
             {
 

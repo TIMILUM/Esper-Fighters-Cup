@@ -19,6 +19,9 @@ namespace EsperFightersCup
         public override void StartState()
         {
             base.StartState();
+            PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerWinPoint, 0);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameRound, 0);
+
             _intro.gameObject.SetActive(true);
             FsmSystem.Curtain.FadeOutAsync();
             _intro.stopped += OnIntroEnd;
@@ -28,7 +31,7 @@ namespace EsperFightersCup
         // 컷씬 끝났을 때 실행
         private void OnIntroEnd(PlayableDirector director)
         {
-            _intro.stopped -= OnIntroEnd;
+            director.stopped -= OnIntroEnd;
             EndIntroCutAsync().Forget();
         }
 

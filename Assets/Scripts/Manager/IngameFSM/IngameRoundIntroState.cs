@@ -22,7 +22,8 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
         if (PhotonNetwork.IsMasterClient)
         {
-            ++FsmSystem.RoundCount;
+            var round = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
+            PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameRound, round + 1);
             PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameRoundWinner, 0);
         }
 
@@ -33,6 +34,7 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
         // 설정 완료 후 MasterClient에게 신호
         FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     [PunRPC]

@@ -50,7 +50,9 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
             {
                 return 0;
             }
-            return (int)(room.CustomProperties[CustomPropertyKeys.GameRound] ?? 0);
+            var round = (int)(room.CustomProperties[CustomPropertyKeys.GameRound] ?? 0);
+            Debug.Log($"Get RoundCount = {round}");
+            return round;
         }
         set
         {

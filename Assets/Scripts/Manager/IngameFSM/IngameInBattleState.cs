@@ -35,17 +35,16 @@ namespace EsperFightersCup
                 Debug.Log($"LocalPlayer is dead!");
                 var actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
                 var winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
-
-                PhotonNetwork.CurrentRoom.SetCustomPropertiesBySafe(CustomPropertyKeys.GameRoundWinner, actorNumber);
+                PhotonNetwork.CurrentRoom.SetCustomPropertiesBySafe(CustomPropertyKeys.GameRoundWinner, winner);
             }
 
             static bool CheckLocalPlayerIsDead()
             {
-                var localplayer = InGamePlayerManager.Instance.LocalPlayer;
-                if (localplayer == null)
+                if (InGamePlayerManager.Instance is null)
                 {
                     return false;
                 }
+                var localplayer = InGamePlayerManager.Instance.LocalPlayer;
                 return localplayer.HP <= 0;
             }
         }
@@ -58,15 +57,17 @@ namespace EsperFightersCup
             }
 
             var winner = (int)value;
-            Debug.Log($"Winner: {winner}");
+            Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
                 _checkCanllation.Cancel();
 
                 // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
-                InGamePlayerManager.Instance.LocalPlayer.WinPoint++;
-                Debug.Log($"Add WinPoint to LocalPlayer - {InGamePlayerManager.Instance.LocalPlayer.WinPoint}");
+                var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
+                PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
+                Debug.Log($"Add WinPoint to LocalPlayer - {winPoint}");
 
+                PhotonNetwork.SendAllOutgoingCommands();
                 ChangeState(IngameFSMSystem.State.RoundEnd);
             }
         }

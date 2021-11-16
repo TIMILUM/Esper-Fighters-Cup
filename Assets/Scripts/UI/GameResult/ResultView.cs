@@ -4,7 +4,6 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EsperFightersCup.UI.GameResult
 {
@@ -43,7 +42,7 @@ namespace EsperFightersCup.UI.GameResult
 
             var roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
 
-            if (roomProps.TryGetValue("winner", out var winner))
+            if (roomProps.TryGetValue(CustomPropertyKeys.GameWinner, out var winner))
             {
                 _winnerNameText.text = winner as string ?? "???";
             }
@@ -52,7 +51,7 @@ namespace EsperFightersCup.UI.GameResult
                 _winnerNameText.text = "???";
             }
 
-            if (roomProps.TryGetValue("loser", out var loser))
+            if (roomProps.TryGetValue(CustomPropertyKeys.GameLooser, out var loser))
             {
                 _loserNameText.text = loser as string ?? "???";
             }
@@ -96,8 +95,7 @@ namespace EsperFightersCup.UI.GameResult
                 return;
             }
 
-            PhotonNetwork.LocalPlayer.SetCustomProperties(
-                new Hashtable { [CustomPropertyKeys.PlayerGameRematch] = true });
+            PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerGameRematch, true);
             _rematchButtonText.text = "대기 중";
             _rematchButton.interactable = false;
 
@@ -111,8 +109,7 @@ namespace EsperFightersCup.UI.GameResult
         {
             if (PhotonNetwork.InRoom)
             {
-                PhotonNetwork.LocalPlayer.SetCustomProperties(
-                    new Hashtable { [CustomPropertyKeys.PlayerGameRematch] = false });
+                PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerGameRematch, false);
                 _rematchButtonText.text = "재 대결 신청";
                 _rematchButton.interactable = true;
             }
