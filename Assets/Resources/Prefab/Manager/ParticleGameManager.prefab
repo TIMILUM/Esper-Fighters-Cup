@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3466341873098705245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3466341873098705247}
+  - component: {fileID: 3466341873098705244}
+  m_Layer: 0
+  m_Name: ParticleGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3466341873098705247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466341873098705245}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3466341873098705244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466341873098705245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fbb774f6d422a346b44801cb68383aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particleInfo:
+  - _particleName: ShockWave
+    _particleFrefab: {fileID: 1562547645984578419, guid: 4008374dca3d8894e9e41c7f0d9f7d7e, type: 3}
+    _maxNum: 30
+    _lifeTime: 2000
+  - _particleName: ReverseGravityFiled
+    _particleFrefab: {fileID: 1584207308368762904, guid: c0bd0b407ec3d674bb92a84d2d73d356, type: 3}
+    _maxNum: 30
+    _lifeTime: 1000
+  - _particleName: ReverseGravityBreak
+    _particleFrefab: {fileID: 8848458364248349026, guid: 09779e93cfbaaec4e8f83e7ef7da8c35, type: 3}
+    _maxNum: 30
+    _lifeTime: 1000
+  - _particleName: ReverseGravityFiledAfter
+    _particleFrefab: {fileID: 7206864135028122236, guid: 3793a3533e331804eaa05995c0e35c2d, type: 3}
+    _maxNum: 100
+    _lifeTime: 0
+  - _particleName: Hit
+    _particleFrefab: {fileID: 740977408721668117, guid: acbe955bffe485e47be46ee42dacdf44, type: 3}
+    _maxNum: 100
+    _lifeTime: 1500
+  - _particleName: ShockWaveHand
+    _particleFrefab: {fileID: 8508841593130726734, guid: 79af6b9abf16f2f48b3737cbd13c1e14, type: 3}
+    _maxNum: 100
+    _lifeTime: 1500

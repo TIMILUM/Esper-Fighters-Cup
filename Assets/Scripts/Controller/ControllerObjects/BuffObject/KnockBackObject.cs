@@ -48,9 +48,6 @@ public class KnockBackObject : BuffObject
 
     protected override void OnRegistered()
     {
-
-
-
         _normalizedDirection = _normalizedDirection.normalized;
         _rigidbody = Author.GetComponent<Rigidbody>();
     }

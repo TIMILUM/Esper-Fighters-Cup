@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using EsperFightersCup.Net;
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
-
-
 
 /// <summary>
 /// 파편 지형을 만들어 주는 클래스 입니다.
@@ -12,7 +9,7 @@ using UnityEngine;
 public class FragmentAreaManager : PunEventCallbacks
 {
     [SerializeField]
-    private GameObject _fregmentFrefab;
+    private GameObject _fragmentPrefab;
     [SerializeField]
     private float _shardsOfDebris;
 
@@ -43,20 +40,18 @@ public class FragmentAreaManager : PunEventCallbacks
     /// <param name="trans"></param>
     /// <param name="range"></param>
     /// <returns></returns>
-    public GameObject AddFragmentList(Transform trans, float range, int ActorViewID)
+    public GameObject AddFragmentList(Transform trans, float range, int actorViewID)
     {
-        var clone = PhotonNetwork.Instantiate("Prefabs/Environment/" + _fregmentFrefab.name, trans.position, trans.rotation);
-        clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
+        var clone = PhotonNetwork.Instantiate("Prefab/EnvironmentObject/" + _fragmentPrefab.name, trans.position, trans.rotation);
+        clone.GetComponent<FragmentArea>().NotFloatObject(actorViewID);
         clone.transform.localScale = trans.localScale;
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
         return clone;
     }
 
-
-
     public GameObject AddFragmentList(Vector3 trans, float range, int ActorViewID)
     {
-        var clone = Instantiate(_fregmentFrefab, trans, Quaternion.identity);
+        var clone = Instantiate(_fragmentPrefab, trans, Quaternion.identity);
         clone.GetComponent<FragmentArea>().NotFloatObject(ActorViewID);
         clone.transform.localScale = new Vector3(range, 1.0f, range);
         _currentfragmentList.Add(new FragmentAreaInfo(clone, range));
@@ -76,9 +71,6 @@ public class FragmentAreaManager : PunEventCallbacks
         return true;
     }
 
-    /// <summary>
-    /// 파편지대 삭제
-    /// </summary>
     public void AllDestory()
     {
         foreach (var item in _currentfragmentList)
@@ -108,7 +100,7 @@ public class FragmentAreaManager : PunEventCallbacks
     /// </summary>
     public void SetFragmentAreaActive(Vector3 pos, float range, int ActorViewID)
     {
-        PacketSender.Broadcast(new GameFragmentAreaGenEvent(ActorViewID, pos, range), SendOptions.SendUnreliable);
+        // PacketSender.Broadcast(new GameFragmentAreaGenEvent(ActorViewID, pos, range), SendOptions.SendUnreliable);
         // 아래 코드 HandleFragmentAreaEvent()로 옮기기
     }
 

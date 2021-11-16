@@ -43,7 +43,7 @@ public class SkillController : ControllerBase
             ReleaseAllSkills();
             return;
         }
-        
+
         // 스턴 확인 시 스킬 사용을 멈춥니다.
         if (_buffController.GetBuff(BuffObject.Type.Stun) != null)
         {
@@ -53,16 +53,18 @@ public class SkillController : ControllerBase
 
         foreach (var skill in _skills)
         {
-            if (Input.GetKeyDown(skill.Key))
+            if (!Input.GetKeyDown(skill.Key))
             {
-                if (GetSkill(skill.Name) != null)
-                {
-                    continue;
-                }
-
-                var skillObject = GenerateSkill(skill.SkillPrefab);
-                skillObject.Name = skill.Name;
+                continue;
             }
+
+            if (GetSkill(skill.SkillPrefab.ID) != null)
+            {
+                continue;
+            }
+
+            var skillObject = GenerateSkill(skill.SkillPrefab);
+            skillObject.Name = skill.Name;
         }
     }
 
@@ -72,6 +74,20 @@ public class SkillController : ControllerBase
         {
             var skill = (SkillObject)_skillObjects[i];
             if (skill.Name.Equals(skillName))
+            {
+                return skill;
+            }
+        }
+
+        return null;
+    }
+
+    public SkillObject GetSkill(int id)
+    {
+        for (var i = _skillObjects.Count - 1; i >= 0; --i)
+        {
+            var skill = (SkillObject)_skillObjects[i];
+            if (skill.ID == id)
             {
                 return skill;
             }
@@ -97,7 +113,11 @@ public class SkillController : ControllerBase
             return;
         }
 
-        skillObject.SetState(SkillObject.State.Canceled);
+        if (skillObject.CurrentState != SkillObject.State.Release)
+        {
+            skillObject.SetState(SkillObject.State.Canceled);
+        }
+        _skillObjects.Remove(skillObject);
     }
 
     public void ReleaseAllSkills()

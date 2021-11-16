@@ -1,4 +1,5 @@
 using System;
+using EsperFightersCup.Net;
 using Photon.Pun;
 using UnityEngine;
 
@@ -15,7 +16,11 @@ public abstract class BuffObject : ControllerObject
         Slow,
         DecreaseHp,
         IncreaseHp,
-        Raise
+        Raise,
+        Falling,
+        Sliding,
+        Grab,
+        MoveSpeed
     }
 
     [SerializeField]
@@ -120,7 +125,33 @@ public abstract class BuffObject : ControllerObject
         public float Damage { get => _damage; set => _damage = value; }
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
+
+        public GameBuffGenerateEvent ToBuffEvent(int target, string id)
+        {
+            return new GameBuffGenerateEvent(
+                target,
+                (int)_type,
+                id,
+                _duration,
+                ValueFloat,
+                ValueVector3,
+                AllowDuplicates,
+                Damage,
+                IsOnlyOnce);
+        }
+
+        public static explicit operator BuffStruct(in GameBuffGenerateEvent packet)
+        {
+            return new BuffStruct
+            {
+                Type = (Type)packet.Type,
+                Duration = packet.Duration,
+                ValueFloat = packet.ValueFloat,
+                ValueVector3 = packet.ValueVector3,
+                AllowDuplicates = packet.AllowDuplicates,
+                Damage = packet.Damage,
+                IsOnlyOnce = packet.IsOnlyOnce
+            };
+        }
     }
-
-
 }
