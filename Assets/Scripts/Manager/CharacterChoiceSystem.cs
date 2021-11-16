@@ -19,7 +19,7 @@ namespace EsperFightersCup.Manager
                 return false;
             }
 
-            return PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerCharacterType, (int)ChooseCharacter);
+            return PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerCharacterType, (int)ChooseCharacter);
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

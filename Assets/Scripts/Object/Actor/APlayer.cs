@@ -22,7 +22,7 @@ public class APlayer : ACharacter, IPunObservable
             {
                 return;
             }
-            localplayer.SetCustomProperties(CustomPropertyKeys.PlayerWinPoint, value);
+            localplayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, value);
         }
     }
 

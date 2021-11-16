@@ -95,7 +95,7 @@ namespace EsperFightersCup.UI.GameResult
                 return;
             }
 
-            PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerGameRematch, true);
+            PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerGameRematch, true);
             _rematchButtonText.text = "대기 중";
             _rematchButton.interactable = false;
 
@@ -109,7 +109,7 @@ namespace EsperFightersCup.UI.GameResult
         {
             if (PhotonNetwork.InRoom)
             {
-                PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerGameRematch, false);
+                PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerGameRematch, false);
                 _rematchButtonText.text = "재 대결 신청";
                 _rematchButton.interactable = true;
             }

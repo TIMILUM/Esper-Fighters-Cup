@@ -64,7 +64,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
 
             int round = Mathf.Max(value, 0);
             Debug.Log($"Set RoundCount = {round}");
-            room.SetCustomProperties(CustomPropertyKeys.GameRound, round);
+            room.SetCustomProperty(CustomPropertyKeys.GameRound, round);
         }
     }
 
@@ -112,7 +112,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
             return;
         }
 
-        PhotonNetwork.CurrentRoom.SetCustomPropertiesBySafe(CustomPropertyKeys.GameState, (int)state);
+        PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameState, (int)state);
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)

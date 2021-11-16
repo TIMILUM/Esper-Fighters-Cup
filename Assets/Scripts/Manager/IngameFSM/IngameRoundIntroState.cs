@@ -23,8 +23,8 @@ public class IngameRoundIntroState : InGameFSMStateBase
         if (PhotonNetwork.IsMasterClient)
         {
             var round = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
-            PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameRound, round + 1);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameRoundWinner, 0);
+            PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameRound, round + 1);
+            PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameRoundWinner, 0);
         }
 
         // 로컬플레이어 설정

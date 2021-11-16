@@ -19,11 +19,11 @@ namespace EsperFightersCup
             var myWinPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
             if (myWinPoint == 3)
             {
-                PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameWinner, PhotonNetwork.LocalPlayer.NickName);
+                PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameWinner, PhotonNetwork.LocalPlayer.NickName);
             }
             else
             {
-                PhotonNetwork.CurrentRoom.SetCustomProperties(CustomPropertyKeys.GameLooser, PhotonNetwork.LocalPlayer.NickName);
+                PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameLooser, PhotonNetwork.LocalPlayer.NickName);
             }
 
             ResultEndAsync().Forget();

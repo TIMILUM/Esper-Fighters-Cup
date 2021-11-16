@@ -41,7 +41,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     {
         LocalPlayer = SpawnLocalPlayer();
         var pvID = LocalPlayer.photonView.ViewID;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(CustomPropertyKeys.PlayerPhotonView, pvID);
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
 
         Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
         Debug.Log($"GamePlayers count: {GamePlayers.Count}");

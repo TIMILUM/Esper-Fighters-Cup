@@ -12,7 +12,7 @@ namespace EsperFightersCup
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool SetCustomProperties(this Player player, string key, object value)
+        public static bool SetCustomProperty(this Player player, string key, object value)
         {
             var changeProp = new Hashtable { [key] = value };
             return player.SetCustomProperties(changeProp);
@@ -25,7 +25,7 @@ namespace EsperFightersCup
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool SetCustomPropertiesBySafe(this Player player, string key, object value)
+        public static bool SetCustomPropertyBySafe(this Player player, string key, object value)
         {
             var changeProp = new Hashtable { [key] = value };
             var oldProp = new Hashtable { [key] = player.CustomProperties[key] };
@@ -39,7 +39,7 @@ namespace EsperFightersCup
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool SetCustomProperties(this Room room, string key, object value)
+        public static bool SetCustomProperty(this Room room, string key, object value)
         {
             var changeProp = new Hashtable { [key] = value };
             return room.SetCustomProperties(changeProp);
@@ -52,7 +52,7 @@ namespace EsperFightersCup
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool SetCustomPropertiesBySafe(this Room room, string key, object value)
+        public static bool SetCustomPropertyBySafe(this Room room, string key, object value)
         {
             var changeProp = new Hashtable { [key] = value };
             var oldProp = new Hashtable { [key] = room.CustomProperties[key] };
