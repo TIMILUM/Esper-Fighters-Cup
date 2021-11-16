@@ -1915,6 +1915,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: InSkillGameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 2714110592261382150, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
+      propertyPath: _DropuiPrefabs
+      value: 
+      objectReference: {fileID: 1830693600371288693, guid: fd36db764b0743b48914d86a169708a7, type: 3}
+    - target: {fileID: 2714110592261382150, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
+      propertyPath: _reverseuiPrefabs
+      value: 
+      objectReference: {fileID: 3187823670617454164, guid: 965235aedfa28c44fb60c7bbd019b8d0, type: 3}
+    - target: {fileID: 2714110592261382150, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
+      propertyPath: _dropStaticObjectPrefab
+      value: 
+      objectReference: {fileID: 7540981878553075838, guid: e3a0f211bfe5a794ba0781abf334912e, type: 3}
     - target: {fileID: 2714110592261382152, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1959,7 +1971,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2714110592261382153, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
 --- !u!4 &2885620611091357183 stripped
 Transform:
@@ -1978,6 +1991,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1076915466}
     m_Modifications:
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[3]._lifeTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705245, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: m_Name
       value: ParticleGameManager

@@ -7,7 +7,7 @@ namespace EsperFightersCup
     public class DropSkillObject : SkillObject
     {
 
-        private int _dropRate = 0;
+
         [SerializeField]
         private float _range;
         private float _secondrange;
@@ -19,16 +19,8 @@ namespace EsperFightersCup
         private float _endDelayTime;
 
         [SerializeField]
-        private GameObject _dropUIPrefab;
-
-
-
-
-        [SerializeField]
         private GameObject[] _secondCasting;
 
-
-        private float _perSceond;
         private Vector3 _endMousePoint;
 
         protected override void Start()
@@ -124,7 +116,7 @@ namespace EsperFightersCup
                     isCanceled = true;
                     return isCanceled;
                 }
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetKeyUp(KeyCode.Space))
                 {
                     _endMousePoint = MousePos;
                     return true;

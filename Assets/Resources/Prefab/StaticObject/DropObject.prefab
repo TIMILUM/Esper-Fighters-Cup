@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 8539521510519346714}
   - component: {fileID: 9163902271404509405}
   - component: {fileID: 6819613831527960332}
+  - component: {fileID: -3680202524107622899}
   m_Layer: 0
   m_Name: DropObject
   m_TagString: Untagged
@@ -250,6 +251,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+--- !u!114 &-3680202524107622899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540981878553075838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eaf348ff82e6e448976a068688b04f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buffOnCollision: []
+  _controllerManager: {fileID: 6820238161038408815}
+  _hp: 0
+  _id: 2
+  _audioEmitter: {fileID: 0}
 --- !u!1001 &402237127510166391
 PrefabInstance:
   m_ObjectHideFlags: 0

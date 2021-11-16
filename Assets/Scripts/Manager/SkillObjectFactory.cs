@@ -12,7 +12,10 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     private GameObject _dropStaticObjectPrefab;
 
     [SerializeField]
-    private GameObject _uiPrefabs;
+    private GameObject _DropuiPrefabs;
+    [SerializeField]
+    private GameObject _reverseuiPrefabs;
+
 
 
     public GameObject CreateSkillObject(string objectname, Vector3 pos)
@@ -33,9 +36,18 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     {
         GameObject clone = null;
         if (objectname == "DropUI")
-            clone = PhotonNetwork.Instantiate($"Prefab/UI/InGame/{_uiPrefabs.name}", pos, Quaternion.identity);
+            clone = PhotonNetwork.Instantiate($"Prefab/UI/InGame/{_DropuiPrefabs.name}", pos, Quaternion.identity);
+        if (objectname == "ThrowUI")
+            clone = PhotonNetwork.Instantiate($"Prefab/UI/InGame/{_reverseuiPrefabs.name}", pos, Quaternion.identity);
         return clone;
     }
+
+    public void DestroyObj(GameObject obj)
+    {
+        PhotonNetwork.Destroy(obj);
+    }
+
+
 
 
 
