@@ -25,11 +25,13 @@ public class Actor : ObjectBase, IPunObservable
     public int HP { get => _hp; set => _hp = Mathf.Clamp(value, 0, int.MaxValue); }
     public int ID => _id;
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
+    public Rigidbody Rigidbody { get; protected set; }
 
     protected virtual void Awake()
     {
         Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");
         ControllerManager.SetActor(this);
+        Rigidbody = GetComponent<Rigidbody>();
     }
 
     protected virtual void Start()

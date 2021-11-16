@@ -56,7 +56,7 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
     private async UniTask RoundIntroAsync()
     {
-        var round = FsmSystem.RoundCount;
+        var round = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
         await FsmSystem.Curtain.FadeOutAsync();
 
         await UniTask.Delay(2000);

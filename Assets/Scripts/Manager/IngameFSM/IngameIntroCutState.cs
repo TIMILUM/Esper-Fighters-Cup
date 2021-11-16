@@ -19,8 +19,6 @@ namespace EsperFightersCup
         public override void StartState()
         {
             base.StartState();
-            PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, 0);
-            PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameRound, 0);
 
             _intro.gameObject.SetActive(true);
             FsmSystem.Curtain.FadeOutAsync();

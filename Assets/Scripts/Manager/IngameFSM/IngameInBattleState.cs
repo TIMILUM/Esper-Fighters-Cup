@@ -11,6 +11,8 @@ namespace EsperFightersCup
     {
         private CancellationTokenSource _checkCanllation;
 
+        private int _sawbladeStartTime;
+
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.InBattle;
@@ -21,6 +23,27 @@ namespace EsperFightersCup
             base.StartState();
             _checkCanllation = new CancellationTokenSource();
             CheckLocalPlayerHPAsync(_checkCanllation.Token).Forget();
+            GenerateSawBladeAsync(_checkCanllation.Token).Forget();
+        }
+
+        private async UniTask GenerateSawBladeAsync(CancellationToken cancellation)
+        {
+            var start = PhotonNetwork.ServerTimestamp;
+
+            while (!cancellation.IsCancellationRequested)
+            {
+                if (InGamePlayerManager.Instance.LocalPlayer.HP <= 30)
+                {
+                    var time = PhotonNetwork.ServerTimestamp - start;
+                    if (time > 5000)
+                    {
+                        start = PhotonNetwork.ServerTimestamp;
+                        FsmSystem.SawBladeSystem.GenerateSawBlade();
+                    }
+                }
+
+                await UniTask.Yield();
+            }
         }
 
         private async UniTask CheckLocalPlayerHPAsync(CancellationToken cancellation)

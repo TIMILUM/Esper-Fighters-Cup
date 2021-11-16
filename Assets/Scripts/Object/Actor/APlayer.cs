@@ -1,30 +1,11 @@
-using EsperFightersCup;
 using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
 
-public class APlayer : ACharacter, IPunObservable
+public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
 {
     private Rigidbody _rigidbody;
     private CameraMovement _cameraMovement;
-
-    public int WinPoint
-    {
-        get
-        {
-            var value = PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
-            return value is int winPoint ? winPoint : 0;
-        }
-        set
-        {
-            var localplayer = PhotonNetwork.LocalPlayer;
-            if (localplayer != photonView.Owner)
-            {
-                return;
-            }
-            localplayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, value);
-        }
-    }
 
     protected override void Start()
     {
@@ -50,5 +31,12 @@ public class APlayer : ACharacter, IPunObservable
         var idx = PhotonNetwork.LocalPlayer.ActorNumber - 1;
         var startLocation = InGamePlayerManager.Instance.StartLocations[idx];
         transform.SetPositionAndRotation(startLocation.position, startLocation.rotation);
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        info.Sender.TagObject = this;
+        gameObject.name = $"{info.Sender.NickName}_{info.Sender.ActorNumber}";
+        Debug.Log($"Set {info.Sender.NickName}'s TagObject to {gameObject}");
     }
 }

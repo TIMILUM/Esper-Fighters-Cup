@@ -4,25 +4,14 @@ namespace EsperFightersCup
 {
     public class FallingObject : BuffObject
     {
-
         private float _decreaseHp = 0;
         private float _durationStunSeconds = 0;
-        private AStaticObject _character;
-
 
         private void Reset()
         {
             _name = "";
             _buffStruct.Type = Type.Falling;
-
-            _character = Author as AStaticObject;
-
-            if (!(_character is null))
-            {
-                //_character.CharacterAnimatorSync.SetTrigger("Knockback");
-            }
         }
-
 
         public override void SetBuffStruct(BuffStruct buffStruct)
         {
@@ -36,19 +25,16 @@ namespace EsperFightersCup
             _durationStunSeconds = buffStruct.ValueFloat[1];
         }
 
-
         protected override void Update()
         {
             base.Update();
-            if (transform.position.y < 0.5f) // TODO: transform.position 대신 rigidbody.position 사용
+            if (Author.Rigidbody.position.y < 0.5f)
             {
                 _buffStruct.Duration = 0.1f;
             }
 
-            if (Author.ControllerManager.TryGetController(
-ControllerManager.Type.BuffController, out BuffController myController))
+            if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
             {
-
                 if (myController.GetBuff(Type.KnockBack) != null)
                 {
                     myController.ReleaseBuff(this);
@@ -68,17 +54,13 @@ ControllerManager.Type.BuffController, out BuffController myController))
                 return;
             }
 
-
-            if (Author.ControllerManager.TryGetController(
-    ControllerManager.Type.BuffController, out BuffController myController))
+            if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
             {
                 GenerateAfterBuff(myController);
                 myController.ReleaseBuff(this);
             }
 
-
-            if (otherActor.ControllerManager.TryGetController(
-             ControllerManager.Type.BuffController, out BuffController otherController))
+            if (otherActor.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController otherController))
             {
                 GenerateAfterBuff(otherController);
             }
