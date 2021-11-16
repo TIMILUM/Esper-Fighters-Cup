@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using EsperFightersCup.UI.InGame;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class IngameRoundIntroState : InGameFSMStateBase
     [SerializeField] private GameStateView _gameStateView;
 
     private int _count;
+    private int _currentRound;
 
     protected override void Initialize()
     {
@@ -23,8 +25,14 @@ public class IngameRoundIntroState : InGameFSMStateBase
         if (PhotonNetwork.IsMasterClient)
         {
             var round = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
-            PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameRound, round + 1);
-            PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameRoundWinner, 0);
+            _currentRound = ++round;
+
+            var props = new Hashtable
+            {
+                [CustomPropertyKeys.GameRound] = round,
+                [CustomPropertyKeys.GameRoundWinner] = 0
+            };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
 
         // 로컬플레이어 설정
@@ -34,7 +42,6 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
         // 설정 완료 후 MasterClient에게 신호
         FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
-        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     [PunRPC]
@@ -43,20 +50,20 @@ public class IngameRoundIntroState : InGameFSMStateBase
         _count++;
         if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
         {
-            FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All);
+            FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All, _currentRound);
         }
     }
 
     [PunRPC]
-    private void RoundIntroRPC()
+    private void RoundIntroRPC(int round)
     {
         _count = 0;
-        RoundIntroAsync().Forget();
+        RoundIntroAsync(round).Forget();
     }
 
-    private async UniTask RoundIntroAsync()
+    private async UniTask RoundIntroAsync(int round)
     {
-        var round = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
+        // var round = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
         await FsmSystem.Curtain.FadeOutAsync();
 
         await UniTask.Delay(2000);
