@@ -27,6 +27,6 @@ public class IngamePlayerUI : MonoBehaviour
             return;
         }
 
-        _hp.fillAmount = _player.Hp / 100.0f;
+        _hp.fillAmount = _player.HP / 100.0f;
     }
 }

@@ -7,9 +7,9 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameFragmentAreaGenEvent : IGameEvent
     {
-        [Key("author")] public int FragmentAuthorViewID { get; }
-        [Key("pos")] public Vector3 Position { get; }
-        [Key("range")] public float Range { get; }
+        [Key(0)] public int FragmentAuthorViewID { get; }
+        [Key(1)] public Vector3 Position { get; }
+        [Key(2)] public float Range { get; }
 
         [SerializationConstructor]
         public GameFragmentAreaGenEvent(int author, Vector3 pos, float range)
@@ -18,10 +18,9 @@ namespace EsperFightersCup.Net
             Position = pos;
             Range = range;
         }
-
-        public byte EventCode()
+        public byte GetEventCode()
         {
-            return GameProtocol.FragmentAreaGen;
+            return EventCode.FragmentAreaGen;
         }
     }
 }

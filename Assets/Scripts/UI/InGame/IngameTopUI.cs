@@ -1,10 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using EsperFightersCup;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class IngameTopUI : MonoBehaviour
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
+public class IngameTopUI : MonoBehaviourPunCallbacks
 {
     [Header("Round")]
     [SerializeField]
@@ -15,17 +17,65 @@ public class IngameTopUI : MonoBehaviour
     [Header("Player Infos")]
     [SerializeField]
     private IngamePlayerUI[] _playerUIList;
-    
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
-    
+        SetRoundCount(1);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-    
+        var players = InGamePlayerManager.Instance != null ? InGamePlayerManager.Instance.GamePlayers : null;
+        if (players is null)
+        {
+            return;
+        }
+
+        foreach (var playerActorNumber in players.Keys)
+        {
+            var player = players[playerActorNumber];
+            if (player == null)
+            {
+                continue;
+            }
+
+            var ui = _playerUIList[playerActorNumber - 1].transform;
+
+            var hpbar = ui.GetChild(0).GetComponent<Image>();
+            hpbar.fillAmount = player.HP / 100f;
+
+            var nickname = ui.GetChild(1).GetComponent<Text>();
+            nickname.text = player.photonView.Controller.NickName;
+        }
+    }
+
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        if (propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRound, out var value))
+        {
+            var round = (int)value;
+            if (round > _roundList.Length)
+            {
+                SetRoundCount(_roundList.Length);
+            }
+            else
+            {
+                SetRoundCount(round);
+            }
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (changedProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
+        {
+            var winPoint = (int)value;
+            var ui = _playerUIList[targetPlayer.ActorNumber - 1].transform.Find("VictoryCount");
+            for (int i = 0; i < ui.childCount; i++)
+            {
+                ui.GetChild(i).gameObject.SetActive(i < winPoint);
+            }
+        }
     }
 
     public void SetRoundCount(int round)

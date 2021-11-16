@@ -5,8 +5,8 @@ namespace EsperFightersCup.Net
     [MessagePackObject]
     public readonly struct GameAnimatorTriggerSyncEvent : IGameEvent
     {
-        [Key("actor")] public int ActorViewID { get; }
-        [Key("name")] public string Name { get; }
+        [Key(0)] public int ActorViewID { get; }
+        [Key(1)] public string Name { get; }
 
         [SerializationConstructor]
         public GameAnimatorTriggerSyncEvent(int actor, string name)
@@ -15,9 +15,9 @@ namespace EsperFightersCup.Net
             Name = name;
         }
 
-        public byte EventCode()
+        public byte GetEventCode()
         {
-            return GameProtocol.AnimatorTriggerSync;
+            return EventCode.AnimatorTriggerSync;
         }
     }
 }
