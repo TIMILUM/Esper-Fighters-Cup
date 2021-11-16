@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace EsperFightersCup
 {
     public class GrabObject : BuffObject
     {
-
         private ACharacter _character;
         private Collider[] _colliders;
 

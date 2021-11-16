@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class SawBladePattern : MonoBehaviour
 {
+    public const string SawBladePrefabLocation = "Prefab/StaticObject/SawBladeObject";
+
     [SerializeField]
     private Transform[] _pathList;
 
     private readonly List<SawBladePosition> _bladePositions = new List<SawBladePosition>();
 
-    // Start is called before the first frame update
     private void Start()
     {
         for (var i = 0; i < _pathList.Length; ++i)
@@ -20,29 +21,35 @@ public class SawBladePattern : MonoBehaviour
 
             _bladePositions.Add(new SawBladePosition
             {
-                _startTransform = start,
-                _endTransform = end
+                Start = start,
+                End = end
             });
         }
     }
 
     /// <summary>
-    ///     톱날 오브젝트를 생성합니다.
+    /// 톱날 오브젝트를 생성합니다.
     /// </summary>
-    public void GenerateSawBladeObject()
+    public List<SawBladeObject> GenerateSawBladeObject()
     {
+        var sawblades = new List<SawBladeObject>(_bladePositions.Count);
+
         foreach (var bladePosition in _bladePositions)
         {
-            var sawBladeGameObject = PhotonNetwork.Instantiate("Prefabs/StaticObjects/SawBladeObject",
-                bladePosition._startTransform.position, Quaternion.identity);
+            var sawBladeGameObject = PhotonNetwork.Instantiate(SawBladePrefabLocation,
+                bladePosition.Start.position, Quaternion.identity);
             var sawBladeObject = sawBladeGameObject.GetComponent<SawBladeObject>();
-            sawBladeObject.SetDirection(bladePosition._startTransform, bladePosition._endTransform);
+            sawBladeObject.SetDirection(bladePosition.Start, bladePosition.End);
+
+            sawblades.Add(sawBladeObject);
         }
+
+        return sawblades;
     }
 
     private class SawBladePosition
     {
-        public Transform _endTransform;
-        public Transform _startTransform;
+        public Transform Start { get; set; }
+        public Transform End { get; set; }
     }
 }

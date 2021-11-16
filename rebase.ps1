@@ -4,7 +4,7 @@ $targets = @(
     'design/sunghoon'
     'graphic/haedon'
     'graphic/hyunsung'
-    'graphic/jungwan'
+    'graphic/jeongwan'
     'graphic/junhyo'
     'graphic/kangmin'
     'graphic/kya'

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using EsperFightersCup;
 using UnityEngine;
@@ -128,7 +128,7 @@ public class ShockWaveSkillObject : SkillObject
 
         _shockwaveUI.transform.SetParent(GameObject.Find("UiObject").transform);
 
-        _shockwaveUI.transform.SetPositionAndRotation(_startPos + (_direction), _secondCasting[0].transform.rotation);
+        _shockwaveUI.transform.SetPositionAndRotation(_startPos + _direction, _secondCasting[0].transform.rotation);
         _shockwaveUI.transform.localScale = _secondCasting[0].transform.localScale * 0.1f;
         SetNextState();
     }

@@ -1,8 +1,3 @@
-using System.Text.RegularExpressions;
-using MessagePack;
-using MessagePack.Resolvers;
-using MessagePack.Unity;
-using MessagePack.Unity.Extension;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
@@ -10,7 +5,7 @@ using Object = UnityEngine.Object;
 
 public static class GameStartup
 {
-    private const string PhotonAppIdFilePath = "photon-cloud";
+    // private const string PhotonAppIdFilePath = "photon-cloud";
 
     /// <summary>
     /// 최초로 게임이 실행될 때 씬의 오브젝트들이 초기화되기 전 호출됩니다.
@@ -18,9 +13,8 @@ public static class GameStartup
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitGame()
     {
-        InitMessagePack();
         InitGameVersion();
-        InitAppId();
+        // InitAppId();
         PhotonNetworkSettings();
     }
 
@@ -33,21 +27,6 @@ public static class GameStartup
         CreatePhotonStatus();
     }
 
-    private static void InitMessagePack()
-    {
-        StaticCompositeResolver.Instance.Register(
-            UnityResolver.Instance,
-            UnityBlitWithPrimitiveArrayResolver.Instance,
-            StandardResolver.Instance);
-
-        var options = MessagePackSerializerOptions
-            .Standard
-            .WithResolver(StaticCompositeResolver.Instance)
-            .WithSecurity(MessagePackSecurity.TrustedData);
-
-        MessagePackSerializer.DefaultOptions = options;
-    }
-
     private static void InitGameVersion()
     {
         // 포톤의 게임버전은 프로젝트의 버전을 따라갑니다.
@@ -56,6 +35,7 @@ public static class GameStartup
         Debug.Log($"Game Version: {PhotonNetwork.GameVersion}");
     }
 
+    /*
     private static void InitAppId()
     {
         var appIdFile = Resources.Load<TextAsset>(PhotonAppIdFilePath);
@@ -85,6 +65,7 @@ public static class GameStartup
         Debug.Log($"Photon Cloud App Id를 성공적으로 로드했습니다.");
         // Debug.Log($"Photon Cloud App Id: {appId}");
     }
+    */
 
     private static void PhotonNetworkSettings()
     {
@@ -92,7 +73,6 @@ public static class GameStartup
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
     }
-
 
     private static void CreatePhotonStatus()
     {

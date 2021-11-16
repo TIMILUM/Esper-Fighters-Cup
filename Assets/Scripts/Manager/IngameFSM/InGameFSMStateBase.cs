@@ -10,6 +10,7 @@ public abstract class InGameFSMStateBase : InspectorFSMBase<IngameFSMSystem.Stat
 
     public override void StartState()
     {
+        // TODO: 톱날 초기화 필요
         ActiveObjects(_activeGameObjects, true);
         ActiveObjects(_inactiveGameObjects, false);
     }
