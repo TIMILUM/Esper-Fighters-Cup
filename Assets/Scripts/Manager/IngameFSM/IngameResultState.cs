@@ -31,7 +31,8 @@ namespace EsperFightersCup
 
         private async UniTask ResultEndAsync()
         {
-            PhotonNetwork.SendAllOutgoingCommands();
+            PhotonNetwork.Destroy(InGamePlayerManager.Instance.LocalPlayer.gameObject);
+
             await UniTask.Delay(1000);
             FsmSystem.photonView.RPC(nameof(ResultEndRPC), RpcTarget.MasterClient);
         }

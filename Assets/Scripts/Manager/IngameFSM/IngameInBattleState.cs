@@ -11,8 +11,6 @@ namespace EsperFightersCup
     {
         private CancellationTokenSource _checkCanllation;
 
-        private int _sawbladeStartTime;
-
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.InBattle;
@@ -29,10 +27,16 @@ namespace EsperFightersCup
         private async UniTask GenerateSawBladeAsync(CancellationToken cancellation)
         {
             var start = PhotonNetwork.ServerTimestamp;
+            var localplayer = InGamePlayerManager.Instance.LocalPlayer;
 
             while (!cancellation.IsCancellationRequested)
             {
-                if (InGamePlayerManager.Instance.LocalPlayer.HP <= 30)
+                if (!localplayer)
+                {
+                    return;
+                }
+
+                if (localplayer.HP <= 30)
                 {
                     var time = PhotonNetwork.ServerTimestamp - start;
                     if (time > 5000)
@@ -79,11 +83,12 @@ namespace EsperFightersCup
                 return;
             }
 
+            _checkCanllation.Cancel();
+
             var winner = (int)value;
             Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-                _checkCanllation.Cancel();
 
                 // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
                 var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];

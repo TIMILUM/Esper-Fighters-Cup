@@ -10,6 +10,8 @@ namespace EsperFightersCup
         [SerializeField]
         private GameStateView _gameStateView;
 
+        private int _count;
+
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.RoundEnd;
@@ -17,6 +19,7 @@ namespace EsperFightersCup
 
         public override void StartState()
         {
+            _count = 0;
             base.StartState();
             _gameStateView.Show("K.O.", Vector2.left * 20f);
 
@@ -28,10 +31,32 @@ namespace EsperFightersCup
             await UniTask.Delay(2000);
             await FsmSystem.Curtain.FadeInAsync();
 
+            FsmSystem.photonView.RPC(nameof(RoundEndRPC), RpcTarget.MasterClient);
+        }
+
+        [PunRPC]
+        private void RoundEndRPC()
+        {
+            _count++;
+            if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+            {
+                FsmSystem.photonView.RPC(nameof(RoundEndNextRPC), RpcTarget.All);
+            }
+        }
+
+        [PunRPC]
+        private void RoundEndNextRPC()
+        {
+            var sawblades = SawBladeSystem.Instance.LocalSpawnedSawBlades;
+            Debug.Log($"Destroying {sawblades.Count} sawblades");
+            foreach (var sawblade in sawblades.Values)
+            {
+                PhotonNetwork.Destroy(sawblade.gameObject);
+            }
+
             var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
             Debug.Log($"My win point: {winPoint}");
 
-            // 이번 라운드 우승자의 WinPoint 체크 후 다음 State 결정
             var winner = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRoundWinner];
             if (winner != PhotonNetwork.LocalPlayer.ActorNumber)
             {
