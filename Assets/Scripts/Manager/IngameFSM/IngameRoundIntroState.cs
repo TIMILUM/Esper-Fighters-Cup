@@ -24,7 +24,8 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
         if (PhotonNetwork.IsMasterClient)
         {
-            var round = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
+            var roundValue = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound] ?? 0;
+            var round = (int)roundValue;
             _currentRound = ++round;
 
             var props = new Hashtable
