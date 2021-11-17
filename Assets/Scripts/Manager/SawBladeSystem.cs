@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using EsperFightersCup.Util;
+using EsperFightersCup;
 using UnityEngine;
 
 public class SawBladeSystem : Singleton<SawBladeSystem>
