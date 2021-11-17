@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace EsperFightersCup
@@ -26,7 +25,7 @@ namespace EsperFightersCup
         {
             _cursorStartPosition.x += _cursorTexture.width / 2.0f;
             _cursorStartPosition.y += _cursorTexture.height / 2.0f;
-            
+
             Cursor.SetCursor(_cursorTexture, _cursorStartPosition, CursorMode.Auto);
             _isSetCursor = true;
         }

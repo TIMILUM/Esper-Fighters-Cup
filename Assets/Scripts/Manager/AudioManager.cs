@@ -1,4 +1,3 @@
-using EsperFightersCup.Util;
 using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;

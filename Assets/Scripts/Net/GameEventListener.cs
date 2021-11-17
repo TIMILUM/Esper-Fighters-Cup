@@ -1,4 +1,3 @@
-using EsperFightersCup.Util;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
@@ -74,9 +73,9 @@ namespace EsperFightersCup.Net
                 return;
             }
 
-            Debug.Log($"<color=grey>[Packet Check] received: {photonEvent.Code} from actor {photonEvent.Sender}</color>");
-            var receivedEvent = PacketSerializer.Deserialize((byte[])photonEvent.CustomData);
-            GameEventReceived?.Invoke(new GameEventArguments(photonEvent.Code, photonEvent.Sender, receivedEvent));
+            // Debug.Log($"<color=grey>[Packet Check] received: {photonEvent.Code} from actor {photonEvent.Sender}</color>");
+            GameEventReceived?.Invoke(
+                new GameEventArguments(photonEvent.Code, photonEvent.Sender, (IGameEvent)photonEvent.CustomData));
         }
     }
 }
