@@ -1,4 +1,3 @@
-using EsperFightersCup.Util;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
