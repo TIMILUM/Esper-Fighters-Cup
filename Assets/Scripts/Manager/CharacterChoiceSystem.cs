@@ -18,13 +18,13 @@ namespace EsperFightersCup.Manager
             {
                 return false;
             }
-            var prop = new Hashtable { [CustomPropertyKeys.PlayerCharacterType] = (int)ChooseCharacter };
-            return PhotonNetwork.LocalPlayer.SetCustomProperties(prop);
+
+            return PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerCharacterType, (int)ChooseCharacter);
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
-            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var _))
+            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var value) || value is null)
             {
                 return;
             }
