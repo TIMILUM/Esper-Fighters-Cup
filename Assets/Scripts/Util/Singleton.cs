@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace EsperFightersCup.Util
+namespace EsperFightersCup
 {
     /// <summary>
     /// Awake를 통해 생성되는 싱글톤입니다.

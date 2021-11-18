@@ -1,4 +1,4 @@
-using EsperFightersCup.Util;
+using EsperFightersCup;
 using UnityEngine;
 
 /// <summary>

@@ -1,7 +1,7 @@
 using EsperFightersCup.Net;
 using UnityEngine;
 
-namespace EsperFightersCup.Util
+namespace EsperFightersCup
 {
     /// <summary>
     /// Awake를 통해 생성되는 <see cref="PunEventCallbacks"/> 기반의 싱글톤입니다.

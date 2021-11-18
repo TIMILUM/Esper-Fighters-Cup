@@ -1,6 +1,5 @@
 using EsperFightersCup.Net;
 using EsperFightersCup.UI.Popup;
-using EsperFightersCup.Util;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;

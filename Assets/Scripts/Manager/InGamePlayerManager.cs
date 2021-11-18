@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
-using EsperFightersCup.Util;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
