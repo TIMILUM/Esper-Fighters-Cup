@@ -23,18 +23,20 @@ namespace EsperFightersCup
 
         private Vector3 _endMousePoint;
 
+        private static readonly Dictionary<int, float> s_dropObjectPercentageData = new Dictionary<int, float>();
+        private int _targetId = 0;
+
         protected override void Start()
         {
 
             base.Start();
-            //_range = GetCSVData<float>("Range") * 0.001f;
-            _range = 0.35f;
+            SetDropObjectCSVData();
+            _targetId = GetRandomDropObjectID();
+            _range = GetCSVData<float>("Range") * 0.001f;
             _secondrange = 0.2f;
             _frontDelayTime = FrontDelayMilliseconds;
             _endDelayTime = EndDelayMilliseconds;
 
-            ///아직 엘셀과 파싱하는 부분을 이해를 못해서 
-            ///직접 계산해서 크기를 맞췄습니다.            
 
             ScaleGameObjects(_secondCasting, new Vector3(_secondrange * 2.0f, 1.0f, _secondrange * 2.0f));
 
@@ -47,13 +49,14 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnCanceled()
         {
+            ApplyMovementSpeed(State.Canceled);
             SetState(State.Release);
             yield return null;
         }
 
         protected override IEnumerator OnEndDelay()
         {
-
+            ApplyMovementSpeed(State.EndDelay);
             var startTime = Time.time;
             var currentTime = Time.time;
             DestoryGameObjects(_secondCasting);
@@ -69,6 +72,7 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnFrontDelay()
         {
+            ApplyMovementSpeed(State.FrontDelay);
             var startTime = Time.time;
             var currentTime = Time.time;
             bool isCanceled = false;
@@ -140,17 +144,18 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnRelease()
         {
-
+            ApplyMovementSpeed(State.Release);
             Destroy(gameObject);
             yield return null;
         }
 
         protected override IEnumerator OnUse()
         {
+            ApplyMovementSpeed(State.Use);
             // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = _endMousePoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
-            var obj = InGameSkillManager.Instance.CreateSkillObject("DropObject", createObjectPos);
+            var obj = InGameSkillManager.Instance.CreateSkillObject(_targetId, createObjectPos);
             var UI = InGameSkillManager.Instance.CreateSkillUI("DropUI", createObjectPos);
 
 
@@ -246,6 +251,46 @@ namespace EsperFightersCup
             }
 
             return false;
+        }
+
+        /// <summary>
+        ///     드랍되는 오브젝트가 확률에 따라 떨어지는데 이 데이터를 불러오는 함수입니다.
+        ///     최초 실행 시 한번만 호출하면 되기 때문에 관련하여 예외처리를 하였습니다.
+        /// </summary>
+        private void SetDropObjectCSVData()
+        {
+            if (s_dropObjectPercentageData.Count > 0)
+            {
+                return;
+            }
+            
+            // CSV 데이터 적용
+            var csvData = CSVUtil.GetData("DropSkillDropObjectDataTable");
+            csvData.Get<float>("Obj_ID", out var idList);
+            csvData.Get<float>("Percentage", out var percentageList);
+
+            for (var i = 0; i < idList.Count; ++i)
+            {
+                s_dropObjectPercentageData.Add((int)idList[i], percentageList[i] / 100.0f);
+            }
+        }
+
+        private int GetRandomDropObjectID()
+        {
+            var randomValue = Random.Range(0.0f, 1.0f);
+            var totalPercentage = 0.0f;
+            foreach (var percentageDataPair in s_dropObjectPercentageData)
+            {
+                totalPercentage += percentageDataPair.Value;
+                // 확률 범위 안에 있으면 당첨
+                if (randomValue <= totalPercentage)
+                {
+                    Debug.Log(percentageDataPair.Key);
+                    return percentageDataPair.Key;
+                }
+            }
+            
+            return 0;
         }
 
     }
