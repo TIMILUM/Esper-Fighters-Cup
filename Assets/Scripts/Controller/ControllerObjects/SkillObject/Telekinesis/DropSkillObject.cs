@@ -32,14 +32,11 @@ namespace EsperFightersCup
             base.Start();
             SetDropObjectCSVData();
             _targetId = GetRandomDropObjectID();
-            //_range = GetCSVData<float>("Range") * 0.001f;
-            _range = 0.35f;
+            _range = GetCSVData<float>("Range") * 0.001f;
             _secondrange = 0.2f;
             _frontDelayTime = FrontDelayMilliseconds;
             _endDelayTime = EndDelayMilliseconds;
 
-            ///아직 엘셀과 파싱하는 부분을 이해를 못해서 
-            ///직접 계산해서 크기를 맞췄습니다.            
 
             ScaleGameObjects(_secondCasting, new Vector3(_secondrange * 2.0f, 1.0f, _secondrange * 2.0f));
 
@@ -52,13 +49,14 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnCanceled()
         {
+            ApplyMovementSpeed(State.Canceled);
             SetState(State.Release);
             yield return null;
         }
 
         protected override IEnumerator OnEndDelay()
         {
-
+            ApplyMovementSpeed(State.EndDelay);
             var startTime = Time.time;
             var currentTime = Time.time;
             DestoryGameObjects(_secondCasting);
@@ -74,6 +72,7 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnFrontDelay()
         {
+            ApplyMovementSpeed(State.FrontDelay);
             var startTime = Time.time;
             var currentTime = Time.time;
             bool isCanceled = false;
@@ -145,13 +144,14 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnRelease()
         {
-
+            ApplyMovementSpeed(State.Release);
             Destroy(gameObject);
             yield return null;
         }
 
         protected override IEnumerator OnUse()
         {
+            ApplyMovementSpeed(State.Use);
             // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = _endMousePoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
