@@ -56,25 +56,30 @@ namespace EsperFightersCup.UI.CharacterChoice
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
-            if (targetPlayer != PhotonNetwork.LocalPlayer
-                && changedProps.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var otherPlayerChoose))
+            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var value) || value is null)
+            {
+                return;
+            }
+
+            var playerChoose = (int)value;
+
+            if (targetPlayer == PhotonNetwork.LocalPlayer)
+            {
+                _localPlayerSubmitTimeout?.Kill();
+                _localPlayerStateText.text = "준비 완료";
+
+                var characterType = (ACharacter.Type)playerChoose;
+                _localPlayerCharacterDummyText.text = characterType.ToString();
+            }
+            else
             {
                 if (_otherPlayerStateText)
                 {
                     _otherPlayerStateText.text = "준비 완료";
                 }
 
-                var characterType = (ACharacter.Type)(int)otherPlayerChoose;
+                var characterType = (ACharacter.Type)playerChoose;
                 _otherPlayerCharacterDummyText.text = characterType.ToString();
-            }
-            else if (targetPlayer == PhotonNetwork.LocalPlayer
-                && changedProps.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var localPlayerChoose))
-            {
-                _localPlayerSubmitTimeout?.Kill();
-                _localPlayerStateText.text = "준비 완료";
-
-                var characterType = (ACharacter.Type)(int)localPlayerChoose;
-                _localPlayerCharacterDummyText.text = characterType.ToString();
             }
         }
     }

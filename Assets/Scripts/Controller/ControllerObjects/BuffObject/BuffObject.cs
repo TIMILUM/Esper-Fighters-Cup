@@ -74,8 +74,7 @@ public abstract class BuffObject : ControllerObject
             return;
         }
 
-        var now = PhotonNetwork.ServerTimestamp;
-        ElapsedMilliseconds = now - StartTime;
+        ElapsedMilliseconds = PhotonNetwork.ServerTimestamp - StartTime;
 
         if (_buffStruct.Duration <= 0)
         {

@@ -1,4 +1,4 @@
-using EsperFightersCup.Util;
+using EsperFightersCup;
 using UnityEngine;
 
 /// <summary>
@@ -7,82 +7,9 @@ using UnityEngine;
 /// </summary>
 public class InGameSkillManager : Singleton<InGameSkillManager>
 {
-    [SerializeField]
-    private FragmentAreaManager _fragmentArea;
 
     [SerializeField]
     private SkillObjectFactory _skillObjectfactory;
-
-    /// <summary>
-    /// 파편지대 생성
-    /// </summary>
-    /// <param name="trans"></param>
-    /// <param name="range"></param>
-    public void AddFragmentArea(Transform trans, float range, int ActorID)
-    {
-        _fragmentArea.AddFragmentList(trans, range, ActorID);
-    }
-
-    /// <summary>
-    /// 파편지대 시작 event 띄움
-    /// </summary>
-    public void FragmentEventStart()
-    {
-        _fragmentArea.EventStart();
-    }
-
-    /// <summary>
-    /// 지금 설치한 파편지대 수
-    /// </summary>
-    /// <returns></returns>
-    public int FragmentCount()
-    {
-        return _fragmentArea.FragmentCount();
-    }
-
-    /// <summary>
-    /// 파편지대 모두 활성화
-    /// </summary>
-    public void FragmentAllActive(Vector3 pos, float range, int ActorID)
-    {
-        _fragmentArea.SetFragmentAreaActive(pos, range, ActorID);
-    }
-
-    /// <summary>
-    /// 파편지대 위치 설정한 파편지대 삭제
-    /// </summary>
-    public void FragmentAllDestroy()
-    {
-        _fragmentArea.AllDestory();
-    }
-
-    /// <summary>
-    /// 연속 설치 방지하기 위해서 체크하는 함수
-    /// </summary>
-    /// <param name="pos"></param>
-    /// <returns></returns>
-    public bool CreateFragmentCheck(Vector3 pos)
-    {
-        return _fragmentArea.CreateFragmentCheck(pos);
-    }
-
-    public void FragmentAreaClear()
-    {
-        _fragmentArea.CurrentFragmentAreaClear();
-    }
-
-    /// <summary>
-    /// 취소함수
-    /// </summary>
-    public void CancelFragment()
-    {
-        _fragmentArea.CancelFragment();
-    }
-
-    public void FragmentClear()
-    {
-        _fragmentArea.CurrentFragmentAreaClear();
-    }
 
     /// <summary>
     /// 오브젝트 생성하는 함수
@@ -95,8 +22,26 @@ public class InGameSkillManager : Singleton<InGameSkillManager>
         return _skillObjectfactory.CreateSkillObject(objectname, pos);
     }
 
+    /// <summary>
+    ///     오브젝트의 ID 값을 가지고 오브젝트를 생성하는 함수입니다. (CSV의 ID값을 통해 오브젝트를 불러오기 때문에 생성되었습니다.)
+    ///     수정이 필요하면 함수를 만든 사람에게 물어볼 필요 없이 바로 수정하셔도 됩니다.
+    /// </summary>
+    /// <param name="objectId">오브젝트 ID</param>
+    /// <param name="pos">생성 포지션</param>
+    /// <returns>생성된 게임 오브젝트</returns>
+    public GameObject CreateSkillObject(int objectId, Vector3 pos)
+    {
+        return _skillObjectfactory.CreateSkillObject(objectId, pos);
+    }
+
     public GameObject CreateSkillUI(string objectname, Vector3 pos)
     {
         return _skillObjectfactory.CreateSkillUI(objectname, pos);
     }
+
+    public void DestroySkillObj(GameObject obj)
+    {
+        _skillObjectfactory.DestroyObj(obj);
+    }
+
 }

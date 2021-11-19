@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace EsperFightersCup.Util
+namespace EsperFightersCup
 {
     /// <summary>
     /// 코루틴으로 동작하는 타이머입니다.

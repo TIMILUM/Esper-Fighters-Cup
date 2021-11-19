@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using EsperFightersCup;
 using UnityEngine;
 
-public class SawBladeSystem : MonoBehaviour
+public class SawBladeSystem : Singleton<SawBladeSystem>
 {
     [SerializeField]
     private SawBladeObject _sawBladeObjectPrefab;
@@ -16,6 +17,8 @@ public class SawBladeSystem : MonoBehaviour
     private Transform _patternRoot;
 
     private readonly List<SawBladePattern> _bladePatterns = new List<SawBladePattern>();
+
+    public Dictionary<int, SawBladeObject> LocalSpawnedSawBlades { get; } = new Dictionary<int, SawBladeObject>();
 
     // Start is called before the first frame update
     private void Start()
