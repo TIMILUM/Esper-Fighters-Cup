@@ -24,8 +24,8 @@ public class IngameRoundIntroState : InGameFSMStateBase
 
         if (PhotonNetwork.IsMasterClient)
         {
-            var roundValue = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
-            var round = roundValue == null ? 0 : (int)roundValue;
+            var roundValue = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound] ?? 0;
+            var round = (int)roundValue;
             _currentRound = ++round;
 
             var props = new Hashtable
@@ -36,12 +36,12 @@ public class IngameRoundIntroState : InGameFSMStateBase
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
 
-        // 로컬플레이어 설정
+        // 로컬?�레?�어 ?�정
         var localplayer = InGamePlayerManager.Instance.LocalPlayer;
         localplayer.ResetPositionAndRotation();
         localplayer.HP = 100;
 
-        // 설정 완료 후 MasterClient에게 신호
+        // ?�정 ?�료 ?? MasterClient?�게 ?�호
         FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
     }
 
