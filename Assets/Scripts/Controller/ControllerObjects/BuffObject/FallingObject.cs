@@ -28,13 +28,6 @@ namespace EsperFightersCup
         protected override void Update()
         {
             base.Update();
-            if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
-            {
-                if (myController.GetBuff(Type.KnockBack) != null)
-                {
-                    myController.ReleaseBuff(this);
-                }
-            }
         }
 
         public override void OnPlayerHitEnter(GameObject other)
@@ -47,12 +40,6 @@ namespace EsperFightersCup
             if (otherActor is null)
             {
                 return;
-            }
-
-            if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
-            {
-                GenerateAfterBuff(myController);
-                myController.ReleaseBuff(this);
             }
 
             if (otherActor.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController otherController))
