@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
-    public int cameraViewState = 1;
+    private int cameraViewState = 1;
 
     [SerializeField]
     private Camera _camera;
@@ -46,16 +46,12 @@ public class CameraMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if(cameraViewState==1) { cameraViewState = 2; }
-            else { cameraViewState = 1; }
+            ViewStateChanger();
         }
-
 
         CalcAllBounds();
         Move();
         Zoom();
-        CameraViewChanger();
-
     }
 
     private void Zoom()
@@ -93,15 +89,40 @@ public class CameraMovement : MonoBehaviour
         _movementTargets.Remove(target);
     }
 
-    private void CameraViewChanger()
+
+    private void ViewStateChanger()
     {
-        if(cameraViewState==1)
+        if (cameraViewState == 1) { cameraViewState = 2; Debug.Log("ViewState Changed to [" + cameraViewState + "]"); }
+        else if (cameraViewState == 2) { cameraViewState = 1; Debug.Log("ViewState Changed to [" + cameraViewState + "]"); }
+        CameraViewChanger(cameraViewState);
+    }
+
+    private void CameraViewChanger(int ViewState)
+    {
+        if(ViewState==1)
         {
             transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
             _offset.z = -11;
         }
-        else
+        else if(ViewState==2)
         {
+            transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
+            _offset.z = -18;
+        }
+    }
+
+    public void CameraViewStateFirstInput(int InputedViewState)
+    {
+        Debug.Log("Fitst ViewState Inputer Loaded. ViewState [" + InputedViewState + "] Inputed");
+        if (InputedViewState == 1)
+        {
+            cameraViewState = InputedViewState;
+            transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+            _offset.z = -11;
+        }
+        else if(InputedViewState==2)
+        {
+            cameraViewState = InputedViewState;
             transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
             _offset.z = -18;
         }
