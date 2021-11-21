@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
+    public int cameraViewState = 1;
+
     [SerializeField]
     private Camera _camera;
 
@@ -42,9 +44,18 @@ public class CameraMovement : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if(cameraViewState==1) { cameraViewState = 2; }
+            else { cameraViewState = 1; }
+        }
+
+
         CalcAllBounds();
         Move();
         Zoom();
+        CameraViewChanger();
+
     }
 
     private void Zoom()
@@ -81,4 +92,19 @@ public class CameraMovement : MonoBehaviour
     {
         _movementTargets.Remove(target);
     }
+
+    private void CameraViewChanger()
+    {
+        if(cameraViewState==1)
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+            _offset.z = -11;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
+            _offset.z = -18;
+        }
+    }
+
 }
