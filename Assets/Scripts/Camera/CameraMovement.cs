@@ -99,15 +99,19 @@ public class CameraMovement : MonoBehaviour
 
     private void CameraViewChanger(int ViewState)
     {
-        if(ViewState==1)
+        if(ViewState==1)        //60
         {
             transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
             _offset.z = -11;
+            _minZoom = 80;
+            _maxZoom = 20;
         }
-        else if(ViewState==2)
+        else if(ViewState==2)   //45
         {
             transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
-            _offset.z = -18;
+            _offset.z = -20;
+            _minZoom = 65;
+            _maxZoom = 15;
         }
     }
 
@@ -119,12 +123,16 @@ public class CameraMovement : MonoBehaviour
             cameraViewState = InputedViewState;
             transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
             _offset.z = -11;
+            _minZoom = 80;
+            _maxZoom = 20;
         }
         else if(InputedViewState==2)
         {
             cameraViewState = InputedViewState;
             transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
             _offset.z = -18;
+            _minZoom = 65;
+            _maxZoom = 15;
         }
     }
 
