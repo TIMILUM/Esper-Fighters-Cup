@@ -147,6 +147,7 @@ public class ThrowSkillObject : SkillObject
         if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             _player.CharacterAnimatorSync.SetTrigger("ReverseGravityUnder");
+
         }
 
         //하체는 그냥 실행
