@@ -77,7 +77,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         else
         {
             Debug.LogWarning($"Can not found local player's character type.");
-            characterType = ACharacter.Type.Telekinesis;
+            characterType = ACharacter.Type.Plank;
         }
 
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
