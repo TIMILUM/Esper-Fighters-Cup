@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EsperFightersCup.Net;
-using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-using EventCode = EsperFightersCup.Net.EventCode;
-
+[RequireComponent(typeof(PhotonView))]
 public sealed class BuffController : ControllerBase
 {
     // dictionary로 해야할 필요가 있을까요?
@@ -60,8 +59,43 @@ public sealed class BuffController : ControllerBase
         }
 
         var id = Guid.NewGuid().ToString("N");
-        var packet = buffStruct.ToBuffEvent(photonView.ViewID, id);
-        EventSender.Broadcast(in packet, SendOptions.SendReliable, _generateBuffEventOption);
+        var args = buffStruct.ToBuffArguments(id);
+
+        // 현재 photonView를 컨트롤하는 플레이어에게 RPC 전달
+        photonView.RPC(nameof(GenerateBuffRPC), photonView.Controller, args);
+        // EventSender.Broadcast(in buffEvent, SendOptions.SendReliable, _generateBuffEventOption);
+    }
+
+    [PunRPC]
+    public void GenerateBuffRPC(BuffGenerateArguments args)
+    {
+        var buffType = (BuffObject.Type)args.Type;
+        if (!_buffPrefabLists.ContainsKey(buffType))
+        {
+            return;
+        }
+
+        if (!_buffObjects.ContainsKey(buffType))
+        {
+            _buffObjects.Add(buffType, new List<BuffObject>());
+        }
+
+        var buffObjectList = _buffObjects[buffType];
+        if (!args.AllowDuplicates && buffObjectList.Count > 0)
+        {
+            ReleaseBuff(buffType);
+        }
+
+        var prefab = _buffPrefabLists[buffType];
+        var buffObject = Instantiate(prefab, transform);
+        buffObject.name = args.BuffId;
+        buffObject.BuffId = args.BuffId;
+        buffObject.SetBuffStruct((BuffObject.BuffStruct)args);
+        buffObject.Register(this);
+
+        buffObjectList.Add(buffObject);
+
+        Debug.Log($"Buff generated - [{args.BuffId}]");
     }
 
     /// <summary>
@@ -120,52 +154,5 @@ public sealed class BuffController : ControllerBase
         }
 
         return false;
-    }
-
-    protected override void OnGameEventReceived(GameEventArguments args)
-    {
-        if (photonView is null || args.Code != EventCode.BuffGenerate)
-        {
-            return;
-        }
-
-        HandleBuffGenerate(args);
-    }
-
-    private void HandleBuffGenerate(GameEventArguments args)
-    {
-        var data = (GameBuffGenerateEvent)args.EventData;
-        if (data.TargetViewID != photonView.ViewID) // 같은 ViewID에서 보낸 것인지 체크
-        {
-            return;
-        }
-
-        var buffType = (BuffObject.Type)data.Type;
-        if (!_buffPrefabLists.ContainsKey(buffType))
-        {
-            return;
-        }
-
-        if (!_buffObjects.ContainsKey(buffType))
-        {
-            _buffObjects.Add(buffType, new List<BuffObject>());
-        }
-
-        var buffObjectList = _buffObjects[buffType];
-        if (!data.AllowDuplicates && buffObjectList.Count > 0)
-        {
-            ReleaseBuff(buffType);
-        }
-
-        var prefab = _buffPrefabLists[buffType];
-        var buffObject = Instantiate(prefab, transform);
-        buffObject.name = data.BuffId;
-        buffObject.BuffId = data.BuffId;
-        buffObject.SetBuffStruct((BuffObject.BuffStruct)data);
-        buffObject.Register(this);
-
-        buffObjectList.Add(buffObject);
-
-        Debug.Log($"Buff generated - [{data.BuffId}]");
     }
 }

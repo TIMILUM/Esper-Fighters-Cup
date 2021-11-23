@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class SkillController : ControllerBase
 {
     [SerializeField]

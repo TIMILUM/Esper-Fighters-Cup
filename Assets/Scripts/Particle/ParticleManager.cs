@@ -145,7 +145,7 @@ public class ParticleManager : PunEventCallbacks
 
     protected override void OnGameEventReceived(GameEventArguments args)
     {
-        if (args.Code != EventCode.ParticlePlay)
+        if (args.Code != EventCode.PlayParticle)
         {
             return;
         }
