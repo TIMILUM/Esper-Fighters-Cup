@@ -55,14 +55,14 @@ public class SkillController : ControllerBase
 
     private void UpdateMine()
     {
-        if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle)
+        if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle && _activeSkills.Count > 0)
         {
             ReleaseAllSkills();
             return;
         }
 
         // 스턴 확인 시 스킬 사용을 멈춥니다.
-        if (_buffController.ActiveBuffs.Exists(BuffObject.Type.Stun))
+        if (_buffController.ActiveBuffs.Exists(BuffObject.Type.Stun) && _activeSkills.Count > 0)
         {
             ReleaseAllSkills();
             return;
@@ -169,7 +169,9 @@ public class SkillController : ControllerBase
     /// </summary>
     public void ReleaseAllSkills()
     {
-        photonView.RPC(nameof(ReleaseAllSkillsRPC), RpcTarget.All);
+        // RPC를 받기 전에 Update에서 계속 체크하는 이슈때문에 로컬에서 먼저 삭제해야 함
+        ReleaseAllSkillsRPC();
+        photonView.RPC(nameof(ReleaseAllSkillsRPC), RpcTarget.Others);
     }
 
     [PunRPC]
