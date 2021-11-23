@@ -153,7 +153,7 @@ namespace EsperFightersCup
         {
             ApplyMovementSpeed(State.Use);
             _player.CharacterAnimatorSync.Animator.SetTrigger("RandomDrop");
-            // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
+            // 移대찓???꾨줈 ?앹꽦 ?섎룄濡??섍린 ?꾪빐??y媛믪쓣 10???뷀빐以ъ뒿?덈떎.
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = _endMousePoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
             var obj = InGameSkillManager.Instance.CreateSkillObject(_targetId, createObjectPos);
@@ -244,8 +244,8 @@ namespace EsperFightersCup
         private bool SetStartPos()
         {
             var startPos = GetMousePosition();
-            ///아직 엘셀과 파싱하는 부분을 이해를 못해서 
-            ///직접 계산해서 크기를 맞췄습니다.
+            ///?꾩쭅 ?섏?怨??뚯떛?섎뒗 遺遺꾩쓣 ?댄빐瑜?紐삵빐??
+            ///吏곸젒 怨꾩궛?댁꽌 ?ш린瑜?留욎톬?듬땲??
             if (Vector3.Distance(startPos, transform.position) > _range * 10.0f)
             {
                 return true;
@@ -255,8 +255,8 @@ namespace EsperFightersCup
         }
 
         /// <summary>
-        ///     드랍되는 오브젝트가 확률에 따라 떨어지는데 이 데이터를 불러오는 함수입니다.
-        ///     최초 실행 시 한번만 호출하면 되기 때문에 관련하여 예외처리를 하였습니다.
+        ///     ?쒕엻?섎뒗 ?ㅻ툕?앺듃媛 ?뺣쪧???곕씪 ?⑥뼱吏?붾뜲 ???곗씠?곕? 遺덈윭?ㅻ뒗 ?⑥닔?낅땲??
+        ///     理쒖큹 ?ㅽ뻾 ???쒕쾲留??몄텧?섎㈃ ?섍린 ?뚮Ц??愿?⑦븯???덉쇅泥섎━瑜??섏??듬땲??
         /// </summary>
         private void SetDropObjectCSVData()
         {
@@ -265,7 +265,7 @@ namespace EsperFightersCup
                 return;
             }
 
-            // CSV 데이터 적용
+            // CSV ?곗씠???곸슜
             var csvData = CSVUtil.GetData("DropSkillDropObjectDataTable");
             csvData.Get<float>("Obj_ID", out var idList);
             csvData.Get<float>("Percentage", out var percentageList);
@@ -283,7 +283,7 @@ namespace EsperFightersCup
             foreach (var percentageDataPair in s_dropObjectPercentageData)
             {
                 totalPercentage += percentageDataPair.Value;
-                // 확률 범위 안에 있으면 당첨
+                // ?뺣쪧 踰붿쐞 ?덉뿉 ?덉쑝硫??뱀꺼
                 if (randomValue <= totalPercentage)
                 {
                     Debug.Log(percentageDataPair.Key);
