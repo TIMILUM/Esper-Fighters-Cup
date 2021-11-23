@@ -89,8 +89,8 @@ public class MovementController : ControllerBase
                 float sin = Vector3.Dot(crossProduct, Vector3.up);
                 float cos = Vector3.Dot(tempPos, targetDirctionNormal);
 
-                _player.CharacterAnimatorSync.SetFloat("Cos", cos);
-                _player.CharacterAnimatorSync.SetFloat("Sin", sin);
+                _player.AnimatorSync.SetFloat("Cos", cos);
+                _player.AnimatorSync.SetFloat("Sin", sin);
             }
         }
 
@@ -152,8 +152,8 @@ public class MovementController : ControllerBase
 
         var playerPosition = _player.transform.position;
 
-        _player.CharacterAnimatorSync.SetFloat("DirX", dirx);
-        _player.CharacterAnimatorSync.SetFloat("DirZ", dirz);
+        _player.AnimatorSync.SetFloat("DirX", dirx);
+        _player.AnimatorSync.SetFloat("DirZ", dirz);
 
         var currentSpeedTime = 0.0f;
 

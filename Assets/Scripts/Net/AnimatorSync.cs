@@ -69,6 +69,7 @@ namespace EsperFightersCup.Net
             }
         }
 
+        [Obsolete("트리거는 로컬 애니메이터에서 설정해주세요")]
         public void SetTrigger(string name)
         {
             _animator.SetTrigger(name);

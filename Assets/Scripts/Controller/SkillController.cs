@@ -122,6 +122,36 @@ public class SkillController : ControllerBase
         photonView.RPC(nameof(GenerateSkillRPC), RpcTarget.All, id);
     }
 
+    /// <summary>
+    /// 현재 활성화된 모든 스킬을 해제합니다. RPC를 통해 동기화됩니다.
+    /// </summary>
+    public void ReleaseAllSkills()
+    {
+        // RPC를 받기 전에 Update에서 계속 체크하는 이슈때문에 로컬에서 먼저 삭제해야 함
+        ReleaseAllSkillsRPC();
+        photonView.RPC(nameof(ReleaseAllSkillsRPC), RpcTarget.Others);
+    }
+
+    /// <summary>
+    /// 스킬을 해제합니다. RPC를 통해 동기화됩니다.
+    /// </summary>
+    /// <param name="skillObject">해제할 스킬 오브젝트</param>
+    public void ReleaseSkill(SkillObject skillObject)
+    {
+        photonView.RPC(nameof(ReleaseSkillRPC), RpcTarget.All, skillObject.ID);
+    }
+
+    /// <summary>
+    /// 스킬의 상태를 변경합니다. RPC를 통해 동기화됩니다.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="state"></param>
+    public void ChangeState(int id, SkillObject.State state)
+    {
+        ChangeSkillStateRPC(id, (int)state);
+        photonView.RPC(nameof(ChangeSkillStateRPC), RpcTarget.Others, id, (int)state);
+    }
+
     [PunRPC]
     private void GenerateSkillRPC(int id)
     {
@@ -136,13 +166,20 @@ public class SkillController : ControllerBase
         _activeSkills.Add(skillObject.ID, skillObject);
     }
 
-    /// <summary>
-    /// 스킬을 해제합니다. RPC를 통해 동기화됩니다.
-    /// </summary>
-    /// <param name="skillObject">해제할 스킬 오브젝트</param>
-    public void ReleaseSkill(SkillObject skillObject)
+    [PunRPC]
+    private void ReleaseAllSkillsRPC()
     {
-        photonView.RPC(nameof(ReleaseSkillRPC), RpcTarget.All, skillObject.ID);
+        lock (_skillReleaseLock)
+        {
+            foreach (var targetSkill in _activeSkills.Values)
+            {
+                if (targetSkill.CurrentState != SkillObject.State.Release)
+                {
+                    targetSkill.SetState(SkillObject.State.Canceled);
+                }
+            }
+            _activeSkills.Clear();
+        }
     }
 
     [PunRPC]
@@ -164,30 +201,17 @@ public class SkillController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// 현재 활성화된 모든 스킬을 해제합니다. RPC를 통해 동기화됩니다.
-    /// </summary>
-    public void ReleaseAllSkills()
-    {
-        // RPC를 받기 전에 Update에서 계속 체크하는 이슈때문에 로컬에서 먼저 삭제해야 함
-        ReleaseAllSkillsRPC();
-        photonView.RPC(nameof(ReleaseAllSkillsRPC), RpcTarget.Others);
-    }
-
     [PunRPC]
-    private void ReleaseAllSkillsRPC()
+    private void ChangeSkillStateRPC(int id, int state)
     {
-        lock (_skillReleaseLock)
+        var skillState = (SkillObject.State)state;
+        if (!_activeSkills.TryGetValue(id, out var skill))
         {
-            foreach (var targetSkill in _activeSkills.Values)
-            {
-                if (targetSkill.CurrentState != SkillObject.State.Release)
-                {
-                    targetSkill.SetState(SkillObject.State.Canceled);
-                }
-            }
-            _activeSkills.Clear();
+            Debug.LogError($"{id}와 일치하는 ID의 스킬 오브젝트를 찾지 못했습니다.");
+            return;
         }
+
+        skill.SyncState(skillState);
     }
 
     [Serializable]

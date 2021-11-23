@@ -32,7 +32,7 @@ namespace EsperFightersCup
 
             if (!(_character is null))
             {
-                _character.CharacterAnimatorSync.SetTrigger("Sliding");
+                _character.Animator.SetTrigger("Sliding");
             }
         }
 

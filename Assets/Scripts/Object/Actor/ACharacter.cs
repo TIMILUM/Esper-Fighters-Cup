@@ -17,12 +17,14 @@ public class ACharacter : Actor
 
     public Type CharacterType => _characterType;
 
-    public AnimatorSync CharacterAnimatorSync { get; private set; }
+    public Animator Animator { get; private set; }
+    public AnimatorSync AnimatorSync { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
-        CharacterAnimatorSync = GetComponent<AnimatorSync>();
+        AnimatorSync = GetComponent<AnimatorSync>();
+        Animator = AnimatorSync.Animator;
     }
 
     // Start is called before the first frame update

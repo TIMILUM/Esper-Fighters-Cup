@@ -16,7 +16,7 @@ namespace EsperFightersCup
             _character = Author as ACharacter;
             if (!(_character is null))
             {
-                _character.CharacterAnimatorSync.SetTrigger("Knockback");
+                _character.Animator.SetTrigger("Knockback");
             }
         }
         protected override void Start()

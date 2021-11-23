@@ -107,8 +107,12 @@ public abstract class SkillObject : ControllerObject
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        ReleaseMoveSpeedBuffAll();
-        ControllerCast<SkillController>().ReleaseSkill(this);
+
+        if (Author.photonView.IsMine)
+        {
+            ReleaseMoveSpeedBuffAll();
+            ControllerCast<SkillController>().ReleaseSkill(this);
+        }
     }
 
     protected override void OnRegistered()
@@ -153,7 +157,7 @@ public abstract class SkillObject : ControllerObject
     /// </summary>
     public void SetNextState()
     {
-        if (_currentState >= State.Release)
+        if (!Author.photonView.IsMine || _currentState >= State.Release)
         {
             return;
         }
@@ -169,6 +173,16 @@ public abstract class SkillObject : ControllerObject
     /// <param name="state">이동할 스킬 FSM의 상태입니다.</param>
     public void SetState(State state)
     {
+        if (!Author.photonView.IsMine)
+        {
+            return;
+        }
+
+        (Controller as SkillController).ChangeState(ID, state);
+    }
+
+    public void SyncState(State state)
+    {
         if (state < 0 || state > State.Release)
         {
             return;
@@ -178,10 +192,12 @@ public abstract class SkillObject : ControllerObject
 
         if (_currentCoroutine != null)
         {
+            Debug.Log("Reset state");
             StopCoroutine(_currentCoroutine);
             _currentCoroutine = null;
         }
 
+        Debug.Log($"Current state: {_currentState}");
         var currentEnumerator = GetStateFunction();
         _currentCoroutine = StartCoroutine(currentEnumerator);
     }
@@ -276,6 +292,11 @@ public abstract class SkillObject : ControllerObject
 
     protected void ApplyMovementSpeed(State state)
     {
+        if (!Author.photonView.IsMine)
+        {
+            return;
+        }
+
         // 나머지 상태인 경우 움직임 버프와 관련한 요소가 없으므로 버프요소 삭제
         if (state != State.FrontDelay && state != State.EndDelay)
         {
@@ -303,6 +324,11 @@ public abstract class SkillObject : ControllerObject
 
     protected void ReleaseMoveSpeedBuffAll()
     {
+        if (!Author.photonView.IsMine)
+        {
+            return;
+        }
+
         foreach (var speedObject in _moveSpeedObjects)
         {
             _buffController.ReleaseBuff(speedObject);

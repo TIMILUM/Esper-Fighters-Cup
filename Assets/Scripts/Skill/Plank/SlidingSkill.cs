@@ -71,7 +71,7 @@ namespace EsperFightersCup
 
             }
 
-            _player.CharacterAnimatorSync.SetBool("Cancel", true);
+            _player.Animator.SetBool("Cancel", true);
 
             if (isCanceled)
             {
@@ -89,7 +89,7 @@ namespace EsperFightersCup
         /// <returns></returns>
         protected override IEnumerator OnFrontDelay()
         {
-            _player.CharacterAnimatorSync.SetTrigger("Sliding");
+            _player.Animator.SetTrigger("Sliding");
             yield return new WaitForSeconds(_slidingFrontDelay / 1000.0f);
 
 
@@ -129,7 +129,7 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnRelease()
         {
-            _player.CharacterAnimatorSync.SetBool("Cancel", false);
+            _player.Animator.SetBool("Cancel", false);
             Destroy(gameObject);
             yield return null;
         }

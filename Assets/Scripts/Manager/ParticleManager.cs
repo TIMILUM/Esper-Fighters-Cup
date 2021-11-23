@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using EsperFightersCup.Net;
-using ExitGames.Client.Photon;
 using UnityEngine;
 
-public class ParticleManager : PunEventCallbacks
+public class ParticleManager : MonoBehaviour
 {
     /// <summary>
     /// 각각의 파티클 종류 정보
@@ -111,7 +109,26 @@ public class ParticleManager : PunEventCallbacks
     /// <param name="angle">파티클 앵글 </param>
     public void PullParticle(string particleName, Vector3 pos, Quaternion angle)
     {
-        EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
+        // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
+
+        if (!_particleList.TryGetValue(particleName, out var particleQueue))
+        {
+            Debug.LogError("동일한 파티클 이름이 없습니다.");
+            return;
+        }
+
+        if (particleQueue.Count == 0)
+        {
+            Debug.Log("파티클이 없습니다.");
+            return;
+        }
+
+        var clon = particleQueue.Dequeue();
+        clon.Object.SetActive(true);
+
+        clon.Object.transform.SetPositionAndRotation(pos, angle);
+        clon.StartParticle(particleName);
+        _activeParticle.Add(clon);
     }
 
     /// <summary>
@@ -143,6 +160,7 @@ public class ParticleManager : PunEventCallbacks
         PutParticle();
     }
 
+    /*
     protected override void OnGameEventReceived(GameEventArguments args)
     {
         if (args.Code != EventCode.PlayParticle)
@@ -171,4 +189,5 @@ public class ParticleManager : PunEventCallbacks
         clon.StartParticle(data.Name);
         _activeParticle.Add(clon);
     }
+    */
 }
