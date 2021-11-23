@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-190656789927378286
+--- !u!114 &-1865578218070241463
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Crack_01
-  m_Shader: {fileID: -6465566751694194690, guid: 8ad04ceb3fb944d43a9825b84dabc175, type: 3}
+  m_Name: M_Link_01
+  m_Shader: {fileID: -6465566751694194690, guid: 6d0e127999592874aad75e24c07bfc30, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,14 +32,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Main_Tex:
-        m_Texture: {fileID: 2800000, guid: 23e931739ab6e504f96e4b15975133d0, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - T_Main:
-        m_Texture: {fileID: 2800000, guid: 5603e8e5bba5fb746ac0e47ec6d3dadb, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -80,12 +72,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_108c846aae0a4cb5ae1ebf9d1225fc02_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 9fd013fb012b0ea46af1710d4aba51f7, type: 3}
+    - _SampleTexture2D_523ed4abb0374709a41c243e644fbf40_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 89db56237486a4041af6cedcb6b29808, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_90de45b4bdf34277a2ea4652b109722a_Texture_1:
-        m_Texture: {fileID: 2800000, guid: e0019574c8fd1154fbc12ca209ff72e4, type: 3}
+    - _SampleTexture2D_7c3b7d3890a64b218702df3b3e30b4e8_Texture_1:
+        m_Texture: {fileID: 2800000, guid: af3c2ab93e087104791cff7e9cad559a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_8e1b23bbb9df4eb89e6f1dfe69f925fe_Texture_1:
+        m_Texture: {fileID: 2800000, guid: af3c2ab93e087104791cff7e9cad559a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_f548b0384ebe4af1b7fa54aeb81007ac_Texture_1:
+        m_Texture: {fileID: 2800000, guid: e807d55d80b0d374bbd62af1930ed648, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -106,7 +106,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Intensity: 3
+    - Intensity: 5
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
