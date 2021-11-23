@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
+    [RequireComponent(typeof(PhotonView))]
     public class AnimatorSync : MonoBehaviourPunCallbacks, IPunObservable
     {
         public enum ParameterType
@@ -73,7 +74,7 @@ namespace EsperFightersCup.Net
             _animator.SetTrigger(name);
             if (_syncTriggers.Contains(name))
             {
-                photonView.RPC(nameof(AnimTriggerRPC), RpcTarget.Others);
+                photonView.RPC(nameof(AnimTriggerRPC), RpcTarget.Others, name);
             }
         }
 
