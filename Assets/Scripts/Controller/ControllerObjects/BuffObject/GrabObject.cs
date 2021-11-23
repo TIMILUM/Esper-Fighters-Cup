@@ -40,11 +40,8 @@ namespace EsperFightersCup
                 _rigid.useGravity = false;
 
             }
-
-
-
-
         }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();

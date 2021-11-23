@@ -67,6 +67,7 @@ namespace EsperFightersCup
                 _grabTarget = to;
                 /// 잡기 스킬 시작 위치
                 _buffOnCollision[0].ValueVector3[1] = _grabTarget.transform.position;
+                _buffOnCollision[0].ValueVector3[0] = transform.position;
                 return;
             }
 
@@ -78,6 +79,7 @@ namespace EsperFightersCup
 
                 /// 잡기 스킬 시작 위치
                 _buffOnCollision[0].ValueVector3[1] = _grabTarget.transform.position;
+                _buffOnCollision[0].ValueVector3[0] = transform.position;
             }
 
 
@@ -140,10 +142,16 @@ namespace EsperFightersCup
         {
             ApplyMovementSpeed(State.Release);
             Actor isBuffController = _grabTarget as Actor;
-            isBuffController.BuffController.ReleaseBuff(BuffObject.Type.Grab);
+            if (isBuffController != null)
+            {
+                isBuffController.BuffController.ReleaseBuff(BuffObject.Type.Grab);
+            }
+
+
             Destroy(gameObject);
             yield return null;
         }
+
 
         protected override IEnumerator OnUse()
         {
@@ -169,33 +177,5 @@ namespace EsperFightersCup
             }
             SetNextState();
         }
-
-
-        private void Update()
-        {
-            TargetGrab();
-        }
-
-
-        private void TargetGrab()
-        {
-
-            if (_grabTarget == null) return;
-            Actor isBuffController = _grabTarget as Actor;
-
-
-            var Grab = isBuffController.BuffController.GetBuff(BuffObject.Type.Grab);
-            if (Grab != null)
-            {
-                /// 잡는 플레이어 위치
-                _buffOnCollision[0].ValueVector3[0] = Author.transform.position;
-                Grab[0].SetBuffStruct(_buffOnCollision[0]);
-            }
-        }
-
-
-
-
-
     }
 }
