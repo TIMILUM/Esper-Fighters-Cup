@@ -33,29 +33,27 @@ namespace EsperFightersCup
         [SerializeField]
         private Vector2 _colliderSize = new Vector2(2.0f, 1.0f);
 
-        [SerializeField]
-        private float _grabSecond;
 
-
-        private float _currentSecond;
 
         private ObjectBase _grabTarget;
-        private Vector3 _startPos = Vector3.zero;
         private float _minDistance = float.MaxValue;
 
         protected override void Start()
         {
             base.Start();
             _collider.OnCollision += SetHit;
-            var colliderScale = new Vector3(_colliderSize.x, 0.0f, _colliderSize.y);
+            var colliderScale = new Vector3(_colliderSize.x, 1.0f, _colliderSize.y);
             _collider.transform.localScale = colliderScale;
 
         }
+
 
         public override void OnPlayerHitEnter(GameObject other)
         {
             throw new System.NotImplementedException();
         }
+
+
 
         public override void SetHit(ObjectBase to)
         {
@@ -67,7 +65,8 @@ namespace EsperFightersCup
             if (charactor != null)
             {
                 _grabTarget = to;
-                _startPos = _grabTarget.transform.position;
+                /// 잡기 스킬 시작 위치
+                _buffOnCollision[0].ValueVector3[1] = _grabTarget.transform.position;
                 return;
             }
 
@@ -76,8 +75,12 @@ namespace EsperFightersCup
             {
                 _grabTarget = to;
                 _minDistance = dist;
-                _startPos = _grabTarget.transform.position;
+
+                /// 잡기 스킬 시작 위치
+                _buffOnCollision[0].ValueVector3[1] = _grabTarget.transform.position;
             }
+
+
         }
 
         protected override IEnumerator OnCanceled()
@@ -88,23 +91,26 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnEndDelay()
         {
+            yield return new WaitForSeconds(_ThrowendDelayTime * 0.001f);
+
             SetNextState();
             yield break;
         }
 
         protected override IEnumerator OnFrontDelay()
         {
-            while (_currentSecond > 1.0f)
+            Actor isBuffController = _grabTarget as Actor;
+
+            if (isBuffController != null)
             {
-                _currentSecond += Time.deltaTime * _grabSecond;
-                _grabTarget.transform.position = Vector3.Lerp(_startPos, _player.transform.position +
-                    _player.transform.up * 3.0f, _currentSecond);
-                yield return null;
+                isBuffController.BuffController.GenerateBuff(_buffOnCollision[0]);
             }
 
             SetNextState();
             yield break;
         }
+
+
 
         protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
         {
@@ -128,24 +134,68 @@ namespace EsperFightersCup
             yield break;
         }
 
+
+
         protected override IEnumerator OnRelease()
         {
             ApplyMovementSpeed(State.Release);
+            Actor isBuffController = _grabTarget as Actor;
+            isBuffController.BuffController.ReleaseBuff(BuffObject.Type.Grab);
             Destroy(gameObject);
             yield return null;
         }
 
         protected override IEnumerator OnUse()
         {
+            var isCanceled = false;
 
             yield return new WaitForSeconds(_ThrowfrontDelayTime * 0.001f);
 
-            /// 던지기 애니메이션
 
-            yield return new WaitForSeconds(_ThrowendDelayTime * 0.001f);
+            yield return new WaitUntil(() =>
+            {
+                if (Input.GetMouseButton(1))
+                {
+                    isCanceled = true;
+                }
+                return isCanceled;
+            });
+
+
+            if (isCanceled)
+            {
+                SetState(State.Canceled);
+                yield break;
+            }
             SetNextState();
-            yield break;
-
         }
+
+
+        private void Update()
+        {
+            TargetGrab();
+        }
+
+
+        private void TargetGrab()
+        {
+
+            if (_grabTarget == null) return;
+            Actor isBuffController = _grabTarget as Actor;
+
+
+            var Grab = isBuffController.BuffController.GetBuff(BuffObject.Type.Grab);
+            if (Grab != null)
+            {
+                /// 잡는 플레이어 위치
+                _buffOnCollision[0].ValueVector3[0] = Author.transform.position;
+                Grab[0].SetBuffStruct(_buffOnCollision[0]);
+            }
+        }
+
+
+
+
+
     }
 }
