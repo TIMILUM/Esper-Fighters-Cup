@@ -344,6 +344,9 @@ GameObject:
   - component: {fileID: 8245475252214133918}
   - component: {fileID: 1285394932241494094}
   - component: {fileID: 5506997089778145022}
+  - component: {fileID: 7254185911484802737}
+  - component: {fileID: 7700222262012898811}
+  - component: {fileID: 8196894372271107416}
   m_Layer: 0
   m_Name: SkillObject_Lighting
   m_TagString: Untagged
@@ -359,7 +362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6919689476003765198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.172, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1450634420683259415}
@@ -487,8 +490,49 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 1.3, z: 1.3}
-  m_Center: {x: -0.55, y: -0.7, z: 0.2}
+  m_Size: {x: 1.5, y: 1.3, z: 0.65}
+  m_Center: {x: -0.55, y: -0.76, z: 0.15}
+--- !u!65 &7254185911484802737
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919689476003765198}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 0.4, z: 0.4}
+  m_Center: {x: -0.55, y: -0.35, z: 0.68}
+--- !u!136 &7700222262012898811
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919689476003765198}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.2
+  m_Height: 2.2
+  m_Direction: 0
+  m_Center: {x: -0.55, y: -0.77, z: -0.28}
+--- !u!136 &8196894372271107416
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6919689476003765198}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.15
+  m_Height: 2.2
+  m_Direction: 0
+  m_Center: {x: -0.55, y: -1.1, z: -0.7}
 --- !u!1 &8643946364726197484
 GameObject:
   m_ObjectHideFlags: 0
