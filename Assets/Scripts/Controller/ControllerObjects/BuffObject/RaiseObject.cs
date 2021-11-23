@@ -25,7 +25,7 @@ public class RaiseObject : BuffObject
         _endTime = Time.time;
         var currentTime = _endTime - _startTime;
 
-        if (_actor.BuffController.GetBuff(Type.KnockBack) != null)
+        if (_actor.BuffController.ActiveBuffs.Exists(Type.KnockBack))
         {
             _actor.BuffController.ReleaseBuff(this);
             return;

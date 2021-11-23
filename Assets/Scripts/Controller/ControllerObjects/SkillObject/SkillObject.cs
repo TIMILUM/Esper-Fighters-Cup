@@ -313,7 +313,9 @@ public abstract class SkillObject : ControllerObject
 
     private IEnumerator GenerateMoveSpeedBuffCoroutine(float value)
     {
-        var leastMoveSpeedBuff = _buffController.GetBuff(BuffObject.Type.MoveSpeed)?.Last() ?? null;
+        var speedBuffs = _buffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+        var leastMoveSpeedBuff = speedBuffs.Count > 0 ? speedBuffs.Last() : null;
+
         _buffController.GenerateBuff(new BuffObject.BuffStruct
         {
             Type = BuffObject.Type.MoveSpeed,
@@ -324,14 +326,17 @@ public abstract class SkillObject : ControllerObject
             ValueFloat = new[] { value }
         });
 
-        List<BuffObject> moveSpeedBuffList = null;
+        IReadOnlyList<BuffObject> moveSpeedBuffList = null;
 
         // 만들기 전 최신의 움직임 버프 ID값과 비교하여 실제로 구현이 되었는지 확인합니다.
         yield return new WaitUntil(() =>
         {
-            var leastBuffId = leastMoveSpeedBuff?.BuffId;
-            moveSpeedBuffList = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
-            var currentBuffId = moveSpeedBuffList?.Last().BuffId;
+            var leastBuffId = leastMoveSpeedBuff != null ? leastMoveSpeedBuff.BuffId : null;
+
+            moveSpeedBuffList = _buffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+
+            // TODO: 테스트 필요
+            var currentBuffId = moveSpeedBuffList.Count > 0 ? moveSpeedBuffList.Last().BuffId : null;
             return currentBuffId != null && !currentBuffId.Equals(leastBuffId);
         });
 

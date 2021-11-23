@@ -235,7 +235,7 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         var targetID = target.ID;
-        var isRaised = target.BuffController.GetBuff(BuffObject.Type.Raise) != null;
+        var isRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
         var idList = s_shockWaveSkillData._idList;
         var floatCheckList = s_shockWaveSkillData._floatCheckList;
         var moveSpeedList = s_shockWaveSkillData._moveSpeedList;

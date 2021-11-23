@@ -38,7 +38,6 @@ Transform:
   m_Children:
   - {fileID: 8667282436784431221}
   - {fileID: 4314589049991569686}
-  - {fileID: 1798782088056480914}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -113,7 +112,6 @@ MonoBehaviour:
   - {fileID: 8663577832037187048}
   - {fileID: 6646747819659544057}
   - {fileID: 4771311192888277670}
-  - {fileID: 7363788457405380186}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -296,6 +294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4314589050214799941}
+  - component: {fileID: 6956331953027775819}
   - component: {fileID: 4314589050214799940}
   m_Layer: 0
   m_Name: BuffController
@@ -318,6 +317,28 @@ Transform:
   m_Father: {fileID: 4314589049991569686}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6956331953027775819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589050214799942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &4314589050214799940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +361,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4314589050688884503}
+  - component: {fileID: 7060703069090608221}
   - component: {fileID: 4314589050688884502}
   m_Layer: 0
   m_Name: SkillController
@@ -362,6 +384,28 @@ Transform:
   m_Father: {fileID: 4314589049991569686}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7060703069090608221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589050688884496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &4314589050688884502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,56 +420,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _type: 2
   _skills:
-  - _name: 
+  - _name: Skill 1
     _key: 32
     _skillPrefab: {fileID: 21849732020840252, guid: ccd0d07e82152ce46b88ca0c5fee9009, type: 3}
---- !u!1 &5292001714685375169
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1798782088056480914}
-  - component: {fileID: 7363788457405380186}
-  m_Layer: 0
-  m_Name: hp_dummy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1798782088056480914
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5292001714685375169}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4314589049664778600}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7363788457405380186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5292001714685375169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 0
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1001 &9206173514665150366
 PrefabInstance:
   m_ObjectHideFlags: 0
