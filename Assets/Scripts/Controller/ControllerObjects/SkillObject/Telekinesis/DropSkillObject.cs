@@ -33,7 +33,7 @@ namespace EsperFightersCup
             SetDropObjectCSVData();
             _targetId = GetRandomDropObjectID();
             _range = GetCSVData<float>("Range") * 0.001f;
-            _secondrange = 0.2f;
+            _secondrange = _range - 0.15f;
             _frontDelayTime = FrontDelayMilliseconds;
             _endDelayTime = EndDelayMilliseconds;
 
