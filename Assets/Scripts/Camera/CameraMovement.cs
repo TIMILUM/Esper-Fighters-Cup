@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
+    private int cameraViewState = 1;
+
     [SerializeField]
     private Camera _camera;
 
@@ -40,6 +42,11 @@ public class CameraMovement : MonoBehaviour
         if (_movementTargets.Count == 0)
         {
             return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ViewStateChanger();
         }
 
         CalcAllBounds();
@@ -81,4 +88,52 @@ public class CameraMovement : MonoBehaviour
     {
         _movementTargets.Remove(target);
     }
+
+
+    private void ViewStateChanger()
+    {
+        if (cameraViewState == 1) { cameraViewState = 2; Debug.Log("ViewState Changed to [" + cameraViewState + "]"); }
+        else if (cameraViewState == 2) { cameraViewState = 1; Debug.Log("ViewState Changed to [" + cameraViewState + "]"); }
+        CameraViewChanger(cameraViewState);
+    }
+
+    private void CameraViewChanger(int ViewState)
+    {
+        if(ViewState==1)        //60
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+            _offset.z = -11;
+            _minZoom = 80;
+            _maxZoom = 20;
+        }
+        else if(ViewState==2)   //45
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
+            _offset.z = -20;
+            _minZoom = 65;
+            _maxZoom = 15;
+        }
+    }
+
+    public void CameraViewStateFirstInput(int InputedViewState)
+    {
+        Debug.Log("Fitst ViewState Inputer Loaded. ViewState [" + InputedViewState + "] Inputed");
+        if (InputedViewState == 1)
+        {
+            cameraViewState = InputedViewState;
+            transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+            _offset.z = -11;
+            _minZoom = 80;
+            _maxZoom = 20;
+        }
+        else if(InputedViewState==2)
+        {
+            cameraViewState = InputedViewState;
+            transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
+            _offset.z = -18;
+            _minZoom = 65;
+            _maxZoom = 15;
+        }
+    }
+
 }
