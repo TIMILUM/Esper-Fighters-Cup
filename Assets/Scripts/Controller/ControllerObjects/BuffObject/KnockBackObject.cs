@@ -32,8 +32,10 @@ public class KnockBackObject : BuffObject
         set => _speed = value;
     }
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "";
         _buffStruct.Type = Type.KnockBack;
 

@@ -13,8 +13,10 @@ public class RaiseObject : BuffObject
     private Vector3 _startPos;
     private float _startTime;
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "";
         _buffStruct.Type = Type.Raise;
     }

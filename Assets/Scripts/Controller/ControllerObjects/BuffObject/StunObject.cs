@@ -5,8 +5,10 @@ public class StunObject : BuffObject
 {
     private ACharacter _character;
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "Stun";
         _buffStruct.Type = Type.Stun;
     }

@@ -23,8 +23,10 @@ namespace EsperFightersCup
 
 
 
-        private void Reset()
+        protected override void Reset()
         {
+            base.Reset();
+
             _name = "";
             _buffStruct.Type = Type.Sliding;
 

@@ -10,8 +10,10 @@ public abstract class ControllerObject : ObjectBase
     protected Actor Author { get; private set; }
     protected ControllerBase Controller { get; private set; }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         // Debug.Log(Author.photonView);
         if (Author.photonView.IsMine)
         {

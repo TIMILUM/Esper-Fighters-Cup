@@ -58,13 +58,16 @@ public abstract class BuffObject : ControllerObject
         set => _buffStruct.Duration = value;
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         StartTime = PhotonNetwork.ServerTimestamp;
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
+
         /**
          * @todo Update 용 abstract 메소드 만들기
          * @body abstract로 Update 메소드를 만들어서 자식 클래스에서는 아래 조건문 생략

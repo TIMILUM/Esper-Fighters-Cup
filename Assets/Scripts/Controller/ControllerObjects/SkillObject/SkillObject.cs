@@ -90,8 +90,10 @@ public abstract class SkillObject : ControllerObject
     /// </summary>
     protected float EndDelayMilliseconds { get; private set; }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
+
         SetCSVData();
         SetState(State.ReadyToUse);
     }

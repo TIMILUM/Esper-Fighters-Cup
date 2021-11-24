@@ -14,8 +14,10 @@ public class AStaticObject : Actor
         base.Start();
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
             if (transform.position.y > _boxcollider.bounds.extents.y + 1.0f)
