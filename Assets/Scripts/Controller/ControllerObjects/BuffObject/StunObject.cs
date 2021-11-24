@@ -18,7 +18,7 @@ public class StunObject : BuffObject
         base.OnRegistered();
         _character = Author as ACharacter;
 
-        if (_character && _character.AnimatorSync)
+        if (_character && _character.Animator)
         {
             var data = transform.transform.position;
             data.y = 0.01f;
