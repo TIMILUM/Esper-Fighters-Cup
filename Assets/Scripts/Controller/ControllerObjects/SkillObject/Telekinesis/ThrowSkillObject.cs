@@ -144,14 +144,14 @@ public class ThrowSkillObject : SkillObject
         var currentTime = Time.time;
 
         //Idle 상태일때 애니메이션 실행
-        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (_player.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
-            _player.CharacterAnimatorSync.SetTrigger("ReverseGravityUnder");
+            _player.Animator.SetTrigger("ReverseGravityUnder");
 
         }
 
         //하체는 그냥 실행
-        _player.CharacterAnimatorSync.SetTrigger("ReverseGravityA");
+        _player.Animator.SetTrigger("ReverseGravityA");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))

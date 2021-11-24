@@ -125,10 +125,9 @@ public abstract class BuffObject : ControllerObject
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
 
-        public GameBuffGenerateEvent ToBuffEvent(int target, string id)
+        public BuffGenerateArguments ToBuffArguments(string id)
         {
-            return new GameBuffGenerateEvent(
-                target,
+            return new BuffGenerateArguments(
                 (int)_type,
                 id,
                 _duration,
@@ -139,17 +138,17 @@ public abstract class BuffObject : ControllerObject
                 IsOnlyOnce);
         }
 
-        public static explicit operator BuffStruct(in GameBuffGenerateEvent packet)
+        public static explicit operator BuffStruct(in BuffGenerateArguments args)
         {
             return new BuffStruct
             {
-                Type = (Type)packet.Type,
-                Duration = packet.Duration,
-                ValueFloat = packet.ValueFloat,
-                ValueVector3 = packet.ValueVector3,
-                AllowDuplicates = packet.AllowDuplicates,
-                Damage = packet.Damage,
-                IsOnlyOnce = packet.IsOnlyOnce
+                Type = (Type)args.Type,
+                Duration = args.Duration,
+                ValueFloat = args.ValueFloat,
+                ValueVector3 = args.ValueVector3,
+                AllowDuplicates = args.AllowDuplicates,
+                Damage = args.Damage,
+                IsOnlyOnce = args.IsOnlyOnce
             };
         }
     }

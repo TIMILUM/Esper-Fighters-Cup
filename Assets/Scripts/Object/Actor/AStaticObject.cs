@@ -16,17 +16,19 @@ public class AStaticObject : Actor
 
     protected virtual void Update()
     {
-        if (BuffController.GetBuff(BuffObject.Type.Falling) != null)
+        if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
             if (transform.position.y > _boxcollider.bounds.extents.y + 1.0f)
             {
                 transform.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
             else
-                BuffController.ReleaseBuff(BuffObject.Type.Falling);
+            {
+                BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
+            }
         }
 
-        if (BuffController.GetBuff(BuffObject.Type.KnockBack) != null || BuffController.GetBuff(BuffObject.Type.Falling) != null)
+        if (BuffController.ActiveBuffs.Exists(BuffObject.Type.KnockBack) || BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
             if (GetComponent<Rigidbody>().isKinematic)
             {

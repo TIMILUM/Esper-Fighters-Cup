@@ -98,8 +98,7 @@ namespace EsperFightersCup
             _startDistance = Vector3.Distance(_objectStartPos, transform.position);
             while (true)
             {
-
-                if (_object.GetComponent<Actor>().BuffController.GetBuff(BuffObject.Type.Falling) == null)
+                if (!_object.GetComponent<Actor>().BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
                 {
                     break;
                 }
