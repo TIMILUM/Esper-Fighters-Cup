@@ -33,7 +33,7 @@ namespace EsperFightersCup
             SetDropObjectCSVData();
             _targetId = GetRandomDropObjectID();
             _range = GetCSVData<float>("Range") * 0.001f;
-            _secondrange = 0.2f;
+            _secondrange = _range - 0.15f;
             _frontDelayTime = FrontDelayMilliseconds;
             _endDelayTime = EndDelayMilliseconds;
 
@@ -265,7 +265,7 @@ namespace EsperFightersCup
                 return;
             }
 
-            // CSV 데이터 적용
+            // CSV ?곗씠???곸슜
             var csvData = CSVUtil.GetData("DropSkillDropObjectDataTable");
             csvData.Get<float>("Obj_ID", out var idList);
             csvData.Get<float>("Percentage", out var percentageList);
