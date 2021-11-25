@@ -11,16 +11,16 @@ public class SkillController : ControllerBase
 {
     [SerializeField] private Skill[] _skills;
 
-    private readonly Dictionary<int, SkillObject> _activeSkills = new Dictionary<int, SkillObject>();
-    private readonly Dictionary<int, Skill> _skillTable = new Dictionary<int, Skill>();
+    private readonly SkillCollection _activeSkills = new SkillCollection();
     private readonly object _skillReleaseLock = new object();
 
+    private IReadOnlyDictionary<int, SkillObject> _skillTable;
     private BuffController _buffController;
 
     /// <summary>
-    /// 현재 플레이어에 활성화된 키가 스킬 아이디, 값이 스킬 오브젝트인 스킬 목록
+    /// 현재 플레이어에 활성화된 스킬 목록
     /// </summary>
-    public IReadOnlyDictionary<int, SkillObject> ActiveSkills => _activeSkills;
+    public IReadonlySkillCollection ActiveSkills => _activeSkills;
 
     protected override void Reset()
     {
@@ -35,26 +35,25 @@ public class SkillController : ControllerBase
     {
         base.Start();
 
-        _buffController = ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-
+        var table = new Dictionary<int, SkillObject>();
         foreach (var skill in _skills)
         {
-            _skillTable.Add(skill.SkillPrefab.ID, skill);
+            table.Add(skill.SkillPrefab.ID, skill.SkillPrefab);
         }
+        _skillTable = table;
+
+        _buffController = ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     protected override void Update()
     {
         base.Update();
 
-        if (photonView.IsMine)
+        if (!photonView.IsMine)
         {
-            UpdateMine();
+            return;
         }
-    }
 
-    private void UpdateMine()
-    {
         if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle && _activeSkills.Count > 0)
         {
             ReleaseAllSkills();
@@ -70,12 +69,7 @@ public class SkillController : ControllerBase
 
         foreach (var skill in _skills)
         {
-            if (!Input.GetKeyDown(skill.Key))
-            {
-                continue;
-            }
-
-            if (!TryGetActiveSkill(skill.SkillPrefab.ID, out var _))
+            if (Input.GetKeyDown(skill.Key) && !_activeSkills.Exist(skill.SkillPrefab.ID))
             {
                 // TODO: GenerateSkill 이후 다음 프레임에 바로 GetSkill에서 확인이 되는지 체크
                 GenerateSkill(skill.SkillPrefab.ID);
@@ -84,41 +78,17 @@ public class SkillController : ControllerBase
     }
 
     /// <summary>
-    /// 현재 활성화된 스킬 중 이름과 일치하는 스킬을 가져옵니다.
-    /// </summary>
-    /// <param name="skillName">검색할 스킬 이름</param>
-    /// <returns>검색된 스킬 오브젝트를 반환합니다. 스킬을 찾지 못한 경우 null을 반환합니다.</returns>
-    public SkillObject GetActiveSkill(string skillName)
-    {
-        for (var i = _activeSkills.Count - 1; i >= 0; --i)
-        {
-            var skill = _activeSkills[i];
-            if (skill.Name.Equals(skillName))
-            {
-                return skill;
-            }
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// ID와 일치하는 활성화 스킬을 검색합니다. <see cref="GetActiveSkill(string)"/>보다 빠릅니다.
-    /// </summary>
-    /// <param name="id">검색할 스킬 ID</param>
-    /// <param name="skill">검색된 스킬 오브젝트</param>
-    /// <returns>스킬의 존재 여부를 반환합니다.</returns>
-    public bool TryGetActiveSkill(int id, out SkillObject skill)
-    {
-        return _activeSkills.TryGetValue(id, out skill);
-    }
-
-    /// <summary>
     /// 스킬을 생성합니다. RPC를 통해 동기화됩니다.
     /// </summary>
     /// <param name="id">생성할 스킬의 ID</param>
     public void GenerateSkill(int id)
     {
+        if (_activeSkills.Exist(id))
+        {
+            Debug.LogWarning($"이미 아이디가 {id}인 스킬이 플레이어에게 존재합니다.", gameObject);
+            return;
+        }
+
         photonView.RPC(nameof(GenerateSkillRPC), RpcTarget.All, id);
     }
 
@@ -148,6 +118,7 @@ public class SkillController : ControllerBase
     /// <param name="state"></param>
     public void ChangeState(int id, SkillObject.State state)
     {
+        // 혹시 스킬에서 계속 확인하는 로직이 있을 수 있어서 로컬에서 먼저 수행 후 RPC를 보내는 방식으로 작성
         ChangeSkillStateRPC(id, (int)state);
         photonView.RPC(nameof(ChangeSkillStateRPC), RpcTarget.Others, id, (int)state);
     }
@@ -155,15 +126,21 @@ public class SkillController : ControllerBase
     [PunRPC]
     private void GenerateSkillRPC(int id)
     {
-        if (!_skillTable.TryGetValue(id, out var skill))
+        if (!_skillTable.TryGetValue(id, out var skillTemplate))
         {
             return;
         }
 
-        var skillObject = Instantiate(skill.SkillPrefab, transform);
-        skillObject.Register(this);
-
-        _activeSkills.Add(skillObject.ID, skillObject);
+        var skillObject = Instantiate(skillTemplate, transform);
+        if (_activeSkills.TryAdd(skillObject))
+        {
+            skillObject.Register(this);
+        }
+        else
+        {
+            Debug.LogWarning($"아이디가 {id}인 스킬이 이미 존재합니다.", gameObject);
+            Destroy(skillObject);
+        }
     }
 
     [PunRPC]
@@ -171,33 +148,28 @@ public class SkillController : ControllerBase
     {
         lock (_skillReleaseLock)
         {
-            foreach (var targetSkill in _activeSkills.Values)
+            var removed = _activeSkills.Clear();
+            foreach (var skill in removed)
             {
-                if (targetSkill.CurrentState != SkillObject.State.Release)
+                if (skill.CurrentState != SkillObject.State.Release)
                 {
-                    targetSkill.SetState(SkillObject.State.Canceled);
+                    // SetState는 RPC로 동기화되기 때문에 이미 ReleaseAllSkills 메소드가 RPC로 호출된 시점에서
+                    // 또 State를 동기화할 필요가 없으므로 SyncState 호출
+                    skill.SetStateToLocal(SkillObject.State.Canceled);
                 }
             }
-            _activeSkills.Clear();
         }
     }
 
     [PunRPC]
     private void ReleaseSkillRPC(int id)
     {
-        SkillObject targetSkill;
         lock (_skillReleaseLock)
         {
-            if (!_activeSkills.TryGetValue(id, out targetSkill))
+            if (_activeSkills.TryRemove(id, out var removed) && removed.CurrentState != SkillObject.State.Release)
             {
-                return;
+                removed.SetStateToLocal(SkillObject.State.Canceled);
             }
-            _activeSkills.Remove(id);
-        }
-
-        if (targetSkill.CurrentState != SkillObject.State.Release)
-        {
-            targetSkill.SetState(SkillObject.State.Canceled);
         }
     }
 
@@ -205,13 +177,13 @@ public class SkillController : ControllerBase
     private void ChangeSkillStateRPC(int id, int state)
     {
         var skillState = (SkillObject.State)state;
-        if (!_activeSkills.TryGetValue(id, out var skill))
+        if (!_activeSkills.TryGetSkill(id, out var skill))
         {
             Debug.LogError($"{id}와 일치하는 ID의 스킬 오브젝트를 찾지 못했습니다.");
             return;
         }
 
-        skill.SyncState(skillState);
+        skill.SetStateToLocal(skillState);
     }
 
     [Serializable]

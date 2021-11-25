@@ -10,6 +10,7 @@ public sealed class BuffController : ControllerBase
     private readonly BuffCollection _activeBuffs = new BuffCollection();
     // 캐싱용 딕셔너리
     private readonly Dictionary<BuffObject.Type, BuffObject> _buffTable = new Dictionary<BuffObject.Type, BuffObject>();
+    private readonly object _skillReleaseLock = new object();
 
     // TODO: 값을 올바르게 리턴하는지 체크
     public IReadonlyBuffCollection ActiveBuffs => _activeBuffs;

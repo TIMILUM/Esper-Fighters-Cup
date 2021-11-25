@@ -30,7 +30,7 @@ public class DecreaseHpObject : BuffObject
         if (_character is null)
         {
             Debug.Log("HP does not found!");
-            ControllerCast<BuffController>().ReleaseBuff(this);
+            Controller.ReleaseBuff(this);
             return;
         }
 

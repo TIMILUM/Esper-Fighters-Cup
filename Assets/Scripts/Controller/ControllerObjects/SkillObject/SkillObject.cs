@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class SkillObject : ControllerObject
+public abstract class SkillObject : ControllerObject<SkillController>
 {
     /// <summary>
-    ///     스킬 FSM의 상태변화가 정리된 enum입니다.
+    /// 스킬 FSM의 상태변화가 정리된 enum입니다.
     /// </summary>
     public enum State
     {
@@ -25,68 +25,62 @@ public abstract class SkillObject : ControllerObject
     [SerializeField]
     private int _id;
 
-    /// <summary>
-    ///     플레이어의 버프 컨트롤러입니다.
-    /// </summary>
-    protected BuffController _buffController;
-
     private CSVData _commonCsvData;
-
     private int _commonCsvIndex;
 
     /// <summary>
-    ///     이 스킬에서 현재 실행 중인 코루틴입니다. (코루틴의 수정은 지정된 함수로 진행하는걸 권장합니다.)
+    /// 이 스킬에서 현재 실행 중인 코루틴입니다. (코루틴의 수정은 지정된 함수로 진행하는걸 권장합니다.)
     /// </summary>
     protected Coroutine _currentCoroutine;
 
-    private float _endDelayMoveSpeed;
-
     private float _frontDelayMoveSpeed;
+    private float _endDelayMoveSpeed;
 
     // 움직임 버프 관련하여 안전하게 생성하는 코루틴 함수입니다.
     private Coroutine _generateMoveSpeedCoroutine;
 
     /// <summary>
-    ///     스킬 캐스팅 중 움직임 관련하여 주어진 버프를 따로 모아 안전하게 해지하고자 합니다.
+    /// 스킬 캐스팅 중 움직임 관련하여 주어진 버프를 따로 모아 안전하게 해지하고자 합니다.
     /// </summary>
     private readonly List<MoveSpeedObject> _moveSpeedObjects = new List<MoveSpeedObject>();
 
     private short _physicsCount = -1;
 
     /// <summary>
-    ///     플레이어
+    /// 플레이어
     /// </summary>
-    protected APlayer _player;
+    protected APlayer AuthorPlayer => Author as APlayer;
 
     /// <summary>
-    ///     현재 해당 스킬의 FSM입니다.
+    /// 플레이어의 버프 컨트롤러입니다.
     /// </summary>
-    public State CurrentState
-    {
-        get => _currentState;
-        protected set => SetState(_currentState);
-    }
+    protected BuffController BuffController { get; private set; }
 
     /// <summary>
-    ///     해당 스킬을 중복으로 호출(생성)이 가능한지에 대한 여부입니다.
+    /// 현재 해당 스킬의 FSM입니다.
+    /// </summary>
+    public State CurrentState => _currentState;
+
+    /// <summary>
+    /// 해당 스킬을 중복으로 호출(생성)이 가능한지에 대한 여부입니다.
     /// </summary>
     public bool AllowDuplicates { get; protected set; } = false;
 
     /// <summary>
-    ///     UI에 나타날 스킬 이름입니다.
+    /// UI에 나타날 스킬 이름입니다.
     /// </summary>
     public string Name { get; set; }
 
     public int ID => _id;
 
     /// <summary>
-    ///     해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
-    ///     @Todo 나중에 스킬 작업 내용 모두 머지하면 SkillObject에서 데이터 적용하도록 수정이 필요함.
+    /// 해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
+    /// @Todo 나중에 스킬 작업 내용 모두 머지하면 SkillObject에서 데이터 적용하도록 수정이 필요함.
     /// </summary>
     protected float FrontDelayMilliseconds { get; private set; }
 
     /// <summary>
-    ///     해당 스킬이 사용되고 난 뒤 딜레이 밀리초 입니다.
+    /// 해당 스킬이 사용되고 난 뒤 딜레이 밀리초 입니다.
     /// </summary>
     protected float EndDelayMilliseconds { get; private set; }
 
@@ -95,7 +89,7 @@ public abstract class SkillObject : ControllerObject
         base.Start();
 
         SetCSVData();
-        SetState(State.ReadyToUse);
+        SyncState(State.ReadyToUse);
     }
 
     protected void FixedUpdate()
@@ -113,44 +107,42 @@ public abstract class SkillObject : ControllerObject
         if (Author.photonView.IsMine)
         {
             ReleaseMoveSpeedBuffAll();
-            ControllerCast<SkillController>().ReleaseSkill(this);
+            Controller.ReleaseSkill(this);
         }
     }
 
     protected override void OnRegistered()
     {
-        _buffController =
-            Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-        _player = Author.GetComponent<APlayer>();
+        BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     /// <summary>
-    ///     스킬 사용 전 캐스팅 단계입니다.
+    /// 스킬 사용 전 캐스팅 단계입니다.
     /// </summary>
     protected abstract IEnumerator OnReadyToUse();
 
     /// <summary>
-    ///     캐스팅 후 스킬 사용하기까지 사이의 선 딜레이 단계입니다.
+    /// 캐스팅 후 스킬 사용하기까지 사이의 선 딜레이 단계입니다.
     /// </summary>
     protected abstract IEnumerator OnFrontDelay();
 
     /// <summary>
-    ///     스킬이 본격적으로 실행되는 단계입니다.
+    /// 스킬이 본격적으로 실행되는 단계입니다.
     /// </summary>
     protected abstract IEnumerator OnUse();
 
     /// <summary>
-    ///     스킬 실행이 끝나고 스킬을 종료하기까지 사이의 후 딜레이 단계입니다.
+    /// 스킬 실행이 끝나고 스킬을 종료하기까지 사이의 후 딜레이 단계입니다.
     /// </summary>
     protected abstract IEnumerator OnEndDelay();
 
     /// <summary>
-    ///     스킬 사용이 취소되는 단계입니다.
+    /// 스킬 사용이 취소되는 단계입니다.
     /// </summary>
     protected abstract IEnumerator OnCanceled();
 
     /// <summary>
-    ///     스킬이 끝나고 릴리즈되는 단계입니다.
+    /// 스킬이 끝나고 릴리즈되는 단계입니다.
     /// </summary>
     protected abstract IEnumerator OnRelease();
 
@@ -165,25 +157,30 @@ public abstract class SkillObject : ControllerObject
         }
 
         _currentState += 1;
-        SetState(_currentState);
+        SyncState(_currentState);
     }
 
     /// <summary>
-    ///     특정 단계의 스킬 FSM으로 이동합니다.
-    ///     인스펙터 및 애니메이터에 사용하는 용도로 해당 함수를 삭제하지 마세요!
+    /// 특정 단계의 스킬 FSM으로 이동합니다.
+    /// 인스펙터 및 애니메이터에 사용하는 용도로 해당 함수를 삭제하지 마세요!
     /// </summary>
     /// <param name="state">이동할 스킬 FSM의 상태입니다.</param>
-    public void SetState(State state)
+    public void SyncState(State state)
     {
         if (!Author.photonView.IsMine)
         {
             return;
         }
 
-        (Controller as SkillController).ChangeState(ID, state);
+        Controller.ChangeState(ID, state);
     }
 
-    public void SyncState(State state)
+    /// <summary>
+    /// 스킬의 FSM을 변경해줍니다. <para/>
+    /// 로컬에서만 적용되기 때문에 모든 클라이언트에서의 State 동기화는 <see cref="SyncState(State)"/>를 사용해주세요.
+    /// </summary>
+    /// <param name="state"></param>
+    public void SetStateToLocal(State state)
     {
         if (state < 0 || state > State.Release)
         {
@@ -194,12 +191,10 @@ public abstract class SkillObject : ControllerObject
 
         if (_currentCoroutine != null)
         {
-            Debug.Log("Reset state");
             StopCoroutine(_currentCoroutine);
             _currentCoroutine = null;
         }
 
-        Debug.Log($"Current state: {_currentState}");
         var currentEnumerator = GetStateFunction();
         _currentCoroutine = StartCoroutine(currentEnumerator);
     }
@@ -333,7 +328,7 @@ public abstract class SkillObject : ControllerObject
 
         foreach (var speedObject in _moveSpeedObjects)
         {
-            _buffController.ReleaseBuff(speedObject);
+            BuffController.ReleaseBuff(speedObject);
         }
 
         _moveSpeedObjects.Clear();
@@ -341,10 +336,10 @@ public abstract class SkillObject : ControllerObject
 
     private IEnumerator GenerateMoveSpeedBuffCoroutine(float value)
     {
-        var speedBuffs = _buffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+        var speedBuffs = BuffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
         var leastMoveSpeedBuff = speedBuffs.Count > 0 ? speedBuffs.Last() : null;
 
-        _buffController.GenerateBuff(new BuffObject.BuffStruct
+        BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
             Type = BuffObject.Type.MoveSpeed,
             Duration = 0,
@@ -361,7 +356,7 @@ public abstract class SkillObject : ControllerObject
         {
             var leastBuffId = leastMoveSpeedBuff != null ? leastMoveSpeedBuff.BuffId : null;
 
-            moveSpeedBuffList = _buffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+            moveSpeedBuffList = BuffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
 
             // TODO: 테스트 필요
             var currentBuffId = moveSpeedBuffList.Count > 0 ? moveSpeedBuffList.Last().BuffId : null;

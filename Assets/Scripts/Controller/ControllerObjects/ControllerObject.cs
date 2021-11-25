@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ControllerObject : ObjectBase
+public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
 {
     public bool IsRegistered { get; private set; }
 
@@ -8,7 +8,7 @@ public abstract class ControllerObject : ObjectBase
     /// 컨트롤러 오브젝트의 주인 액터입니다.
     /// </summary>
     protected Actor Author { get; private set; }
-    protected ControllerBase Controller { get; private set; }
+    protected T Controller { get; private set; }
 
     protected override void OnDestroy()
     {
@@ -21,7 +21,7 @@ public abstract class ControllerObject : ObjectBase
         }
     }
 
-    public void Register(ControllerBase controller)
+    public void Register(T controller)
     {
         Controller = controller;
         Author = Controller.ControllerManager.GetActor();
@@ -41,16 +41,6 @@ public abstract class ControllerObject : ObjectBase
     protected virtual void OnRegistered()
     {
     }
-
-    /// <summary>
-    /// 종속된 컨트롤러를 탬플릿에 캐스팅 된 형식으로 안전하고 빠르게 얻어옵니다.
-    /// </summary>
-    /// <typeparam name="T">형변환 시킬 컨트롤러의 클래스 탬플릿명을 작성합니다</typeparam>
-    protected T ControllerCast<T>() where T : ControllerBase
-    {
-        return (T)Controller;
-    }
-
 
     /// <summary>
     /// 플레이어가 아무 오브젝트와 충돌이 처음 일어날 때만 무조건 실행되는 함수입니다.

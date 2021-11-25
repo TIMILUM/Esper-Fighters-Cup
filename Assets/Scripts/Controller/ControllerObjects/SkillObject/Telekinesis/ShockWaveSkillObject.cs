@@ -62,7 +62,7 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         _buffOnCollision[0].ValueVector3[0] = _direction;
-        SetState(State.EndDelay);
+        SyncState(State.EndDelay);
         base.SetHit(to);
     }
 
@@ -107,7 +107,7 @@ public class ShockWaveSkillObject : SkillObject
             {
                 //충격파 애니메이션
                 // TODO: 이거 OnFrontDelay 등으로 옮겨주세요...
-                _player.Animator.SetTrigger("ShockWaveSkill");
+                AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
                 ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
                 return true;
@@ -118,7 +118,7 @@ public class ShockWaveSkillObject : SkillObject
 
         if (isCanceled)
         {
-            SetState(State.Canceled);
+            SyncState(State.Canceled);
             yield break;
         }
 
@@ -163,7 +163,7 @@ public class ShockWaveSkillObject : SkillObject
     protected override IEnumerator OnCanceled()
     {
         ApplyMovementSpeed(State.Canceled);
-        SetState(State.Release);
+        SyncState(State.Release);
         yield return null;
     }
 

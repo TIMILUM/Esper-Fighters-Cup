@@ -50,7 +50,7 @@ namespace EsperFightersCup
         protected override IEnumerator OnCanceled()
         {
             ApplyMovementSpeed(State.Canceled);
-            SetState(State.Release);
+            SyncState(State.Release);
             yield return null;
         }
 
@@ -90,7 +90,7 @@ namespace EsperFightersCup
 
             if (isCanceled == true)
             {
-                SetState(State.Release);
+                SyncState(State.Release);
             }
 
             SetNextState();
@@ -132,7 +132,7 @@ namespace EsperFightersCup
 
             if (isCanceled)
             {
-                SetState(State.Canceled);
+                SyncState(State.Canceled);
                 yield break;
             }
 
@@ -152,7 +152,7 @@ namespace EsperFightersCup
         protected override IEnumerator OnUse()
         {
             ApplyMovementSpeed(State.Use);
-            _player.Animator.SetTrigger("RandomDrop");
+            AuthorPlayer.Animator.SetTrigger("RandomDrop");
             // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = _endMousePoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
