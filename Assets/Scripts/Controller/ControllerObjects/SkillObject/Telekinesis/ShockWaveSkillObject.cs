@@ -68,7 +68,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnReadyToUse()
     {
-        if(!Author.photonView.IsMine)
+        if (!Author.photonView.IsMine)
         {
             yield break;
         }
@@ -137,7 +137,7 @@ public class ShockWaveSkillObject : SkillObject
     {
         ApplyMovementSpeed(State.FrontDelay);
         //충격파 애니메이션
-        _player.Animator.SetTrigger("ShockWaveSkill");
+        AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
         ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
         yield return new WaitForSeconds(FrontDelayMilliseconds / 1000.0f);
@@ -146,7 +146,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override IEnumerator OnUse()
     {
-        if(!Author.photonView.IsMine)
+        if (!Author.photonView.IsMine)
         {
             ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
             yield break;
