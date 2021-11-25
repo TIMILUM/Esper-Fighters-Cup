@@ -35,6 +35,7 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - AnimTriggerRPC
+  - ChangeSkillStateRPC
   - ClickRpc
   - DestroyRpc
   - DropPreSeondRPC
@@ -52,7 +53,6 @@ MonoBehaviour:
   - RoundIntroEndRPC
   - RoundIntroRPC
   - RoundSetCompleteRPC
-  - ChangeSkillStateRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

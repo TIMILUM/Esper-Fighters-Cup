@@ -134,9 +134,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: plank_mesh_PreFeb (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4794231293171263799, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_LocalScale.x
@@ -453,7 +457,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &140748872
 GameObject:
@@ -1121,6 +1125,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Plank_Appear
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e4fa8372ee6cc0d43b396e4c2e78770c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4fa8372ee6cc0d43b396e4c2e78770c, type: 3}
 --- !u!1 &527497438 stripped
@@ -1150,11 +1158,6 @@ Animator:
 --- !u!4 &604767304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4180087773423436115, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
-  m_PrefabInstance: {fileID: 4180087774027154715}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &628744017 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4180087773437254218, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
   m_PrefabInstance: {fileID: 4180087774027154715}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &678641793
@@ -2076,6 +2079,10 @@ PrefabInstance:
     - target: {fileID: 4794231293171263799, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_Name
       value: plank_mesh_PreFeb
+      objectReference: {fileID: 0}
+    - target: {fileID: 4794231293171263799, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_RootOrder
@@ -3317,35 +3324,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 821624620}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
-      propertyPath: _spawnTransform
-      value: 
-      objectReference: {fileID: 628744017}
-    - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _ingameFsmSystem
       value: 
       objectReference: {fileID: 2480101516244202184}
-    - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
-      propertyPath: _startLocations.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
-      propertyPath: _startPositions.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _startLocations.Array.data[0]
       value: 
       objectReference: {fileID: 1113195082}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _startLocations.Array.data[1]
-      value: 
-      objectReference: {fileID: 604767304}
-    - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
-      propertyPath: _startPositions.Array.data[0]
-      value: 
-      objectReference: {fileID: 1113195082}
-    - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
-      propertyPath: _startPositions.Array.data[1]
       value: 
       objectReference: {fileID: 604767304}
     m_RemovedComponents: []
@@ -3464,10 +3451,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3238718088495368678, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
-      propertyPath: _curain
-      value: 
-      objectReference: {fileID: 792015349}
-    - target: {fileID: 3238718088495368678, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _curtain
       value: 
       objectReference: {fileID: 792015349}
@@ -3475,10 +3458,6 @@ PrefabInstance:
       propertyPath: _sawBladeSystem
       value: 
       objectReference: {fileID: 873093734}
-    - target: {fileID: 3238718088495368678, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
-      propertyPath: _startPosition.Array.size
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4016711496365037146, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: m_Name
       value: IngameFSMSystem
@@ -3491,21 +3470,13 @@ PrefabInstance:
       propertyPath: _gameStateView
       value: 
       objectReference: {fileID: 1121800803}
-    - target: {fileID: 4873366967118284923, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
-      propertyPath: _startPosition.Array.data[0]
-      value: 
-      objectReference: {fileID: 1113195082}
-    - target: {fileID: 4873366967118284923, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
-      propertyPath: _startPosition.Array.data[1]
-      value: 
-      objectReference: {fileID: 604767304}
     - target: {fileID: 5403316554260806962, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _gameStateView
       value: 
       objectReference: {fileID: 1121800803}
     - target: {fileID: 6704078585159148731, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: sceneViewId
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _intro
@@ -3535,18 +3506,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: InSkillGameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 2714110592261382150, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
-      propertyPath: _DropuiPrefabs
-      value: 
-      objectReference: {fileID: 1830693600371288693, guid: fd36db764b0743b48914d86a169708a7, type: 3}
-    - target: {fileID: 2714110592261382150, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
-      propertyPath: _reverseuiPrefabs
-      value: 
-      objectReference: {fileID: 3187823670617454164, guid: 965235aedfa28c44fb60c7bbd019b8d0, type: 3}
-    - target: {fileID: 2714110592261382150, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
-      propertyPath: _dropStaticObjectPrefab
-      value: 
-      objectReference: {fileID: 7540981878553075838, guid: e3a0f211bfe5a794ba0781abf334912e, type: 3}
     - target: {fileID: 2714110592261382152, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3591,8 +3550,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2714110592261382153, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1db8856bb886f54459a0fda3a0250b79, type: 3}
 --- !u!4 &2885620611091357183 stripped
 Transform:
@@ -3611,10 +3569,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1076915466}
     m_Modifications:
-    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
-      propertyPath: _particleInfo.Array.data[3]._lifeTime
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705245, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: m_Name
       value: ParticleGameManager
@@ -3675,6 +3629,10 @@ PrefabInstance:
     - target: {fileID: 3769195638610221162, guid: 764b6ebb85d12824b911072bcf7273dd, type: 3}
       propertyPath: m_Name
       value: Elena_Mesh_v2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3769195638610221162, guid: 764b6ebb85d12824b911072bcf7273dd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4541053228298535632, guid: 764b6ebb85d12824b911072bcf7273dd, type: 3}
       propertyPath: m_RootOrder

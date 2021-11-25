@@ -180,6 +180,7 @@ MonoBehaviour:
   - {fileID: 4314589049664778607}
   - {fileID: 8663577832037187048}
   - {fileID: 6646747819659544057}
+  - {fileID: 0}
   - {fileID: 3634706055614757839}
   sceneViewId: 0
   InstantiationId: 0
@@ -459,6 +460,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
       propertyPath: m_Name
       value: Elena_rigging
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
       propertyPath: m_Controller
