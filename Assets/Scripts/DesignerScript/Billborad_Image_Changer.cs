@@ -72,7 +72,6 @@ namespace EsperFightersCup
             this.gameObject.GetComponent<MeshRenderer>().material = matNumber01;
             //변수값 초기화
             this.changeLevel = 2;
-            this.OKSignTime = 3.0f;
             this.delta = 0;
 
         }
