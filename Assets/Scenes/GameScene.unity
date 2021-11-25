@@ -1378,6 +1378,54 @@ MonoBehaviour:
   _minZoom: 130
   _maxZoom: 25
   _zoomLimiter: 100
+--- !u!1 &862858611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 862858612}
+  - component: {fileID: 862858613}
+  m_Layer: 0
+  m_Name: BillboardImageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &862858612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862858611}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1076915466}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &862858613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862858611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab13386494f45e42a869eae67e6dfa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Screen01: {fileID: 0}
+  Screen02: {fileID: 0}
+  Screen03: {fileID: 0}
+  Screen04: {fileID: 0}
+  Screen05: {fileID: 0}
 --- !u!114 &873093734 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4180087773155155837, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
@@ -1734,6 +1782,7 @@ Transform:
   - {fileID: 1372195443}
   - {fileID: 28038344}
   - {fileID: 705699738}
+  - {fileID: 862858612}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
