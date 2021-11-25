@@ -26,8 +26,10 @@ namespace EsperFightersCup
 
         //기능 처리용 변수들
         private int changeLevel;    //어떤 이미지로 변환시킬지 결정하는 용도
-        float OKSignTime;           //이 값(시간) 마다 이미지 바꿈
         float delta;                //시간값 확인하는 용도
+
+        [SerializeField]
+        private float OKSignTime;           //이 값(시간) 마다 이미지 바꿈
 
 
 
