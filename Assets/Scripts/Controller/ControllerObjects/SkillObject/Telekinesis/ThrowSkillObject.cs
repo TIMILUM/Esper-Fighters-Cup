@@ -56,7 +56,7 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnCanceled()
     {
         ApplyMovementSpeed(State.Canceled);
-        SetState(State.Release);
+        SyncState(State.Release);
         yield return null;
     }
 
@@ -83,10 +83,10 @@ public class ThrowSkillObject : SkillObject
 
         if (isCanceled == true)
         {
-            SetState(State.Release);
+            SyncState(State.Release);
         }
 
-        SetState(State.Use);
+        SyncState(State.Use);
     }
 
     protected override IEnumerator OnReadyToUse()
@@ -107,7 +107,7 @@ public class ThrowSkillObject : SkillObject
            }
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
-               if (_player.photonView.IsMine)
+               if (AuthorPlayer.photonView.IsMine)
                {
                    _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
                    _fragmentCasting.transform.SetParent(null);
@@ -128,7 +128,7 @@ public class ThrowSkillObject : SkillObject
         if (isCanceled)
         {
 
-            SetState(State.Canceled);
+            SyncState(State.Canceled);
             yield break;
         }
 
@@ -144,14 +144,14 @@ public class ThrowSkillObject : SkillObject
         var currentTime = Time.time;
 
         //Idle 상태일때 애니메이션 실행
-        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (AuthorPlayer.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
-            _player.CharacterAnimatorSync.SetTrigger("ReverseGravityUnder");
+            AuthorPlayer.Animator.SetTrigger("ReverseGravityUnder");
 
         }
 
         //하체는 그냥 실행
-        _player.CharacterAnimatorSync.SetTrigger("ReverseGravityA");
+        AuthorPlayer.Animator.SetTrigger("ReverseGravityA");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))
@@ -166,9 +166,9 @@ public class ThrowSkillObject : SkillObject
         if (isCanceled == true)
         {
 
-            SetState(State.Release);
+            SyncState(State.Release);
         }
-        SetState(State.EndDelay);
+        SyncState(State.EndDelay);
     }
 
     private Vector3 GetMousePosition()
@@ -202,7 +202,7 @@ public class ThrowSkillObject : SkillObject
         _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
         GameObjectUtil.ActiveGameObject(_hitBox, false);
         yield return null;
-        SetState(State.Canceled);
+        SyncState(State.Canceled);
     }
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)

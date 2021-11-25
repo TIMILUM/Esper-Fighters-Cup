@@ -21,8 +21,10 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
         }
     }
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         _cameraMovement.RemoveTarget(transform); // 카메라 타겟 삭제
     }
 

@@ -4,8 +4,10 @@ public class MoveSpeedObject : BuffObject
 {
     public float AddedSpeed { get; private set; }
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "";
         _buffStruct.Type = Type.MoveSpeed;
     }

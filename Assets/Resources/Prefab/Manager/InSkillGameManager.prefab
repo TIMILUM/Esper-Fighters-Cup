@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2714110592261382152}
   - component: {fileID: 2714110592261382151}
   - component: {fileID: 2714110592261382150}
-  - component: {fileID: 2714110592261382153}
   m_Layer: 0
   m_Name: InSkillGameManager
   m_TagString: Untagged
@@ -45,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b1cd766b410a04f9293e7657969f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fragmentArea: {fileID: 2714110592261382153}
   _skillObjectfactory: {fileID: 2714110592261382150}
 --- !u!114 &2714110592261382150
 MonoBehaviour:
@@ -62,18 +60,5 @@ MonoBehaviour:
   _stonePrefab: {fileID: 7540981878553075838, guid: a9b8632111a24574d87023ced9fe46d6, type: 3}
   _fragmentStaticObjectPrefab: {fileID: 1851603496711567382, guid: 2fd4acb7d61ae2848b05c2469db23904, type: 3}
   _dropStaticObjectPrefab: {fileID: 7540981878553075838, guid: a9b8632111a24574d87023ced9fe46d6, type: 3}
-  _uiPrefabs: {fileID: 1830693600371288693, guid: fd36db764b0743b48914d86a169708a7, type: 3}
---- !u!114 &2714110592261382153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2714110592261382149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5810252d16183314b86fc9905788f418, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _fragmentPrefab: {fileID: 6684051829039581318, guid: 189720cac249aaf45a386c3470996d44, type: 3}
-  _shardsOfDebris: 1
+  _DropuiPrefabs: {fileID: 0}
+  _reverseuiPrefabs: {fileID: 0}

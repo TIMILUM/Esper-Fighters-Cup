@@ -7,8 +7,9 @@ namespace EsperFightersCup
         private float _decreaseHp = 0;
         private float _durationStunSeconds = 0;
 
-        private void Reset()
+        protected override void Reset()
         {
+            base.Reset();
             _name = "";
             _buffStruct.Type = Type.Falling;
         }

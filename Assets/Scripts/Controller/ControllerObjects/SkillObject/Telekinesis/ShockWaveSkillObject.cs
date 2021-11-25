@@ -36,7 +36,6 @@ public class ShockWaveSkillObject : SkillObject
     private Vector3 _direction = Vector3.right;
     private Vector3 _startPos = Vector3.zero;
 
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -63,7 +62,7 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         _buffOnCollision[0].ValueVector3[0] = _direction;
-        SetState(State.EndDelay);
+        SyncState(State.EndDelay);
         base.SetHit(to);
     }
 
@@ -107,7 +106,8 @@ public class ShockWaveSkillObject : SkillObject
             else if (Input.GetMouseButtonUp(0))
             {
                 //충격파 애니메이션
-                _player.CharacterAnimatorSync.SetTrigger("ShockWaveSkill");
+                // TODO: 이거 OnFrontDelay 등으로 옮겨주세요...
+                AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
                 ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
                 return true;
@@ -118,7 +118,7 @@ public class ShockWaveSkillObject : SkillObject
 
         if (isCanceled)
         {
-            SetState(State.Canceled);
+            SyncState(State.Canceled);
             yield break;
         }
 
@@ -163,7 +163,7 @@ public class ShockWaveSkillObject : SkillObject
     protected override IEnumerator OnCanceled()
     {
         ApplyMovementSpeed(State.Canceled);
-        SetState(State.Release);
+        SyncState(State.Release);
         yield return null;
     }
 
@@ -235,7 +235,7 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         var targetID = target.ID;
-        var isRaised = target.BuffController.GetBuff(BuffObject.Type.Raise) != null;
+        var isRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
         var idList = s_shockWaveSkillData._idList;
         var floatCheckList = s_shockWaveSkillData._floatCheckList;
         var moveSpeedList = s_shockWaveSkillData._moveSpeedList;

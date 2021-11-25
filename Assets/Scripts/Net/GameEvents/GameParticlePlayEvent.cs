@@ -21,7 +21,7 @@ namespace EsperFightersCup.Net
 
         public byte GetEventCode()
         {
-            return EventCode.ParticlePlay;
+            return EventCode.PlayParticle;
         }
     }
 }

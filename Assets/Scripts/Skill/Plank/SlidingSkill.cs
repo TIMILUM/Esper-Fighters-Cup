@@ -18,11 +18,11 @@ namespace EsperFightersCup
 
 
         /// <summary>
-        /// 
+        ///
         /// _buffOnCollision[0] = 슬라이드
         /// _buffOnCollision[1] = Grab
         /// _buffOnCollision[2] = Knockback
-        /// 
+        ///
         /// </summary>
 
         public override void OnPlayerHitEnter(GameObject other)
@@ -42,7 +42,7 @@ namespace EsperFightersCup
         protected override IEnumerator OnCanceled()
         {
             yield return new WaitForSeconds(0.03f);
-            SetState(State.Release);
+            SyncState(State.Release);
             yield return null;
         }
 
@@ -59,11 +59,11 @@ namespace EsperFightersCup
 
             }
 
-            while (_buffController.GetBuff(BuffObject.Type.Sliding) != null)
+            while (BuffController.ActiveBuffs.Exists(BuffObject.Type.Sliding))
             {
                 if (Input.GetMouseButton(1))
                 {
-                    _buffController.ReleaseBuff(BuffObject.Type.Sliding);
+                    BuffController.ReleaseBuffsByType(BuffObject.Type.Sliding);
                     isCanceled = true;
                     break;
                 }
@@ -71,11 +71,11 @@ namespace EsperFightersCup
 
             }
 
-            _player.CharacterAnimatorSync.SetBool("Cancel", true);
+            AuthorPlayer.Animator.SetBool("Cancel", true);
 
             if (isCanceled)
             {
-                SetState(State.Canceled);
+                SyncState(State.Canceled);
                 yield break;
             }
 
@@ -89,13 +89,13 @@ namespace EsperFightersCup
         /// <returns></returns>
         protected override IEnumerator OnFrontDelay()
         {
-            _player.CharacterAnimatorSync.SetTrigger("Sliding");
+            AuthorPlayer.Animator.SetTrigger("Sliding");
             yield return new WaitForSeconds(_slidingFrontDelay / 1000.0f);
 
 
-            if (_buffController.GetBuff(BuffObject.Type.Sliding) != null)
+            if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Sliding))
             {
-                SetState(State.Canceled);
+                SyncState(State.Canceled);
                 yield break;
             }
 
@@ -103,11 +103,11 @@ namespace EsperFightersCup
             ///처음 시작 위치
             _buffOnCollision[0].ValueVector3[0] = Author.transform.position;
             ///목표 위치
-            _buffOnCollision[0].ValueVector3[1] = Author.transform.position + (mousePos - Author.transform.position).normalized * _slidingRange;
+            _buffOnCollision[0].ValueVector3[1] = Author.transform.position + ((mousePos - Author.transform.position).normalized * _slidingRange);
             ///목표까지 가는 시간
             _buffOnCollision[0].ValueVector3[1].y = _buffOnCollision[0].ValueVector3[0].y;
             ///슬라이드 버프 추가
-            _buffController.GenerateBuff(_buffOnCollision[0]);
+            BuffController.GenerateBuff(_buffOnCollision[0]);
 
 
             SetNextState();
@@ -129,7 +129,7 @@ namespace EsperFightersCup
 
         protected override IEnumerator OnRelease()
         {
-            _player.CharacterAnimatorSync.SetBool("Cancel", false);
+            AuthorPlayer.Animator.SetBool("Cancel", false);
             Destroy(gameObject);
             yield return null;
         }
