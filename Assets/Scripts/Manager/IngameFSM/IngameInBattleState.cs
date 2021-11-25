@@ -52,11 +52,11 @@ namespace EsperFightersCup
 
         private async UniTask CheckLocalPlayerHPAsync(CancellationToken cancellation)
         {
-            // ?곷?諛⑹씠 癒쇱? ?쇨? 0???섏뼱??RPC瑜?蹂대궡硫?WaitUntil 醫낅즺 諛?false 諛섑솚
+            // 상대방이 먼저 피가 0이 되어서 RPC를 보내면 WaitUntil 종료 및 false 반환
             var isDead = !await UniTask.WaitUntil(CheckLocalPlayerIsDead, cancellationToken: cancellation)
                 .SuppressCancellationThrow();
 
-            // 蹂몄씤??癒쇱? ?쇨? 0????寃쎌슦??RPC ?몄텧
+            // 본인이 먼저 피가 0이 된 경우에 RPC 호출
             if (isDead)
             {
                 Debug.Log($"LocalPlayer is dead!");

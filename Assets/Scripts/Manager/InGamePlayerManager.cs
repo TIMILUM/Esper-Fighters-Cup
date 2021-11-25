@@ -22,17 +22,17 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     [SerializeField] private CameraMovement _cameraMovement;
 
     /// <summary>
-    /// ?꾩옱 ?ъ쓽 濡쒖뺄 ?뚮젅?댁뼱 ?몄뒪?댁뒪瑜?媛?몄샃?덈떎.
+    /// 현재 씬의 로컬 플레이어 인스턴스를 가져옵니다.
     /// </summary>
     public APlayer LocalPlayer { get; private set; }
 
     /// <summary>
-    /// ?ㅺ? ActorNumber, 媛믪씠 ?뚮젅?댁뼱 ?몄뒪?댁뒪???뺤뀛?덈━瑜??쒓났?⑸땲?ㅳ뀖.
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다.
     /// </summary>
     public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
 
     /// <summary>
-    /// ?멸쾶?꾩쓽 ?뚮젅?댁뼱 ?쒖옉 ?꾩튂瑜??닿퀬 ?덉뒿?덈떎.
+    /// 인게임의 플레이어 시작 위치를 담고 있습니다.
     /// </summary>
     public List<Transform> StartLocations => _startLocations;
 
@@ -83,7 +83,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
         if (prefab == null)
         {
-            throw new Exception("?앹꽦??罹먮┃?곗쓽 ??낆쓣 李얠쓣 ???놁뒿?덈떎.");
+            throw new Exception("생성할 캐릭터의 타입을 찾을 수 없습니다.");
         }
 
         var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
