@@ -44,7 +44,6 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         if (!IngameObjectIDParser.TryGetPrefabPackage(objectId, out var prefabPackage))
         {
             return null;
-            Debug.Log(prefabPackage);
         }
         var clone = PhotonNetwork.Instantiate(prefabPackage.PrefabPath, pos, Quaternion.identity);
         Debug.Log(prefabPackage);
