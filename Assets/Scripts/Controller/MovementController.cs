@@ -180,7 +180,8 @@ public class MovementController : ControllerBase
 
         _currentMoveDir = Vector3.Lerp(tempDirection, dir, currentSpeedTime);
 
-        playerPosition += (_moveSpeed + _addedMoveSpeed) * Time.deltaTime * _currentMoveDir;
+        var totalSpeed = Mathf.Max(0, _moveSpeed + _addedMoveSpeed);
+        playerPosition += totalSpeed * Time.deltaTime * _currentMoveDir;
 
         _player.transform.position = playerPosition;
 
