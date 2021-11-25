@@ -128,19 +128,19 @@ public class SkillController : ControllerBase
     {
         if (!_skillTable.TryGetValue(id, out var skillTemplate))
         {
+            Debug.LogWarning($"스킬 프리팹 목록에 {id} 와 일치하는 ID를 가진 스킬이 없습니다.");
+            return;
+        }
+
+        if (_activeSkills.Exist(id))
+        {
+            Debug.LogWarning($"아이디가 {id}인 스킬이 이미 존재합니다.", gameObject);
             return;
         }
 
         var skillObject = Instantiate(skillTemplate, transform);
-        if (_activeSkills.TryAdd(skillObject))
-        {
-            skillObject.Register(this);
-        }
-        else
-        {
-            Debug.LogWarning($"아이디가 {id}인 스킬이 이미 존재합니다.", gameObject);
-            Destroy(skillObject);
-        }
+        skillObject.Register(this);
+        _activeSkills.Add(skillObject);
     }
 
     [PunRPC]
@@ -166,7 +166,7 @@ public class SkillController : ControllerBase
     {
         lock (_skillReleaseLock)
         {
-            if (_activeSkills.TryRemove(id, out var removed) && removed.CurrentState != SkillObject.State.Release)
+            if (_activeSkills.Remove(id, out var removed) && removed.CurrentState != SkillObject.State.Release)
             {
                 removed.SetStateToLocal(SkillObject.State.Canceled);
             }

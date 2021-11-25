@@ -51,7 +51,7 @@ public interface ISkillCollection
     /// </summary>
     /// <param name="skill">추가할 스킬</param>
     /// <returns>ID가 일치하는 스킬이 이미 존재할 경우 추가하지 않고 <see langword="false"/>를 반환합니다.</returns>
-    bool TryAdd(SkillObject skill);
+    bool Add(SkillObject skill);
 
     /// <summary>
     /// ID와 일치하는 스킬 오브젝트를 목록에서 제거합니다.
@@ -59,7 +59,7 @@ public interface ISkillCollection
     /// <param name="id">제거하고 싶은 스킬의 ID</param>
     /// <param name="removedSkill">목록에서 제거된 스킬 오브젝트</param>
     /// <returns>제거 여부</returns>
-    bool TryRemove(int id, out SkillObject removedSkill);
+    bool Remove(int id, out SkillObject removedSkill);
 
     /// <summary>
     /// 모든 스킬을 스킬 콜렉션에서 제거합니다.
@@ -83,7 +83,7 @@ public class SkillCollection : IReadonlySkillCollection, ISkillCollection
     /// </summary>
     public int Count => _skills.Count;
 
-    public bool TryAdd(SkillObject skill)
+    public bool Add(SkillObject skill)
     {
         if (!skill || _skills.ContainsKey(skill.ID))
         {
@@ -104,7 +104,7 @@ public class SkillCollection : IReadonlySkillCollection, ISkillCollection
         return _skills.TryGetValue(id, out skill);
     }
 
-    public bool TryRemove(int id, out SkillObject removedSkill)
+    public bool Remove(int id, out SkillObject removedSkill)
     {
         if (!_skills.TryGetValue(id, out removedSkill))
         {
