@@ -1,4 +1,3 @@
-using UnityEngine;
 /// <summary>
 /// 간단하게 오브젝트를 만들었습니다.
 /// </summary>

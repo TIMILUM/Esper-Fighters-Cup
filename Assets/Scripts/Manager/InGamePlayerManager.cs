@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using EsperFightersCup;
-using EsperFightersCup.Util;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -14,7 +15,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
 
-    [SerializeField] private Transform _spawnTransform;
+    [SerializeField] private List<Transform> _startLocations;
     [SerializeField] private IngameFSMSystem _ingameFsmSystem;
 
     [Header("[Player's Camera]")]
@@ -25,21 +26,46 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     /// </summary>
     public APlayer LocalPlayer { get; private set; }
 
+    /// <summary>
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다ㅏ.
+    /// </summary>
+    public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
+
+    /// <summary>
+    /// 인게임의 플레이어 시작 위치를 담고 있습니다.
+    /// </summary>
+    public List<Transform> StartLocations => _startLocations;
+
     private void Start()
     {
-#if UNITY_EDITOR
-        // 연결되지 않고 인게임 화면이 나온다면 오프라인 모드를 통한 디버깅을 허용
-        if (!PhotonNetwork.IsConnected)
-        {
-            Debug.LogWarning("Enable Offline Mode!");
-            PhotonNetwork.OfflineMode = true;
-            PhotonNetwork.JoinRandomRoom();
-        }
-#endif
-        SpawnLocalPlayer();
+        LocalPlayer = SpawnLocalPlayer();
+        var pvID = LocalPlayer.photonView.ViewID;
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
+
+        Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
+        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
     }
 
-    private void SpawnLocalPlayer()
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value))
+        {
+            return;
+        }
+
+        var targetPV = (int)value;
+        var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
+        GamePlayers[targetPlayer.ActorNumber] = playerInstance;
+        Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
+        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+
+        if (PhotonNetwork.IsMasterClient && GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
+        {
+            NextStateAsync().Forget();
+        }
+    }
+
+    private APlayer SpawnLocalPlayer()
     {
         ACharacter.Type characterType;
         var props = PhotonNetwork.LocalPlayer.CustomProperties;
@@ -51,7 +77,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         else
         {
             Debug.LogWarning($"Can not found local player's character type.");
-            characterType = ACharacter.Type.Telekinesis;
+            characterType = ACharacter.Type.Plank;
         }
 
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
@@ -61,11 +87,18 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         }
 
         var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
-            _spawnTransform.position + Vector3.up, Quaternion.identity);
+            transform.position + (Vector3.up * 5f), Quaternion.identity);
 
-        LocalPlayer = player.GetComponent<APlayer>();
+        var localplayer = player.GetComponent<APlayer>();
+        localplayer.ResetPositionAndRotation();
 
-        var pvID = LocalPlayer.photonView.ViewID;
-        PhotonNetwork.SetPlayerCustomProperties(new Hashtable { [CustomPropertyKeys.PlayerPhotonView] = pvID });
+        return localplayer;
+    }
+
+    private async UniTask NextStateAsync()
+    {
+        Debug.Log($"Change state to IntroCut");
+        await UniTask.Delay(1000);
+        IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
     }
 }

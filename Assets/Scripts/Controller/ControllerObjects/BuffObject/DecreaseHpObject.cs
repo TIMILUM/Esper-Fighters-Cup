@@ -25,15 +25,15 @@ public class DecreaseHpObject : BuffObject
             return;
         }
 
-        if (_character is null) // is: Unity.Object의 null check 건너뛰고 바로 System.Object의 null check
+        if (_character is null)
         {
             Debug.Log("HP does not found!");
             ControllerCast<BuffController>().ReleaseBuff(this);
             return;
         }
 
-        _character.Hp -= _damage;
-        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.Hp);
+        _character.HP -= (int)_damage; // BUG: 대미지가 float보다는 int로 바뀌는게 좋음
+        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.HP);
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)

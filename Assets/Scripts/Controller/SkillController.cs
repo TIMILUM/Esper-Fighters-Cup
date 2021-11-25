@@ -38,7 +38,7 @@ public class SkillController : ControllerBase
 
     private void UpdateMine()
     {
-        if (IngameFSMSystem.CurrentState != IngameFSMSystem.State.InBattle)
+        if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle)
         {
             ReleaseAllSkills();
             return;

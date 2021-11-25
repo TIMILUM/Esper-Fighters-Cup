@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using EsperFightersCup;
 using UnityEngine;
 using UnityEngine.Events;
@@ -96,7 +95,7 @@ public class IngameDelayCursorObject : MonoBehaviour
         ped.position = Input.mousePosition;
         var eventPosition = Input.mousePosition;
         int displayIndex = _canvas.targetDisplay;
-        
+
         // Multiple display support only when not the main display. For display 0 the reported
         // resolution is always the desktops resolution since its part of the display API,
         // so we use the standard none multiple display method. (case 741751)

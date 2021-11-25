@@ -1,16 +1,13 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEngine;
 
 public static class CSVUtil
 {
     public static string SplitRegex = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
     public static string LineSplitRegex = @"\r\n|\n\r|\n|\r";
     public static char[] TrimChars = { '\"' };
-    
+
     public static CSVData Parse(string csv)
     {
         var csvStringArray = Regex.Split(csv, LineSplitRegex);
@@ -18,7 +15,7 @@ public static class CSVUtil
         {
             return null;
         }
-        
+
         var result = new CSVData();
         var rawData = new List<List<string>>();
 

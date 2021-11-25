@@ -75,7 +75,7 @@ namespace EsperFightersCup.Net
             if (_syncTriggers.Contains(name))
             {
                 var packet = new GameAnimatorTriggerSyncEvent(_actor.photonView.ViewID, name);
-                PacketSender.Broadcast(in packet, SendOptions.SendUnreliable, PacketEventOptions.SendOthers);
+                EventSender.Broadcast(in packet, SendOptions.SendUnreliable, EventSendOptions.SendOthers);
             }
         }
 
@@ -132,7 +132,7 @@ namespace EsperFightersCup.Net
 
         protected override void OnGameEventReceived(GameEventArguments args)
         {
-            if (args.Code != GameProtocol.AnimatorTriggerSync || !_animator || !_actor)
+            if (args.Code != EventCode.AnimatorTriggerSync || !_animator || !_actor)
             {
                 return;
             }
