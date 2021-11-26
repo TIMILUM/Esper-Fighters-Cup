@@ -43,7 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a057067240a53a4592f488b9a133e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buffOnCollision: []
+  _buffOnCollision:
+  - _type: 6
+    _duration: 1
+    _valueFloat:
+    - 5
+    _valueVector3: []
+    _allowDuplicates: 0
+    _damage: 0
+    _isOnlyOnce: 0
   _name: Raise
   _buffStruct:
     _type: 6
@@ -57,7 +65,3 @@ MonoBehaviour:
     _damage: 0
     _isOnlyOnce: 0
   _raiseDate: 0
-  _KnockBackSpeed: 14
-  _ShockwavedecreaseHp: 5
-  _ShockwavedurationStunSeconds: 0.5
-  _Shockwaveduration: 1

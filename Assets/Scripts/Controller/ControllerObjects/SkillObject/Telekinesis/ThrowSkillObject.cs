@@ -5,50 +5,66 @@ using UnityEngine;
 public class ThrowSkillObject : SkillObject
 {
     [SerializeField]
-    private GameObject _casting;
-    [SerializeField]
     private GameObject _fragmentCasting;
     [SerializeField]
-    private float _range;
+    private GameObject _hitBox;
     [SerializeField]
-    private float _fragmentAreaRange;
+    private float _range;
 
+    [SerializeField]
+    private ColliderChecker _collider;
     [SerializeField]
     private float _frontDelayTime;
 
     [SerializeField]
     private float _endDelayTime;
 
+
+    private GameObject _fragmentObj;
+    private GameObject _fragmentUI;
+
+
+    private Vector3 _endMousePos;
     protected override void Start()
     {
         base.Start();
-        _range = GetCSVData<float>("Range");
+        _range = GetCSVData<float>("Range") * 0.01f;
         _frontDelayTime = FrontDelayMilliseconds;
         _endDelayTime = EndDelayMilliseconds;
-        GameObjectUtil.ScaleGameObject(_casting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
-        GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(_fragmentAreaRange * 2.0f, 1.0f, _fragmentAreaRange * 2.0f));
+        _collider.OnCollision += SetHit;
+        GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
+        GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
 
     }
     public override void SetHit(ObjectBase to)
     {
+
+        if (_fragmentObj != null)
+        {
+            if (_fragmentObj.GetComponent<ObjectBase>() == to)
+                return;
+        }
         base.SetHit(to);
     }
 
 
     public override void OnPlayerHitEnter(GameObject other)
     {
+        Debug.Log(other.transform.name);
     }
 
     protected override IEnumerator OnCanceled()
     {
         ApplyMovementSpeed(State.Canceled);
-        SetState(State.Release);
+        SyncState(State.Release);
         yield return null;
     }
 
     protected override IEnumerator OnEndDelay()
     {
         ApplyMovementSpeed(State.EndDelay);
+        GameObjectUtil.ActiveGameObject(_hitBox);
+        GameObjectUtil.TranslateGameObject(_hitBox, _fragmentCasting.transform.position);
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
@@ -62,20 +78,21 @@ public class ThrowSkillObject : SkillObject
             }
             yield return null;
             currentTime = Time.time;
+
         }
 
         if (isCanceled == true)
         {
-            InGameSkillManager.Instance.FragmentAllDestroy();
-            SetState(State.Release);
+            SyncState(State.Release);
         }
-        SetState(State.Use);
+
+        SyncState(State.Use);
     }
 
     protected override IEnumerator OnReadyToUse()
     {
         var isCanceled = false;
-        GameObjectUtil.ActiveGameObject(_casting);
+
         GameObjectUtil.ActiveGameObject(_fragmentCasting);
 
         yield return new WaitUntil(() =>
@@ -90,18 +107,15 @@ public class ThrowSkillObject : SkillObject
            }
            if (Input.GetKeyUp(KeyCode.LeftShift))
            {
-               InGameSkillManager.Instance.FragmentAllActive(transform.position, _range, _player.photonView.ViewID);
-               GameObjectUtil.ActiveGameObject(_fragmentCasting, false);
-               GameObjectUtil.ActiveGameObject(_casting, false);
-               if (SetPosCompare(mousePos))
+               if (AuthorPlayer.photonView.IsMine)
                {
-                   InGameSkillManager.Instance.AddFragmentArea(_fragmentCasting.transform, _fragmentAreaRange, _player.photonView.ViewID);
-                   InGameSkillManager.Instance.FragmentAllActive(GetMousePosition(), _range, _player.photonView.ViewID);
-               }
-               else
-               {
-                   isCanceled = true;
-                   return isCanceled;
+                   _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
+                   _fragmentCasting.transform.SetParent(null);
+                   _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
+                   _fragmentCasting.transform.SetParent(transform);
+                   _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
+                   _endMousePos = mousePos;
+
                }
 
                return true;
@@ -110,15 +124,15 @@ public class ThrowSkillObject : SkillObject
        });
 
 
+
         if (isCanceled)
         {
-            InGameSkillManager.Instance.FragmentAllDestroy();
-            SetState(State.Canceled);
+
+            SyncState(State.Canceled);
             yield break;
         }
 
         GameObjectUtil.ActiveGameObject(_fragmentCasting, false);
-        GameObjectUtil.ActiveGameObject(_casting, false);
         SetNextState();
     }
 
@@ -128,11 +142,16 @@ public class ThrowSkillObject : SkillObject
         bool isCanceled = false;
         var startTime = Time.time;
         var currentTime = Time.time;
-        if (_player.CharacterAnimatorSync.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+
+        //Idle 상태일때 애니메이션 실행
+        if (AuthorPlayer.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
-            _player.CharacterAnimatorSync.SetTrigger("ReverseGravityUnder");
+            AuthorPlayer.Animator.SetTrigger("ReverseGravityUnder");
+
         }
-        _player.CharacterAnimatorSync.SetTrigger("ReverseGravityA");
+
+        //하체는 그냥 실행
+        AuthorPlayer.Animator.SetTrigger("ReverseGravityA");
         while ((currentTime - startTime) * 1000 <= _frontDelayTime)
         {
             if (Input.GetMouseButtonDown(1))
@@ -146,10 +165,10 @@ public class ThrowSkillObject : SkillObject
 
         if (isCanceled == true)
         {
-            InGameSkillManager.Instance.FragmentAllDestroy();
-            SetState(State.Release);
+
+            SyncState(State.Release);
         }
-        SetState(State.EndDelay);
+        SyncState(State.EndDelay);
     }
 
     private Vector3 GetMousePosition()
@@ -172,7 +191,7 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnRelease()
     {
         ApplyMovementSpeed(State.Release);
-        InGameSkillManager.Instance.FragmentAreaClear();
+        InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
         Destroy(gameObject);
         yield break;
     }
@@ -180,32 +199,11 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnUse()
     {
         ApplyMovementSpeed(State.Use);
-        bool isCanceled = false;
-
-        InGameSkillManager.Instance.FragmentEventStart();
-
-
-        if (isCanceled)
-        {
-            InGameSkillManager.Instance.CancelFragment();
-            SetState(State.Canceled);
-        }
+        _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
+        GameObjectUtil.ActiveGameObject(_hitBox, false);
         yield return null;
-        SetState(State.Canceled);
+        SyncState(State.Canceled);
     }
-
-
-    private bool SetPosCompare(Vector3 pos)
-    {
-        var startPos = GetMousePosition();
-        if (Vector3.Distance(pos, transform.position) > _range)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
     {

@@ -13,18 +13,14 @@ public class SawBladeObject : AStaticObject
     [SerializeField]
     private float _speed = 3;
 
-    public float Speed => _speed;
-
-    private Vector3 _direction = Vector3.one;
-    public Vector3 Direction => _direction;
-
-    private Transform _startPosition;
-    private Transform _endPosition;
-    public Transform EndPosition => _endPosition;
-
     [SerializeField]
     private AnimatorSync _animator = null;
+
+    public float Speed => _speed;
     public AnimatorSync SawBladeAnimator => _animator;
+    public Vector3 Direction { get; private set; } = Vector3.one;
+    public Transform StartPosition { get; private set; }
+    public Transform EndPosition { get; private set; }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -32,6 +28,21 @@ public class SawBladeObject : AStaticObject
         base.Start();
         _collider.OnCollision += SetHit;
         GetComponent<Rigidbody>().useGravity = false;
+
+        if (photonView.IsMine)
+        {
+            SawBladeSystem.Instance.LocalSpawnedSawBlades[photonView.ViewID] = this;
+        }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (photonView.IsMine)
+        {
+            SawBladeSystem.Instance.LocalSpawnedSawBlades.Remove(photonView.ViewID);
+        }
     }
 
     public override void SetHit(ObjectBase to)
@@ -43,17 +54,17 @@ public class SawBladeObject : AStaticObject
 
     public void SetDirection(Transform start, Transform end)
     {
-        _startPosition = start;
-        _endPosition = end;
-        var startPosition = _startPosition.position;
-        _direction = Vector3.Normalize(_endPosition.position - startPosition);
+        StartPosition = start;
+        EndPosition = end;
+        var startPosition = StartPosition.position;
+        Direction = Vector3.Normalize(EndPosition.position - startPosition);
 
-        transform.SetPositionAndRotation(startPosition, Quaternion.LookRotation(_direction));
+        transform.SetPositionAndRotation(startPosition, Quaternion.LookRotation(Direction));
     }
 
     protected override void OnHit(ObjectBase @from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
     {
-        if (_buffController == null)
+        if (BuffController == null)
         {
             return;
         }
@@ -62,7 +73,7 @@ public class SawBladeObject : AStaticObject
         {
             if (IsAllowBuff(buffStruct))
             {
-                _buffController.GenerateBuff(buffStruct);
+                BuffController.GenerateBuff(buffStruct);
             }
         }
     }

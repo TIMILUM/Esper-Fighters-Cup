@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Psy_01
-  m_Shader: {fileID: -6465566751694194690, guid: 07f54cffdeb06a14d9fee79d573bc2bd, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 43c7ec18dba036a45b260b382d7b88b4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,6 +32,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - T_Main:
+        m_Texture: {fileID: 2800000, guid: 851e622b6c7a5ca4a910ac45d72ef4c2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -98,6 +102,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Inten: 2
     - Intencity: 2
     - Intensity: 5
     - _AlphaClip: 0

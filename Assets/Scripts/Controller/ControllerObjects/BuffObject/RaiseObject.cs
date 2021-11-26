@@ -13,8 +13,10 @@ public class RaiseObject : BuffObject
     private Vector3 _startPos;
     private float _startTime;
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "";
         _buffStruct.Type = Type.Raise;
     }
@@ -25,19 +27,15 @@ public class RaiseObject : BuffObject
         _endTime = Time.time;
         var currentTime = _endTime - _startTime;
 
-        var buff = _actor.BuffController.GetBuff(Type.KnockBack);
-        if (buff == null)
-        {
-            _actor.transform.position = Vector3.Lerp(
-                _startPos, new Vector3(_actor.transform.position.x, _limitPosy, _actor.transform.position.z),
-                currentTime / Duration);
-        }
-        else
+        if (_actor.BuffController.ActiveBuffs.Exists(Type.KnockBack))
         {
             _actor.BuffController.ReleaseBuff(this);
+            return;
         }
-    }
 
+        _actor.transform.position = Vector3.Lerp(
+            _startPos, new Vector3(_actor.transform.position.x, _limitPosy, _actor.transform.position.z), currentTime / Duration);
+    }
 
     protected override void OnDestroy()
     {
@@ -78,6 +76,7 @@ public class RaiseObject : BuffObject
     {
     }
 
+    /*
     private Vector3 GetMousePosition()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -93,4 +92,5 @@ public class RaiseObject : BuffObject
 
         return Vector3.positiveInfinity;
     }
+    */
 }

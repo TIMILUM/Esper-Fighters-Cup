@@ -1,7 +1,7 @@
 using EsperFightersCup.Net;
 using UnityEngine;
 
-namespace EsperFightersCup.Util
+namespace EsperFightersCup
 {
     /// <summary>
     /// Awake를 통해 생성되는 <see cref="PunEventCallbacks"/> 기반의 싱글톤입니다.
@@ -9,33 +9,17 @@ namespace EsperFightersCup.Util
     /// <typeparam name="T">싱글톤을 사용하려는 컴포넌트</typeparam>
     public class PunEventSingleton<T> : PunEventCallbacks where T : PunEventCallbacks
     {
-        private static T s_instance;
-
         /// <summary>
         /// 현재 씬에 존재하는 싱글톤 오브젝트입니다.
         /// </summary>
-        public static T Instance
-        {
-            get
-            {
-                if (s_instance == null)
-                {
-                    s_instance = FindObjectOfType<T>();
-                    if (s_instance == null)
-                    {
-                        s_instance = CreateNewSingletonObject();
-                    }
-                }
-                return s_instance;
-            }
-        }
+        public static T Instance { get; private set; }
         public static string SingletonName { get; } = typeof(T).Name;
 
         protected virtual void Awake()
         {
-            if (s_instance == null)
+            if (Instance == null)
             {
-                s_instance = gameObject.GetComponent<T>();
+                Instance = gameObject.GetComponent<T>();
             }
             else
             {
@@ -46,7 +30,7 @@ namespace EsperFightersCup.Util
 
         protected virtual void OnDestroy()
         {
-            s_instance = null;
+            Instance = null;
         }
 
         protected static T CreateNewSingletonObject()
