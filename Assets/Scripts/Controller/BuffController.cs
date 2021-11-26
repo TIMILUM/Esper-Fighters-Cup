@@ -137,9 +137,9 @@ public sealed class BuffController : ControllerBase
                 Debug.LogWarning($"ID와 일치하는 버프를 찾지 못했습니다. ({id})");
                 return;
             }
-        }
 
-        Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
-        Destroy(targetBuff.gameObject);
+            Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
+            Destroy(targetBuff.gameObject);
+        }
     }
 }
