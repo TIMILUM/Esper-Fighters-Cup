@@ -74,7 +74,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     public int ID => _id;
 
     /// <summary>
-    /// 해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
+    /// 해당 스킬이 사용되기 전 딜레이 밀리초 입니다. <para/>
     /// @Todo 나중에 스킬 작업 내용 모두 머지하면 SkillObject에서 데이터 적용하도록 수정이 필요함.
     /// </summary>
     protected float FrontDelayMilliseconds { get; private set; }
@@ -147,7 +147,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     protected abstract IEnumerator OnRelease();
 
     /// <summary>
-    ///     다음 단계의 스킬 FSM으로 이동합니다.
+    /// 다음 단계의 스킬 FSM으로 이동합니다. 스킬의 PhotonView Controller 본인이 아니면 작동하지 않습니다.
     /// </summary>
     public void SetNextState()
     {
@@ -161,7 +161,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     }
 
     /// <summary>
-    /// 특정 단계의 스킬 FSM으로 이동합니다.
+    /// 스킬의 State를 새로운 State로 동기화합니다. 스킬의 PhotonView Controller 본인이 아니면 작동하지 않습니다. <para/>
     /// 인스펙터 및 애니메이터에 사용하는 용도로 해당 함수를 삭제하지 마세요!
     /// </summary>
     /// <param name="state">이동할 스킬 FSM의 상태입니다.</param>
@@ -200,8 +200,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
     }
 
     /// <summary>
-    ///     WaitPhysicsUpdate()를 초기화시켜주는 함수입니다.
-    ///     WaitPhysicsUpdate() 함수를 재활용할 때 해당 함수를 실행시켜야합니다.
+    /// WaitPhysicsUpdate()를 초기화시켜주는 함수입니다.
+    /// WaitPhysicsUpdate() 함수를 재활용할 때 해당 함수를 실행시켜야합니다.
     /// </summary>
     protected void ResetPhysicsUpdateCount()
     {
@@ -209,8 +209,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
     }
 
     /// <summary>
-    ///     코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
-    ///     해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
+    /// 코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
+    /// 해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
     /// </summary>
     /// <param name="waitCount">해당 정수만큼 연산 횟수를 기다립니다.</param>
     /// <returns></returns>
@@ -272,8 +272,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
     }
 
     /// <summary>
-    ///     해당 스킬의 CSV 데이터를 들고옵니다.
-    ///     캐스팅 시 float, bool, string만 허용됩니다.
+    /// 해당 스킬의 CSV 데이터를 들고옵니다.
+    /// 캐스팅 시 float, bool, string만 허용됩니다.
     /// </summary>
     /// <param name="key">가져올 데이터의 이름입니다.</param>
     /// <typeparam name="T">캐스팅 시 float, bool, string만 허용됩니다.</typeparam>
