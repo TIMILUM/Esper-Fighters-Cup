@@ -19,6 +19,12 @@ public class ThrowSkillObject : SkillObject
     [SerializeField]
     private float _endDelayTime;
 
+    [SerializeField]
+    private LineRenderer _lineRenderer;
+    [SerializeField]
+    private GameObject _lineRendererObj;
+
+
 
     private GameObject _fragmentObj;
     private GameObject _fragmentUI;
@@ -34,7 +40,6 @@ public class ThrowSkillObject : SkillObject
         _collider.OnCollision += SetHit;
         GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
         GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
-
     }
     public override void SetHit(ObjectBase to)
     {
@@ -50,6 +55,7 @@ public class ThrowSkillObject : SkillObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
+
         Debug.Log(other.transform.name);
     }
 
@@ -63,7 +69,7 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnEndDelay()
     {
         ApplyMovementSpeed(State.EndDelay);
-        GameObjectUtil.ActiveGameObject(_hitBox);
+
         GameObjectUtil.TranslateGameObject(_hitBox, _fragmentCasting.transform.position);
         bool isCanceled = false;
         var startTime = Time.time;
@@ -190,6 +196,9 @@ public class ThrowSkillObject : SkillObject
 
     protected override IEnumerator OnRelease()
     {
+
+        yield return new WaitForSeconds(0.03f);
+        GameObjectUtil.ActiveGameObject(_hitBox, false);
         ApplyMovementSpeed(State.Release);
         InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
         Destroy(gameObject);
@@ -199,8 +208,29 @@ public class ThrowSkillObject : SkillObject
     protected override IEnumerator OnUse()
     {
         ApplyMovementSpeed(State.Use);
+
+        _lineRendererObj.SetActive(true);
         _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
-        GameObjectUtil.ActiveGameObject(_hitBox, false);
+        var Stone_gathering = _fragmentObj.transform.Find("stone_gathering");
+
+        while (Stone_gathering.GetComponent<Animator>()
+            .GetCurrentAnimatorStateInfo(0).IsName("CreateRock"))
+        {
+            _lineRenderer.SetPosition(0, _fragmentUI.transform.position);
+            _lineRenderer.SetPosition(1, AuthorPlayer.transform.position);
+            yield return null;
+        }
+        GameObjectUtil.ActiveGameObject(_hitBox);
+        _fragmentObj.transform.position += new Vector3(0.0f, 2.0f, 0.0f);
+
+        if (_fragmentObj.GetComponent<AStaticObject>() != null)
+        {
+            _fragmentObj.GetComponent<AStaticObject>().BuffController.GenerateBuff(new BuffObject.BuffStruct()
+            {
+                Type = BuffObject.Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
+        }
         yield return null;
         SyncState(State.Canceled);
     }

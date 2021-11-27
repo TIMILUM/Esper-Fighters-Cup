@@ -21,6 +21,7 @@ namespace EsperFightersCup
             // ValueFloat[1]    : _durationStunSeconds (0이면 스턴 효과 없음)
             // ---------------
 
+
             base.SetBuffStruct(buffStruct);
             _decreaseHp = buffStruct.ValueFloat[0];
             _durationStunSeconds = buffStruct.ValueFloat[1];
@@ -55,6 +56,8 @@ namespace EsperFightersCup
 
         private void GenerateAfterBuff(BuffController controller)
         {
+            if (_durationStunSeconds == 0) return;
+
             controller.GenerateBuff(new BuffStruct()
             {
                 Type = Type.DecreaseHp,

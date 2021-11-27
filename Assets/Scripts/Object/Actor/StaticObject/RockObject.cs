@@ -10,7 +10,6 @@ namespace EsperFightersCup
 
         private Collider[] _colliders;
 
-
         protected override void Start()
         {
             base.Start();
@@ -20,8 +19,11 @@ namespace EsperFightersCup
                 collider.enabled = false;
             }
         }
+
+
         protected override void Update()
         {
+            base.Update();
             if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("CreateRock"))
             {
                 _fristObj.SetActive(false);

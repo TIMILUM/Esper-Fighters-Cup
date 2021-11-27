@@ -33,6 +33,7 @@ public class ShockWaveSkillObject : SkillObject
     [Tooltip("[세로, 가로]")]
     private Vector2 _colliderSize = new Vector2(0.5f, 2);
 
+
     private Vector3 _direction = Vector3.right;
     private Vector3 _startPos = Vector3.zero;
 
@@ -157,7 +158,7 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.gameObject.SetActive(true);
         _colliderParentTransform.transform.position = _startPos;
         yield return new WaitUntil(() => WaitPhysicsUpdate());
-        ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
+        ParticleManager.Instance.PullParticle("ShockWaveHand", AuthorPlayer.EffectTrans[0]);
 
         _colliderParentTransform.gameObject.SetActive(false);
         SetNextState();
