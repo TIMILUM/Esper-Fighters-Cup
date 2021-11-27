@@ -5,8 +5,10 @@ public class StunObject : BuffObject
 {
     private ACharacter _character;
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "Stun";
         _buffStruct.Type = Type.Stun;
     }
@@ -16,11 +18,11 @@ public class StunObject : BuffObject
         base.OnRegistered();
         _character = Author as ACharacter;
 
-        if (_character && _character.CharacterAnimatorSync)
+        if (_character && _character.Animator)
         {
             var data = transform.transform.position;
             data.y = 0.01f;
-            _character.CharacterAnimatorSync.SetTrigger("Hit");
+            _character.Animator.SetTrigger("Hit");
             ParticleManager.Instance.PullParticle("Hit", data, Quaternion.identity);
         }
     }

@@ -27,7 +27,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     public APlayer LocalPlayer { get; private set; }
 
     /// <summary>
-    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다ㅏ.
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다.
     /// </summary>
     public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
 

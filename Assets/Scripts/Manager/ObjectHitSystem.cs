@@ -44,6 +44,7 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
             var pv = gameObject.GetComponentInChildren<PhotonView>();
             if (pv != null)
             {
+                PhotonNetwork.OpCleanRpcBuffer(photonView);
                 PhotonNetwork.Destroy(photonView);
             }
             else

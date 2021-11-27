@@ -41,11 +41,12 @@ public class IngameTopUI : MonoBehaviourPunCallbacks
 
             var ui = _playerUIList[playerActorNumber - 1].transform;
 
-            var hpbar = ui.GetChild(0).GetComponent<Image>();
+            // BUG: 얘네 자식 오브젝트 순서 바뀌면 못알아봄
+            var hpbar = ui.GetChild(1).GetComponent<Image>();
             hpbar.fillAmount = player.HP / 100f;
 
-            var nickname = ui.GetChild(1).GetComponent<Text>();
-            nickname.text = player.photonView.Controller.NickName;
+            var nickname = ui.GetChild(2).GetComponent<Text>();
+            nickname.text = player.photonView.Controller.NickName ?? "unknown";
         }
     }
 

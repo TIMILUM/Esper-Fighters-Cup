@@ -33,7 +33,7 @@ namespace EsperFightersCup
             SetDropObjectCSVData();
             _targetId = GetRandomDropObjectID();
             _range = GetCSVData<float>("Range") * 0.001f;
-            _secondrange = 0.2f;
+            _secondrange = _range - 0.15f;
             _frontDelayTime = FrontDelayMilliseconds;
             _endDelayTime = EndDelayMilliseconds;
 
@@ -50,7 +50,7 @@ namespace EsperFightersCup
         protected override IEnumerator OnCanceled()
         {
             ApplyMovementSpeed(State.Canceled);
-            SetState(State.Release);
+            SyncState(State.Release);
             yield return null;
         }
 
@@ -90,7 +90,7 @@ namespace EsperFightersCup
 
             if (isCanceled == true)
             {
-                SetState(State.Release);
+                SyncState(State.Release);
             }
 
             SetNextState();
@@ -132,7 +132,7 @@ namespace EsperFightersCup
 
             if (isCanceled)
             {
-                SetState(State.Canceled);
+                SyncState(State.Canceled);
                 yield break;
             }
 
@@ -152,6 +152,7 @@ namespace EsperFightersCup
         protected override IEnumerator OnUse()
         {
             ApplyMovementSpeed(State.Use);
+            AuthorPlayer.Animator.SetTrigger("RandomDrop");
             // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = _endMousePoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
@@ -263,8 +264,8 @@ namespace EsperFightersCup
             {
                 return;
             }
-            
-            // CSV 데이터 적용
+
+            // CSV ?곗씠???곸슜
             var csvData = CSVUtil.GetData("DropSkillDropObjectDataTable");
             csvData.Get<float>("Obj_ID", out var idList);
             csvData.Get<float>("Percentage", out var percentageList);
@@ -289,7 +290,7 @@ namespace EsperFightersCup
                     return percentageDataPair.Key;
                 }
             }
-            
+
             return 0;
         }
 

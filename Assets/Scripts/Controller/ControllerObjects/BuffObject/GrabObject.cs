@@ -7,16 +7,16 @@ namespace EsperFightersCup
         private ACharacter _character;
         private Collider[] _colliders;
 
-        private void Reset()
+        protected override void Reset()
         {
+            base.Reset();
+
             _name = "";
             _buffStruct.Type = Type.Grab;
-
-
             _character = Author as ACharacter;
             if (!(_character is null))
             {
-                _character.CharacterAnimatorSync.SetTrigger("Knockback");
+                _character.Animator.SetTrigger("Knockback");
             }
         }
         protected override void Start()

@@ -34,11 +34,19 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AnimTriggerRPC
+  - ChangeSkillStateRPC
   - ClickRpc
   - DestroyRpc
   - DropPreSeondRPC
+  - GenerateBuffRPC
+  - GenerateSkillRPC
   - IntroEndRPC
   - OutroEndRPC
+  - ReleaseAllSkillsRPC
+  - ReleaseBuffRPC
+  - ReleaseBuffsByTypeRPC
+  - ReleaseSkillRPC
   - ResultEndRPC
   - RoundEndNextRPC
   - RoundEndRPC
