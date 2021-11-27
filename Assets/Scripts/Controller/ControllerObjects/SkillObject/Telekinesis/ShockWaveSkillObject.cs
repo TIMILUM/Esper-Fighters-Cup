@@ -5,53 +5,20 @@ using UnityEngine;
 
 public class ShockWaveSkillObject : SkillObject
 {
-    private static ShockWaveSkillData s_shockWaveSkillData;
+    private ShockWaveSkillData _shockWaveSkillData;
 
-    [SerializeField]
-    private float _range = 3;
-
-    [SerializeField]
-    private float _onHitDuration = 0.5f;
-
-    [SerializeField]
-    private GameObject[] _firstCasting;
-
-    [SerializeField]
-    private GameObject[] _secondCasting;
-
-    [SerializeField]
+    [SerializeField] private float _onHitDuration = 0.5f;
+    [SerializeField] private GameObject _shockwaveUI;
+    [SerializeField] private GameObject[] _firstCasting;
+    [SerializeField] private GameObject[] _secondCasting;
     [Header("Collider")]
-    private Transform _colliderParentTransform;
+    [SerializeField] private Transform _colliderParentTransform;
+    [SerializeField] private ColliderChecker _collider;
 
-    [SerializeField]
-    private ColliderChecker _collider;
-
-    [SerializeField]
-    private GameObject _shockwaveUI;
-
-    [SerializeField]
-    [Tooltip("[세로, 가로]")]
-    private Vector2 _colliderSize = new Vector2(0.5f, 2);
-
+    private float _range = 3;
+    private Vector2 _colliderSize;
     private Vector3 _direction = Vector3.right;
     private Vector3 _startPos = Vector3.zero;
-
-    // Start is called before the first frame update
-    protected override void Start()
-    {
-        base.Start();
-        // 사거리
-        _range = GetCSVData<float>("Range");
-        // 판정 범위 가로 세로
-        _colliderSize = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
-        GameObjectUtil.ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
-
-        var colliderScale = new Vector3(_colliderSize.x, 1, _colliderSize.y);
-        GameObjectUtil.ScaleGameObjects(_secondCasting, colliderScale);
-        _colliderParentTransform.localScale = colliderScale;
-        _collider.OnCollision += SetHit;
-        LoadShockWaveData();
-    }
 
     public override void SetHit(ObjectBase to)
     {
@@ -63,7 +30,19 @@ public class ShockWaveSkillObject : SkillObject
 
         _buffOnCollision[0].ValueVector3[0] = _direction;
         SyncState(State.EndDelay);
+
         base.SetHit(to);
+    }
+
+    protected override void LoadSkillData()
+    {
+        base.LoadSkillData();
+
+        LoadShockWaveData();
+        // 사거리
+        _range = GetCSVData<float>("Range");
+        // 판정 범위 가로 세로
+        _colliderSize = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
     }
 
     protected override IEnumerator OnReadyToUse()
@@ -72,6 +51,13 @@ public class ShockWaveSkillObject : SkillObject
         {
             yield break;
         }
+
+        GameObjectUtil.ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
+
+        var colliderScale = new Vector3(_colliderSize.x, 1, _colliderSize.y);
+        GameObjectUtil.ScaleGameObjects(_secondCasting, colliderScale);
+        _colliderParentTransform.localScale = colliderScale;
+        _collider.OnCollision += SetHit;
 
         var isCanceled = false;
         Vector3 endPos;
@@ -156,7 +142,7 @@ public class ShockWaveSkillObject : SkillObject
         _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
         _colliderParentTransform.gameObject.SetActive(true);
         _colliderParentTransform.transform.position = _startPos;
-        yield return new WaitUntil(() => WaitPhysicsUpdate());
+        yield return new WaitForFixedUpdate();
         ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
 
         _colliderParentTransform.gameObject.SetActive(false);
@@ -221,19 +207,19 @@ public class ShockWaveSkillObject : SkillObject
 
     private void LoadShockWaveData()
     {
-        if (s_shockWaveSkillData != null)
+        if (_shockWaveSkillData != null)
         {
             return;
         }
 
         var csvData = CSVUtil.GetData("ShockWaveKnockBackDataTable");
-        s_shockWaveSkillData = new ShockWaveSkillData();
-        csvData.Get("TargetObject_ID", out s_shockWaveSkillData._idList);
-        csvData.Get("FloatCheck", out s_shockWaveSkillData._floatCheckList);
-        csvData.Get("ShockWave_MoveSpeed", out s_shockWaveSkillData._moveSpeedList);
-        csvData.Get("ShockWave_MoveTime", out s_shockWaveSkillData._moveTimeList);
-        csvData.Get("Damage", out s_shockWaveSkillData._damageList);
-        csvData.Get("Groggy_Duration", out s_shockWaveSkillData._stunDurationList);
+        _shockWaveSkillData = new ShockWaveSkillData();
+        csvData.Get("TargetObject_ID", out _shockWaveSkillData._idList);
+        csvData.Get("FloatCheck", out _shockWaveSkillData._floatCheckList);
+        csvData.Get("ShockWave_MoveSpeed", out _shockWaveSkillData._moveSpeedList);
+        csvData.Get("ShockWave_MoveTime", out _shockWaveSkillData._moveTimeList);
+        csvData.Get("Damage", out _shockWaveSkillData._damageList);
+        csvData.Get("Groggy_Duration", out _shockWaveSkillData._stunDurationList);
     }
 
     private BuffObject.BuffStruct AnalyzeBuff(ObjectBase to)
@@ -246,12 +232,12 @@ public class ShockWaveSkillObject : SkillObject
 
         var targetID = target.ID;
         var isRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
-        var idList = s_shockWaveSkillData._idList;
-        var floatCheckList = s_shockWaveSkillData._floatCheckList;
-        var moveSpeedList = s_shockWaveSkillData._moveSpeedList;
-        var moveTimeList = s_shockWaveSkillData._moveTimeList;
-        var damageList = s_shockWaveSkillData._damageList;
-        var stunDurationList = s_shockWaveSkillData._stunDurationList;
+        var idList = _shockWaveSkillData._idList;
+        var floatCheckList = _shockWaveSkillData._floatCheckList;
+        var moveSpeedList = _shockWaveSkillData._moveSpeedList;
+        var moveTimeList = _shockWaveSkillData._moveTimeList;
+        var damageList = _shockWaveSkillData._damageList;
+        var stunDurationList = _shockWaveSkillData._stunDurationList;
 
         for (var i = 0; i < idList.Count; ++i)
         {

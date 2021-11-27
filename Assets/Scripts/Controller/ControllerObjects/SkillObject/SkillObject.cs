@@ -12,11 +12,11 @@ public abstract class SkillObject : ControllerObject<SkillController>
     public enum State
     {
         ReadyToUse = 0,
-        FrontDelay = 1,
-        Use = 2,
-        EndDelay = 3,
-        Canceled = 4,
-        Release = 5
+        FrontDelay,
+        Use,
+        EndDelay,
+        Canceled,
+        Release
     }
 
     [SerializeField]
@@ -44,12 +44,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
     /// </summary>
     private readonly List<MoveSpeedObject> _moveSpeedObjects = new List<MoveSpeedObject>();
 
-    private short _physicsCount = -1;
-
     /// <summary>
     /// 플레이어
     /// </summary>
-    protected APlayer AuthorPlayer => Author as APlayer;
+    protected APlayer AuthorPlayer { get; private set; }
 
     /// <summary>
     /// 플레이어의 버프 컨트롤러입니다.
@@ -84,36 +82,24 @@ public abstract class SkillObject : ControllerObject<SkillController>
     /// </summary>
     protected float EndDelayMilliseconds { get; private set; }
 
-    protected override void Start()
+    protected sealed override void OnRegistered()
     {
-        base.Start();
+        BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        AuthorPlayer = Author as APlayer;
 
-        SetCSVData();
-        SyncState(State.ReadyToUse);
-    }
-
-    protected void FixedUpdate()
-    {
-        if (_physicsCount > 0)
+        LoadSkillData();
+        if (Author.photonView.IsMine)
         {
-            --_physicsCount;
+            SyncState(State.ReadyToUse);
         }
     }
 
-    protected override void OnDestroy()
+    protected sealed override void OnReleased()
     {
-        base.OnDestroy();
-
         if (Author.photonView.IsMine)
         {
             ReleaseMoveSpeedBuffAll();
-            Controller.ReleaseSkill(this);
         }
-    }
-
-    protected override void OnRegistered()
-    {
-        BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     /// <summary>
@@ -151,13 +137,11 @@ public abstract class SkillObject : ControllerObject<SkillController>
     /// </summary>
     public void SetNextState()
     {
-        if (!Author.photonView.IsMine || _currentState >= State.Release)
+        if (Author.photonView.IsMine && _currentState < State.Release)
         {
-            return;
+            _currentState += 1;
+            SyncState(_currentState);
         }
-
-        _currentState += 1;
-        SyncState(_currentState);
     }
 
     /// <summary>
@@ -167,12 +151,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
     /// <param name="state">이동할 스킬 FSM의 상태입니다.</param>
     public void SyncState(State state)
     {
-        if (!Author.photonView.IsMine)
+        if (Author.photonView.IsMine)
         {
-            return;
+            Controller.ChangeState(ID, state);
         }
-
-        Controller.ChangeState(ID, state);
     }
 
     /// <summary>
@@ -199,31 +181,6 @@ public abstract class SkillObject : ControllerObject<SkillController>
         _currentCoroutine = StartCoroutine(currentEnumerator);
     }
 
-    /// <summary>
-    /// WaitPhysicsUpdate()를 초기화시켜주는 함수입니다.
-    /// WaitPhysicsUpdate() 함수를 재활용할 때 해당 함수를 실행시켜야합니다.
-    /// </summary>
-    protected void ResetPhysicsUpdateCount()
-    {
-        _physicsCount = -1;
-    }
-
-    /// <summary>
-    /// 코루틴의 yield return 을 통해 물리 연산이 몇 번 실행되었는지 알 수 있는 함수입니다.
-    /// 해당 함수를 재활용하기 위해선 ResetPhysicsUpdateCount()를 한번 실행해야합니다.
-    /// </summary>
-    /// <param name="waitCount">해당 정수만큼 연산 횟수를 기다립니다.</param>
-    /// <returns></returns>
-    protected bool WaitPhysicsUpdate(short waitCount = 1)
-    {
-        if (_physicsCount < 0)
-        {
-            _physicsCount = waitCount;
-        }
-
-        return _physicsCount <= 0;
-    }
-
     private IEnumerator GetStateFunction()
     {
         return _currentState switch
@@ -238,7 +195,11 @@ public abstract class SkillObject : ControllerObject<SkillController>
         };
     }
 
-    private void SetCSVData()
+    /// <summary>
+    /// 스킬이 최초 생성되는 시점에 CSV 로딩을 위해 호출됩니다.<para/>
+    /// 스킬이 실행되는 시점이 아닙니다! 스킬 실행 시점 콜백은 OnReadyToUse를 사용해주세요.
+    /// </summary>
+    protected virtual void LoadSkillData()
     {
         // CSV 데이터 적용
         _commonCsvData = CSVUtil.GetData("SkillDataTable");
@@ -319,13 +280,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
         _generateMoveSpeedCoroutine = StartCoroutine(GenerateMoveSpeedBuffCoroutine(value));
     }
 
-    protected void ReleaseMoveSpeedBuffAll()
+    private void ReleaseMoveSpeedBuffAll()
     {
-        if (!Author.photonView.IsMine)
-        {
-            return;
-        }
-
         foreach (var speedObject in _moveSpeedObjects)
         {
             BuffController.ReleaseBuff(speedObject);

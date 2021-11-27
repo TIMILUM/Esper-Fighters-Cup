@@ -25,20 +25,20 @@ public class ThrowSkillObject : SkillObject
 
 
     private Vector3 _endMousePos;
-    protected override void Start()
+
+    protected override void LoadSkillData()
     {
-        base.Start();
+        base.LoadSkillData();
         _range = GetCSVData<float>("Range") * 0.01f;
         _frontDelayTime = FrontDelayMilliseconds;
         _endDelayTime = EndDelayMilliseconds;
         _collider.OnCollision += SetHit;
         GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
         GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
-
     }
+
     public override void SetHit(ObjectBase to)
     {
-
         if (_fragmentObj != null)
         {
             if (_fragmentObj.GetComponent<ObjectBase>() == to)

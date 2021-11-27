@@ -7,28 +7,17 @@ namespace EsperFightersCup
         private float _decreaseHp = 0;
         private float _durationStunSeconds = 0;
 
-        protected override void Reset()
-        {
-            base.Reset();
-            _name = "";
-            _buffStruct.Type = Type.Falling;
-        }
+        public override Type BuffType => Type.Falling;
 
-        public override void SetBuffStruct(BuffStruct buffStruct)
+        public override void OnBuffGenerated()
         {
             // BuffStruct Help
             // ValueFloat[0]    : _decreaseHp (0이면 HP감소 효과 없음)
             // ValueFloat[1]    : _durationStunSeconds (0이면 스턴 효과 없음)
             // ---------------
 
-            base.SetBuffStruct(buffStruct);
-            _decreaseHp = buffStruct.ValueFloat[0];
-            _durationStunSeconds = buffStruct.ValueFloat[1];
-        }
-
-        protected override void Update()
-        {
-            base.Update();
+            _decreaseHp = Info.ValueFloat[0];
+            _durationStunSeconds = Info.ValueFloat[1];
         }
 
         public override void OnPlayerHitEnter(GameObject other)
@@ -38,19 +27,10 @@ namespace EsperFightersCup
                 return;
             }
 
-            if (otherActor is null)
-            {
-                return;
-            }
-
             if (otherActor.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController otherController))
             {
                 GenerateAfterBuff(otherController);
             }
-        }
-
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-        {
         }
 
         private void GenerateAfterBuff(BuffController controller)

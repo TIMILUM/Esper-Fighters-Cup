@@ -26,49 +26,58 @@ namespace EsperFightersCup
         private static readonly Dictionary<int, float> s_dropObjectPercentageData = new Dictionary<int, float>();
         private int _targetId = 0;
 
-        protected override void Start()
+        protected override void LoadSkillData()
         {
-
-            base.Start();
+            base.LoadSkillData();
             SetDropObjectCSVData();
             _targetId = GetRandomDropObjectID();
             _range = GetCSVData<float>("Range") * 0.001f;
             _secondrange = _range - 0.15f;
             _frontDelayTime = FrontDelayMilliseconds;
             _endDelayTime = EndDelayMilliseconds;
-
-
-            ScaleGameObjects(_secondCasting, new Vector3(_secondrange * 2.0f, 1.0f, _secondrange * 2.0f));
-
         }
 
-        public override void OnPlayerHitEnter(GameObject other)
+        protected override IEnumerator OnReadyToUse()
         {
+            GameObjectUtil.ScaleGameObjects(_secondCasting, new Vector3(_secondrange * 2.0f, 1.0f, _secondrange * 2.0f));
 
-        }
+            var isCanceled = false;
 
-        protected override IEnumerator OnCanceled()
-        {
-            ApplyMovementSpeed(State.Canceled);
-            SyncState(State.Release);
-            yield return null;
-        }
+            var MousePos = GetMousePosition();
 
-        protected override IEnumerator OnEndDelay()
-        {
-            ApplyMovementSpeed(State.EndDelay);
-            var startTime = Time.time;
-            var currentTime = Time.time;
-            DestoryGameObjects(_secondCasting);
-            while ((currentTime - startTime) * 1000 <= _endDelayTime)
+            GameObjectUtil.ActiveGameObjects(_secondCasting);
+
+
+            yield return new WaitUntil(() =>
             {
-                yield return null;
-                currentTime = Time.time;
-            }
-            SetNextState();
-            yield break;
-        }
+                MousePos = GetMousePosition();
 
+                if (Input.GetKeyDown(KeyCode.Mouse1))
+                {
+                    isCanceled = true;
+                    return isCanceled;
+                }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    _endMousePoint = MousePos;
+                    return true;
+                }
+
+                GameObjectUtil.TranslateGameObjects(_secondCasting, MousePos);
+                return isCanceled;
+            });
+
+            if (isCanceled)
+            {
+                SyncState(State.Canceled);
+                yield break;
+            }
+
+            GameObjectUtil.SetParentGameObjects(_secondCasting, "UiObject");
+
+
+            SetNextState();
+        }
 
         protected override IEnumerator OnFrontDelay()
         {
@@ -97,58 +106,6 @@ namespace EsperFightersCup
             yield break;
         }
 
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-        {
-
-        }
-
-        protected override IEnumerator OnReadyToUse()
-        {
-            var isCanceled = false;
-
-            var MousePos = GetMousePosition();
-
-            ActiveGameObjects(_secondCasting);
-
-
-            yield return new WaitUntil(() =>
-            {
-                MousePos = GetMousePosition();
-
-                if (Input.GetKeyDown(KeyCode.Mouse1))
-                {
-                    isCanceled = true;
-                    return isCanceled;
-                }
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    _endMousePoint = MousePos;
-                    return true;
-                }
-
-                TranslateGameObjects(_secondCasting, MousePos);
-                return isCanceled;
-            });
-
-            if (isCanceled)
-            {
-                SyncState(State.Canceled);
-                yield break;
-            }
-
-            SetParentGameObjects(_secondCasting, "UiObject");
-
-
-            SetNextState();
-        }
-
-        protected override IEnumerator OnRelease()
-        {
-            ApplyMovementSpeed(State.Release);
-            Destroy(gameObject);
-            yield return null;
-        }
-
         protected override IEnumerator OnUse()
         {
             ApplyMovementSpeed(State.Use);
@@ -175,55 +132,39 @@ namespace EsperFightersCup
             yield break;
         }
 
+        protected override IEnumerator OnEndDelay()
+        {
+            ApplyMovementSpeed(State.EndDelay);
+            var startTime = Time.time;
+            var currentTime = Time.time;
+            GameObjectUtil.DestoryGameObjects(_secondCasting);
+            while ((currentTime - startTime) * 1000 <= _endDelayTime)
+            {
+                yield return null;
+                currentTime = Time.time;
+            }
+            SetNextState();
+            yield break;
+        }
+
+        protected override IEnumerator OnCanceled()
+        {
+            ApplyMovementSpeed(State.Canceled);
+            SyncState(State.Release);
+            yield return null;
+        }
+
+        protected override IEnumerator OnRelease()
+        {
+            ApplyMovementSpeed(State.Release);
+            Destroy(gameObject);
+            yield return null;
+        }
 
         private IEnumerator GenerateBuff(GameObject Obj)
         {
             yield return new WaitForSeconds(0.03f);
             Obj.GetComponent<Actor>().BuffController.GenerateBuff(_buffOnCollision[0]);
-        }
-
-
-        private void ActiveGameObjects(IEnumerable<GameObject> gameObjects, bool isActive = true)
-        {
-            foreach (var gameObj in gameObjects)
-            {
-                gameObj.SetActive(isActive);
-            }
-        }
-
-
-
-        private void TranslateGameObjects(IEnumerable<GameObject> gameObjects, Vector3 position)
-        {
-            foreach (var gameObj in gameObjects)
-            {
-                gameObj.transform.position = position;
-            }
-        }
-
-
-        private void ScaleGameObjects(IEnumerable<GameObject> gameObjects, Vector3 scale)
-        {
-            foreach (var gameObj in gameObjects)
-            {
-                gameObj.transform.localScale = scale;
-            }
-        }
-
-        private void SetParentGameObjects(IEnumerable<GameObject> gameObjects, string transformName)
-        {
-            foreach (var gameObj in gameObjects)
-            {
-                gameObj.transform.SetParent(GameObject.Find(transformName).transform);
-            }
-        }
-
-        private void DestoryGameObjects(IEnumerable<GameObject> gameObjects)
-        {
-            foreach (var gameObj in gameObjects)
-            {
-                Destroy(gameObj);
-            }
         }
 
         private Vector3 GetMousePosition()
@@ -240,11 +181,10 @@ namespace EsperFightersCup
             return Vector3.positiveInfinity;
         }
 
-
         private bool SetStartPos()
         {
             var startPos = GetMousePosition();
-            ///아직 엘셀과 파싱하는 부분을 이해를 못해서 
+            ///아직 엘셀과 파싱하는 부분을 이해를 못해서
             ///직접 계산해서 크기를 맞췄습니다.
             if (Vector3.Distance(startPos, transform.position) > _range * 10.0f)
             {
@@ -293,6 +233,5 @@ namespace EsperFightersCup
 
             return 0;
         }
-
     }
 }
