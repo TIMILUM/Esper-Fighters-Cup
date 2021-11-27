@@ -1763,6 +1763,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 670437740301748976, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0e8c9e770134133459247db8916d3510, type: 2}
+    - target: {fileID: 873317733678873947, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0e8c9e770134133459247db8916d3510, type: 2}
+    - target: {fileID: 1759379178794538436, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0e8c9e770134133459247db8916d3510, type: 2}
     - target: {fileID: 4794231293171263799, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_Name
       value: plank_mesh_PreFeb
@@ -1785,7 +1797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.01
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1793,7 +1805,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.21
+      value: -0.33
       objectReference: {fileID: 0}
     - target: {fileID: 5315188026236253069, guid: c50b36c62e147554ba0c1327dcd65221, type: 3}
       propertyPath: m_LocalRotation.w
