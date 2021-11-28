@@ -52,6 +52,7 @@ public abstract class BuffObject : ControllerObject<BuffController>
     protected sealed override void OnRegistered()
     {
         StartTime = PhotonNetwork.ServerTimestamp;
+        gameObject.SetActive(true);
 
         if (Author.photonView.IsMine)
         {

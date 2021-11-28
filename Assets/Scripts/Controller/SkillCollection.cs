@@ -110,6 +110,7 @@ public class SkillCollection : IReadonlySkillCollection, ISkillCollection
         {
             return false;
         }
+
         _skills.Remove(id);
         return true;
     }

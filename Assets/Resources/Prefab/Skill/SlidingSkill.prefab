@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3689584638283406407}
   - component: {fileID: 21849732020840252}
+  - component: {fileID: 1869099019993867306}
   m_Layer: 0
   m_Name: SlidingSkill
   m_TagString: Untagged
@@ -75,10 +76,27 @@ MonoBehaviour:
   _currentState: 0
   _id: 4
   _slidingRange: 5
-  _grabRange: 3
   _slidingFrontDelay: 300
   _slidingEndDelay: 300
-  _grapFrontDelay: 300
-  _grapEndDelay: 300
-  _throwFrontDelay: 300
-  _throwEndDelay: 300
+--- !u!114 &1869099019993867306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199537504363684713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

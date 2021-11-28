@@ -68,6 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8362198494138024947}
   - component: {fileID: 8362198494138024948}
+  - component: {fileID: 2255552080148620562}
   m_Layer: 0
   m_Name: ThrowSkill
   m_TagString: Untagged
@@ -116,14 +117,36 @@ MonoBehaviour:
     _allowDuplicates: 0
     _damage: 0
     _isOnlyOnce: 0
-  _currentState: 0
   _id: 2
+  _inputKey: 0
   _fragmentCasting: {fileID: 8969004188049629262}
   _hitBox: {fileID: 7896948227814281178}
   _range: 5
   _collider: {fileID: 572622360751842425}
   _frontDelayTime: 1000
   _endDelayTime: 0
+--- !u!114 &2255552080148620562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8362198494138024949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &4197593625088003182
 PrefabInstance:
   m_ObjectHideFlags: 0

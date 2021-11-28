@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3856951970831774978}
   - component: {fileID: 3839221633854377787}
+  - component: {fileID: 6611826618926075925}
   m_Layer: 0
   m_Name: DropSkill
   m_TagString: Untagged
@@ -55,16 +56,35 @@ MonoBehaviour:
     _allowDuplicates: 0
     _damage: 0
     _isOnlyOnce: 0
-  _currentState: 0
   _id: 3
+  _inputKey: 0
   _range: 0
   _frontDelayTime: 0
   _endDelayTime: 0
-  _dropUIPrefab: {fileID: 1830693600371288693, guid: fd36db764b0743b48914d86a169708a7, type: 3}
-  _firstCasting:
-  - {fileID: 7882865240250705527}
   _secondCasting:
   - {fileID: 6780086093992286579}
+--- !u!114 &6611826618926075925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173644158747676082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6780086093992286579
 GameObject:
   m_ObjectHideFlags: 0

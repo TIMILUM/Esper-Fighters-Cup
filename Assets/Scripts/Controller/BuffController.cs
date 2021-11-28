@@ -115,7 +115,7 @@ public sealed class BuffController : ControllerBase
             foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
                 Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
-                Destroy(targetBuff.gameObject);
+                targetBuff.Release();
             }
             _activeBuffs.Clear((BuffObject.Type)buffType);
         }
@@ -139,7 +139,7 @@ public sealed class BuffController : ControllerBase
             }
 
             Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
-            Destroy(targetBuff.gameObject);
+            targetBuff.Release();
         }
     }
 }
