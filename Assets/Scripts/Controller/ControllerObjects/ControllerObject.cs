@@ -43,11 +43,11 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
         base.OnDisable();
     }
 
-    public void Register(T controller, Action continueFunc)
+    public bool Register(T controller, Action continueFunc)
     {
         if (_isRegistered)
         {
-            return;
+            return false;
         }
 
         Controller = controller;
@@ -60,6 +60,7 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
 
         _isRegistered = true;
         OnRegistered(continueFunc);
+        return true;
     }
 
     public virtual void Release()

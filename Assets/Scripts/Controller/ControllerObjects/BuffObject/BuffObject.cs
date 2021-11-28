@@ -70,6 +70,7 @@ public abstract class BuffObject : ControllerObject<BuffController>
             _elapsedTimeout = null;
         }
         OnBuffReleased();
+        Destroy(gameObject);
     }
 
     /// <summary>

@@ -67,7 +67,7 @@ public class ThrowSkillObject : SkillObject
     protected override void BeforeFrontDelay()
     {
         //Idle 상태일때 애니메이션 실행
-        if (AuthorPlayer.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (AuthorPlayer.Animator.Local.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             AuthorPlayer.Animator.SetTrigger("ReverseGravityUnder");
         }

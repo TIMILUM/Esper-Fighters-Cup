@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6623127734546534237}
   - component: {fileID: 6646747819659544057}
   - component: {fileID: 4573762489192822212}
+  - component: {fileID: 2882739371826115864}
   - component: {fileID: 8211835443746325872}
   m_Layer: 0
   m_Name: TelekinesisPlayer
@@ -88,7 +89,6 @@ MonoBehaviour:
   _id: 101
   _audioEmitter: {fileID: 6623127734546534237}
   _characterType: 1
-  _animator: {fileID: 8452954096454414649}
 --- !u!114 &8663577832037187048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +158,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+--- !u!114 &2882739371826115864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2112b5df1b378439d4526b64127f13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 8452954096454414649}
+  _parameters:
+  - _name: DirX
+    _type: 1
+  - _name: DirZ
+    _type: 1
+  - _name: Cos
+    _type: 1
+  - _name: Sin
+    _type: 1
+  - _name: ShockWaveSkill
+    _type: 9
+  - _name: Hit
+    _type: 9
+  - _name: ReverseGravityA
+    _type: 9
+  - _name: ReverseGravityUnder
+    _type: 9
+  - _name: Knockback
+    _type: 9
+  - _name: Nockdown
+    _type: 4
+  - _name: RandomDrop
+    _type: 9
 --- !u!114 &8211835443746325872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,7 +216,7 @@ MonoBehaviour:
   - {fileID: 4314589049664778607}
   - {fileID: 8663577832037187048}
   - {fileID: 6646747819659544057}
-  - {fileID: 3634706055614757839}
+  - {fileID: 2882739371826115864}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -572,11 +608,6 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 370e589997e6dd745a2ba5e28d198266, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
---- !u!1 &2946779737853571577 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
-  m_PrefabInstance: {fileID: 2604339933289745576}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2571203696124029763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
@@ -587,62 +618,6 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 0e218b1003bda8f44854174d1f5b306b, type: 3}
   m_PrefabInstance: {fileID: 2604339933289745576}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3634706055614757839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2946779737853571577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowLayerWeightsInspector: 1
-  ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 1
-    SynchronizeType: 1
-    Name: DirX
-  - Type: 1
-    SynchronizeType: 1
-    Name: DirZ
-  - Type: 1
-    SynchronizeType: 1
-    Name: Cos
-  - Type: 1
-    SynchronizeType: 1
-    Name: Sin
-  - Type: 9
-    SynchronizeType: 0
-    Name: ShockWaveSkill
-  - Type: 9
-    SynchronizeType: 0
-    Name: Hit
-  - Type: 9
-    SynchronizeType: 0
-    Name: ReverseGravityA
-  - Type: 9
-    SynchronizeType: 0
-    Name: ReverseGravityUnder
-  - Type: 9
-    SynchronizeType: 0
-    Name: Knockback
-  - Type: 9
-    SynchronizeType: 0
-    Name: New Trigger
-  - Type: 4
-    SynchronizeType: 0
-    Name: Nockdown
-  - Type: 9
-    SynchronizeType: 0
-    Name: RandomDrop
-  m_SynchronizeLayers:
-  - SynchronizeType: 1
-    LayerIndex: 0
-  - SynchronizeType: 1
-    LayerIndex: 1
 --- !u!1001 &8928272282695346480
 PrefabInstance:
   m_ObjectHideFlags: 0

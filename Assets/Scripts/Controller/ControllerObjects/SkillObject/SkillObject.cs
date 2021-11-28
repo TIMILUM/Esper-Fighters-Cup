@@ -27,7 +27,6 @@ public abstract class SkillObject : ControllerObject<SkillController>
     private CSVData _commonCsvData;
     private int _commonCsvIndex;
 
-    private UniTask _currentTask;
     private CancellationTokenSource _stateCancellation;
 
     // 움직임 버프 관련하여 안전하게 생성하는 코루틴 함수입니다.
@@ -116,18 +115,18 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     protected sealed override void OnRegistered(Action continueFunc)
     {
-        Debug.Log("OnRegistered");
+        Debug.Log($"[{ID}] OnRegistered");
         BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
         AuthorPlayer = Author as APlayer;
 
         gameObject.SetActive(true);
         _stateCancellation = new CancellationTokenSource();
-        _currentTask = RunAsync(_stateCancellation.Token, continueFunc);
+        RunAsync(_stateCancellation.Token, continueFunc).Forget();
     }
 
     protected sealed override void OnReleased()
     {
-        Debug.Log("OnReleased");
+        Debug.Log($"[{ID}] OnReleased");
         ReleaseMoveSpeedBuffAll();
         gameObject.SetActive(false);
 
@@ -136,17 +135,17 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     public sealed override void Release()
     {
-        Debug.Log("Release (Cancel)");
+        Debug.Log($"[{ID}] Release (Cancel)");
         _stateCancellation?.Cancel();
     }
 
-    private async UniTask RunAsync(CancellationToken cancelltaion, Action afterFunc)
+    private async UniTaskVoid RunAsync(CancellationToken cancelltaion, Action afterFunc)
     {
         var isCanceled = await SkillReadyToUse(cancelltaion).ContinueWith(afterFunc).SuppressCancellationThrow();
 
         if (isCanceled)
         {
-            Debug.Log("Canceled");
+            Debug.Log($"[{ID}] Canceled");
             CurrentState = State.Canceled;
             ApplyMovementSpeed(State.Canceled);
             OnCancel();
@@ -157,7 +156,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillReadyToUse(CancellationToken cancelltaion)
     {
-        Debug.Log("ReadyToUse");
+        Debug.Log($"[{ID}] ReadyToUse");
         CurrentState = State.ReadyToUse;
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
 
@@ -167,13 +166,13 @@ public abstract class SkillObject : ControllerObject<SkillController>
         }
         else
         {
-            Release();
+            throw new OperationCanceledException(cancelltaion);
         }
     }
 
     private async UniTask SkillFrontDelay(CancellationToken cancelltaion)
     {
-        Debug.Log($"FrontDelay {FrontDelayMilliseconds}");
+        Debug.Log($"[{ID}] FrontDelay {FrontDelayMilliseconds}");
         CurrentState = State.FrontDelay;
         ApplyMovementSpeed(State.FrontDelay);
         BeforeFrontDelay();
@@ -183,7 +182,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillUse(CancellationToken cancelltaion)
     {
-        Debug.Log("Use");
+        Debug.Log($"[{ID}] Use");
         CurrentState = State.Use;
         ApplyMovementSpeed(State.Use);
         await OnUseAsync();
@@ -192,7 +191,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillEndDelay(CancellationToken cancelltaion)
     {
-        Debug.Log($"EndDelay {EndDelayMilliseconds}");
+        Debug.Log($"[{ID}] EndDelay {EndDelayMilliseconds}");
         CurrentState = State.EndDelay;
         ApplyMovementSpeed(State.EndDelay);
         BeforeEndDelay();
@@ -202,7 +201,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private void SkillRelease()
     {
-        Debug.Log("Release");
+        Debug.Log($"[{ID}] Release");
         CurrentState = State.Release;
         ApplyMovementSpeed(State.Release);
         OnRelease();

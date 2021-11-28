@@ -27,6 +27,10 @@ public class SkillController : ControllerBase
     protected override void Start()
     {
         base.Start();
+        if (!ControllerManager.Author.photonView.IsMine)
+        {
+            return;
+        }
 
         var skills = new List<SkillObject>();
         for (int i = 0; i < transform.childCount; i++)
@@ -45,17 +49,27 @@ public class SkillController : ControllerBase
     protected override void Update()
     {
         base.Update();
-
-        if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle && _activeSkills.Count > 0)
+        if (!ControllerManager.Author.photonView.IsMine)
         {
-            ReleaseAllSkills();
+            return;
+        }
+
+        if (IngameFSMSystem.Instance.CurrentState != IngameFSMSystem.State.InBattle)
+        {
+            if (_activeSkills.Count > 0)
+            {
+                ReleaseAllSkills();
+            }
             return;
         }
 
         // 스턴 확인 시 스킬 사용을 멈춥니다.
-        if (_buffController.ActiveBuffs.Exists(BuffObject.Type.Stun) && _activeSkills.Count > 0)
+        if (_buffController.ActiveBuffs.Exists(BuffObject.Type.Stun))
         {
-            ReleaseAllSkills();
+            if (_activeSkills.Count > 0)
+            {
+                ReleaseAllSkills();
+            }
             return;
         }
 
@@ -94,8 +108,14 @@ public class SkillController : ControllerBase
             return;
         }
 
-        _activeSkills.Add(skill);
-        skill.Register(this, () => RemoveAfterReleased(skill));
+        if (skill.Register(this, () => RemoveAfterReleased(skill)))
+        {
+            _activeSkills.Add(skill);
+        }
+        else
+        {
+            Debug.Log("Register 실패");
+        }
     }
 
     /// <summary>

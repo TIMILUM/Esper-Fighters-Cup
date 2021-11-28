@@ -126,19 +126,19 @@ public class ShockWaveSkillObject : SkillObject
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
+        ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
     }
 
     protected override async UniTask OnUseAsync()
     {
         ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
-        ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
 
         _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
         _collider.OnCollision += SetHit;
         _colliderParentTransform.transform.position = _startPos;
         _colliderParentTransform.gameObject.SetActive(true);
 
-        await UniTask.Yield();
+        await UniTask.NextFrame();
 
         _colliderParentTransform.gameObject.SetActive(false);
         _collider.OnCollision -= SetHit;
