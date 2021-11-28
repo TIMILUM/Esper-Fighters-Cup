@@ -346,7 +346,6 @@ GameObject:
   m_Component:
   - component: {fileID: 502394932971514453}
   - component: {fileID: 3750393118598012776}
-  - component: {fileID: 8415273705242721377}
   m_Layer: 0
   m_Name: ShockWaveSkill
   m_TagString: Untagged
@@ -396,8 +395,8 @@ MonoBehaviour:
     _allowDuplicates: 0
     _damage: 0
     _isOnlyOnce: 0
-  _currentState: 0
   _id: 1
+  _inputKey: 0
   _onHitDuration: 0.5
   _shockwaveUI: {fileID: 724373672371379801}
   _firstCasting:
@@ -406,28 +405,6 @@ MonoBehaviour:
   - {fileID: 5442526445780341760}
   _colliderParentTransform: {fileID: 951088987925126506}
   _collider: {fileID: 7195997254769971582}
---- !u!114 &8415273705242721377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8280799062219633593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &8750936006952403873
 GameObject:
   m_ObjectHideFlags: 0

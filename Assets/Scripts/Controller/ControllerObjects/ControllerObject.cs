@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
@@ -42,7 +43,7 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
         base.OnDisable();
     }
 
-    public void Register(T controller)
+    public void Register(T controller, Action continueFunc)
     {
         if (_isRegistered)
         {
@@ -58,7 +59,7 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
         }
 
         _isRegistered = true;
-        OnRegistered();
+        OnRegistered(continueFunc);
     }
 
     public virtual void Release()
@@ -89,7 +90,7 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
     /// 컨트롤러 오브젝트의 Register가 호출된 후에 실행됩니다.<para/>
     /// 해당 컨트롤러 오브젝트가 본인 것이 아니더라도 호출됩니다.
     /// </summary>
-    protected virtual void OnRegistered()
+    protected virtual void OnRegistered(Action continueFunc)
     {
     }
 

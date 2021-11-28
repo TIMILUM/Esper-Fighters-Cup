@@ -326,7 +326,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4314589050688884503}
   - component: {fileID: 4314589050688884502}
-  - component: {fileID: 7060703069090608221}
   m_Layer: 0
   m_Name: SkillController
   m_TagString: Untagged
@@ -362,32 +361,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 2
-  _skills:
-  - _name: Skill 1
-    _key: 32
-    _skillPrefab: {fileID: 1498099208563605382}
---- !u!114 &7060703069090608221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4314589050688884496}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1001 &1479416525397956794
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -450,17 +423,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3689584638283406407, guid: ccd0d07e82152ce46b88ca0c5fee9009, type: 3}
   m_PrefabInstance: {fileID: 1479416525397956794}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1498099208563605382 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 21849732020840252, guid: ccd0d07e82152ce46b88ca0c5fee9009, type: 3}
-  m_PrefabInstance: {fileID: 1479416525397956794}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39ae89212f75aa74fa97323109c4c493, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &9206173514665150366
 PrefabInstance:
   m_ObjectHideFlags: 0

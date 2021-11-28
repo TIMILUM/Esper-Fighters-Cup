@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace EsperFightersCup
         [SerializeField]
         private GameObject[] _secondCasting;
 
-        private List<DropObjectData> _dropObjects;
+        private DropObjectData[] _dropObjects;
         private float _secondRange;
         private Vector3 _mouseEndPoint;
 
@@ -143,15 +142,18 @@ namespace EsperFightersCup
             }
 
             var csvData = CSVUtil.GetData("DropSkillDropObjectDataTable");
-            if (!csvData.Get<int>("Obj_ID", out var targetIds))
+            if (!csvData.Get<float>("Obj_ID", out var targetIds))
             {
                 return;
             }
 
-            _dropObjects = new List<DropObjectData>(targetIds.Count);
+            _dropObjects = new DropObjectData[targetIds.Count];
             for (int i = 0; i < targetIds.Count; i++)
             {
-                _dropObjects[i].TargetID = targetIds[i];
+                _dropObjects[i] = new DropObjectData
+                {
+                    TargetID = (int)targetIds[i]
+                };
             }
 
             if (csvData.Get<float>("Obj_DropRate", out var dropRates))
@@ -173,7 +175,7 @@ namespace EsperFightersCup
                 obj.DropRate /= totalWeight;
             }
 
-            _dropObjects = _dropObjects.OrderBy(x => x.DropRate).ToList();
+            _dropObjects = _dropObjects.OrderBy(x => x.DropRate).ToArray();
         }
 
         private int GetRandomDropObjectID()

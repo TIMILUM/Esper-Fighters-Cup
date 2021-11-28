@@ -28,7 +28,15 @@ public class SkillController : ControllerBase
     {
         base.Start();
 
-        var skills = gameObject.GetComponentsInChildren<SkillObject>();
+        var skills = new List<SkillObject>();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            var child = transform.GetChild(i);
+            if (child.TryGetComponent<SkillObject>(out var skill))
+            {
+                skills.Add(skill);
+            }
+        }
         _skillTemplates = skills.ToDictionary(skill => skill.ID);
 
         _buffController = ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
@@ -55,6 +63,7 @@ public class SkillController : ControllerBase
         {
             if (Input.GetKeyDown(skillTemplate.InputKey) && !_activeSkills.Exist(skillTemplate.ID))
             {
+                Debug.Log($"UseSkill({skillTemplate.ID})");
                 // TODO: GenerateSkill 이후 다음 프레임에 바로 GetSkill에서 확인이 되는지 체크
                 UseSkill(skillTemplate.ID);
             }
@@ -85,8 +94,8 @@ public class SkillController : ControllerBase
             return;
         }
 
-        skill.Register(this);
         _activeSkills.Add(skill);
+        skill.Register(this, () => RemoveAfterReleased(skill));
     }
 
     /// <summary>
@@ -108,10 +117,16 @@ public class SkillController : ControllerBase
     {
         lock (_skillReleaseLock)
         {
-            if (_activeSkills.Remove(skillObject.ID, out var removed) && removed.CurrentState != SkillObject.State.Release)
+            if (skillObject.CurrentState != SkillObject.State.Release)
             {
-                removed.Release();
+                skillObject.Release();
             }
         }
+    }
+
+    private void RemoveAfterReleased(SkillObject skill)
+    {
+        Debug.Log($"RemoveAfterReleased({skill.ID})");
+        _activeSkills.Remove(skill.ID, out var _);
     }
 }

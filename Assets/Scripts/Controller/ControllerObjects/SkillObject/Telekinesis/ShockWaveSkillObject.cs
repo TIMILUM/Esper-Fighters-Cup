@@ -203,29 +203,29 @@ public class ShockWaveSkillObject : SkillObject
         var csvData = CSVUtil.GetData("ShockWaveKnockBackDataTable");
         _data = new ShockWaveSkillData();
 
-        if (csvData.Get<int>("ShockWave_Data_ID", out var targetIds))
+        if (csvData.Get<float>("ShockWave_Data_ID", out var targetIds))
         {
-            _data.TargetID = targetIds;
+            _data.TargetID = targetIds.Select(x => (int)x).ToList();
         }
-        if (csvData.Get<int>("FloatCheck", out var floatChecks))
+        if (csvData.Get<float>("FloatCheck", out var floatChecks))
         {
             _data.Raise = floatChecks.Select(x => x > 0).ToList();
         }
-        if (csvData.Get<int>("ShockWave_MoveSpeed", out var moveSpeeds))
+        if (csvData.Get<float>("ShockWave_MoveSpeed", out var moveSpeeds))
         {
-            _data.MoveSpeed = moveSpeeds;
+            _data.MoveSpeed = moveSpeeds.Select(x => (int)x).ToList();
         }
-        if (csvData.Get<int>("ShockWave_MoveTime", out var moveTimes))
+        if (csvData.Get<float>("ShockWave_MoveTime", out var moveTimes))
         {
-            _data.MoveTime = moveTimes;
+            _data.MoveTime = moveTimes.Select(x => (int)x).ToList();
         }
-        if (csvData.Get<int>("Damage", out var damages))
+        if (csvData.Get<float>("Damage", out var damages))
         {
-            _data.Damage = damages;
+            _data.Damage = damages.Select(x => (int)x).ToList();
         }
-        if (csvData.Get<int>("Groggy_Duration", out var durations))
+        if (csvData.Get<float>("Groggy_Duration", out var durations))
         {
-            _data.StunDuration = durations;
+            _data.StunDuration = durations.Select(x => (int)x).ToList();
         }
     }
 

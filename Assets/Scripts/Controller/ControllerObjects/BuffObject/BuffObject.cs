@@ -49,8 +49,9 @@ public abstract class BuffObject : ControllerObject<BuffController>
 
     public BuffStruct Info { get; private set; }
 
-    protected sealed override void OnRegistered()
+    protected sealed override void OnRegistered(Action continueFunc)
     {
+        // TODO: 나중에 continueFunc에서 ActiveBuff 제거하는 코드 넣어야됨
         StartTime = PhotonNetwork.ServerTimestamp;
         gameObject.SetActive(true);
 

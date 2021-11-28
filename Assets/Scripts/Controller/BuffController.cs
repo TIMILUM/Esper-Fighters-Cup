@@ -100,7 +100,7 @@ public sealed class BuffController : ControllerBase
         buff.name = args.BuffId;
         buff.BuffId = args.BuffId;
         buff.SetBuffStruct((BuffObject.BuffStruct)args);
-        buff.Register(this);
+        buff.Register(this, null);
 
         _activeBuffs.Add(buff);
 

@@ -60,7 +60,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     /// </summary>
     public string Name { get; set; }
     public int ID => _id;
-    protected int Range { get; private set; }
+    protected float Range { get; private set; }
     protected Vector2 Size { get; private set; }
     /// <summary>
     /// 해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
@@ -114,20 +114,20 @@ public abstract class SkillObject : ControllerObject<SkillController>
         OnIntializeSkill();
     }
 
-    protected sealed override void OnRegistered()
+    protected sealed override void OnRegistered(Action continueFunc)
     {
+        Debug.Log("OnRegistered");
         BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
         AuthorPlayer = Author as APlayer;
 
         gameObject.SetActive(true);
-
         _stateCancellation = new CancellationTokenSource();
-        _currentTask = SkillReadyToUse(_stateCancellation.Token);
-        _currentTask.Forget(OnSkillCanceled);
+        _currentTask = RunAsync(_stateCancellation.Token, continueFunc);
     }
 
     protected sealed override void OnReleased()
     {
+        Debug.Log("OnReleased");
         ReleaseMoveSpeedBuffAll();
         gameObject.SetActive(false);
 
@@ -136,11 +136,29 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     public sealed override void Release()
     {
+        Debug.Log("Release (Cancel)");
         _stateCancellation?.Cancel();
+    }
+
+    private async UniTask RunAsync(CancellationToken cancelltaion, Action afterFunc)
+    {
+        var isCanceled = await SkillReadyToUse(cancelltaion).ContinueWith(afterFunc).SuppressCancellationThrow();
+
+        if (isCanceled)
+        {
+            Debug.Log("Canceled");
+            CurrentState = State.Canceled;
+            ApplyMovementSpeed(State.Canceled);
+            OnCancel();
+            base.Release();
+            afterFunc();
+        }
     }
 
     private async UniTask SkillReadyToUse(CancellationToken cancelltaion)
     {
+        Debug.Log("ReadyToUse");
+        CurrentState = State.ReadyToUse;
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
 
         if (canMoveNextState)
@@ -155,6 +173,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillFrontDelay(CancellationToken cancelltaion)
     {
+        Debug.Log($"FrontDelay {FrontDelayMilliseconds}");
+        CurrentState = State.FrontDelay;
         ApplyMovementSpeed(State.FrontDelay);
         BeforeFrontDelay();
         await UniTask.Delay(FrontDelayMilliseconds, cancellationToken: cancelltaion);
@@ -163,6 +183,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillUse(CancellationToken cancelltaion)
     {
+        Debug.Log("Use");
+        CurrentState = State.Use;
         ApplyMovementSpeed(State.Use);
         await OnUseAsync();
         await SkillEndDelay(cancelltaion);
@@ -170,6 +192,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillEndDelay(CancellationToken cancelltaion)
     {
+        Debug.Log($"EndDelay {EndDelayMilliseconds}");
+        CurrentState = State.EndDelay;
         ApplyMovementSpeed(State.EndDelay);
         BeforeEndDelay();
         await UniTask.Delay(EndDelayMilliseconds, cancellationToken: cancelltaion);
@@ -178,15 +202,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private void SkillRelease()
     {
+        Debug.Log("Release");
+        CurrentState = State.Release;
         ApplyMovementSpeed(State.Release);
         OnRelease();
-        base.Release();
-    }
-
-    private void OnSkillCanceled(Exception e)
-    {
-        ApplyMovementSpeed(State.Canceled);
-        OnCancel();
         base.Release();
     }
 
@@ -202,12 +221,12 @@ public abstract class SkillObject : ControllerObject<SkillController>
         _commonCsvData.Get<float>("Skill_ID", out var idList);
         _commonCsvIndex = idList.FindIndex(x => (int)x == _id);
 
-        Name = GetCSVData<string>("Name");
-        Range = GetCSVData<int>("Range");
-        Damage = GetCSVData<int>("Damage");
-        StunGroggyDuration = GetCSVData<int>("Groggy_Duration");
-        FrontDelayMilliseconds = GetCSVData<int>("Pre_Delay_Duration");
-        EndDelayMilliseconds = GetCSVData<int>("After_Delay_Duration");
+        // Name = GetCSVData<string>("Name");
+        Range = GetCSVData<float>("Range");
+        Damage = (int)GetCSVData<float>("Damage");
+        StunGroggyDuration = (int)GetCSVData<float>("Groggy_Duration");
+        FrontDelayMilliseconds = (int)GetCSVData<float>("Pre_Delay_Duration");
+        EndDelayMilliseconds = (int)GetCSVData<float>("After_Delay_Duration");
         FrontDelayMoveSpeed = GetCSVData<float>("Pre_Delay_MoveSpeed");
         EndDelayMoveSpeed = GetCSVData<float>("After_Delay_MoveSpeed");
         Size = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
