@@ -40,9 +40,21 @@ public class RaiseObject : BuffObject
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        if (_rigidbody != null)
+
+        if (_actor as AStaticObject != null)
         {
-            _rigidbody.useGravity = true;
+            _actor.BuffController.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
+        }
+        else
+        {
+            if (_rigidbody != null)
+            {
+                _rigidbody.useGravity = true;
+            }
         }
     }
 
@@ -52,9 +64,12 @@ public class RaiseObject : BuffObject
 
         _actor = Controller.ControllerManager.GetActor();
         _rigidbody = _actor.GetComponent<Rigidbody>();
-        _rigidbody.useGravity = false;
         _startPos = _actor.transform.position;
         _startTime = Time.time;
+
+
+        if (_actor as AStaticObject == null)
+            _rigidbody.useGravity = false;
     }
 
     public override void SetBuffStruct(BuffStruct buffStruct)

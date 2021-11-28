@@ -20,7 +20,7 @@ public class AStaticObject : Actor
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (transform.position.y > _boxcollider.bounds.extents.y + 1.0f)
+            if (transform.position.y > _boxcollider.bounds.extents.y + 0.03f)
             {
                 transform.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
