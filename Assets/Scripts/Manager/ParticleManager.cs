@@ -114,6 +114,35 @@ public class ParticleManager : PunEventCallbacks
         EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
     }
 
+
+
+
+    public void PullParticle(string particleName, Transform Trans)
+    {
+        // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
+
+        if (!_particleList.TryGetValue(particleName, out var particleQueue))
+        {
+            Debug.LogError("동일한 파티클 이름이 없습니다.");
+            return;
+        }
+
+        if (particleQueue.Count == 0)
+        {
+            Debug.Log("파티클이 없습니다.");
+            return;
+        }
+
+        var clon = particleQueue.Dequeue();
+        clon.Object.SetActive(true);
+        clon.Object.transform.SetParent(Trans);
+        clon.Object.transform.SetPositionAndRotation(Trans.position, Trans.rotation);
+        clon.StartParticle(particleName);
+        _activeParticle.Add(clon);
+    }
+
+
+
     /// <summary>
     /// 큐에 넣는 작업
     /// </summary>
@@ -126,6 +155,10 @@ public class ParticleManager : PunEventCallbacks
 
             if (currentTime >= item.LifeTime)
             {
+                if (item.Object.transform.parent != transform)
+                    item.Object.transform.SetParent(transform);
+
+
                 item.Object.SetActive(false);
                 _particleList[item.Name].Enqueue(item);
                 _removeParticle.Enqueue(item);

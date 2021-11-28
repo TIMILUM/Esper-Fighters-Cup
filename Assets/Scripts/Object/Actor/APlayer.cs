@@ -1,11 +1,21 @@
+using System.Collections.Generic;
 using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
 
 public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
 {
+
+    // 이펙트가 손위치에 나오는 기획이 있어서 추가합니다.
+    [SerializeField]
+    private List<Transform> _effectTrans;
+
+
     private Rigidbody _rigidbody;
     private CameraMovement _cameraMovement;
+
+    public List<Transform> EffectTrans => _effectTrans;
+
 
     protected override void Start()
     {

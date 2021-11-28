@@ -29,6 +29,11 @@ public class RaiseObject : BuffObject
         {
             Author.Rigidbody.useGravity = true;
             StopCoroutine(_raising);
+            Controller.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
         }
     }
 

@@ -35,6 +35,8 @@ namespace EsperFightersCup
 
         private void GenerateAfterBuff(BuffController controller)
         {
+            if (_durationStunSeconds == 0) return;
+
             controller.GenerateBuff(new BuffStruct()
             {
                 Type = Type.DecreaseHp,
