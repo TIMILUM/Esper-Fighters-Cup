@@ -105,20 +105,26 @@ MonoBehaviour:
   - _type: 9
     _duration: 0
     _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 0
+    _damage: 0
+    _isOnlyOnce: 0
+  - _type: 2
+    _duration: 1.5
+    _valueFloat:
+    - 10
+    - 3
+    - 3
     _valueVector3:
-    - {x: 0, y: 0, z: 0}
     - {x: 0, y: 0, z: 0}
     _allowDuplicates: 0
     _damage: 0
     _isOnlyOnce: 0
-  _currentState: 0
   _id: 5
+  _inputKey: 0
   _range: 0
-  _grabFrontDelayTime: 300
-  _grabEndDelayTime: 300
   _ThrowfrontDelayTime: 300
-  _ThrowendDelayTime: 300
+  _ThrowendDelayTime: 30
   _collider: {fileID: 7561730188851709874}
   _colliderParent: {fileID: 5460907096129286788}
   _colliderSize: {x: 2, y: 1}
-  _grabSecond: 1

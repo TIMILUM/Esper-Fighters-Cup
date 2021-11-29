@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace EsperFightersCup
@@ -10,11 +12,6 @@ namespace EsperFightersCup
         [SerializeField]
         private float _range;
 
-        [SerializeField]
-        private float _grabFrontDelayTime;
-
-        [SerializeField]
-        private float _grabEndDelayTime;
 
         [SerializeField]
         private float _ThrowfrontDelayTime;
@@ -35,23 +32,28 @@ namespace EsperFightersCup
 
 
 
+
+
+
         private ObjectBase _grabTarget;
         private float _minDistance = float.MaxValue;
 
-        protected override void Start()
+        protected override void OnInitializeSkill()
         {
-            base.Start();
+            base.OnInitializeSkill();
             _collider.OnCollision += SetHit;
             var colliderScale = new Vector3(_colliderSize.x, 1.0f, _colliderSize.y);
             _collider.transform.localScale = colliderScale;
-
         }
 
 
         public override void OnPlayerHitEnter(GameObject other)
         {
-            throw new System.NotImplementedException();
+
         }
+
+
+
 
 
 
@@ -71,7 +73,7 @@ namespace EsperFightersCup
                 return;
             }
 
-            var dist = Vector3.Distance(_player.transform.position, to.transform.position);
+            var dist = Vector3.Distance(Author.transform.position, to.transform.position);
             if (dist < _minDistance)
             {
                 _grabTarget = to;
@@ -85,97 +87,121 @@ namespace EsperFightersCup
 
         }
 
-        protected override IEnumerator OnCanceled()
-        {
-            SetState(State.Release);
-            yield return null;
-        }
-
-        protected override IEnumerator OnEndDelay()
-        {
-            yield return new WaitForSeconds(_ThrowendDelayTime * 0.001f);
-
-            SetNextState();
-            yield break;
-        }
-
-        protected override IEnumerator OnFrontDelay()
-        {
-            Actor isBuffController = _grabTarget as Actor;
-
-            if (isBuffController != null)
-            {
-                isBuffController.BuffController.GenerateBuff(_buffOnCollision[0]);
-            }
-
-            SetNextState();
-            yield break;
-        }
 
 
 
         protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
         {
-            throw new System.NotImplementedException();
         }
 
-        protected override IEnumerator OnReadyToUse()
+        protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
-            yield return new WaitForSeconds(_grabFrontDelayTime * 0.001f);
-            _colliderParent.SetActive(true);
-            /// 잡기 애니메이션
-            yield return new WaitForSeconds(_grabEndDelayTime * 0.001f);
 
+            _grabTarget = null;
+
+            _colliderParent.SetActive(true);
+            _collider.OnCollision += SetHit;
+
+            await UniTask.NextFrame();
+
+            _collider.OnCollision -= SetHit;
             _colliderParent.SetActive(false);
 
-            ///물체 없을때 CANCEL
+
             if (_grabTarget == null)
-                SetState(State.Canceled);
+                return false;
 
-            SetNextState();
-            yield break;
+            return true;
         }
 
-
-
-        protected override IEnumerator OnRelease()
+        protected override void BeforeFrontDelay()
         {
-            ApplyMovementSpeed(State.Release);
-            Actor isBuffController = _grabTarget as Actor;
-            if (isBuffController != null)
-            {
-                isBuffController.BuffController.ReleaseBuff(BuffObject.Type.Grab);
-            }
-
-
-            Destroy(gameObject);
-            yield return null;
         }
 
-
-        protected override IEnumerator OnUse()
+        protected async override UniTask OnUseAsync()
         {
-            var isCanceled = false;
 
-            yield return new WaitForSeconds(_ThrowfrontDelayTime * 0.001f);
-
-
-            yield return new WaitUntil(() =>
+            var currentTime = 0.0f;
+            if (AuthorPlayer.photonView.IsMine)
             {
-                if (Input.GetMouseButton(1))
+
+                var Obj = _grabTarget as Actor;
+                AuthorPlayer.Animator.SetBool("Grab", true);
+
+                _buffOnCollision[0].ValueFloat[0] = Author.photonView.ViewID;
+                Obj.BuffController.GenerateBuff(_buffOnCollision[0]);
+                AuthorPlayer.Animator.SetTrigger("Grab");
+
+                await UniTask.WaitUntil(() =>
                 {
-                    isCanceled = true;
-                }
-                return isCanceled;
-            });
 
 
-            if (isCanceled)
-            {
-                SetState(State.Canceled);
-                yield break;
+                    if (Input.GetMouseButton(0))
+                    {
+                        AuthorPlayer.Animator.SetTrigger("Throw");
+                        return true;
+                    }
+
+                    return false;
+                });
+
+
+                await UniTask.WaitUntil(() =>
+                {
+                    currentTime += Time.deltaTime * 1000.0f;
+
+                    if (currentTime > _ThrowfrontDelayTime)
+                    {
+                        _buffOnCollision[1].ValueVector3[0] = Vector3.Normalize(GetMousePosition() - _grabTarget.transform.position);
+                        Obj.BuffController.GenerateBuff(_buffOnCollision[1]);
+                        return true;
+                    }
+                    return false;
+                });
+
+                await UniTask.WaitUntil(() =>
+                {
+                    if (currentTime > _ThrowendDelayTime)
+                    {
+                        return true;
+                    }
+                    return false;
+                });
             }
-            SetNextState();
+
         }
+
+        protected override void BeforeEndDelay()
+        {
+
+        }
+
+        protected override void OnCancel()
+        {
+
+        }
+
+        protected override void OnRelease()
+        {
+
+        }
+
+
+        private Vector3 GetMousePosition()
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var hits = Physics.RaycastAll(ray);
+            foreach (var hit in hits)
+            {
+                if (hit.collider.CompareTag("Floor"))
+                {
+                    return hit.point;
+                }
+            }
+
+            return Vector3.positiveInfinity;
+        }
+
+
     }
 }
