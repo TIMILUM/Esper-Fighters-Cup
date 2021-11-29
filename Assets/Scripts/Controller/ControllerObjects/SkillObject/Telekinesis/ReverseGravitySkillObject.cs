@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
+using EsperFightersCup.UI.InGame.Skill;
 using UnityEngine;
 
 public class ReverseGravitySkillObject : SkillObject
@@ -9,8 +10,8 @@ public class ReverseGravitySkillObject : SkillObject
     [SerializeField] private LineRenderer _lineRenderer;
 
     private Vector2 _uiSize;
-    private GameObject _rangeUI;
-    private GameObject _castUI;
+    private SkillUI _rangeUI;
+    private SkillUI _castUI;
 
     private GameObject _fragmentObj;
     private GameObject _fragmentUI;
@@ -31,15 +32,12 @@ public class ReverseGravitySkillObject : SkillObject
         base.OnInitializeSkill();
 
         _uiSize = Size * 0.1f;
-        _rangeUI = GameUIManager.Instance.PlayLocal(
-            "Skill_Range", transform.position, 0f, Vector2.one * Range,
-            viewID: AuthorPlayer.photonView.ViewID).gameObject;
+        var rangeSize = 0.1f * Range * Vector2.one;
+        _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize);
+        _castUI = GameUIManager.Instance.PlayLocal("ReverseGravity_Casting", transform.position, 0f, _uiSize);
 
-        _castUI = GameUIManager.Instance.PlayLocal(
-            "ReverseGravity_Casting", transform.position, 0f, _uiSize).gameObject;
-
-        GameObjectUtil.ActiveGameObject(_rangeUI, false);
-        GameObjectUtil.ActiveGameObject(_castUI, false);
+        GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
 
         _collider.transform.SetParent(null);
         _collider.OnCollision += SetHit;
@@ -49,12 +47,13 @@ public class ReverseGravitySkillObject : SkillObject
     {
         var isCanceled = false;
 
-        GameObjectUtil.ActiveGameObject(_rangeUI, true);
+        _rangeUI.ChangeTarget(AuthorPlayer.photonView.ViewID);
+        GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, true);
 
         await UniTask.WaitUntil(() =>
         {
             var mousePos = GetMousePosition();
-            GameObjectUtil.TranslateGameObject(_castUI, mousePos);
+            GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -77,8 +76,8 @@ public class ReverseGravitySkillObject : SkillObject
 
         }, cancellationToken: cancellation);
 
-        GameObjectUtil.ActiveGameObject(_rangeUI, false);
-        GameObjectUtil.ActiveGameObject(_castUI, false);
+        GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
         return false;
     }
 
@@ -113,10 +112,18 @@ public class ReverseGravitySkillObject : SkillObject
     protected override void OnRelease()
     {
         InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
+        ReleaseObjects();
     }
 
     protected override void OnCancel()
     {
+        ReleaseObjects();
+    }
+
+    private void ReleaseObjects()
+    {
+        GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
     }
 
     private Vector3 GetMousePosition()
