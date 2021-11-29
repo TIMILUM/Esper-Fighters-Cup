@@ -2,51 +2,20 @@ using UnityEngine;
 
 public class DecreaseHpObject : BuffObject
 {
-    private ACharacter _character = null;
-    private float _damage = 0;
+    public override Type BuffType => Type.DecreaseHp;
 
-    private void Reset()
+    protected override void Reset()
     {
-        _name = "";
-        _buffStruct.Type = Type.DecreaseHp;
+        base.Reset();
+        Info.Type = Type.DecreaseHp;
     }
 
-    protected override void OnRegistered()
+    public override void OnBuffGenerated()
     {
-        base.OnRegistered();
-        _character = Author.GetComponent<ACharacter>();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        if (!IsRegistered || !Author.photonView.IsMine)
+        if (Author.photonView.IsMine)
         {
-            return;
+            Author.HP -= (int)Info.Damage;
+            Debug.Log("Actor : " + Author.name + ", HP : " + Author.HP);
         }
-
-        if (_character is null)
-        {
-            Debug.Log("HP does not found!");
-            ControllerCast<BuffController>().ReleaseBuff(this);
-            return;
-        }
-
-        _character.HP -= (int)_damage; // BUG: 대미지가 float보다는 int로 바뀌는게 좋음
-        Debug.Log("ChracterName : " + _character.transform.name + "  Chracter HP : " + _character.HP);
-    }
-
-    public override void SetBuffStruct(BuffStruct buffStruct)
-    {
-        base.SetBuffStruct(buffStruct);
-        _damage = buffStruct.Damage;
-    }
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
-    }
-
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-    {
     }
 }

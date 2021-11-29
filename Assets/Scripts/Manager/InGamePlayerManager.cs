@@ -14,6 +14,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
+    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
 
     [SerializeField] private List<Transform> _startLocations;
     [SerializeField] private IngameFSMSystem _ingameFsmSystem;
@@ -27,7 +28,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     public APlayer LocalPlayer { get; private set; }
 
     /// <summary>
-    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다ㅏ.
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다.
     /// </summary>
     public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
 
@@ -77,7 +78,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         else
         {
             Debug.LogWarning($"Can not found local player's character type.");
-            characterType = ACharacter.Type.Plank;
+            characterType = _defaultCharacterType;
         }
 
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);

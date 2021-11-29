@@ -42,13 +42,13 @@ public class CSVData
         _data.Add(key, value.Select(x => ConvertCast(x, type)).ToList());
     }
 
-    private static object ConvertCast(string value, CSVData.Type type)
+    private static object ConvertCast(string value, Type type)
     {
         return type switch
         {
             Type.INT => int.Parse(value),
             Type.FLOAT => float.Parse(value),
-            Type.BOOL => value == "true",
+            Type.BOOL => value == "true" || value == "TRUE",
             Type.STRING => value,
             _ => null
         };
@@ -61,7 +61,7 @@ public class CSVData
             return Type.FLOAT;
         }
 
-        if (value == "true" || value == "false")
+        if (value == "true" || value == "false" || value == "TRUE" || value == "FALSE")
         {
             return Type.BOOL;
         }

@@ -307,6 +307,8 @@ MonoBehaviour:
   _hp: 0
   _id: 7
   _audioEmitter: {fileID: 0}
+  _fgravity: 30
+  _boxcollider: {fileID: 0}
   _allowBuffList: 
   _collider: {fileID: 3179342519834818331}
   _speed: 4
@@ -454,6 +456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7733293999787269550}
   - component: {fileID: 626158081367375084}
+  - component: {fileID: 8386682674955976131}
   m_Layer: 0
   m_Name: BuffController
   m_TagString: Untagged
@@ -488,6 +491,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _type: 3
+--- !u!114 &8386682674955976131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6804647049068734126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7085171369113554124
 GameObject:
   m_ObjectHideFlags: 0

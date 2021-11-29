@@ -1,94 +1,55 @@
+using System.Collections;
 using UnityEngine;
 
 public class RaiseObject : BuffObject
 {
-    [SerializeField]
-    [Tooltip("높이 데이터 입니다.")]
-    private float _raiseDate;
+    private float _limitPosY;
+    private Coroutine _raising;
 
-    private Actor _actor;
-    private float _endTime;
-    private float _limitPosy;
-    private Rigidbody _rigidbody;
-    private Vector3 _startPos;
-    private float _startTime;
+    public override Type BuffType => Type.Raise;
 
-    private void Reset()
-    {
-        _name = "";
-        _buffStruct.Type = Type.Raise;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        _endTime = Time.time;
-        var currentTime = _endTime - _startTime;
-
-        if (_actor.BuffController.GetBuff(Type.KnockBack) != null)
-        {
-            _actor.BuffController.ReleaseBuff(this);
-            return;
-        }
-
-        _actor.transform.position = Vector3.Lerp(
-            _startPos, new Vector3(_actor.transform.position.x, _limitPosy, _actor.transform.position.z), currentTime / Duration);
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        if (_rigidbody != null)
-        {
-            _rigidbody.useGravity = true;
-        }
-    }
-
-    protected override void OnRegistered()
-    {
-        base.OnRegistered();
-
-        _actor = Controller.ControllerManager.GetActor();
-        _rigidbody = _actor.GetComponent<Rigidbody>();
-        _rigidbody.useGravity = false;
-        _startPos = _actor.transform.position;
-        _startTime = Time.time;
-    }
-
-    public override void SetBuffStruct(BuffStruct buffStruct)
+    public override void OnBuffGenerated()
     {
         // BuffStruct Help
         // ----------------
         // ValueFloat[0] : limitPosY (0이면 스턴 효과 없음)
         // ----------------
+        _limitPosY = Info.ValueFloat[0];
 
-        base.SetBuffStruct(buffStruct);
-        _limitPosy = buffStruct.ValueFloat[0];
-    }
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
-    }
-
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-    {
-    }
-
-    /*
-    private Vector3 GetMousePosition()
-    {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var hits = Physics.RaycastAll(ray);
-
-        foreach (var hit in hits)
+        if (Author.photonView.IsMine)
         {
-            if (hit.collider.CompareTag("Floor"))
-            {
-                return hit.point;
-            }
+            Author.Rigidbody.useGravity = false;
+            _raising = StartCoroutine(Raise());
         }
-
-        return Vector3.positiveInfinity;
     }
-    */
+
+    public override void OnBuffReleased()
+    {
+        if (Author.photonView.IsMine)
+        {
+            Author.Rigidbody.useGravity = true;
+            StopCoroutine(_raising);
+            Controller.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
+        }
+    }
+
+    private IEnumerator Raise()
+    {
+        var startTime = Time.time;
+        var waitForFixedUpdate = new WaitForFixedUpdate();
+        var startPos = Author.Rigidbody.position;
+        var endPos = new Vector3(startPos.x, _limitPosY, startPos.z);
+
+        while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
+        {
+            var currentTime = Time.time - startTime;
+            Author.Rigidbody.position = Vector3.Lerp(startPos, endPos, currentTime / Info.Duration);
+            yield return waitForFixedUpdate;
+        }
+        Controller.ReleaseBuff(this);
+    }
 }

@@ -1,36 +1,17 @@
-using System;
 using UnityEngine;
 
 public class StunObject : BuffObject
 {
-    private ACharacter _character;
+    public override Type BuffType => Type.Stun;
 
-    private void Reset()
+    public override void OnBuffGenerated()
     {
-        _name = "Stun";
-        _buffStruct.Type = Type.Stun;
-    }
-
-    protected override void OnRegistered()
-    {
-        base.OnRegistered();
-        _character = Author as ACharacter;
-
-        if (_character && _character.CharacterAnimatorSync)
+        if (Author is APlayer player && player.Animator != null)
         {
-            var data = transform.transform.position;
-            data.y = 0.01f;
-            _character.CharacterAnimatorSync.SetTrigger("Hit");
-            ParticleManager.Instance.PullParticle("Hit", data, Quaternion.identity);
+            player.Animator.SetTrigger("Hit");
+
+            var position = Author.transform.position + new Vector3(0f, 0.01f, 0f);
+            ParticleManager.Instance.PullParticle("Hit", position, Quaternion.identity);
         }
-    }
-
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
     }
 }

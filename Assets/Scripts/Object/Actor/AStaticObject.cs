@@ -14,19 +14,23 @@ public class AStaticObject : Actor
         base.Start();
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
-        if (BuffController.GetBuff(BuffObject.Type.Falling) != null)
+        base.Update();
+
+        if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (transform.position.y > _boxcollider.bounds.extents.y + 1.0f)
+            if (transform.position.y > _boxcollider.bounds.extents.y + 0.03f)
             {
                 transform.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
             else
-                BuffController.ReleaseBuff(BuffObject.Type.Falling);
+            {
+                BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
+            }
         }
 
-        if (BuffController.GetBuff(BuffObject.Type.KnockBack) != null || BuffController.GetBuff(BuffObject.Type.Falling) != null)
+        if (BuffController.ActiveBuffs.Exists(BuffObject.Type.KnockBack) || BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
             if (GetComponent<Rigidbody>().isKinematic)
             {

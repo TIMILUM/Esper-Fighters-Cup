@@ -1,4 +1,3 @@
-using System;
 using Photon.Pun;
 using UnityEngine;
 public class ObjectHitSystem : MonoBehaviourPunCallbacks
@@ -9,7 +8,6 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
 
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
-    private int _csvIndex = 0;
 
     private Actor _actor;
     private bool _isDestroy = false;
@@ -26,15 +24,30 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
     private void Start()
     {
         var csvData = CSVUtil.GetData("ObjectHitSystemDataTable");
-        csvData.Get<float>("Obj_ID", out var idList);
-        _csvIndex = idList.FindIndex(x => (int)x == _objectID);
-        _strength = GetCSVData<float>(csvData, "Strength");
-        _isDestroyable = GetCSVData<bool>(csvData, "Destroyable");
+
+        if (!csvData.Get<float>("Obj_ID", out var idList))
+        {
+            return;
+        }
+        var index = idList.FindIndex(x => (int)x == _objectID);
+        if (index < 0)
+        {
+            return;
+        }
+
+        if (csvData.Get<float>("Strength", out var strengthList))
+        {
+            _strength = strengthList[index];
+        }
+        if (csvData.Get<float>("Destroyable", out var destroyableList))
+        {
+            _isDestroyable = destroyableList[index] > 0;
+        }
     }
 
     private void Update()
     {
-        if (!_isDestroyable || !_actor.photonView.IsMine)
+        if (!_actor || !_actor.photonView.IsMine || !_isDestroyable)
         {
             return;
         }
@@ -44,6 +57,7 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
             var pv = gameObject.GetComponentInChildren<PhotonView>();
             if (pv != null)
             {
+                PhotonNetwork.OpCleanRpcBuffer(photonView);
                 PhotonNetwork.Destroy(photonView);
             }
             else
@@ -84,15 +98,5 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
             _isDestroy = _isDestroyable;
             otherHitSystem._isDestroy = otherHitSystem._isDestroyable;
         }
-    }
-
-    private T GetCSVData<T>(CSVData csvData, string key)
-    {
-        if (!csvData.Get<T>(key, out var valueList))
-        {
-            throw new Exception("Error to parse csv data.");
-        }
-
-        return valueList[_csvIndex];
     }
 }

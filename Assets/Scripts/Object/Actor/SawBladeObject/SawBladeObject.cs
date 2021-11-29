@@ -35,8 +35,10 @@ public class SawBladeObject : AStaticObject
         }
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (photonView.IsMine)
         {
             SawBladeSystem.Instance.LocalSpawnedSawBlades.Remove(photonView.ViewID);
