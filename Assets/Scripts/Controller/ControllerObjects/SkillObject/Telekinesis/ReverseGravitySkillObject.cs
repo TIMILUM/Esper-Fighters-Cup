@@ -13,17 +13,19 @@ public class ReverseGravitySkillObject : SkillObject
     private SkillUI _rangeUI;
     private SkillUI _castUI;
 
-    private GameObject _fragmentObj;
-    private GameObject _fragmentUI;
+    //private GameObject _fragmentObj;
+    //private GameObject _fragmentUI;
 
     private Vector3 _endMousePos;
 
     public override void SetHit(ObjectBase to)
     {
+        /*
         if (_fragmentObj != null && _fragmentObj.GetComponent<ObjectBase>() == to)
         {
             return;
         }
+        */
         base.SetHit(to);
     }
 
@@ -32,8 +34,10 @@ public class ReverseGravitySkillObject : SkillObject
         base.OnInitializeSkill();
 
         _uiSize = Size * 0.1f;
-        var rangeSize = 0.1f * Range * Vector2.one;
-        _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize);
+
+        // 범위 UI의 반지름 = Range
+        var rangeSize = new Vector2(Range, Range) * 2f;
+        _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize * 0.1f);
         _castUI = GameUIManager.Instance.PlayLocal("ReverseGravity_Casting", transform.position, 0f, _uiSize);
 
         GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
@@ -53,23 +57,42 @@ public class ReverseGravitySkillObject : SkillObject
         await UniTask.WaitUntil(() =>
         {
             var mousePos = GetMousePosition();
-            GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
+            var distance = Vector3.Distance(Author.transform.position, mousePos);
+
+            if (distance < Range)
+            {
+                if (!_castUI.gameObject.activeInHierarchy)
+                {
+                    GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
+                }
+                GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
+            }
+            else
+            {
+                GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+            }
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 isCanceled = true;
-                return isCanceled;
             }
-            if (Input.GetKeyUp(KeyCode.LeftShift))
+            else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                /*
-                _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
-                _fragmentCasting.transform.SetParent(null);
-                _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
-                _fragmentCasting.transform.SetParent(transform);
-                _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
-                */
-                _endMousePos = mousePos;
+                if (distance <= Range)
+                {
+                    /*
+                    _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
+                    _fragmentCasting.transform.SetParent(null);
+                    _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
+                    _fragmentCasting.transform.SetParent(transform);
+                    _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
+                    */
+                    _endMousePos = mousePos;
+                }
+                else
+                {
+                    isCanceled = true;
+                }
                 return true;
             }
             return isCanceled;
@@ -78,7 +101,8 @@ public class ReverseGravitySkillObject : SkillObject
 
         GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
-        return false;
+
+        return !isCanceled;
     }
 
     protected override void BeforeFrontDelay()
@@ -95,7 +119,7 @@ public class ReverseGravitySkillObject : SkillObject
 
     protected override async UniTask OnUseAsync()
     {
-        _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
+        // _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
         GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
 
         _collider.OnCollision += SetHit;
@@ -111,7 +135,7 @@ public class ReverseGravitySkillObject : SkillObject
 
     protected override void OnRelease()
     {
-        InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
+        // InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
         ReleaseObjects();
     }
 
