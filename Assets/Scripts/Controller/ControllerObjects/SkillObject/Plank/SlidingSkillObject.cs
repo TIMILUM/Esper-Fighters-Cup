@@ -1,3 +1,5 @@
+using System.Collections;
+
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -7,6 +9,7 @@ namespace EsperFightersCup
     public class SlidingSkillObject : SkillObject
     {
         private Vector3 _mousePosition;
+        private float _dummyRange;
 
         protected override void OnInitializeSkill()
         {
@@ -20,6 +23,11 @@ namespace EsperFightersCup
         /// </summary>
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
+            if (Range == 0)
+                _dummyRange = 5.0f;
+            else
+                _dummyRange = Range;
+
             _mousePosition = GetMousePosition();
             await UniTask.Yield(cancellationToken: cancellation);
             return true;
@@ -30,20 +38,24 @@ namespace EsperFightersCup
         /// </summary>
         protected override void BeforeFrontDelay()
         {
+            AuthorPlayer.Animator.SetTrigger("Sliding");
         }
 
         protected override async UniTask OnUseAsync()
         {
-            AuthorPlayer.Animator.SetTrigger("Sliding");
+
 
             ///처음 시작 위치
             _buffOnCollision[0].ValueVector3[0] = Author.transform.position;
             ///목표 위치
-            _buffOnCollision[0].ValueVector3[1] = Author.transform.position + ((_mousePosition - Author.transform.position).normalized * Range);
+            _buffOnCollision[0].ValueVector3[1] = Author.transform.position + ((_mousePosition - Author.transform.position).normalized
+                * _dummyRange);
             ///목표까지 가는 시간
             _buffOnCollision[0].ValueVector3[1].y = _buffOnCollision[0].ValueVector3[0].y;
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
+
+
 
             await UniTask.Yield();
         }
@@ -58,14 +70,17 @@ namespace EsperFightersCup
 
         protected override void OnRelease()
         {
-            AuthorPlayer.Animator.SetBool("Cancel", true);
+
         }
 
         protected override void OnCancel()
         {
             BuffController.ReleaseBuffsByType(BuffObject.Type.Sliding);
-            AuthorPlayer.Animator.SetBool("Cancel", false);
+
         }
+
+
+
 
         private Vector3 GetMousePosition()
         {
