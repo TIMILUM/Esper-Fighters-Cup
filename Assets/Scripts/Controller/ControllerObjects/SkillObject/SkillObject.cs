@@ -110,7 +110,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     protected sealed override void OnInitialized()
     {
-        OnIntializeSkill();
+        OnInitializeSkill();
     }
 
     protected sealed override void OnRegistered(Action continueFunc)
@@ -158,6 +158,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         Debug.Log($"[{ID}] ReadyToUse");
         CurrentState = State.ReadyToUse;
+        await UniTask.Yield();
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
 
         if (canMoveNextState)
@@ -212,7 +213,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     /// 스킬이 최초 생성되는 시점에 호출됩니다.<para/>
     /// 스킬이 실행되는 시점이 아닙니다! 스킬 실행 시점 콜백은 OnReadyToUse를 사용해주세요.
     /// </summary>
-    protected virtual void OnIntializeSkill()
+    protected virtual void OnInitializeSkill()
     {
         // CSV 데이터 적용
         _commonCsvData = CSVUtil.GetData("SkillDataTable");

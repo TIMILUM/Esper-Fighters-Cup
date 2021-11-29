@@ -111,7 +111,7 @@ public class ParticleManager : PunEventCallbacks
     /// <param name="angle">파티클 앵글 </param>
     public void PullParticle(string particleName, Vector3 pos, Quaternion angle)
     {
-        EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
+        EventSender.Broadcast(new GameParticlePlayArguments(particleName, pos, angle.eulerAngles), SendOptions.SendReliable);
     }
 
 
@@ -183,7 +183,7 @@ public class ParticleManager : PunEventCallbacks
             return;
         }
 
-        var data = (GameParticlePlayEvent)args.EventData;
+        var data = (GameParticlePlayArguments)args.EventData;
 
         if (!_particleList.TryGetValue(data.Name, out var particleQueue))
         {
