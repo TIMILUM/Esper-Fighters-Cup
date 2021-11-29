@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-public interface IReadonlyBuffCollection
+public interface IReadonlyBuffCollection : IReadOnlyCollection<KeyValuePair<BuffObject.Type, IReadOnlyList<BuffObject>>>
 {
     /// <summary>
     /// 버프 콜렉션의 타입 목록
@@ -52,12 +53,6 @@ public interface IBuffCollection
     void Add(BuffObject buff);
 
     /// <summary>
-    /// 타입과 일치하는 버프 오브젝트들을 목록에서 제거합니다.
-    /// </summary>
-    /// <param name="type"></param>
-    void Clear(BuffObject.Type type);
-
-    /// <summary>
     /// 해당 버프를 목록에서 제거합니다.
     /// </summary>
     /// <param name="buff"></param>
@@ -68,14 +63,26 @@ public interface IBuffCollection
     /// 아이디와 일치하는 버프를 목록에서 제거합니다.
     /// </summary>
     /// <param name="id"></param>
-    /// /// <returns>목록에서 제거된 버프 오브젝트</returns>
+    /// <returns>목록에서 제거된 버프 오브젝트</returns>
     BuffObject Remove(string id);
+
+    /// <summary>
+    /// 타입과 일치하는 버프 오브젝트들을 목록에서 제거합니다.
+    /// </summary>
+    /// <param name="type">제거할 버프들의 타입</param>
+    IReadOnlyList<BuffObject> Clear(BuffObject.Type type);
+
+    /// <summary>
+    /// 모든 버프를 버프 콜렉션에서 제거합니다.
+    /// </summary>
+    /// <returns>제거된 버프 목록</returns>
+    IReadOnlyList<BuffObject> Clear();
 }
 
 /// <summary>
 /// 버프 타입에 맞는 리스트가 반드시 하나 존재하는 버프 콜렉션입니다.
 /// </summary>
-public class BuffCollection : IBuffCollection, IReadonlyBuffCollection, IReadOnlyCollection<KeyValuePair<BuffObject.Type, List<BuffObject>>>
+public class BuffCollection : IBuffCollection, IReadonlyBuffCollection
 {
     private readonly Dictionary<BuffObject.Type, List<BuffObject>> _activeBuffs = new Dictionary<BuffObject.Type, List<BuffObject>>();
 
@@ -100,11 +107,6 @@ public class BuffCollection : IBuffCollection, IReadonlyBuffCollection, IReadOnl
         }
 
         _activeBuffs[buff.BuffType].Add(buff);
-    }
-
-    public void Clear(BuffObject.Type type)
-    {
-        _activeBuffs[type].Clear();
     }
 
     public BuffObject Remove(BuffObject buff)
@@ -132,6 +134,27 @@ public class BuffCollection : IBuffCollection, IReadonlyBuffCollection, IReadOnl
         return null;
     }
 
+    public IReadOnlyList<BuffObject> Clear(BuffObject.Type type)
+    {
+        var removedBuffs = _activeBuffs[type].ToList();
+        _activeBuffs[type].Clear();
+
+        return removedBuffs;
+    }
+
+    public IReadOnlyList<BuffObject> Clear()
+    {
+        var removedBuffs = new List<BuffObject>();
+
+        foreach (var buffsByType in _activeBuffs.Values)
+        {
+            removedBuffs.AddRange(buffsByType);
+            buffsByType.Clear();
+        }
+
+        return removedBuffs;
+    }
+
     public bool Exists(BuffObject.Type type)
     {
         return this[type].Count > 0;
@@ -154,13 +177,15 @@ public class BuffCollection : IBuffCollection, IReadonlyBuffCollection, IReadOnl
         return false;
     }
 
-    IEnumerator<KeyValuePair<BuffObject.Type, List<BuffObject>>> IEnumerable<KeyValuePair<BuffObject.Type, List<BuffObject>>>.GetEnumerator()
+    public IEnumerator<KeyValuePair<BuffObject.Type, IReadOnlyList<BuffObject>>> GetEnumerator()
     {
-        return _activeBuffs.GetEnumerator();
+        return _activeBuffs
+            .Select(x => new KeyValuePair<BuffObject.Type, IReadOnlyList<BuffObject>>(x.Key, x.Value))
+            .GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
-        return _activeBuffs.GetEnumerator();
+        return GetEnumerator();
     }
 }

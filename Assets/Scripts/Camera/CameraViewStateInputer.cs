@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 namespace EsperFightersCup
@@ -18,7 +15,7 @@ namespace EsperFightersCup
             Debug.Log("PlayerInput-ViewState: [1]");
         }
 
-        public  void ViewStateInput_45()
+        public void ViewStateInput_45()
         {
             ViewStateInputed = 2;
             Debug.Log("PlayerInput-ViewState: [2]");
@@ -29,7 +26,7 @@ namespace EsperFightersCup
             DontDestroyOnLoad(this.gameObject);
         }
 
-        void Update()
+        private void Update()
         {
             SceneNameChecker = SceneManager.GetActiveScene().name;
 

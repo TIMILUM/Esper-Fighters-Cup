@@ -49,6 +49,7 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         }
         Debug.Log(prefabPackage);
         var clone = PhotonNetwork.Instantiate(prefabPackage.PrefabPath, pos, Quaternion.identity);
+        Debug.Log(prefabPackage);
         return clone;
     }
 

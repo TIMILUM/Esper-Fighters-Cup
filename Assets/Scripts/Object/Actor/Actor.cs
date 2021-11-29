@@ -27,15 +27,19 @@ public class Actor : ObjectBase, IPunObservable
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
     public Rigidbody Rigidbody { get; protected set; }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");
         ControllerManager.SetActor(this);
         Rigidbody = GetComponent<Rigidbody>();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
+
         BuffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
@@ -76,10 +80,14 @@ public class Actor : ObjectBase, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(_hp);
+            stream.SendNext(Rigidbody.isKinematic);
+            stream.SendNext(Rigidbody.useGravity);
         }
         else
         {
             _hp = (int)stream.ReceiveNext();
+            Rigidbody.isKinematic = (bool)stream.ReceiveNext();
+            Rigidbody.useGravity = (bool)stream.ReceiveNext();
         }
     }
 }

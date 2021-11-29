@@ -1,184 +1,176 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using UnityEngine;
 
 public class ShockWaveSkillObject : SkillObject
 {
-    private static ShockWaveSkillData s_shockWaveSkillData;
-
-    [SerializeField]
-    private float _range = 3;
-
-    [SerializeField]
-    private float _onHitDuration = 0.5f;
-
-    [SerializeField]
-    private GameObject[] _firstCasting;
-
-    [SerializeField]
-    private GameObject[] _secondCasting;
-
-    [SerializeField]
-    [Header("Collider")]
-    private Transform _colliderParentTransform;
-
-    [SerializeField]
-    private ColliderChecker _collider;
-
-    [SerializeField]
-    private GameObject _shockwaveUI;
-
-    [SerializeField]
-    [Tooltip("[세로, 가로]")]
-    private Vector2 _colliderSize = new Vector2(0.5f, 2);
-
-    private Vector3 _direction = Vector3.right;
-    private Vector3 _startPos = Vector3.zero;
-
-    // Start is called before the first frame update
-    protected override void Start()
+    private class ShockWaveSkillData
     {
-        base.Start();
-        // 사거리
-        _range = GetCSVData<float>("Range");
-        // 판정 범위 가로 세로
-        _colliderSize = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
-        GameObjectUtil.ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
-
-        var colliderScale = new Vector3(_colliderSize.x, 1, _colliderSize.y);
-        GameObjectUtil.ScaleGameObjects(_secondCasting, colliderScale);
-        _colliderParentTransform.localScale = colliderScale;
-        _collider.OnCollision += SetHit;
-        LoadShockWaveData();
+        public List<int> TargetID { get; set; }
+        public List<bool> Raise { get; set; }
+        public List<int> MoveSpeed { get; set; }
+        public List<int> MoveTime { get; set; }
+        public List<int> Damage { get; set; }
+        public List<int> StunDuration { get; set; }
     }
+
+    [SerializeField] private float _onHitDuration = 0.5f;
+    [SerializeField] private GameObject _shockwaveUI;
+    [SerializeField] private GameObject[] _firstCasting;
+    [SerializeField] private GameObject[] _secondCasting;
+    [Header("Collider")]
+    [SerializeField] private Transform _colliderParentTransform;
+    [SerializeField] private ColliderChecker _collider;
+
+    private ShockWaveSkillData _data;
+    private Vector3 _startPos = Vector3.zero;
+    private Vector3 _direction = Vector3.right;
 
     public override void SetHit(ObjectBase to)
     {
         var knockBackBuff = AnalyzeBuff(to);
-        if (knockBackBuff != null)
+        if (knockBackBuff is null)
         {
-            _buffOnCollision[0] = knockBackBuff;
+            return;
         }
-
-        _buffOnCollision[0].ValueVector3[0] = _direction;
-        SetState(State.EndDelay);
-        base.SetHit(to);
+        knockBackBuff.ValueVector3[0] = _direction;
+        base.OnHit(this, to, new[] { knockBackBuff });
     }
 
-    protected override IEnumerator OnReadyToUse()
+    protected override void OnIntializeSkill()
     {
-        var isCanceled = false;
+        base.OnIntializeSkill();
+        LoadShockWaveData();
+
+        var colliderScale = new Vector3(Size.x, 1, Size.y);
+        GameObjectUtil.ScaleGameObjects(_secondCasting, colliderScale);
+        _colliderParentTransform.localScale = colliderScale;
+    }
+
+    protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
+    {
+        bool isCanceled = false;
         Vector3 endPos;
 
+        GameObjectUtil.ScaleGameObjects(_firstCasting, new Vector3(Range, 1, Range));
         GameObjectUtil.ActiveGameObjects(_firstCasting);
 
-        yield return new WaitUntil(() =>
+        await UniTask.WaitUntil(() =>
         {
             // 우클릭 시 취소
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            if (Input.GetMouseButtonDown(1))
             {
                 isCanceled = true;
             }
-
-            // 시작점 설정
-            if (Input.GetMouseButtonDown(0))
+            else
             {
-                _startPos = SetStartPos();
-                if (float.IsPositiveInfinity(_startPos.x))
+                // 시작점 설정
+                if (Input.GetMouseButtonDown(0))
                 {
-                    isCanceled = true;
+                    _startPos = SetStartPos();
+                    if (float.IsPositiveInfinity(_startPos.x))
+                    {
+                        isCanceled = true;
+                    }
+                    else
+                    {
+                        GameObjectUtil.ActiveGameObjects(_firstCasting, false);
+                        GameObjectUtil.ActiveGameObjects(_secondCasting);
+                    }
                 }
-
-                GameObjectUtil.ActiveGameObjects(_firstCasting, false);
-                GameObjectUtil.ActiveGameObjects(_secondCasting);
-            }
-            // 끝점 설정
-            else if (Input.GetMouseButton(0) && _startPos != Vector3.positiveInfinity)
-            {
-                endPos = GetMousePosition();
-                _direction = Vector3.Normalize(endPos - _startPos);
-                GameObjectUtil.TranslateGameObjects(_secondCasting, _startPos);
-                var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
-                GameObjectUtil.RotateGameObjects(_secondCasting, rotation);
-            }
-            // 판정 범위 최종 계산
-            else if (Input.GetMouseButtonUp(0))
-            {
-                //충격파 애니메이션
-                // TODO: 이거 OnFrontDelay 등으로 옮겨주세요...
-                _player.Animator.SetTrigger("ShockWaveSkill");
-                ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
-
-                return true;
+                // 끝점 설정
+                else if (Input.GetMouseButton(0) && _startPos != Vector3.positiveInfinity)
+                {
+                    endPos = GetMousePosition();
+                    _direction = Vector3.Normalize(endPos - _startPos);
+                    GameObjectUtil.TranslateGameObjects(_secondCasting, _startPos);
+                    var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
+                    GameObjectUtil.RotateGameObjects(_secondCasting, rotation);
+                }
+                // 판정 범위 최종 계산
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    return true;
+                }
             }
 
             return isCanceled;
-        });
+
+        }, cancellationToken: cancellation);
 
         if (isCanceled)
         {
-            SetState(State.Canceled);
-            yield break;
+            return false;
         }
 
         GameObjectUtil.ActiveGameObjects(_firstCasting, false);
         GameObjectUtil.ActiveGameObjects(_secondCasting, false);
-        _shockwaveUI.SetActive(true);
 
+        return true;
+    }
+
+    protected override void BeforeFrontDelay()
+    {
+        var pos = _startPos + _direction;
+        var rot = _secondCasting[0].transform.rotation;
+        var scale = _secondCasting[0].transform.localScale * 0.1f;
+
+        _shockwaveUI.SetActive(true);
         _shockwaveUI.transform.SetParent(GameObject.Find("UiObject").transform);
 
-        _shockwaveUI.transform.SetPositionAndRotation(_startPos + _direction, _secondCasting[0].transform.rotation);
-        _shockwaveUI.transform.localScale = _secondCasting[0].transform.localScale * 0.1f;
-        SetNextState();
-    }
+        _shockwaveUI.transform.SetPositionAndRotation(pos, rot);
+        _shockwaveUI.transform.localScale = scale;
 
-    protected override IEnumerator OnFrontDelay()
-    {
-        ApplyMovementSpeed(State.FrontDelay);
-        yield return new WaitForSeconds(FrontDelayMilliseconds / 1000.0f);
-        SetNextState();
-    }
-
-    protected override IEnumerator OnUse()
-    {
-        ApplyMovementSpeed(State.Use);
-        _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
-        _colliderParentTransform.gameObject.SetActive(true);
-        _colliderParentTransform.transform.position = _startPos;
-        yield return new WaitUntil(() => WaitPhysicsUpdate());
+        //충격파 애니메이션
+        AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
         ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
+    }
+
+    protected override async UniTask OnUseAsync()
+    {
+        ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
+
+        _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
+        _collider.OnCollision += SetHit;
+        _colliderParentTransform.transform.position = _startPos;
+        _colliderParentTransform.gameObject.SetActive(true);
+
+        await UniTask.NextFrame();
 
         _colliderParentTransform.gameObject.SetActive(false);
-        SetNextState();
+        _collider.OnCollision -= SetHit;
     }
 
-    protected override IEnumerator OnEndDelay()
+    protected override void BeforeEndDelay()
     {
-        ApplyMovementSpeed(State.EndDelay);
-        yield return new WaitForSeconds(EndDelayMilliseconds / 1000.0f);
-        SetNextState();
     }
 
-    protected override IEnumerator OnCanceled()
+    protected override void OnCancel()
     {
-        ApplyMovementSpeed(State.Canceled);
-        SetState(State.Release);
-        yield return null;
+        ReleaseShockWave();
     }
 
-    protected override IEnumerator OnRelease()
+    protected override void OnRelease()
     {
-        ApplyMovementSpeed(State.Release);
-        Destroy(_shockwaveUI);
-        Destroy(gameObject);
-        yield return null;
+        ReleaseShockWave();
+    }
+
+    private void ReleaseShockWave()
+    {
+        // 중간에 스킬이 취소되어서 미처 제거하지 못한 코드들 여기서 제거
+        GameObjectUtil.ActiveGameObjects(_firstCasting, false);
+        GameObjectUtil.ActiveGameObjects(_secondCasting, false);
+        _shockwaveUI.SetActive(false);
+        _colliderParentTransform.gameObject.SetActive(false);
     }
 
     private Vector3 SetStartPos()
     {
         var startPos = GetMousePosition();
-        if (Vector3.Distance(startPos, transform.position) > _range)
+        if (Vector3.Distance(startPos, transform.position) > Range)
         {
             return Vector3.positiveInfinity;
         }
@@ -201,60 +193,68 @@ public class ShockWaveSkillObject : SkillObject
         return Vector3.positiveInfinity;
     }
 
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-    {
-    }
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
-    }
-
     private void LoadShockWaveData()
     {
-        if (s_shockWaveSkillData != null)
+        if (_data != null)
         {
             return;
         }
 
         var csvData = CSVUtil.GetData("ShockWaveKnockBackDataTable");
-        s_shockWaveSkillData = new ShockWaveSkillData();
-        csvData.Get("TargetObject_ID", out s_shockWaveSkillData._idList);
-        csvData.Get("FloatCheck", out s_shockWaveSkillData._floatCheckList);
-        csvData.Get("ShockWave_MoveSpeed", out s_shockWaveSkillData._moveSpeedList);
-        csvData.Get("ShockWave_MoveTime", out s_shockWaveSkillData._moveTimeList);
-        csvData.Get("Damage", out s_shockWaveSkillData._damageList);
-        csvData.Get("Groggy_Duration", out s_shockWaveSkillData._stunDurationList);
+        _data = new ShockWaveSkillData();
+
+        if (csvData.Get<float>("ShockWave_Data_ID", out var targetIds))
+        {
+            _data.TargetID = targetIds.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("FloatCheck", out var floatChecks))
+        {
+            _data.Raise = floatChecks.Select(x => x > 0).ToList();
+        }
+        if (csvData.Get<float>("ShockWave_MoveSpeed", out var moveSpeeds))
+        {
+            _data.MoveSpeed = moveSpeeds.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("ShockWave_MoveTime", out var moveTimes))
+        {
+            _data.MoveTime = moveTimes.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("Damage", out var damages))
+        {
+            _data.Damage = damages.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("Groggy_Duration", out var durations))
+        {
+            _data.StunDuration = durations.Select(x => (int)x).ToList();
+        }
     }
 
     private BuffObject.BuffStruct AnalyzeBuff(ObjectBase to)
     {
-        var target = to as Actor;
-        if (target == null)
+        if (!(to is Actor target))
         {
             return null;
         }
 
         var targetID = target.ID;
-        var isRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
-        var idList = s_shockWaveSkillData._idList;
-        var floatCheckList = s_shockWaveSkillData._floatCheckList;
-        var moveSpeedList = s_shockWaveSkillData._moveSpeedList;
-        var moveTimeList = s_shockWaveSkillData._moveTimeList;
-        var damageList = s_shockWaveSkillData._damageList;
-        var stunDurationList = s_shockWaveSkillData._stunDurationList;
+        var targetIsRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
 
-        for (var i = 0; i < idList.Count; ++i)
+        for (int i = 0; i < _data.TargetID.Count; i++)
         {
-            var id = (int)idList[i];
+            var id = _data.TargetID[i];
+            var raise = _data.Raise[i];
+            var movespeed = _data.MoveSpeed[i];
+            var movetime = _data.MoveTime[i];
+            var damage = _data.Damage[i];
+            var stunDuration = _data.StunDuration[i];
+
             // CSV의 타겟 ID가 아니면 확인할 필요가 없으니 1차적으로 필터링
-            if (id != targetID)
+            if (targetID != id)
             {
                 continue;
             }
-
-            var raiseCheck = floatCheckList[i] > 0;
             // CSV의 띄워짐 상태와 오브젝트의 띄워짐 상태를 확인하여 2차 필터링
-            if (raiseCheck != isRaised)
+            if (targetIsRaised != raise)
             {
                 continue;
             }
@@ -263,12 +263,12 @@ public class ShockWaveSkillObject : SkillObject
             {
                 Type = BuffObject.Type.KnockBack,
                 AllowDuplicates = false,
-                Duration = moveTimeList[i] / 1000.0f,
-                ValueFloat = new[]
+                Duration = movetime,
+                ValueFloat = new float[] // TOOD: ValueFloat 대신 ValueInt가 돼야 할듯
                 {
-                    moveSpeedList[i],
-                    damageList[i],
-                    stunDurationList[i] / 1000.0f
+                    movespeed,
+                    damage,
+                    stunDuration
                 },
                 ValueVector3 = new Vector3[1]
             };
@@ -276,15 +276,5 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         return null;
-    }
-
-    private class ShockWaveSkillData
-    {
-        public List<float> _damageList;
-        public List<float> _floatCheckList;
-        public List<float> _idList;
-        public List<float> _moveSpeedList;
-        public List<float> _moveTimeList;
-        public List<float> _stunDurationList;
     }
 }
