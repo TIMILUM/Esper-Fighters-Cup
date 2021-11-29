@@ -42,7 +42,7 @@ public class CSVData
         _data.Add(key, value.Select(x => ConvertCast(x, type)).ToList());
     }
 
-    private static object ConvertCast(string value, CSVData.Type type)
+    private static object ConvertCast(string value, Type type)
     {
         return type switch
         {

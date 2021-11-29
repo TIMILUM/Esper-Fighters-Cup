@@ -1,174 +1,104 @@
-using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using UnityEngine;
 
 public class ThrowSkillObject : SkillObject
 {
-    [SerializeField]
-    private GameObject _fragmentCasting;
-    [SerializeField]
-    private GameObject _hitBox;
-    [SerializeField]
-    private float _range;
-
-    [SerializeField]
-    private ColliderChecker _collider;
-    [SerializeField]
-    private float _frontDelayTime;
-
-    [SerializeField]
-    private float _endDelayTime;
-
+    [SerializeField] private GameObject _fragmentCasting;
+    [SerializeField] private GameObject _hitBox;
+    [SerializeField] private ColliderChecker _collider;
 
     private GameObject _fragmentObj;
     private GameObject _fragmentUI;
 
-
     private Vector3 _endMousePos;
-    protected override void Start()
-    {
-        base.Start();
-        _range = GetCSVData<float>("Range") * 0.01f;
-        _frontDelayTime = FrontDelayMilliseconds;
-        _endDelayTime = EndDelayMilliseconds;
-        _collider.OnCollision += SetHit;
-        GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
-        GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(_range * 2.0f, 1.0f, _range * 2.0f));
 
+    protected override void OnIntializeSkill()
+    {
+        base.OnIntializeSkill();
+        GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(Range * 2.0f, 1.0f, Range * 2.0f));
+        GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(Range * 2.0f, 1.0f, Range * 2.0f));
     }
+
     public override void SetHit(ObjectBase to)
     {
-
-        if (_fragmentObj != null)
+        if (_fragmentObj != null && _fragmentObj.GetComponent<ObjectBase>() == to)
         {
-            if (_fragmentObj.GetComponent<ObjectBase>() == to)
-                return;
+            return;
         }
         base.SetHit(to);
     }
 
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
-        Debug.Log(other.transform.name);
-    }
-
-    protected override IEnumerator OnCanceled()
-    {
-        ApplyMovementSpeed(State.Canceled);
-        SyncState(State.Release);
-        yield return null;
-    }
-
-    protected override IEnumerator OnEndDelay()
-    {
-        ApplyMovementSpeed(State.EndDelay);
-        GameObjectUtil.ActiveGameObject(_hitBox);
-        GameObjectUtil.TranslateGameObject(_hitBox, _fragmentCasting.transform.position);
-        bool isCanceled = false;
-        var startTime = Time.time;
-        var currentTime = Time.time;
-
-        while ((currentTime - startTime) * 1000 <= _endDelayTime)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                isCanceled = true;
-                break;
-            }
-            yield return null;
-            currentTime = Time.time;
-
-        }
-
-        if (isCanceled == true)
-        {
-            SyncState(State.Release);
-        }
-
-        SyncState(State.Use);
-    }
-
-    protected override IEnumerator OnReadyToUse()
+    protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
     {
         var isCanceled = false;
 
         GameObjectUtil.ActiveGameObject(_fragmentCasting);
 
-        yield return new WaitUntil(() =>
-       {
-           var mousePos = GetMousePosition();
-           GameObjectUtil.TranslateGameObject(_fragmentCasting, mousePos);
-
-           if (Input.GetKeyDown(KeyCode.Mouse1))
-           {
-               isCanceled = true;
-               return isCanceled;
-           }
-           if (Input.GetKeyUp(KeyCode.LeftShift))
-           {
-               if (AuthorPlayer.photonView.IsMine)
-               {
-                   _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
-                   _fragmentCasting.transform.SetParent(null);
-                   _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
-                   _fragmentCasting.transform.SetParent(transform);
-                   _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
-                   _endMousePos = mousePos;
-
-               }
-
-               return true;
-           }
-           return isCanceled;
-       });
-
-
-
-        if (isCanceled)
+        await UniTask.WaitUntil(() =>
         {
+            var mousePos = GetMousePosition();
+            GameObjectUtil.TranslateGameObject(_fragmentCasting, mousePos);
 
-            SyncState(State.Canceled);
-            yield break;
-        }
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                isCanceled = true;
+                return isCanceled;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
+                _fragmentCasting.transform.SetParent(null);
+                _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
+                _fragmentCasting.transform.SetParent(transform);
+                _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
+                _endMousePos = mousePos;
+                return true;
+            }
+            return isCanceled;
+
+        }, cancellationToken: cancellation);
 
         GameObjectUtil.ActiveGameObject(_fragmentCasting, false);
-        SetNextState();
+        return isCanceled;
     }
 
-    protected override IEnumerator OnFrontDelay()
+    protected override void BeforeFrontDelay()
     {
-        ApplyMovementSpeed(State.FrontDelay);
-        bool isCanceled = false;
-        var startTime = Time.time;
-        var currentTime = Time.time;
-
         //Idle 상태일때 애니메이션 실행
-        if (AuthorPlayer.Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        if (AuthorPlayer.Animator.Local.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             AuthorPlayer.Animator.SetTrigger("ReverseGravityUnder");
-
         }
 
         //하체는 그냥 실행
         AuthorPlayer.Animator.SetTrigger("ReverseGravityA");
-        while ((currentTime - startTime) * 1000 <= _frontDelayTime)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                isCanceled = true;
-                break;
-            }
-            yield return null;
-            currentTime = Time.time;
-        }
+    }
 
-        if (isCanceled == true)
-        {
+    protected override async UniTask OnUseAsync()
+    {
+        _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
+        GameObjectUtil.ActiveGameObject(_hitBox, false);
 
-            SyncState(State.Release);
-        }
-        SyncState(State.EndDelay);
+        _collider.OnCollision += SetHit;
+        await UniTask.Yield();
+        _collider.OnCollision -= SetHit;
+    }
+
+    protected override void BeforeEndDelay()
+    {
+        GameObjectUtil.ActiveGameObject(_hitBox);
+        GameObjectUtil.TranslateGameObject(_hitBox, _fragmentCasting.transform.position);
+    }
+
+    protected override void OnRelease()
+    {
+        InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
+    }
+
+    protected override void OnCancel()
+    {
     }
 
     private Vector3 GetMousePosition()
@@ -185,28 +115,5 @@ public class ThrowSkillObject : SkillObject
         }
 
         return Vector3.positiveInfinity;
-    }
-
-
-    protected override IEnumerator OnRelease()
-    {
-        ApplyMovementSpeed(State.Release);
-        InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
-        Destroy(gameObject);
-        yield break;
-    }
-
-    protected override IEnumerator OnUse()
-    {
-        ApplyMovementSpeed(State.Use);
-        _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
-        GameObjectUtil.ActiveGameObject(_hitBox, false);
-        yield return null;
-        SyncState(State.Canceled);
-    }
-
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
-    {
-        throw new System.NotImplementedException();
     }
 }

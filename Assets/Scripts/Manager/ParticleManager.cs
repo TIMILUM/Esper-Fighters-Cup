@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using EsperFightersCup.Net;
+using ExitGames.Client.Photon;
 using UnityEngine;
 
-public class ParticleManager : MonoBehaviour
+public class ParticleManager : PunEventCallbacks
 {
     /// <summary>
     /// 각각의 파티클 종류 정보
@@ -109,6 +111,14 @@ public class ParticleManager : MonoBehaviour
     /// <param name="angle">파티클 앵글 </param>
     public void PullParticle(string particleName, Vector3 pos, Quaternion angle)
     {
+        EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
+    }
+
+
+
+
+    public void PullParticle(string particleName, Transform Trans)
+    {
         // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
 
         if (!_particleList.TryGetValue(particleName, out var particleQueue))
@@ -125,11 +135,13 @@ public class ParticleManager : MonoBehaviour
 
         var clon = particleQueue.Dequeue();
         clon.Object.SetActive(true);
-
-        clon.Object.transform.SetPositionAndRotation(pos, angle);
+        clon.Object.transform.SetParent(Trans);
+        clon.Object.transform.SetPositionAndRotation(Trans.position, Trans.rotation);
         clon.StartParticle(particleName);
         _activeParticle.Add(clon);
     }
+
+
 
     /// <summary>
     /// 큐에 넣는 작업
@@ -143,6 +155,10 @@ public class ParticleManager : MonoBehaviour
 
             if (currentTime >= item.LifeTime)
             {
+                if (item.Object.transform.parent != transform)
+                    item.Object.transform.SetParent(transform);
+
+
                 item.Object.SetActive(false);
                 _particleList[item.Name].Enqueue(item);
                 _removeParticle.Enqueue(item);
@@ -160,7 +176,6 @@ public class ParticleManager : MonoBehaviour
         PutParticle();
     }
 
-    /*
     protected override void OnGameEventReceived(GameEventArguments args)
     {
         if (args.Code != EventCode.PlayParticle)
@@ -189,5 +204,4 @@ public class ParticleManager : MonoBehaviour
         clon.StartParticle(data.Name);
         _activeParticle.Add(clon);
     }
-    */
 }
