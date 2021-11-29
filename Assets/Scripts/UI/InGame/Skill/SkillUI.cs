@@ -27,7 +27,7 @@ namespace EsperFightersCup.UI.InGame.Skill
 
             transform.localPosition = new Vector3(Position.x, 0, Position.y);
             transform.localRotation = Quaternion.Euler(new Vector3(defaultRot.x, RotationY, defaultRot.z));
-            transform.localScale = 0.01f * new Vector3(Scale.x, 1, Scale.y);
+            transform.localScale = new Vector3(Scale.x, 1, Scale.y);
 
             if (ViewID > 0)
             {
