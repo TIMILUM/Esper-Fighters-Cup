@@ -20,7 +20,6 @@ public class ShockWaveSkillObject : SkillObject
 
     [Header("Collider")]
     [SerializeField] private ColliderChecker _collider;
-    [SerializeField] private Transform _handTransform;
 
     private ShockWaveSkillData _data;
     private SkillUI _castObject;
@@ -30,6 +29,8 @@ public class ShockWaveSkillObject : SkillObject
 
     public override void SetHit(ObjectBase to)
     {
+        // TODO: 충격파 대쉬 적용
+
         var knockBackBuff = AnalyzeBuff(to);
         if (knockBackBuff is null)
         {
@@ -50,7 +51,7 @@ public class ShockWaveSkillObject : SkillObject
 
         _uiSize = new Vector2(Size.y, Size.y) * 0.1f;
 
-        _castObject = GameUIManager.Instance.PlayLocal("Skill_Range_Arrow", transform.position, 0f, _uiSize);
+        _castObject = GameUIManager.Instance.PlayLocal("ShockWave_Arrow", transform.position, 0f, _uiSize);
         GameObjectUtil.ActiveGameObject(_castObject.gameObject, false);
 
         _collider.transform.SetParent(null);
@@ -111,11 +112,11 @@ public class ShockWaveSkillObject : SkillObject
         var pos = _castObject.transform.position;
         var rot = _castObject.transform.rotation.eulerAngles;
 
-        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize, 0.5f, Author.photonView.ViewID);
+        GameUIManager.Instance.Play("ShockWave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize, 0.5f, Author.photonView.ViewID);
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
-        ParticleManager.Instance.PullParticleToLocal("ShockWaveHand", _handTransform);
+        ParticleManager.Instance.PullParticleToLocal("ShockWaveHand", AuthorPlayer.EffectTrans[0]);
         // ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
     }
 

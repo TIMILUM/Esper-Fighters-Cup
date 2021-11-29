@@ -37,6 +37,11 @@ namespace EsperFightersCup.UI.InGame.Skill
                     Target = actor;
                 }
             }
+
+            if (Duration > 0f)
+            {
+                Destroy(gameObject, Duration);
+            }
         }
     }
 }

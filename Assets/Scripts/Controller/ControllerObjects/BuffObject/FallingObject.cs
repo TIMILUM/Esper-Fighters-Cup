@@ -27,6 +27,11 @@ namespace EsperFightersCup
                 return;
             }
 
+            if (otherActor is null)
+            {
+                return;
+            }
+
             if (otherActor.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController otherController))
             {
                 GenerateAfterBuff(otherController);
@@ -35,7 +40,10 @@ namespace EsperFightersCup
 
         private void GenerateAfterBuff(BuffController controller)
         {
-            if (_durationStunSeconds == 0) return;
+            if (_durationStunSeconds == 0)
+            {
+                return;
+            }
 
             controller.GenerateBuff(new BuffStruct()
             {

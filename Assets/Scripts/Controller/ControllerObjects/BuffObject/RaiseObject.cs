@@ -18,6 +18,7 @@ public class RaiseObject : BuffObject
 
         if (Author.photonView.IsMine)
         {
+            // useGravity 동기화됨
             Author.Rigidbody.useGravity = false;
             _raising = StartCoroutine(Raise());
         }
@@ -27,13 +28,19 @@ public class RaiseObject : BuffObject
     {
         if (Author.photonView.IsMine)
         {
-            Author.Rigidbody.useGravity = true;
             StopCoroutine(_raising);
-            Controller.GenerateBuff(new BuffStruct()
+            if (Author is APlayer)
             {
-                Type = Type.Falling,
-                ValueFloat = new float[2] { 0.0f, 0.0f }
-            });
+                Author.Rigidbody.useGravity = true;
+            }
+            else
+            {
+                Controller.GenerateBuff(new BuffStruct()
+                {
+                    Type = Type.Falling,
+                    ValueFloat = new float[2] { 0.0f, 0.0f }
+                });
+            }
         }
     }
 

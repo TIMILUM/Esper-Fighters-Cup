@@ -3,23 +3,19 @@ using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using UnityEngine;
 
-public class ThrowSkillObject : SkillObject
+public class ReverseGravitySkillObject : SkillObject
 {
-    [SerializeField] private GameObject _fragmentCasting;
-    [SerializeField] private GameObject _hitBox;
     [SerializeField] private ColliderChecker _collider;
+    [SerializeField] private LineRenderer _lineRenderer;
+
+    private Vector2 _uiSize;
+    private GameObject _rangeUI;
+    private GameObject _castUI;
 
     private GameObject _fragmentObj;
     private GameObject _fragmentUI;
 
     private Vector3 _endMousePos;
-
-    protected override void OnInitializeSkill()
-    {
-        base.OnInitializeSkill();
-        GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(Range * 2.0f, 1.0f, Range * 2.0f));
-        GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(Range * 2.0f, 1.0f, Range * 2.0f));
-    }
 
     public override void SetHit(ObjectBase to)
     {
@@ -30,16 +26,35 @@ public class ThrowSkillObject : SkillObject
         base.SetHit(to);
     }
 
+    protected override void OnInitializeSkill()
+    {
+        base.OnInitializeSkill();
+
+        _uiSize = Size * 0.1f;
+        _rangeUI = GameUIManager.Instance.PlayLocal(
+            "Skill_Range", transform.position, 0f, Vector2.one * Range,
+            viewID: AuthorPlayer.photonView.ViewID).gameObject;
+
+        _castUI = GameUIManager.Instance.PlayLocal(
+            "ReverseGravity_Casting", transform.position, 0f, _uiSize).gameObject;
+
+        GameObjectUtil.ActiveGameObject(_rangeUI, false);
+        GameObjectUtil.ActiveGameObject(_castUI, false);
+
+        _collider.transform.SetParent(null);
+        _collider.OnCollision += SetHit;
+    }
+
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
     {
         var isCanceled = false;
 
-        GameObjectUtil.ActiveGameObject(_fragmentCasting);
+        GameObjectUtil.ActiveGameObject(_rangeUI, true);
 
         await UniTask.WaitUntil(() =>
         {
             var mousePos = GetMousePosition();
-            GameObjectUtil.TranslateGameObject(_fragmentCasting, mousePos);
+            GameObjectUtil.TranslateGameObject(_castUI, mousePos);
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
@@ -48,11 +63,13 @@ public class ThrowSkillObject : SkillObject
             }
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
+                /*
                 _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
                 _fragmentCasting.transform.SetParent(null);
                 _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
                 _fragmentCasting.transform.SetParent(transform);
                 _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
+                */
                 _endMousePos = mousePos;
                 return true;
             }
@@ -60,8 +77,9 @@ public class ThrowSkillObject : SkillObject
 
         }, cancellationToken: cancellation);
 
-        GameObjectUtil.ActiveGameObject(_fragmentCasting, false);
-        return isCanceled;
+        GameObjectUtil.ActiveGameObject(_rangeUI, false);
+        GameObjectUtil.ActiveGameObject(_castUI, false);
+        return false;
     }
 
     protected override void BeforeFrontDelay()
@@ -79,7 +97,7 @@ public class ThrowSkillObject : SkillObject
     protected override async UniTask OnUseAsync()
     {
         _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
-        GameObjectUtil.ActiveGameObject(_hitBox, false);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
 
         _collider.OnCollision += SetHit;
         await UniTask.Yield();
@@ -88,8 +106,8 @@ public class ThrowSkillObject : SkillObject
 
     protected override void BeforeEndDelay()
     {
-        GameObjectUtil.ActiveGameObject(_hitBox);
-        GameObjectUtil.TranslateGameObject(_hitBox, _fragmentCasting.transform.position);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject);
+        GameObjectUtil.TranslateGameObject(_collider.gameObject, _castUI.transform.position);
     }
 
     protected override void OnRelease()

@@ -46,7 +46,11 @@ MonoBehaviour:
   _uiParent: {fileID: 0}
   _positionY: 0.03
   _uiList:
-  - _name: Skill_Range_Arrow
+  - _name: Skill_Range
+    _prefab: {fileID: 1506241234304734123, guid: 528957cb890354e47833efa81797618b, type: 3}
+  - _name: ShockWave_Arrow
     _prefab: {fileID: 7777918327910784537, guid: 2bf6c2fd19f7e6c4fba07ecba2edfec7, type: 3}
-  - _name: Shockwave_Range
-    _prefab: {fileID: 7582841892689441441, guid: 22d4055e6ef825141b5ab6663799c16d, type: 3}
+  - _name: ShockWave_Range
+    _prefab: {fileID: -3706689521334415213, guid: 22d4055e6ef825141b5ab6663799c16d, type: 3}
+  - _name: ReverseGravity_Casting
+    _prefab: {fileID: 2012874535035243228, guid: e0c03364b3e2f304491cd548cad181f1, type: 3}
