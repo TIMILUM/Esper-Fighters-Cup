@@ -54,6 +54,8 @@ namespace EsperFightersCup
             _buffOnCollision[0].ValueVector3[1].y = _buffOnCollision[0].ValueVector3[0].y;
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
+            ParticleManager.Instance.PullParticle("Sliding", Author.transform.position, Quaternion.identity);
+
 
 
 
