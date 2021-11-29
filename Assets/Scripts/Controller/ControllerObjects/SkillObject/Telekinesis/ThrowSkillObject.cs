@@ -14,9 +14,9 @@ public class ThrowSkillObject : SkillObject
 
     private Vector3 _endMousePos;
 
-    protected override void OnIntializeSkill()
+    protected override void OnInitializeSkill()
     {
-        base.OnIntializeSkill();
+        base.OnInitializeSkill();
         GameObjectUtil.ScaleGameObject(_fragmentCasting, new Vector3(Range * 2.0f, 1.0f, Range * 2.0f));
         GameObjectUtil.ScaleGameObject(_hitBox, new Vector3(Range * 2.0f, 1.0f, Range * 2.0f));
     }
