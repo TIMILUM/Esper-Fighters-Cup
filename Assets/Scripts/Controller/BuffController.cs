@@ -81,7 +81,7 @@ public sealed class BuffController : ControllerBase
     }
 
     [PunRPC]
-    public void GenerateBuffRPC(BuffGenerateArguments args)
+    private void GenerateBuffRPC(BuffGenerateArguments args)
     {
         var buffType = (BuffObject.Type)args.Type;
         if (!_buffTable.ContainsKey(buffType))
