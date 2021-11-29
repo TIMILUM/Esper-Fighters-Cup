@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4304734942701883359}
   - component: {fileID: 7195997254769971582}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: ShockWaveCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,5 +104,4 @@ MonoBehaviour:
   _buffOnCollision: []
   _id: 1
   _inputKey: 323
-  _onHitDuration: 500
   _collider: {fileID: 7195997254769971582}

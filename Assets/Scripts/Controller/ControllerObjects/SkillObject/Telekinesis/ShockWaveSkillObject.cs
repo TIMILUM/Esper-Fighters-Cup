@@ -25,6 +25,7 @@ public class ShockWaveSkillObject : SkillObject
     private SkillUI _castObject;
     private Vector3 _startPos = Vector3.zero;
     private Vector3 _direction = Vector3.right;
+    private Vector2 _uiSize;
 
     public override void SetHit(ObjectBase to)
     {
@@ -46,7 +47,9 @@ public class ShockWaveSkillObject : SkillObject
         base.OnInitializeSkill();
         LoadShockWaveData();
 
-        _castObject = GameUIManager.Instance.PlayLocal("Skill_Range_Arrow", transform.position, 0f, Size * 0.1f);
+        _uiSize = new Vector2(Size.y, Size.y) * 0.1f;
+
+        _castObject = GameUIManager.Instance.PlayLocal("Skill_Range_Arrow", transform.position, 0f, _uiSize);
         GameObjectUtil.ActiveGameObject(_castObject.gameObject, false);
 
         _collider.transform.SetParent(null);
@@ -107,7 +110,7 @@ public class ShockWaveSkillObject : SkillObject
         var pos = _castObject.transform.position;
         var rot = _castObject.transform.rotation.eulerAngles;
 
-        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, Size * 0.1f, 0.5f, Author.photonView.ViewID);
+        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize * 0.1f, 0.5f, Author.photonView.ViewID);
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");

@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 7335264167673560857}
   - component: {fileID: 572622360751842425}
   m_Layer: 0
-  m_Name: HitBox
+  m_Name: ThrowSkillHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,10 +252,6 @@ MonoBehaviour:
   _fragmentCasting: {fileID: 8969004188049629262}
   _hitBox: {fileID: 7896948227814281178}
   _collider: {fileID: 572622360751842425}
-  _frontDelayTime: 1000
-  _endDelayTime: 0
-  _lineRenderer: {fileID: 5683109528759902376}
-  _lineRendererObj: {fileID: 5691257962791518571}
 --- !u!1001 &4197593625088003182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -333,7 +329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5059957886434733088, guid: 370efa44efa2a224b914ef7c1b8eed21, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 370efa44efa2a224b914ef7c1b8eed21, type: 3}
