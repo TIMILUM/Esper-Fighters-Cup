@@ -20,6 +20,7 @@ public class ShockWaveSkillObject : SkillObject
 
     [Header("Collider")]
     [SerializeField] private ColliderChecker _collider;
+    [SerializeField] private Transform _handTransform;
 
     private ShockWaveSkillData _data;
     private SkillUI _castObject;
@@ -110,11 +111,12 @@ public class ShockWaveSkillObject : SkillObject
         var pos = _castObject.transform.position;
         var rot = _castObject.transform.rotation.eulerAngles;
 
-        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize * 0.1f, 0.5f, Author.photonView.ViewID);
+        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize, 0.5f, Author.photonView.ViewID);
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
-        ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
+        ParticleManager.Instance.PullParticleToLocal("ShockWaveHand", _handTransform);
+        // ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
     }
 
     protected override async UniTask OnUseAsync()
@@ -124,7 +126,6 @@ public class ShockWaveSkillObject : SkillObject
         _collider.transform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
         GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 5, Size.y));
         GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
-        // await UniTask.Delay(_onHitDuration);
         await UniTask.DelayFrame(3);
         GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
     }
