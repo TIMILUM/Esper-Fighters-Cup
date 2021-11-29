@@ -73,6 +73,11 @@ public class SkillController : ControllerBase
             return;
         }
 
+        if (ActiveSkills.Count > 0)
+        {
+            return;
+        }
+
         foreach (var skillTemplate in _skillTemplates.Values)
         {
             if (Input.GetKeyDown(skillTemplate.InputKey) && !_activeSkills.Exist(skillTemplate.ID))
