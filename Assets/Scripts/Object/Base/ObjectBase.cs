@@ -8,16 +8,6 @@ public abstract class ObjectBase : MonoBehaviourPunCallbacks
     [Header("이 오브젝트와 충돌한 오브젝트에게 부여되는 버프목록입니다.")]
     protected List<BuffObject.BuffStruct> _buffOnCollision = new List<BuffObject.BuffStruct>();
 
-    /// <summary>
-    /// 인게임 오브젝트(스킬, 버프, 플레이어, 환경 오브젝트 등)과 충돌이 일어나면 호출되는 함수입니다.
-    /// 플레이어에 종속된 이벤트가 아닌 인게임 오브젝트에서 인게임 오브젝트로 발생하는 이벤트입니다.
-    /// 만약 플레이어에 종속된 충돌 이벤트를 원하신다면 다른 함수를 찾아보세요.
-    /// </summary>
-    /// <param name="from">충돌을 받은 오브젝트입니다.</param>
-    /// <param name="to">충돌한 오브젝트입니다.</param>
-    /// <param name="appendBuff">충돌한 오브젝트가 가지고 있는 버프 목록입니다.</param>
-    protected abstract void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff);
-
     protected virtual void Reset()
     {
     }
@@ -35,6 +25,18 @@ public abstract class ObjectBase : MonoBehaviourPunCallbacks
     }
 
     protected virtual void OnDestroy()
+    {
+    }
+
+    /// <summary>
+    /// 인게임 오브젝트(스킬, 버프, 플레이어, 환경 오브젝트 등)과 충돌이 일어나면 호출되는 함수입니다.
+    /// 플레이어에 종속된 이벤트가 아닌 인게임 오브젝트에서 인게임 오브젝트로 발생하는 이벤트입니다.
+    /// 만약 플레이어에 종속된 충돌 이벤트를 원하신다면 다른 함수를 찾아보세요.
+    /// </summary>
+    /// <param name="from">충돌을 받은 오브젝트입니다.</param>
+    /// <param name="to">충돌한 오브젝트입니다.</param>
+    /// <param name="appendBuff">충돌한 오브젝트가 가지고 있는 버프 목록입니다.</param>
+    protected virtual void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
     {
     }
 

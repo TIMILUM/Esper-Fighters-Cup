@@ -14,9 +14,9 @@ namespace EsperFightersCup.Net
         {
             InitMessagePack();
 
-            RegisterEvent<GameEffectPlayEvent>(EventCode.PlayEffect);
-            RegisterEvent<GameParticlePlayEvent>(EventCode.PlayParticle);
-            RegisterEvent<GameSoundPlayEvent>(EventCode.PlaySound);
+            RegisterEvent<GameUIPlayArguments>(EventCode.PlayGameUI);
+            RegisterEvent<GameParticlePlayArguments>(EventCode.PlayParticle);
+            RegisterEvent<GameSoundPlayArguments>(EventCode.PlaySound);
             RegisterEvent<BuffGenerateArguments>(EventCode.BuffGenerate);
         }
 

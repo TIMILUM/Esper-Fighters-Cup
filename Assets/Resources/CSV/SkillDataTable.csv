@@ -1,6 +1,10 @@
-﻿Name,Skill_ID,Range,Damage,Groggy_Duration,Pre_Delay_Duration,After_Delay_Duration,Pre_Delay_MoveSpeed,After_Delay_MoveSpeed,Area_Shape,ShapeData_1,ShapeData_2,Skill_Effect_Data_1,Skill_Effect_Data_2
-충격파,1,350,0,0,250,650,0,0,0,2,5,0,0
-들어올리기,2,350,0,0,0,200,0,0,1,900,300,2,30
-떨어트리기,3,300,30,500,0,200,0,0,1,900,300,2,30
-슬라이딩,4,350,20,300,300,200,200,300,1,300,300,2,30
-잡고던지기,5,350,20,300,300,200,200,300,1,300,300,2,30
+﻿주석,Skill_ID,Skill_Type,Range,Damage,Groggy_Duration,Pre_Delay_Duration,After_Delay_Duration,After_Delay_Miss_Duration,Pre_Delay_MoveSpeed,After_Delay_MoveSpeed,ShapeData_1,ShapeData_2,Skill_Effect_Data_1,Skill_Effect_Data_2,Skill_Speed,Skill_Effect_Damage,Skill_Strength,Effect_Size_1,Effect_Size_2
+충격파,1,0,0,0,0,0,200,0,0,300,30,70,0,0,0,0,0,0,0
+들어올리기,2,0,100,20,300,300,200,0,400,300,50,50,2,30,0,0,0,0,0
+떨어트리기,3,0,150,30,200,0,250,0,0,300,50,50,8,0,0,0,0,0,0
+슬라이딩_이동,4,1,18,0,0,0,0,0,0,0,0,0,0,0,15,0,0,0,0
+슬라이딩_잡기,4,2,0,0,0,0,300,0,0,300,15,15,4,0,0,0,0,0,0
+슬라이딩_던지기,4,3,0,20,300,400,1000,0,300,300,0,0,0,0,50,0,0,0,0
+지면 분쇄,5,0,0,20,300,500,500,0,200,300,50,0,5,0,0,30,70,0,0
+태클 펀치_태클,6,1,9,0,0,0,0,0,0,0,0,0,0,0,30,0,0,0,0
+태클 펀치_펀치,6,2,40,20,300,0,500,400,0,300,15,15,30,0,30,10,90,20,10

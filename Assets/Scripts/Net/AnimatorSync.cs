@@ -33,7 +33,7 @@ namespace EsperFightersCup.Net
         private Actor _actor;
         private List<string> _syncTriggers;
 
-        public Animator Animator => _animator;
+        public Animator Local => _animator;
 
         private void Awake()
         {
@@ -69,7 +69,6 @@ namespace EsperFightersCup.Net
             }
         }
 
-        [Obsolete("트리거는 로컬 애니메이터에서 설정해주세요")]
         public void SetTrigger(string name)
         {
             _animator.SetTrigger(name);

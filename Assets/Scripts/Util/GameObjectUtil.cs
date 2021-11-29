@@ -56,5 +56,27 @@ namespace EsperFightersCup
         {
             gameObject.transform.position = position;
         }
+
+        public static void SetParentGameObjects(IEnumerable<GameObject> gameObjects, string transformName)
+        {
+            var parent = GameObject.Find(transformName);
+            if (parent == null)
+            {
+                return;
+            }
+
+            foreach (var gameObj in gameObjects)
+            {
+                gameObj.transform.SetParent(parent.transform);
+            }
+        }
+
+        public static void DestoryGameObjects(IEnumerable<GameObject> gameObjects)
+        {
+            foreach (var gameObj in gameObjects)
+            {
+                UnityEngine.Object.Destroy(gameObj);
+            }
+        }
     }
 }
