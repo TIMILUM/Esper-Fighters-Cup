@@ -8,7 +8,7 @@ namespace EsperFightersCup
     {
         private Vector3 _mousePosition;
 
-        protected override void OnIntializeSkill()
+        protected override void OnInitializeSkill()
         {
             // _buffOnCollision[0] = Slide
             // _buffOnCollision[1] = Grab
