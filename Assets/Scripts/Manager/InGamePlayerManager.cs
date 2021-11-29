@@ -14,6 +14,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
+    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
 
     [SerializeField] private List<Transform> _startLocations;
     [SerializeField] private IngameFSMSystem _ingameFsmSystem;
@@ -77,7 +78,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         else
         {
             Debug.LogWarning($"Can not found local player's character type.");
-            characterType = ACharacter.Type.Telekinesis;
+            characterType = _defaultCharacterType;
         }
 
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
