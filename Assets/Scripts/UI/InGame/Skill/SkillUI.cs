@@ -29,18 +29,24 @@ namespace EsperFightersCup.UI.InGame.Skill
             transform.localRotation = Quaternion.Euler(new Vector3(defaultRot.x, RotationY, defaultRot.z));
             transform.localScale = new Vector3(Scale.x, 1, Scale.y);
 
-            if (ViewID > 0)
-            {
-                var pv = PhotonNetwork.GetPhotonView(ViewID);
-                if (pv != null && pv.TryGetComponent<Actor>(out var actor))
-                {
-                    Target = actor;
-                }
-            }
+            ChangeTarget(ViewID);
 
             if (Duration > 0f)
             {
                 Destroy(gameObject, Duration);
+            }
+        }
+
+        public void ChangeTarget(int viewID)
+        {
+            if (viewID > 0)
+            {
+                var pv = PhotonNetwork.GetPhotonView(viewID);
+                if (pv != null && pv.TryGetComponent<Actor>(out var actor))
+                {
+                    ViewID = viewID;
+                    Target = actor;
+                }
             }
         }
     }
