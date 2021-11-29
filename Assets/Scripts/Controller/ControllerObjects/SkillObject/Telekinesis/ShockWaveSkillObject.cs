@@ -18,7 +18,6 @@ public class ShockWaveSkillObject : SkillObject
         public List<int> StunDuration { get; set; }
     }
 
-    [SerializeField] private float _onHitDuration = 0.5f;
     [Header("Collider")]
     [SerializeField] private ColliderChecker _collider;
 
@@ -35,7 +34,11 @@ public class ShockWaveSkillObject : SkillObject
             return;
         }
         knockBackBuff.ValueVector3[0] = _direction;
-        base.OnHit(this, to, new[] { knockBackBuff });
+
+        _buffOnCollision.Clear();
+        _buffOnCollision.Add(knockBackBuff);
+
+        base.SetHit(to);
     }
 
     protected override void OnInitializeSkill()
@@ -43,12 +46,11 @@ public class ShockWaveSkillObject : SkillObject
         base.OnInitializeSkill();
         LoadShockWaveData();
 
-        var colliderScale = new Vector3(Size.x, 1, Size.y);
-        _collider.transform.localScale = colliderScale;
-
-        Debug.Log("initialize");
-        _castObject = GameUIManager.Instance.PlayLocal("Skill_Range_Arrow", transform.position, 0f, Size);
+        _castObject = GameUIManager.Instance.PlayLocal("Skill_Range_Arrow", transform.position, 0f, Size * 0.1f);
         GameObjectUtil.ActiveGameObject(_castObject.gameObject, false);
+
+        _collider.transform.SetParent(null);
+        _collider.OnCollision += SetHit;
     }
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
@@ -83,7 +85,6 @@ public class ShockWaveSkillObject : SkillObject
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
-                Debug.Log("Button Up");
                 return true;
             }
 
@@ -106,7 +107,7 @@ public class ShockWaveSkillObject : SkillObject
         var pos = _castObject.transform.position;
         var rot = _castObject.transform.rotation.eulerAngles;
 
-        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, Size, 0.5f, Author.photonView.ViewID);
+        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, Size * 0.1f, 0.5f, Author.photonView.ViewID);
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
@@ -118,14 +119,11 @@ public class ShockWaveSkillObject : SkillObject
         ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
         _collider.transform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
-        _collider.OnCollision += SetHit;
-        _collider.transform.position = _startPos;
-        _collider.gameObject.SetActive(true);
-
-        await UniTask.NextFrame();
-
-        _collider.gameObject.SetActive(false);
-        _collider.OnCollision -= SetHit;
+        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 5, Size.y));
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
+        // await UniTask.Delay(_onHitDuration);
+        await UniTask.DelayFrame(3);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
     }
 
     protected override void BeforeEndDelay()
