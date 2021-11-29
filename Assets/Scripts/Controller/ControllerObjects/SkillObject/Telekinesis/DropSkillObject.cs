@@ -21,9 +21,9 @@ namespace EsperFightersCup
         private float _secondRange;
         private Vector3 _mouseEndPoint;
 
-        protected override void OnIntializeSkill()
+        protected override void OnInitializeSkill()
         {
-            base.OnIntializeSkill();
+            base.OnInitializeSkill();
 
             LoadDropObjectCSVData();
             _secondRange = Range - 0.15f;
