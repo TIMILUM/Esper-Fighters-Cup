@@ -110,7 +110,7 @@ MonoBehaviour:
     _damage: 0
     _isOnlyOnce: 1
   - _type: 1
-    _duration: 0
+    _duration: 1000
     _valueFloat: []
     _valueVector3: []
     _allowDuplicates: 0
@@ -118,5 +118,6 @@ MonoBehaviour:
     _isOnlyOnce: 0
   _id: 2
   _inputKey: 304
+  _stunDuration: 0
   _collider: {fileID: 6444975577083136379}
   _uIDuration: 2

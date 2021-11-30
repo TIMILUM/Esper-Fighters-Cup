@@ -37,12 +37,8 @@ namespace EsperFightersCup
 
         public override void OnPlayerHitEnter(GameObject other)
         {
-
-
             SlidingAnimationCancel(true);
             Controller.ReleaseBuff(this);
-
-
         }
 
         private IEnumerator Slide()

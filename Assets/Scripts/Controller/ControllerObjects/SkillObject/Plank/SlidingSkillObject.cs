@@ -44,30 +44,22 @@ namespace EsperFightersCup
         protected override async UniTask OnUseAsync()
         {
 
-
             ///처음 시작 위치
             _buffOnCollision[0].ValueVector3[0] = Author.transform.position;
             ///목표 위치
-            _buffOnCollision[0].ValueVector3[1] = Author.transform.position + ((_mousePosition - Author.transform.position).normalized
-                * _dummyRange);
+            _buffOnCollision[0].ValueVector3[1] = Author.transform.position + ((_mousePosition - Author.transform.position).normalized * _dummyRange);
             ///목표까지 가는 시간
             _buffOnCollision[0].ValueVector3[1].y = _buffOnCollision[0].ValueVector3[0].y;
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
+
             ParticleManager.Instance.PullParticle("Sliding", Author.transform.position, Quaternion.identity);
-
-
-
 
             await UniTask.Yield();
         }
 
         protected override void BeforeEndDelay()
         {
-            if (Input.GetMouseButton(1))
-            {
-                Release();
-            }
         }
 
         protected override void OnRelease()
@@ -77,7 +69,6 @@ namespace EsperFightersCup
 
         protected override void OnCancel()
         {
-            BuffController.ReleaseBuffsByType(BuffObject.Type.Sliding);
 
         }
 
