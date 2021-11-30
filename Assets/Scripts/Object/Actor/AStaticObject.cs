@@ -8,9 +8,11 @@ public class AStaticObject : Actor
     private float _fgravity = 30.0f;
     [SerializeField]
     private BoxCollider _boxcollider;
-
+    private Vector3 _colliderSize;
     protected override void Start()
     {
+        _colliderSize = _boxcollider.bounds.extents;
+        _boxcollider.enabled = false;
         base.Start();
     }
 
@@ -20,13 +22,14 @@ public class AStaticObject : Actor
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (transform.position.y > _boxcollider.bounds.extents.y + 0.03f)
+            if (transform.position.y > _colliderSize.y + 0.03f)
             {
                 transform.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
             else
             {
                 BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
+                transform.position = new Vector3(transform.position.x, _colliderSize.y, transform.position.z);
             }
         }
 

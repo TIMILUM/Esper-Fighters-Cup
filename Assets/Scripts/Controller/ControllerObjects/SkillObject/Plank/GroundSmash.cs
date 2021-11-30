@@ -14,14 +14,10 @@ namespace EsperFightersCup
 
         private Vector2 _currentSize;
         private float _currentRange;
-        [SerializeField] private float _stunDuration;
 
 
         [SerializeField] private ColliderChecker _collider;
         [SerializeField] private float _uIDuration;
-
-
-
 
 
         protected override void OnInitializeSkill()
@@ -41,8 +37,8 @@ namespace EsperFightersCup
 
             var colliderScale = new Vector3(_currentRange, 1, _currentRange);
             transform.localScale = colliderScale;
+            _buffOnCollision[1].Duration = 1000.0f;
             _buffOnCollision[0].Damage = Damage;
-            _buffOnCollision[1].Duration = _stunDuration;
         }
 
         protected override void BeforeEndDelay()
@@ -64,10 +60,26 @@ namespace EsperFightersCup
 
         }
 
+
+
+        /// <summary>
+        ///  이부분 SetHit가 안 먹혀서 OnPlayerHit에서 넣어줬습니다.
+        /// </summary>
+        /// <param name="other"></param>
+        public override void OnPlayerHitEnter(GameObject other)
+        {
+            var to = other.GetComponent<Actor>();
+
+            if (to == null) return;
+
+            SetHit(to);
+        }
+
+
+
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
-            _collider.OnCollision += SetHit;
-            await UniTask.Yield();
+            await UniTask.NextFrame();
             return true;
         }
         public override void SetHit(ObjectBase to)
@@ -84,8 +96,11 @@ namespace EsperFightersCup
 
         protected override async UniTask OnUseAsync()
         {
+
+
             await UniTask.NextFrame();
-            _collider.OnCollision -= SetHit;
+
+
         }
     }
 }

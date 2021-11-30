@@ -28,7 +28,7 @@ namespace EsperFightersCup
 
 
         [SerializeField]
-        private Vector2 _colliderSize = new Vector2(2.0f, 1.0f);
+        private Vector2 _colliderSize = new Vector2(5.0f, 10.0f);
 
 
 
@@ -40,8 +40,10 @@ namespace EsperFightersCup
 
         protected override void OnInitializeSkill()
         {
+
             base.OnInitializeSkill();
-            _collider.OnCollision += SetHit;
+
+
             var colliderScale = new Vector3(_colliderSize.x, 1.0f, _colliderSize.y);
             _collider.transform.localScale = colliderScale;
         }
@@ -59,9 +61,12 @@ namespace EsperFightersCup
 
         public override void SetHit(ObjectBase to)
         {
-            if (to == _grabTarget || _grabTarget is ACharacter) return;
+
+            if (to == _grabTarget || to == null) return;
+
 
             var charactor = to as ACharacter;
+
 
 
             if (charactor != null)
@@ -83,8 +88,7 @@ namespace EsperFightersCup
                 _buffOnCollision[0].ValueVector3[1] = _grabTarget.transform.position;
                 _buffOnCollision[0].ValueVector3[0] = transform.position;
             }
-
-
+            base.OnHit(this, to, _buffOnCollision.ToArray());
         }
 
 
@@ -98,14 +102,16 @@ namespace EsperFightersCup
         {
 
             _grabTarget = null;
-
+            _minDistance = float.MaxValue;
             _colliderParent.SetActive(true);
             _collider.OnCollision += SetHit;
 
             await UniTask.NextFrame();
 
+
             _collider.OnCollision -= SetHit;
             _colliderParent.SetActive(false);
+
 
 
             if (_grabTarget == null)
@@ -116,7 +122,9 @@ namespace EsperFightersCup
 
         protected override void BeforeFrontDelay()
         {
+
         }
+
 
         protected async override UniTask OnUseAsync()
         {
@@ -153,6 +161,7 @@ namespace EsperFightersCup
                     if (currentTime > _ThrowfrontDelayTime)
                     {
                         _buffOnCollision[1].ValueVector3[0] = Vector3.Normalize(GetMousePosition() - _grabTarget.transform.position);
+                        _buffOnCollision[1].ValueFloat[3] = Author.photonView.ViewID;
                         Obj.BuffController.GenerateBuff(_buffOnCollision[1]);
                         return true;
                     }

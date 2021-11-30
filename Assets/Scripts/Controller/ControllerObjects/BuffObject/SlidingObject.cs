@@ -31,8 +31,6 @@ namespace EsperFightersCup
             {
                 _moving = StartCoroutine(Slide());
             }
-
-
         }
 
         public override void OnPlayerHitEnter(GameObject other)
@@ -41,13 +39,13 @@ namespace EsperFightersCup
             Controller.ReleaseBuff(this);
         }
 
+
+
         private IEnumerator Slide()
         {
             var currentTime = 0f;
             var realTime = 0f;
             var waitForFixedUpdate = new WaitForFixedUpdate();
-
-
 
             while (realTime <= 1.0f - Mathf.Epsilon)
             {
