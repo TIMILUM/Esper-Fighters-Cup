@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SawBladeObject))]
@@ -40,11 +37,11 @@ public class SawBladeFSMSystem : InspectorFSMSystem<SawBladeFSMSystem.StateEnum,
         }
 
         // 넉백 버프가 있으면 방향을 추출하고 OnLift상태로 변경 후 넉백버프 제거
-        var knockBackList = _buffController.GetBuff(BuffObject.Type.KnockBack);
-        if (knockBackList != null)
+        var knockbackBuffs = _buffController.ActiveBuffs[BuffObject.Type.KnockBack];
+        if (knockbackBuffs.Count > 0)
         {
-            _direction = ((KnockBackObject)knockBackList[0]).NormalizedDirection;
-            _buffController.ReleaseBuff(BuffObject.Type.KnockBack);
+            _direction = ((KnockBackObject)knockbackBuffs[0]).NormalizedDirection;
+            _buffController.ReleaseBuffsByType(BuffObject.Type.KnockBack);
             ChangeState(StateEnum.OnLift);
         }
     }

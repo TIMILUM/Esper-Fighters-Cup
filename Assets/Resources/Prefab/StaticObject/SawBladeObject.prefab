@@ -307,6 +307,8 @@ MonoBehaviour:
   _hp: 0
   _id: 7
   _audioEmitter: {fileID: 0}
+  _fgravity: 30
+  _boxcollider: {fileID: 0}
   _allowBuffList: 
   _collider: {fileID: 3179342519834818331}
   _speed: 4
@@ -330,6 +332,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 3179342520512475394}
   - {fileID: -9178771105032117353}
   - {fileID: 2693972747709286436}
   - {fileID: 8533053961359265577}
@@ -443,25 +446,6 @@ MonoBehaviour:
   _parameters:
   - _name: isActive
     _type: 4
---- !u!95 &4587064118331460640
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3841060637423425819}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ef5672012ea5eef4da79036974b17152, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6804647049068734126
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,3 +611,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a0bb6c621516c1e419628e707645c755, type: 3}
   m_PrefabInstance: {fileID: 4147632314326115402}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &4587064118331460640
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3841060637423425819}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ef5672012ea5eef4da79036974b17152, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -1,55 +1,88 @@
-using System.Collections.Generic;
-using DG.Tweening;
+using Cysharp.Threading.Tasks;
+using EsperFightersCup;
 using EsperFightersCup.UI.InGame;
-using EsperFightersCup.Util;
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using UnityEngine;
 
 public class IngameRoundIntroState : InGameFSMStateBase
 {
-    [SerializeField]
-    private GameStateView _gameStateView;
+    [SerializeField] private GameStateView _gameStateView;
 
-    [SerializeField]
-    private List<Transform> _startPosition;
+    private int _count;
+    private int _currentRound;
 
     protected override void Initialize()
     {
         State = IngameFSMSystem.State.RoundIntro;
     }
 
-    private void Start()
-    {
-
-    }
-
     public override void StartState()
     {
         base.StartState();
-        var round = ++FsmSystem.RoundCount;
-        FsmSystem.IngameTopUIObject.SetRoundCount(round);
+        _count = 0;
 
-        for (var i = 0; i < FsmSystem.PlayerList.Count; i++)
+        if (PhotonNetwork.IsMasterClient)
         {
-            var player = FsmSystem.PlayerList[i];
-            var startPosition = _startPosition[i];
-            player.Hp = 100;
-            player.transform.position = startPosition.position;
+            var roundValue = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound] ?? 0;
+            var round = (int)roundValue;
+            _currentRound = ++round;
+
+            var props = new Hashtable
+            {
+                [CustomPropertyKeys.GameRound] = round,
+                [CustomPropertyKeys.GameRoundWinner] = 0
+            };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
 
-        // 몇초 뒤에 보이게 해야 잘 보임.
-        DOTween.Sequence()
-            .AppendInterval(3.0f)
-            .AppendCallback(() => _gameStateView.Show($"Round {round}", Vector2.left * 20f))
-            .AppendInterval(1.5f)
-            .AppendCallback(() =>
-            {
-                _gameStateView.Show("Fight!", Vector2.left * 20f);
-                ChangeState(IngameFSMSystem.State.InBattle);
-            });
+        // 로컬?�레?�어 ?�정
+        var localplayer = InGamePlayerManager.Instance.LocalPlayer;
+        localplayer.ResetPositionAndRotation();
+        localplayer.HP = 100;
+
+        // ?�정 ?�료 ?? MasterClient?�게 ?�호
+        FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
     }
 
-    public override void EndState()
+    [PunRPC]
+    private void RoundSetCompleteRPC()
     {
-        base.EndState();
+        _count++;
+        if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+        {
+            FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All, _currentRound);
+        }
+    }
+
+    [PunRPC]
+    private void RoundIntroRPC(int round)
+    {
+        _count = 0;
+        RoundIntroAsync(round).Forget();
+    }
+
+    private async UniTask RoundIntroAsync(int round)
+    {
+        // var round = PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound];
+        await FsmSystem.Curtain.FadeOutAsync();
+
+        await UniTask.Delay(2000);
+        _gameStateView.Show($"Round {round}", Vector2.left * 20f);
+
+        await UniTask.Delay(1500);
+        _gameStateView.Show("Fight!", Vector2.left * 20f);
+
+        FsmSystem.photonView.RPC(nameof(RoundIntroEndRPC), RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    private void RoundIntroEndRPC()
+    {
+        _count++;
+        if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+        {
+            ChangeState(IngameFSMSystem.State.InBattle);
+        }
     }
 }

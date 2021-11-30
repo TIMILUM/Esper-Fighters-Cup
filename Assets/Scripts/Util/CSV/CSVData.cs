@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 
 public class CSVData
@@ -11,7 +8,7 @@ public class CSVData
     {
         NONE, INT, FLOAT, BOOL, STRING
     }
-    
+
     private Dictionary<string, List<object>> _data = new Dictionary<string, List<object>>();
 
     /// <summary>
@@ -51,7 +48,7 @@ public class CSVData
         {
             Type.INT => int.Parse(value),
             Type.FLOAT => float.Parse(value),
-            Type.BOOL => value == "true",
+            Type.BOOL => value == "true" || value == "TRUE",
             Type.STRING => value,
             _ => null
         };
@@ -63,12 +60,12 @@ public class CSVData
         {
             return Type.FLOAT;
         }
-        
-        if (value == "true" || value == "false")
+
+        if (value == "true" || value == "false" || value == "TRUE" || value == "FALSE")
         {
             return Type.BOOL;
         }
-        
+
         return Type.STRING;
     }
 }

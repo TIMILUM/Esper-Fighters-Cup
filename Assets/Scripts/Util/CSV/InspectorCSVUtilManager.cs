@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class InspectorCSVUtilManager : MonoBehaviour
 {
@@ -20,7 +17,7 @@ public class InspectorCSVUtilManager : MonoBehaviour
         {
             return;
         }
-        
+
         var csvResources = Resources.LoadAll<TextAsset>(_csvPath);
         foreach (var csv in csvResources)
         {

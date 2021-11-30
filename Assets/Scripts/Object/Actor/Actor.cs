@@ -5,40 +5,42 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(PhotonTransformView))]
 [RequireComponent(typeof(PhotonRigidbodyView))]
-public class Actor : ObjectBase
+public class Actor : ObjectBase, IPunObservable
 {
     [SerializeField]
     [Tooltip("오브젝트를 직접 넣어주세요!")]
     protected ControllerManager _controllerManager;
-    public ControllerManager ControllerManager => _controllerManager;
-
-    protected BuffController _buffController;
-    public BuffController BuffController => _buffController;
 
     [SerializeField]
-    private float _hp;
-    public virtual float Hp
-    {
-        get => _hp;
-        set => _hp = value;
-    }
+    private int _hp;
 
     [SerializeField, Tooltip("해당 오브젝트의 ID 값입니다.")]
     private int _id;
+
+    [SerializeField]
+    private StudioEventEmitter _audioEmitter;
+
+    public ControllerManager ControllerManager => _controllerManager;
+    public BuffController BuffController { get; protected set; }
+    public int HP { get => _hp; set => _hp = Mathf.Clamp(value, 0, int.MaxValue); }
     public int ID => _id;
-
-    [SerializeField] private StudioEventEmitter _audioEmitter;
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
+    public Rigidbody Rigidbody { get; protected set; }
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Debug.Assert(_controllerManager, "컨트롤러 매니저가 지정되어 있지 않습니다.");
-        _controllerManager.SetActor(this);
+        ControllerManager.SetActor(this);
+        Rigidbody = GetComponent<Rigidbody>();
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
-        _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        base.Start();
+
+        BuffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
     private void OnCollisionEnter(Collision other)
@@ -53,14 +55,14 @@ public class Actor : ObjectBase
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff)
     {
-        if (_buffController == null)
+        if (BuffController == null)
         {
             return;
         }
 
         foreach (var buffStruct in appendBuff)
         {
-            _buffController.GenerateBuff(buffStruct);
+            BuffController.GenerateBuff(buffStruct);
         }
     }
 
@@ -70,11 +72,10 @@ public class Actor : ObjectBase
     /// <param name="other">충돌이 일어난 상대 오브젝트(게임 오브젝트면 무조건 다 받아옵니다.)</param>
     protected virtual void OnPlayerHitEnter(GameObject other)
     {
-        _controllerManager.OnPlayerHitEnter(other);
+        ControllerManager.OnPlayerHitEnter(other);
     }
 
-    /* HP 동기화용
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
@@ -82,8 +83,7 @@ public class Actor : ObjectBase
         }
         else
         {
-            _hp = (float)stream.ReceiveNext();
+            _hp = (int)stream.ReceiveNext();
         }
     }
-    */
 }

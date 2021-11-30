@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class KnockBackObject : BuffObject
@@ -33,8 +32,10 @@ public class KnockBackObject : BuffObject
         set => _speed = value;
     }
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "";
         _buffStruct.Type = Type.KnockBack;
 
@@ -42,7 +43,7 @@ public class KnockBackObject : BuffObject
 
         if (!(_character is null))
         {
-            _character.CharacterAnimatorSync.SetTrigger("Knockback");
+            _character.Animator.SetTrigger("Knockback");
         }
     }
 
@@ -84,7 +85,6 @@ public class KnockBackObject : BuffObject
 
     protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
     {
-        throw new NotImplementedException();
     }
 
     public override void OnPlayerHitEnter(GameObject other)
@@ -94,8 +94,6 @@ public class KnockBackObject : BuffObject
             return;
         }
 
-
-
         if (Author.ControllerManager.TryGetController(
             ControllerManager.Type.BuffController, out BuffController myController))
         {
@@ -103,8 +101,6 @@ public class KnockBackObject : BuffObject
             GenerateAfterBuff(myController);
             myController.ReleaseBuff(this);
         }
-
-
 
         if (otherActor is null)
         {
