@@ -3,7 +3,7 @@ using EsperFightersCup.Net;
 using Photon.Pun;
 using UnityEngine;
 
-public abstract class BuffObject : ControllerObject
+public abstract class BuffObject : ControllerObject<BuffController>
 {
     /// <summary>
     /// 버프 오브젝트의 모든 타입이 작성된 enum입니다.
@@ -58,13 +58,16 @@ public abstract class BuffObject : ControllerObject
         set => _buffStruct.Duration = value;
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         StartTime = PhotonNetwork.ServerTimestamp;
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
+        base.Update();
+
         /**
          * @todo Update 용 abstract 메소드 만들기
          * @body abstract로 Update 메소드를 만들어서 자식 클래스에서는 아래 조건문 생략
@@ -86,12 +89,12 @@ public abstract class BuffObject : ControllerObject
             // BUG: 특정 상황에서 연속으로 메소드를 실행함
             // 아마 ReleaseBuff를 보내고 나서 다시 이벤트를 받기까지 시간 간격이 있는데,
             // 그 동안 이 오브젝트가 해제되지 못해서 생기는 버그인듯?
-            ControllerCast<BuffController>().ReleaseBuff(this);
+            Controller.ReleaseBuff(this);
         }
 
         if (_buffStruct.IsOnlyOnce)
         {
-            ControllerCast<BuffController>().ReleaseBuff(this);
+            Controller.ReleaseBuff(this);
         }
     }
 
@@ -125,10 +128,9 @@ public abstract class BuffObject : ControllerObject
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
 
-        public GameBuffGenerateEvent ToBuffEvent(int target, string id)
+        public BuffGenerateArguments ToBuffArguments(string id)
         {
-            return new GameBuffGenerateEvent(
-                target,
+            return new BuffGenerateArguments(
                 (int)_type,
                 id,
                 _duration,
@@ -139,17 +141,17 @@ public abstract class BuffObject : ControllerObject
                 IsOnlyOnce);
         }
 
-        public static explicit operator BuffStruct(in GameBuffGenerateEvent packet)
+        public static explicit operator BuffStruct(in BuffGenerateArguments args)
         {
             return new BuffStruct
             {
-                Type = (Type)packet.Type,
-                Duration = packet.Duration,
-                ValueFloat = packet.ValueFloat,
-                ValueVector3 = packet.ValueVector3,
-                AllowDuplicates = packet.AllowDuplicates,
-                Damage = packet.Damage,
-                IsOnlyOnce = packet.IsOnlyOnce
+                Type = (Type)args.Type,
+                Duration = args.Duration,
+                ValueFloat = args.ValueFloat,
+                ValueVector3 = args.ValueVector3,
+                AllowDuplicates = args.AllowDuplicates,
+                Damage = args.Damage,
+                IsOnlyOnce = args.IsOnlyOnce
             };
         }
     }

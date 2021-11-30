@@ -36,7 +36,6 @@ public class ShockWaveSkillObject : SkillObject
     private Vector3 _direction = Vector3.right;
     private Vector3 _startPos = Vector3.zero;
 
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -63,12 +62,17 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         _buffOnCollision[0].ValueVector3[0] = _direction;
-        SetState(State.EndDelay);
+        SyncState(State.EndDelay);
         base.SetHit(to);
     }
 
     protected override IEnumerator OnReadyToUse()
     {
+        if (!Author.photonView.IsMine)
+        {
+            yield break;
+        }
+
         var isCanceled = false;
         Vector3 endPos;
 
@@ -106,10 +110,6 @@ public class ShockWaveSkillObject : SkillObject
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
-                //충격파 애니메이션
-                _player.CharacterAnimatorSync.SetTrigger("ShockWaveSkill");
-                ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
-
                 return true;
             }
 
@@ -118,7 +118,7 @@ public class ShockWaveSkillObject : SkillObject
 
         if (isCanceled)
         {
-            SetState(State.Canceled);
+            SyncState(State.Canceled);
             yield break;
         }
 
@@ -136,12 +136,22 @@ public class ShockWaveSkillObject : SkillObject
     protected override IEnumerator OnFrontDelay()
     {
         ApplyMovementSpeed(State.FrontDelay);
+        //충격파 애니메이션
+        AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
+        ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
+
         yield return new WaitForSeconds(FrontDelayMilliseconds / 1000.0f);
         SetNextState();
     }
 
     protected override IEnumerator OnUse()
     {
+        if (!Author.photonView.IsMine)
+        {
+            ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
+            yield break;
+        }
+
         ApplyMovementSpeed(State.Use);
         _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
         _colliderParentTransform.gameObject.SetActive(true);
@@ -163,7 +173,7 @@ public class ShockWaveSkillObject : SkillObject
     protected override IEnumerator OnCanceled()
     {
         ApplyMovementSpeed(State.Canceled);
-        SetState(State.Release);
+        SyncState(State.Release);
         yield return null;
     }
 
@@ -235,7 +245,7 @@ public class ShockWaveSkillObject : SkillObject
         }
 
         var targetID = target.ID;
-        var isRaised = target.BuffController.GetBuff(BuffObject.Type.Raise) != null;
+        var isRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
         var idList = s_shockWaveSkillData._idList;
         var floatCheckList = s_shockWaveSkillData._floatCheckList;
         var moveSpeedList = s_shockWaveSkillData._moveSpeedList;

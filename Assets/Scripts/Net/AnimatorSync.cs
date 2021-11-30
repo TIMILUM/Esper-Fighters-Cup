@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
 namespace EsperFightersCup.Net
 {
-    public class AnimatorSync : PunEventCallbacks, IPunObservable
+    [RequireComponent(typeof(PhotonView))]
+    public class AnimatorSync : MonoBehaviourPunCallbacks, IPunObservable
     {
         public enum ParameterType
         {
@@ -69,14 +69,20 @@ namespace EsperFightersCup.Net
             }
         }
 
+        [Obsolete("트리거는 로컬 애니메이터에서 설정해주세요")]
         public void SetTrigger(string name)
         {
             _animator.SetTrigger(name);
             if (_syncTriggers.Contains(name))
             {
-                var packet = new GameAnimatorTriggerSyncEvent(_actor.photonView.ViewID, name);
-                EventSender.Broadcast(in packet, SendOptions.SendUnreliable, EventSendOptions.SendOthers);
+                photonView.RPC(nameof(AnimTriggerRPC), RpcTarget.Others, name);
             }
+        }
+
+        [PunRPC]
+        private void AnimTriggerRPC(string name)
+        {
+            _animator.SetTrigger(name);
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -127,20 +133,6 @@ namespace EsperFightersCup.Net
                             break;
                     }
                 }
-            }
-        }
-
-        protected override void OnGameEventReceived(GameEventArguments args)
-        {
-            if (args.Code != EventCode.AnimatorTriggerSync || !_animator || !_actor)
-            {
-                return;
-            }
-
-            var data = (GameAnimatorTriggerSyncEvent)args.EventData;
-            if (data.ActorViewID == _actor.photonView.ViewID)
-            {
-                _animator.SetTrigger(data.Name);
             }
         }
 

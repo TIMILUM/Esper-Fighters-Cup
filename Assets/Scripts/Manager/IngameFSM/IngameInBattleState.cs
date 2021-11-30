@@ -90,7 +90,7 @@ namespace EsperFightersCup
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
 
-                // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
+                // ?쇱슫???곗듅?먮뒗 WinPoint??1???뷀븯怨?RoundEnd濡?GameState 蹂寃?
                 var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
                 Debug.Log($"Add WinPoint to LocalPlayer - {winPoint}");

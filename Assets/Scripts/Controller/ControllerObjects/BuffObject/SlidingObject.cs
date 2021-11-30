@@ -23,8 +23,10 @@ namespace EsperFightersCup
 
 
 
-        private void Reset()
+        protected override void Reset()
         {
+            base.Reset();
+
             _name = "";
             _buffStruct.Type = Type.Sliding;
 
@@ -32,7 +34,7 @@ namespace EsperFightersCup
 
             if (!(_character is null))
             {
-                _character.CharacterAnimatorSync.SetTrigger("Sliding");
+                _character.Animator.SetTrigger("Sliding");
             }
         }
 
@@ -40,10 +42,11 @@ namespace EsperFightersCup
         public override void OnPlayerHitEnter(GameObject other)
         {
             // 부딪히면 버프 삭제
-            if (Author.ControllerManager.TryGetController(
-    ControllerManager.Type.BuffController, out BuffController myController))
+            if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
             {
+
                 myController.ReleaseBuff(this);
+
             }
 
         }
@@ -66,7 +69,6 @@ namespace EsperFightersCup
             base.SetBuffStruct(buffStruct);
             _startPosition = buffStruct.ValueVector3[0];
             _endPosition = buffStruct.ValueVector3[1];
-
             _moveTime = buffStruct.ValueFloat[0];
         }
         protected override void Update()
@@ -80,15 +82,14 @@ namespace EsperFightersCup
             var realTime = _currentTime / _moveTime;
             if (realTime > 1.0f)
             {
-                if (Author.ControllerManager.TryGetController(
-ControllerManager.Type.BuffController, out BuffController myController))
+                if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
                 {
                     myController.ReleaseBuff(this);
                 }
                 return;
             }
 
-            _rigidbody.position = Vector3.Lerp(_startPosition, _endPosition, realTime);
+            Author.transform.position = Vector3.Lerp(_startPosition, _endPosition, realTime);
 
 
         }

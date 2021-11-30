@@ -5,8 +5,10 @@ public class DecreaseHpObject : BuffObject
     private ACharacter _character = null;
     private float _damage = 0;
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         _name = "";
         _buffStruct.Type = Type.DecreaseHp;
     }
@@ -28,7 +30,7 @@ public class DecreaseHpObject : BuffObject
         if (_character is null)
         {
             Debug.Log("HP does not found!");
-            ControllerCast<BuffController>().ReleaseBuff(this);
+            Controller.ReleaseBuff(this);
             return;
         }
 
