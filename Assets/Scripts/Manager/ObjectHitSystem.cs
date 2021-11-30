@@ -4,7 +4,10 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
+    public float Strength => _strength;
+    
     private bool _isDestroyable = true;
+    public bool IsDestroyable => _isDestroyable;
 
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
@@ -54,17 +57,7 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
 
         if (_isDestroy)
         {
-            var pv = gameObject.GetComponentInChildren<PhotonView>();
-            if (pv != null)
-            {
-                // PhotonNetwork.OpCleanRpcBuffer(photonView);
-                PhotonNetwork.Destroy(photonView);
-                PhotonNetwork.SendAllOutgoingCommands();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            DestroyObject();
         }
     }
 
@@ -98,6 +91,31 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
         {
             _isDestroy = _isDestroyable;
             otherHitSystem._isDestroy = otherHitSystem._isDestroyable;
+        }
+
+        if (otherHitSystem._isDestroy)
+        {
+            otherHitSystem.DestroyObject();
+        }
+
+        if (_isDestroy)
+        {
+            DestroyObject();
+        }
+    }
+
+    private void DestroyObject()
+    {
+        var pv = gameObject.GetComponentInChildren<PhotonView>();
+        if (pv != null)
+        {
+            // PhotonNetwork.OpCleanRpcBuffer(photonView);
+            PhotonNetwork.Destroy(photonView);
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }
