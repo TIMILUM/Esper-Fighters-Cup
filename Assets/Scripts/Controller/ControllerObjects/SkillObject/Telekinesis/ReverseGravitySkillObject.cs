@@ -7,31 +7,44 @@ using UnityEngine;
 public class ReverseGravitySkillObject : SkillObject
 {
     [SerializeField] private ColliderChecker _collider;
-    [SerializeField] private LineRenderer _lineRenderer;
+
+    // milliseconds
+    private float _raiseDelay;
+    // milliseconds
+    private float _raiseTime;
 
     private Vector2 _uiSize;
     private SkillUI _rangeUI;
     private SkillUI _castUI;
-
-    //private GameObject _fragmentObj;
-    //private GameObject _fragmentUI;
-
-    private Vector3 _endMousePos;
+    private GameObject _fragment;
 
     public override void SetHit(ObjectBase to)
     {
         /*
-        if (_fragmentObj != null && _fragmentObj.GetComponent<ObjectBase>() == to)
+        if (_fragment != null && _fragment.GetComponent<ObjectBase>() == to)
         {
             return;
         }
         */
+        print("SetHit");
+        print($"Duration: {_raiseTime}");
+        var newBuff = new BuffObject.BuffStruct
+        {
+            Type = BuffObject.Type.Raise,
+            Duration = _raiseTime,
+            ValueFloat = new[] { 5.0f }
+        };
+
+        _buffOnCollision.Clear();
+        _buffOnCollision.Add(newBuff);
+
         base.SetHit(to);
     }
 
     protected override void OnInitializeSkill()
     {
         base.OnInitializeSkill();
+        LoadSkillData();
 
         _uiSize = Size * 0.1f;
 
@@ -43,7 +56,9 @@ public class ReverseGravitySkillObject : SkillObject
         GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
 
+        _collider.gameObject.SetActive(false);
         _collider.transform.SetParent(null);
+        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x * 0.5f, 5, Size.y * 0.5f));
         _collider.OnCollision += SetHit;
     }
 
@@ -78,18 +93,7 @@ public class ReverseGravitySkillObject : SkillObject
             }
             else if (Input.GetKeyUp(KeyCode.LeftShift))
             {
-                if (distance <= Range)
-                {
-                    /*
-                    _fragmentUI = InGameSkillManager.Instance.CreateSkillUI("ThrowUI", _fragmentCasting.transform.position);
-                    _fragmentCasting.transform.SetParent(null);
-                    _fragmentUI.transform.localScale = _fragmentCasting.transform.localScale;
-                    _fragmentCasting.transform.SetParent(transform);
-                    _fragmentUI.transform.SetParent(GameObject.Find("UiObject").transform);
-                    */
-                    _endMousePos = mousePos;
-                }
-                else
+                if (distance > Range)
                 {
                     isCanceled = true;
                 }
@@ -115,27 +119,26 @@ public class ReverseGravitySkillObject : SkillObject
 
         //하체는 그냥 실행
         AuthorPlayer.Animator.SetTrigger("ReverseGravityA");
+
+        ParticleManager.Instance.PullParticle("ReverseGravityFiled", _castUI.transform.position, Quaternion.identity);
+
+        var position = new Vector2(_castUI.transform.position.x, _castUI.transform.position.z);
+        var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
+        GameUIManager.Instance.Play("ReverseGravity_Range", position, 0f, _uiSize, duration);
     }
 
     protected override async UniTask OnUseAsync()
     {
-        // _fragmentObj = InGameSkillManager.Instance.CreateSkillObject("Stone", _endMousePos);
-        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
-
-        _collider.OnCollision += SetHit;
         await UniTask.Yield();
-        _collider.OnCollision -= SetHit;
     }
 
     protected override void BeforeEndDelay()
     {
-        GameObjectUtil.ActiveGameObject(_collider.gameObject);
-        GameObjectUtil.TranslateGameObject(_collider.gameObject, _castUI.transform.position);
+        InstantiateStoneAsync().Forget();
     }
 
     protected override void OnRelease()
     {
-        // InGameSkillManager.Instance.DestroySkillObj(_fragmentUI);
         ReleaseObjects();
     }
 
@@ -144,10 +147,55 @@ public class ReverseGravitySkillObject : SkillObject
         ReleaseObjects();
     }
 
+    private async UniTaskVoid InstantiateStoneAsync()
+    {
+        var fragment = InGameSkillManager.Instance.CreateSkillObject("Stone", _castUI.transform.position);
+        // _lineRendererObj.SetActive(true);
+        // await UniTask.Delay((int)_raiseDelay);
+
+        await UniTask.DelayFrame(3);
+
+        if (fragment.TryGetComponent<AStaticObject>(out var staticObject))
+        {
+            staticObject.BuffController.GenerateBuff(new BuffObject.BuffStruct
+            {
+                Type = BuffObject.Type.Raise,
+                Duration = _raiseTime,
+                ValueFloat = new[] { 8.0f }
+            });
+        }
+
+        var stoneGathering = fragment.transform.Find("stone_gathering");
+        while (stoneGathering.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("CreateRock"))
+        {
+            //_lineRenderer.SetPosition(0, _fragmentUI.transform.position);
+            //_lineRenderer.SetPosition(1, AuthorPlayer.transform.position);
+            await UniTask.Yield();
+        }
+
+        print("animation end");
+
+        // 혹시 해당 비동기메소드가 여러번 실행될 경우 콜라이더 체크가 중간에 취소되는 일 없게 lock 적용
+        Monitor.Enter(_collider);
+        // _fragment = fragment;
+        GameObjectUtil.TranslateGameObject(_collider.gameObject, _castUI.transform.position);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
+        await UniTask.DelayFrame(3);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
+        Monitor.Exit(_collider);
+    }
+
     private void ReleaseObjects()
     {
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
         GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+    }
+
+    private void LoadSkillData()
+    {
+        _raiseDelay = GetCSVData<float>("Skill_Effect_Data_1");
+        _raiseTime = GetCSVData<float>("Skill_Effect_Data_2");
     }
 
     private Vector3 GetMousePosition()

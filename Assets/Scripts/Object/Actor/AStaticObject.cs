@@ -18,6 +18,11 @@ public class AStaticObject : Actor
     {
         base.Update();
 
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
             if (transform.position.y > _boxcollider.bounds.extents.y + 0.03f)
@@ -32,16 +37,16 @@ public class AStaticObject : Actor
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.KnockBack) || BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (GetComponent<Rigidbody>().isKinematic)
+            if (Rigidbody.isKinematic)
             {
-                GetComponent<Rigidbody>().isKinematic = false;
+                Rigidbody.isKinematic = false;
             }
             return;
         }
 
-        if (!GetComponent<Rigidbody>().isKinematic)
+        if (!Rigidbody.isKinematic)
         {
-            GetComponent<Rigidbody>().isKinematic = true;
+            Rigidbody.isKinematic = true;
         }
     }
 }

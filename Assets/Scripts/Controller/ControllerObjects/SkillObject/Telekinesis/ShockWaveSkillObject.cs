@@ -55,6 +55,7 @@ public class ShockWaveSkillObject : SkillObject
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
 
         _collider.transform.SetParent(null);
+        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 5, Size.y));
         _collider.OnCollision += SetHit;
     }
 
@@ -119,7 +120,7 @@ public class ShockWaveSkillObject : SkillObject
         ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
         _collider.transform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
-        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 5, Size.y));
+
         GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
         await UniTask.DelayFrame(3);
         GameObjectUtil.ActiveGameObject(_collider.gameObject, false);

@@ -97,7 +97,8 @@ public abstract class BuffObject : ControllerObject<BuffController>
             yield break;
         }
 
-        yield return new WaitForSeconds(Info.Duration / 1000f);
+        print($"buff duration: {Info.Duration * 0.001f}");
+        yield return new WaitForSeconds(Info.Duration * 0.001f);
         Controller.ReleaseBuff(this);
     }
 

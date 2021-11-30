@@ -1,10 +1,9 @@
-using System.Collections;
-using UnityEngine;
+using DG.Tweening;
 
 public class RaiseObject : BuffObject
 {
     private float _limitPosY;
-    private Coroutine _raising;
+    private Sequence _raising;
 
     public override Type BuffType => Type.Raise;
 
@@ -19,8 +18,22 @@ public class RaiseObject : BuffObject
         if (Author.photonView.IsMine)
         {
             // useGravity 동기화됨
-            Author.Rigidbody.useGravity = false;
-            _raising = StartCoroutine(Raise());
+            if (Author is APlayer)
+            {
+                Author.Rigidbody.useGravity = false;
+            }
+
+            _raising = DOTween.Sequence()
+                .Append(Author.Rigidbody.DOMoveY(_limitPosY, Info.Duration * 0.001f))
+                .SetLink(gameObject, LinkBehaviour.KillOnDisable)
+                .SetEase(Ease.OutCubic)
+                .OnUpdate(() =>
+                {
+                    if (Controller.ActiveBuffs.Exists(Type.KnockBack))
+                    {
+                        Controller.ReleaseBuff(this);
+                    }
+                });
         }
     }
 
@@ -28,7 +41,7 @@ public class RaiseObject : BuffObject
     {
         if (Author.photonView.IsMine)
         {
-            StopCoroutine(_raising);
+            _raising.Kill();
             if (Author is APlayer)
             {
                 Author.Rigidbody.useGravity = true;
@@ -44,19 +57,22 @@ public class RaiseObject : BuffObject
         }
     }
 
+    /*
     private IEnumerator Raise()
     {
         var startTime = Time.time;
         var waitForFixedUpdate = new WaitForFixedUpdate();
         var startPos = Author.Rigidbody.position;
         var endPos = new Vector3(startPos.x, _limitPosY, startPos.z);
+        var duration = Info.Duration * 0.001f;
 
         while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
         {
             var currentTime = Time.time - startTime;
-            Author.Rigidbody.position = Vector3.Lerp(startPos, endPos, currentTime / Info.Duration);
+            Author.Rigidbody.position = Vector3.Lerp(startPos, endPos, currentTime / duration);
             yield return waitForFixedUpdate;
         }
         Controller.ReleaseBuff(this);
     }
+    */
 }

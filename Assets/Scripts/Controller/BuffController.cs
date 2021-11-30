@@ -100,11 +100,10 @@ public sealed class BuffController : ControllerBase
         buff.name = args.BuffId;
         buff.BuffId = args.BuffId;
         buff.SetBuffStruct((BuffObject.BuffStruct)args);
-        buff.Register(this, null);
 
         _activeBuffs.Add(buff);
-
-        Debug.Log($"Buff generated [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        buff.Register(this, null);
     }
 
     [PunRPC]
@@ -114,7 +113,7 @@ public sealed class BuffController : ControllerBase
         {
             foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
-                Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+                Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
                 targetBuff.Release();
             }
             _activeBuffs.Clear((BuffObject.Type)buffType);
@@ -138,7 +137,7 @@ public sealed class BuffController : ControllerBase
                 return;
             }
 
-            Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+            Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
             targetBuff.Release();
         }
     }
