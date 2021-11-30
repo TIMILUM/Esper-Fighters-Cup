@@ -104,7 +104,7 @@ public class ParticleManager : PunEventCallbacks
     }
 
     /// <summary>
-    /// 파티클 실행
+    /// 모든 클라이언트에서 파티클을 실행합니다.
     /// </summary>
     /// <param name="particleName"> 파티클 이름</param>
     /// <param name="pos"> 파티클 시작 위치</param>
@@ -114,10 +114,40 @@ public class ParticleManager : PunEventCallbacks
         EventSender.Broadcast(new GameParticlePlayArguments(particleName, pos, angle.eulerAngles), SendOptions.SendReliable);
     }
 
+    /// <summary>
+    /// 로컬 클라이언트에서 파티클을 실행합니다.
+    /// </summary>
+    /// <param name="particleName"> 파티클 이름</param>
+    /// <param name="pos"> 파티클 시작 위치</param>
+    /// <param name="angle">파티클 앵글 </param>
+    public void PullParticleToLocal(string particleName, Vector3 pos, Quaternion angle)
+    {
+        if (!_particleList.TryGetValue(particleName, out var particleQueue))
+        {
+            Debug.LogError("동일한 파티클 이름이 없습니다.");
+            return;
+        }
 
+        if (particleQueue.Count == 0)
+        {
+            Debug.Log("파티클이 없습니다.");
+            return;
+        }
 
+        var clon = particleQueue.Dequeue();
+        clon.Object.SetActive(true);
 
-    public void PullParticle(string particleName, Transform Trans)
+        clon.Object.transform.SetPositionAndRotation(pos, angle);
+        clon.StartParticle(particleName);
+        _activeParticle.Add(clon);
+    }
+
+    /// <summary>
+    /// 로컬 클라이언트에서 특정 트랜스폼의 자식으로 파티클을 실행합니다.
+    /// </summary>
+    /// <param name="particleName">파티클 이름</param>
+    /// <param name="trans">부모 트랜스폼</param>
+    public void PullParticleToLocal(string particleName, Transform trans)
     {
         // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
 
@@ -135,13 +165,11 @@ public class ParticleManager : PunEventCallbacks
 
         var clon = particleQueue.Dequeue();
         clon.Object.SetActive(true);
-        clon.Object.transform.SetParent(Trans);
-        clon.Object.transform.SetPositionAndRotation(Trans.position, Trans.rotation);
+        clon.Object.transform.SetParent(trans);
+        clon.Object.transform.SetPositionAndRotation(trans.position, trans.rotation);
         clon.StartParticle(particleName);
         _activeParticle.Add(clon);
     }
-
-
 
     /// <summary>
     /// 큐에 넣는 작업

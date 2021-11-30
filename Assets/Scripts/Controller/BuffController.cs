@@ -81,7 +81,7 @@ public sealed class BuffController : ControllerBase
     }
 
     [PunRPC]
-    public void GenerateBuffRPC(BuffGenerateArguments args)
+    private void GenerateBuffRPC(BuffGenerateArguments args)
     {
         var buffType = (BuffObject.Type)args.Type;
         if (!_buffTable.ContainsKey(buffType))
@@ -90,7 +90,7 @@ public sealed class BuffController : ControllerBase
         }
 
         var buffs = _activeBuffs[buffType];
-        if (!args.AllowDuplicates && buffs.Count > 0)
+        if (photonView.IsMine && !args.AllowDuplicates && buffs.Count > 0)
         {
             ReleaseBuffsByType(buffType);
         }
@@ -104,7 +104,7 @@ public sealed class BuffController : ControllerBase
 
         _activeBuffs.Add(buff);
 
-        Debug.Log($"Buff generated [{buff.BuffType}] [{buff.BuffId}]");
+        Debug.Log($"Buff generated [{buff.BuffType}] [{buff.BuffId}]", gameObject);
     }
 
     [PunRPC]
@@ -114,7 +114,7 @@ public sealed class BuffController : ControllerBase
         {
             foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
-                Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
+                Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
                 targetBuff.Release();
             }
             _activeBuffs.Clear((BuffObject.Type)buffType);
@@ -138,7 +138,7 @@ public sealed class BuffController : ControllerBase
                 return;
             }
 
-            Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
+            Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
             targetBuff.Release();
         }
     }
