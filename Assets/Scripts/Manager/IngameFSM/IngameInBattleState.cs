@@ -61,7 +61,7 @@ namespace EsperFightersCup
             {
                 Debug.Log($"LocalPlayer is dead!");
                 var actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-                var winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                int winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
                 PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameRoundWinner, winner);
             }
 
@@ -89,8 +89,7 @@ namespace EsperFightersCup
             Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-
-                // ?쇱슫???곗듅?먮뒗 WinPoint??1???뷀븯怨?RoundEnd濡?GameState 蹂寃?
+                // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
                 var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
                 Debug.Log($"Add WinPoint to LocalPlayer - {winPoint}");

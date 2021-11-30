@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using EsperFightersCup.Net;
+using ExitGames.Client.Photon;
 using UnityEngine;
 
-public class ParticleManager : MonoBehaviour
+public class ParticleManager : PunEventCallbacks
 {
     /// <summary>
     /// 각각의 파티클 종류 정보
@@ -102,15 +104,24 @@ public class ParticleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 파티클 실행
+    /// 모든 클라이언트에서 파티클을 실행합니다.
     /// </summary>
     /// <param name="particleName"> 파티클 이름</param>
     /// <param name="pos"> 파티클 시작 위치</param>
     /// <param name="angle">파티클 앵글 </param>
     public void PullParticle(string particleName, Vector3 pos, Quaternion angle)
     {
-        // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
+        EventSender.Broadcast(new GameParticlePlayArguments(particleName, pos, angle.eulerAngles), SendOptions.SendReliable);
+    }
 
+    /// <summary>
+    /// 로컬 클라이언트에서 파티클을 실행합니다.
+    /// </summary>
+    /// <param name="particleName"> 파티클 이름</param>
+    /// <param name="pos"> 파티클 시작 위치</param>
+    /// <param name="angle">파티클 앵글 </param>
+    public void PullParticleToLocal(string particleName, Vector3 pos, Quaternion angle)
+    {
         if (!_particleList.TryGetValue(particleName, out var particleQueue))
         {
             Debug.LogError("동일한 파티클 이름이 없습니다.");
@@ -131,10 +142,12 @@ public class ParticleManager : MonoBehaviour
         _activeParticle.Add(clon);
     }
 
-
-
-
-    public void PullParticle(string particleName, Transform Trans)
+    /// <summary>
+    /// 로컬 클라이언트에서 특정 트랜스폼의 자식으로 파티클을 실행합니다.
+    /// </summary>
+    /// <param name="particleName">파티클 이름</param>
+    /// <param name="trans">부모 트랜스폼</param>
+    public void PullParticleToLocal(string particleName, Transform trans)
     {
         // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
 
@@ -152,13 +165,11 @@ public class ParticleManager : MonoBehaviour
 
         var clon = particleQueue.Dequeue();
         clon.Object.SetActive(true);
-        clon.Object.transform.SetParent(Trans);
-        clon.Object.transform.SetPositionAndRotation(Trans.position, Trans.rotation);
+        clon.Object.transform.SetParent(trans);
+        clon.Object.transform.SetPositionAndRotation(trans.position, trans.rotation);
         clon.StartParticle(particleName);
         _activeParticle.Add(clon);
     }
-
-
 
     /// <summary>
     /// 큐에 넣는 작업
@@ -193,7 +204,6 @@ public class ParticleManager : MonoBehaviour
         PutParticle();
     }
 
-    /*
     protected override void OnGameEventReceived(GameEventArguments args)
     {
         if (args.Code != EventCode.PlayParticle)
@@ -201,7 +211,7 @@ public class ParticleManager : MonoBehaviour
             return;
         }
 
-        var data = (GameParticlePlayEvent)args.EventData;
+        var data = (GameParticlePlayArguments)args.EventData;
 
         if (!_particleList.TryGetValue(data.Name, out var particleQueue))
         {
@@ -222,5 +232,4 @@ public class ParticleManager : MonoBehaviour
         clon.StartParticle(data.Name);
         _activeParticle.Add(clon);
     }
-    */
 }

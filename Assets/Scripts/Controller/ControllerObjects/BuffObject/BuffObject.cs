@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using EsperFightersCup.Net;
 using Photon.Pun;
 using UnityEngine;
@@ -23,11 +24,7 @@ public abstract class BuffObject : ControllerObject<BuffController>
         MoveSpeed
     }
 
-    [SerializeField]
-    protected string _name = "None";
-
-    [SerializeField]
-    protected BuffStruct _buffStruct;
+    private Coroutine _elapsedTimeout;
 
     /// <summary>
     /// 해당 버프의 아이디입니다.
@@ -37,7 +34,8 @@ public abstract class BuffObject : ControllerObject<BuffController>
     /// <summary>
     /// 버프 생성 후 지금까지 진행된 밀리초입니다. (밀리초 단위)
     /// </summary>
-    public double ElapsedMilliseconds { get; private set; }
+    [Obsolete("제대로 작동하지 않습니다.", true)]
+    public int ElapsedTime { get; private set; }
 
     /// <summary>
     /// 해당 버프가 생성된 시간입니다.
@@ -47,64 +45,76 @@ public abstract class BuffObject : ControllerObject<BuffController>
     /// <summary>
     /// 해당 버프의 타입입니다.
     /// </summary>
-    public Type BuffType => _buffStruct.Type;
+    public abstract Type BuffType { get; }
 
-    /// <summary>
-    /// 해당 버프가 지속되는 시간입니다. (초 단위)
-    /// </summary>
-    public float Duration
-    {
-        get => _buffStruct.Duration;
-        set => _buffStruct.Duration = value;
-    }
+    public BuffStruct Info { get; private set; }
 
-    protected override void Start()
+    protected sealed override void OnRegistered(Action continueFunc)
     {
-        base.Start();
+        // TODO: 나중에 continueFunc에서 ActiveBuff 제거하는 코드 넣어야됨
         StartTime = PhotonNetwork.ServerTimestamp;
+        gameObject.SetActive(true);
+
+        if (Author.photonView.IsMine)
+        {
+            _elapsedTimeout = StartCoroutine(CheckBuffRelease());
+        }
+        OnBuffGenerated();
     }
 
-    protected override void Update()
+    protected sealed override void OnReleased()
     {
-        base.Update();
-
-        /**
-         * @todo Update 용 abstract 메소드 만들기
-         * @body abstract로 Update 메소드를 만들어서 자식 클래스에서는 아래 조건문 생략
-         */
-        if (!IsRegistered || !Author.photonView.IsMine)
+        if (Author.photonView.IsMine && _elapsedTimeout != null)
         {
-            return;
+            StopCoroutine(_elapsedTimeout);
+            _elapsedTimeout = null;
         }
-
-        ElapsedMilliseconds = PhotonNetwork.ServerTimestamp - StartTime;
-
-        if (_buffStruct.Duration <= 0)
-        {
-            return;
-        }
-
-        if (ElapsedMilliseconds > _buffStruct.Duration * 1000)
-        {
-            // BUG: 특정 상황에서 연속으로 메소드를 실행함
-            // 아마 ReleaseBuff를 보내고 나서 다시 이벤트를 받기까지 시간 간격이 있는데,
-            // 그 동안 이 오브젝트가 해제되지 못해서 생기는 버그인듯?
-            Controller.ReleaseBuff(this);
-        }
-
-        if (_buffStruct.IsOnlyOnce)
-        {
-            Controller.ReleaseBuff(this);
-        }
+        OnBuffReleased();
+        Destroy(gameObject);
     }
 
     /// <summary>
     /// BuffStruct를 통해 해당 버프의 세부 정보를 설정해주는 함수입니다.
     /// </summary>
-    /// <param name="buffStruct">버프 관련 데이터를 담는 임시 구조체입니다.</param>
-    public virtual void SetBuffStruct(BuffStruct buffStruct)
+    /// <param name="info">버프 관련 데이터를 담는 임시 구조체입니다.</param>
+    public void SetBuffStruct(BuffStruct info)
     {
-        _buffStruct = buffStruct;
+        Info = info;
+    }
+
+    private IEnumerator CheckBuffRelease()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (Info.IsOnlyOnce)
+        {
+            Controller.ReleaseBuff(this);
+            yield break;
+        }
+
+        if (Info.Duration <= 0f)
+        {
+            yield break;
+        }
+
+        yield return new WaitForSeconds(Info.Duration / 1000f);
+        Controller.ReleaseBuff(this);
+    }
+
+    /// <summary>
+    /// 버프가 생성될 때 호출됩니다.<para/>
+    /// 버프컨트롤러의 주인이 본인이 아니더라도 호출됩니다.
+    /// </summary>
+    public virtual void OnBuffGenerated()
+    {
+    }
+
+    /// <summary>
+    /// 버프가 해제될 때 호출됩니다.<para/>
+    /// 버프컨트롤러의 주인이 본인이 아니더라도 호출됩니다.
+    /// </summary>
+    public virtual void OnBuffReleased()
+    {
     }
 
     [Serializable]
@@ -117,7 +127,6 @@ public abstract class BuffObject : ControllerObject<BuffController>
         [SerializeField] private bool _allowDuplicates;
         [SerializeField] private float _damage;
         [SerializeField] private bool _isOnlyOnce;
-
 
         public Type Type { get => _type; set => _type = value; }
         public float Duration { get => _duration; set => _duration = value; }

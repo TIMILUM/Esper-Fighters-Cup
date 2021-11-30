@@ -4,52 +4,30 @@ namespace EsperFightersCup
 {
     public class GrabObject : BuffObject
     {
-        private ACharacter _character;
         private Collider[] _colliders;
 
-        protected override void Reset()
-        {
-            base.Reset();
+        public override Type BuffType => Type.Grab;
 
-            _name = "";
-            _buffStruct.Type = Type.Grab;
-            _character = Author as ACharacter;
-            if (!(_character is null))
-            {
-                _character.Animator.SetTrigger("Knockback");
-            }
-        }
-        protected override void Start()
+        public override void OnBuffGenerated()
         {
-            base.Start();
-
             _colliders = Author.GetComponentsInChildren<Collider>();
             foreach (var collider in _colliders)
             {
                 collider.isTrigger = true;
             }
 
+            if (Author is APlayer player)
+            {
+                player.Animator.SetTrigger("Knockback");
+            }
         }
-        protected override void OnDestroy()
+
+        public override void OnBuffReleased()
         {
-            base.OnDestroy();
             foreach (var collider in _colliders)
             {
                 collider.isTrigger = false;
             }
         }
-
-
-        public override void OnPlayerHitEnter(GameObject other)
-        {
-
-        }
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-        {
-
-        }
-
-
-
     }
 }
