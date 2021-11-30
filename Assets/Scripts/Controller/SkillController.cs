@@ -39,6 +39,7 @@ public class SkillController : ControllerBase
             if (child.TryGetComponent<SkillObject>(out var skill))
             {
                 skills.Add(skill);
+                Debug.Log(skill);
             }
         }
         _skillTemplates = skills.ToDictionary(skill => skill.ID);
