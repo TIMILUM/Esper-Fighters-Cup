@@ -1,12 +1,13 @@
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using EsperFightersCup.UI.InGame.Skill;
 using UnityEngine;
 
 namespace EsperFightersCup
 {
-    public class DropSkillObject : SkillObject
+    public class RandDropSkillObject : SkillObject
     {
         private class DropObjectData
         {
@@ -14,100 +15,130 @@ namespace EsperFightersCup
             public float DropRate { get; set; }
         }
 
-        [SerializeField]
-        private GameObject[] _secondCasting;
+        [SerializeField] private List<DropObject> _dropObjectTemplates;
 
         private DropObjectData[] _dropObjects;
-        private float _secondRange;
-        private Vector3 _mouseEndPoint;
+        private float _dropDelay;
+
+        private Vector2 _uiSize;
+        private SkillUI _rangeUI;
+        private SkillUI _castUI;
 
         protected override void OnInitializeSkill()
         {
             base.OnInitializeSkill();
-
             LoadDropObjectCSVData();
-            _secondRange = Range - 0.15f;
+
+            var rangeSize = new Vector2(Range, Range) * 2f;
+            _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize * 0.1f);
+            _castUI = GameUIManager.Instance.PlayLocal("RandDrop_Casting", transform.position, 0f, _uiSize);
+
+            GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
         }
 
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
-            bool isCanceled = false;
-            Vector3 mousePos;
+            var isCanceled = false;
 
-            GameObjectUtil.ScaleGameObjects(_secondCasting, new Vector3(_secondRange * 2.0f, 1.0f, _secondRange * 2.0f));
-            GameObjectUtil.ActiveGameObjects(_secondCasting);
+            _rangeUI.ChangeTarget(AuthorPlayer.photonView.ViewID);
+            GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, true);
 
             await UniTask.WaitUntil(() =>
             {
-                mousePos = GetMousePosition();
+                var mousePos = GetMousePosition();
+                var distance = Vector3.Distance(Author.transform.position, mousePos);
+
+                if (distance < Range)
+                {
+                    if (!_castUI.gameObject.activeInHierarchy)
+                    {
+                        GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
+                    }
+                    GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
+                }
+                else
+                {
+                    GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+                }
 
                 if (Input.GetKeyDown(KeyCode.Mouse1))
                 {
                     isCanceled = true;
-                    return isCanceled;
                 }
-                if (Input.GetKeyUp(KeyCode.Space))
+                else if (Input.GetKeyUp(InputKey))
                 {
-                    _mouseEndPoint = mousePos;
+                    if (distance > Range)
+                    {
+                        isCanceled = true;
+                    }
                     return true;
                 }
-
-                GameObjectUtil.TranslateGameObjects(_secondCasting, mousePos);
                 return isCanceled;
 
             }, cancellationToken: cancellation);
 
-            if (isCanceled)
-            {
-                return false;
-            }
+            GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
 
-            GameObjectUtil.SetParentGameObjects(_secondCasting, "UiObject");
-            return true;
+            return !isCanceled;
         }
 
         protected override void BeforeFrontDelay()
         {
+            AuthorPlayer.Animator.SetTrigger("RandomDrop");
         }
 
         protected override async UniTask OnUseAsync()
         {
-            AuthorPlayer.Animator.SetTrigger("RandomDrop");
-            // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
-            var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
-            var createObjectPos = _mouseEndPoint + new Vector3(0.0f, mainCameraPos.y, 0.0f);
-
-            var id = GetRandomDropObjectID();
-            var obj = InGameSkillManager.Instance.CreateSkillObject(id, createObjectPos);
-            var ui = InGameSkillManager.Instance.CreateSkillUI("DropUI", createObjectPos);
-
-            ui.GetComponent<DropUI>().InitDropUI(obj);
-            StartCoroutine(GenerateBuff(obj));
-
-            ui.transform.SetParent(GameObject.Find("UiObject").transform);
-            ui.transform.SetPositionAndRotation(_secondCasting[0].transform.position, _secondCasting[0].transform.rotation);
-            ui.transform.localScale = _secondCasting[0].transform.localScale;
-
+            InstantiateRandomDropObjectAsync(_castUI.transform.position).Forget();
             await UniTask.Yield();
         }
 
         protected override void BeforeEndDelay()
         {
-            GameObjectUtil.DestoryGameObjects(_secondCasting);
         }
 
         protected override void OnRelease()
         {
+            ReleaseObjects();
         }
 
         protected override void OnCancel()
         {
+            ReleaseObjects();
         }
 
-        private IEnumerator GenerateBuff(GameObject obj)
+        private async UniTask InstantiateRandomDropObjectAsync(Vector3 position)
         {
-            yield return new WaitForSeconds(0.03f);
-            obj.GetComponent<Actor>().BuffController.GenerateBuff(_buffOnCollision[0]);
+            // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
+            var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
+            var createObjectPos = position + new Vector3(0.0f, mainCameraPos.y, 0.0f);
+
+            var id = GetRandomDropObjectID();
+            var obj = InGameSkillManager.Instance.CreateSkillObject(id, createObjectPos).GetComponent<AStaticObject>();
+            if (obj == null)
+            {
+                Debug.LogError("DropObject가 AStaticObject가 아닙니다!");
+                return;
+            }
+
+            var duration = _dropDelay * 0.001f;
+            var objPV = obj.photonView;
+            if (objPV == null)
+            {
+                Debug.LogError("DropObject에 photonView를 찾지 못했습니다!");
+                return;
+            }
+
+            GameUIManager.Instance.Play("RandDrop_Range", position, 0f, _uiSize, duration, objPV.ViewID);
+            await UniTask.Delay((int)_dropDelay);
+        }
+
+        private void ReleaseObjects()
+        {
+            GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
         }
 
         private Vector3 GetMousePosition()
@@ -124,12 +155,6 @@ namespace EsperFightersCup
             return Vector3.positiveInfinity;
         }
 
-        private bool SetStartPos()
-        {
-            var startPos = GetMousePosition();
-            return Vector3.Distance(startPos, transform.position) > Range;
-        }
-
         /// <summary>
         /// 드랍되는 오브젝트가 확률에 따라 떨어지는데 이 데이터를 불러오는 함수입니다.
         /// 최초 실행 시 한번만 호출하면 되기 때문에 관련하여 예외처리를 하였습니다.
@@ -140,6 +165,8 @@ namespace EsperFightersCup
             {
                 return;
             }
+
+            _dropDelay = GetCSVData<float>("Skill_Effect_Data_1");
 
             var csvData = CSVUtil.GetData("DropSkillDropObjectDataTable");
             if (!csvData.Get<float>("Obj_ID", out var targetIds))

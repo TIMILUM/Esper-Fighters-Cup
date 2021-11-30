@@ -1,4 +1,5 @@
 using DG.Tweening;
+using UnityEngine;
 
 public class RaiseObject : BuffObject
 {
@@ -22,15 +23,16 @@ public class RaiseObject : BuffObject
             {
                 Author.Rigidbody.useGravity = false;
             }
-
+            var startPos = Author.Rigidbody.position;
             _raising = DOTween.Sequence()
-                .Append(Author.Rigidbody.DOMoveY(_limitPosY, Info.Duration * 0.001f))
+                .Append(Author.Rigidbody.DOMove(new Vector3(startPos.x, _limitPosY, startPos.z), Info.Duration * 0.001f))
                 .SetLink(gameObject, LinkBehaviour.KillOnDisable)
                 .SetEase(Ease.OutCubic)
                 .OnUpdate(() =>
                 {
                     if (Controller.ActiveBuffs.Exists(Type.KnockBack))
                     {
+                        _raising.Kill();
                         Controller.ReleaseBuff(this);
                     }
                 });

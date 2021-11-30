@@ -1,6 +1,20 @@
 using Photon.Pun;
 using UnityEngine;
-public class ObjectHitSystem : MonoBehaviourPunCallbacks
+using UnityEngine.Events;
+
+public class HitInfo
+{
+    public GameObject Other { get; }
+    public bool IsDestroy { get; }
+
+    public HitInfo(GameObject other, bool isDestroy)
+    {
+        Other = other;
+        IsDestroy = isDestroy;
+    }
+}
+
+public class ObjectHitSystem : MonoBehaviourPun
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
@@ -11,6 +25,8 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
 
     private Actor _actor;
     private bool _isDestroy = false;
+
+    public event UnityAction<HitInfo> OnHit;
 
     private void Awake()
     {
@@ -99,5 +115,7 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
             _isDestroy = _isDestroyable;
             otherHitSystem._isDestroy = otherHitSystem._isDestroyable;
         }
+
+        OnHit?.Invoke(new HitInfo(other, _isDestroy));
     }
 }

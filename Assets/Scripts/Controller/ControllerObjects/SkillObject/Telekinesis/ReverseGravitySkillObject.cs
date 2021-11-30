@@ -16,18 +16,9 @@ public class ReverseGravitySkillObject : SkillObject
     private Vector2 _uiSize;
     private SkillUI _rangeUI;
     private SkillUI _castUI;
-    private GameObject _fragment;
 
     public override void SetHit(ObjectBase to)
     {
-        /*
-        if (_fragment != null && _fragment.GetComponent<ObjectBase>() == to)
-        {
-            return;
-        }
-        */
-        print("SetHit");
-        print($"Duration: {_raiseTime}");
         var newBuff = new BuffObject.BuffStruct
         {
             Type = BuffObject.Type.Raise,
@@ -91,7 +82,7 @@ public class ReverseGravitySkillObject : SkillObject
             {
                 isCanceled = true;
             }
-            else if (Input.GetKeyUp(KeyCode.LeftShift))
+            else if (Input.GetKeyUp(InputKey))
             {
                 if (distance > Range)
                 {
@@ -122,19 +113,20 @@ public class ReverseGravitySkillObject : SkillObject
 
         ParticleManager.Instance.PullParticle("ReverseGravityFiled", _castUI.transform.position, Quaternion.identity);
 
-        var position = new Vector2(_castUI.transform.position.x, _castUI.transform.position.z);
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
-        GameUIManager.Instance.Play("ReverseGravity_Range", position, 0f, _uiSize, duration);
+        print(_castUI.transform.position);
+        print(_castUI.Position);
+        GameUIManager.Instance.Play("ReverseGravity_Range", _castUI.Position, 0f, _uiSize, duration);
     }
 
     protected override async UniTask OnUseAsync()
     {
+        InstantiateStoneAsync(_castUI.transform.position).Forget();
         await UniTask.Yield();
     }
 
     protected override void BeforeEndDelay()
     {
-        InstantiateStoneAsync().Forget();
     }
 
     protected override void OnRelease()
@@ -147,11 +139,10 @@ public class ReverseGravitySkillObject : SkillObject
         ReleaseObjects();
     }
 
-    private async UniTaskVoid InstantiateStoneAsync()
+    private async UniTask InstantiateStoneAsync(Vector3 position)
     {
-        var fragment = InGameSkillManager.Instance.CreateSkillObject("Stone", _castUI.transform.position);
+        var fragment = InGameSkillManager.Instance.CreateSkillObject("Stone", position);
         // _lineRendererObj.SetActive(true);
-        // await UniTask.Delay((int)_raiseDelay);
 
         await UniTask.DelayFrame(3);
 
@@ -165,6 +156,7 @@ public class ReverseGravitySkillObject : SkillObject
             });
         }
 
+        /*
         var stoneGathering = fragment.transform.Find("stone_gathering");
         while (stoneGathering.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("CreateRock"))
         {
@@ -172,13 +164,14 @@ public class ReverseGravitySkillObject : SkillObject
             //_lineRenderer.SetPosition(1, AuthorPlayer.transform.position);
             await UniTask.Yield();
         }
-
-        print("animation end");
+        */
+        await UniTask.Delay((int)_raiseDelay);
+        ParticleManager.Instance.PullParticle("ReverseGravityGlow", position, Quaternion.identity);
 
         // 혹시 해당 비동기메소드가 여러번 실행될 경우 콜라이더 체크가 중간에 취소되는 일 없게 lock 적용
         Monitor.Enter(_collider);
         // _fragment = fragment;
-        GameObjectUtil.TranslateGameObject(_collider.gameObject, _castUI.transform.position);
+        GameObjectUtil.TranslateGameObject(_collider.gameObject, position);
         GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
         await UniTask.DelayFrame(3);
         GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
