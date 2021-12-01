@@ -133,6 +133,7 @@ public class MovementController : ControllerBase
         if (activeBuffs.Exists(BuffObject.Type.Stun)
             || activeBuffs.Exists(BuffObject.Type.Raise)
             || activeBuffs.Exists(BuffObject.Type.Sliding)
+            || activeBuffs.Exists(BuffObject.Type.KnockBack)
             || activeBuffs.Exists(BuffObject.Type.Grab))
         {
             dir = Vector3.zero;

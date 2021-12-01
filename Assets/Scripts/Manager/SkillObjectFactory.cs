@@ -9,6 +9,8 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     private GameObject _fragmentStaticObjectPrefab;
     [SerializeField]
     private GameObject _dropStaticObjectPrefab;
+    [SerializeField]
+    private GameObject _windLoadingObjectPrefab;
 
     [SerializeField]
     private GameObject _DropuiPrefabs;
@@ -27,6 +29,8 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_fragmentStaticObjectPrefab.name}", pos, Quaternion.identity);
         if (objectname == "DropObject")
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_dropStaticObjectPrefab.name}", pos, Quaternion.identity);
+        if (objectname == "WindLoadingObject")
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_windLoadingObjectPrefab.name}", pos, Quaternion.identity);
 
         return clone;
     }
