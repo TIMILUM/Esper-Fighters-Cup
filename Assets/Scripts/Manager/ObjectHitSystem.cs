@@ -19,7 +19,7 @@ public class ObjectHitSystem : MonoBehaviourPun
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
     public float Strength => _strength;
-    
+
     private bool _isDestroyable = true;
     public bool IsDestroyable => _isDestroyable;
 

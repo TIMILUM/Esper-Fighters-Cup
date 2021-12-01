@@ -422,6 +422,7 @@ GameObject:
   - component: {fileID: 3356515980302200173}
   - component: {fileID: 6826763052776465486}
   - component: {fileID: -6505318726171507235}
+  - component: {fileID: 6142238110142750894}
   - component: {fileID: 1699185657313963851}
   m_Layer: 0
   m_Name: SkillRockprefab
@@ -538,6 +539,21 @@ MonoBehaviour:
   _audioEmitter: {fileID: 0}
   _fgravity: 30
   _boxcollider: {fileID: 1699185657313963851}
+  _collideSound: 
+--- !u!114 &6142238110142750894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2237613303526667748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
 --- !u!65 &1699185657313963851
 BoxCollider:
   m_ObjectHideFlags: 0
