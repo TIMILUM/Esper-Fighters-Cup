@@ -216,7 +216,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3179342520512475395}
-  - component: {fileID: 3081782349151801843}
   - component: {fileID: 3126938505245127475}
   - component: {fileID: 1959413196410685931}
   - component: {fileID: 2328800679540335472}
@@ -249,22 +248,10 @@ Transform:
   m_Children:
   - {fileID: 5070644869560437771}
   - {fileID: 2043681562052175159}
+  - {fileID: 8717002518507279433}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3081782349151801843
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3179342520512475396}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3126938505245127475
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -442,11 +429,10 @@ MonoBehaviour:
     _damage: 5
     _isOnlyOnce: 1
   _controllerManager: {fileID: 2003298924726973060}
-  _hp: 0
   _id: 7
   _audioEmitter: {fileID: 8241065219527511304}
   _fgravity: 30
-  _boxcollider: {fileID: 3081782349151801843}
+  _boxcollider: {fileID: 8475715845562201901}
   _collideSound: event:/SFX/OBJ_Collison/Sawbalde_Rotate_Coll
   _allowBuffList: 
   _collider: {fileID: 3179342519834818331}
@@ -500,6 +486,50 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 0
+--- !u!1 &4403152359706430281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8717002518507279433}
+  - component: {fileID: 8475715845562201901}
+  m_Layer: 7
+  m_Name: BoundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8717002518507279433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4403152359706430281}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3179342520512475395}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8475715845562201901
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4403152359706430281}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6804647049068734126
 GameObject:
   m_ObjectHideFlags: 0

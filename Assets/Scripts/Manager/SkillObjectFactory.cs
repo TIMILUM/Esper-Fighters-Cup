@@ -36,25 +36,25 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         return clone;
     }
 
-    public GameObject CreateSkillObject(string objectname, Vector3 pos, Quaternion Rot)
+    public GameObject CreateSkillObject(string objectname, Vector3 pos, Quaternion rot)
     {
 
         GameObject clone = null;
         if (objectname == "Stone")
         {
-            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{ _stonePrefab.name}", pos, Rot);
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{ _stonePrefab.name}", pos, rot);
         }
         else if (objectname == "Fragment")
         {
-            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_fragmentStaticObjectPrefab.name}", pos, Rot);
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_fragmentStaticObjectPrefab.name}", pos, rot);
         }
         else if (objectname == "DropObject")
         {
-            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_dropStaticObjectPrefab.name}", pos, Rot);
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_dropStaticObjectPrefab.name}", pos, rot);
         }
         else if (objectname == "SkillRockObj")
         {
-            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_skillRockStaticObjectPrefab.name}", pos, Rot);
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_skillRockStaticObjectPrefab.name}", pos, rot);
         }
 
         return clone;

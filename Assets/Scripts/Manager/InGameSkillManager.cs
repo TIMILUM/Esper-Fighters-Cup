@@ -26,10 +26,12 @@ public class InGameSkillManager : Singleton<InGameSkillManager>
         return _skillObjectfactory.CreateSkillObject(objectname, pos, rot);
     }
 
+    /*
     public GameObject CreateSkillObject(string objectname, Vector3 pos, Quaternion rot, Vector3 scale)
     {
-        return _skillObjectfactory.CreateSkillObject(objectname, pos, rot);
+        return _skillObjectfactory.CreateSkillObject(objectname, pos, rot, scale);
     }
+    */
 
     /// <summary>
     ///     오브젝트의 ID 값을 가지고 오브젝트를 생성하는 함수입니다. (CSV의 ID값을 통해 오브젝트를 불러오기 때문에 생성되었습니다.)

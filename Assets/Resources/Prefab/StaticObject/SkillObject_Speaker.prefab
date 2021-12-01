@@ -645,6 +645,7 @@ GameObject:
   - component: {fileID: -870678768523667088}
   - component: {fileID: 8016094465907375525}
   - component: {fileID: 4856252141550382025}
+  - component: {fileID: 5978704960213691800}
   m_Layer: 7
   m_Name: SkillObject_Speaker
   m_TagString: Untagged
@@ -819,7 +820,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buffOnCollision: []
   _controllerManager: {fileID: 1539758636296768190}
-  _hp: 0
   _id: 9
   _audioEmitter: {fileID: 8723209735390399545}
   _fgravity: 30
@@ -857,6 +857,19 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!65 &5978704960213691800
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 2.12}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5168320457803481529
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,6 +7,8 @@ using UnityEngine;
 public class ReverseGravitySkillObject : SkillObject
 {
     [SerializeField] private ColliderChecker _collider;
+    // [SerializeField] private float _fragmentRaiseHeight = 5f;
+    [SerializeField] private float _objectRaiseHeight = 3f;
 
     // milliseconds
     private float _raiseDelay;
@@ -23,7 +25,7 @@ public class ReverseGravitySkillObject : SkillObject
         {
             Type = BuffObject.Type.Raise,
             Duration = _raiseTime,
-            ValueFloat = new[] { 5.0f }
+            ValueFloat = new[] { _objectRaiseHeight }
         };
 
         _buffOnCollision.Clear();
@@ -142,15 +144,19 @@ public class ReverseGravitySkillObject : SkillObject
         var fragment = InGameSkillManager.Instance.CreateSkillObject("Fragment", position);
         // _lineRendererObj.SetActive(true);
 
-        await UniTask.DelayFrame(3);
+        if (fragment == null)
+        {
+            return;
+        }
 
+        await UniTask.DelayFrame(3);
         if (fragment.TryGetComponent<AStaticObject>(out var staticObject))
         {
             staticObject.BuffController.GenerateBuff(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.Raise,
                 Duration = _raiseTime,
-                ValueFloat = new[] { 8.0f }
+                ValueFloat = new[] { _objectRaiseHeight + 2f }
             });
         }
 

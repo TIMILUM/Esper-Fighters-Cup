@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class PunchSkillObject : SkillObject
@@ -21,7 +18,7 @@ public class PunchSkillObject : SkillObject
     private Transform _colliderTransform;
 
     private Vector3 _direction = Vector3.zero;
-    
+
 
     protected override void OnInitializeSkill()
     {
@@ -40,11 +37,11 @@ public class PunchSkillObject : SkillObject
             Damage = 0,
             Duration = (Range / _moveSpeed) * 1000,
             AllowDuplicates = false,
-            ValueVector3 = new [] { _direction },
-            ValueFloat = new [] { _moveSpeed, 0, 0 },
+            ValueVector3 = new[] { _direction },
+            ValueFloat = new[] { _moveSpeed, 0, 0 },
             IsOnlyOnce = false,
         };
-        
+
         if (target is null)
         {
             return;
@@ -67,7 +64,7 @@ public class PunchSkillObject : SkillObject
         {
             knockBackBuff.Damage = Damage;
             var windLoadingObject = target as WindLoadingObject;
-            windLoadingObject.SetBuffStack(new []{ knockBackBuff });
+            windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
 
         base.SetHit(to);
@@ -77,9 +74,9 @@ public class PunchSkillObject : SkillObject
     {
         // await UniTask.WaitUntil(() =>
         // {
-        //     
+        //
         // }, cancellationToken: cancellation);
-        
+
         Vector3 endPos = GetMousePosition();
         _direction = Vector3.Normalize(endPos - transform.position);
 
@@ -100,8 +97,8 @@ public class PunchSkillObject : SkillObject
             Damage = 0,
             Duration = duration * 1000,
             AllowDuplicates = true,
-            ValueVector3 = new [] { _direction },
-            ValueFloat = new [] { _moveSpeed, 0, 0 },
+            ValueVector3 = new[] { _direction },
+            ValueFloat = new[] { _moveSpeed, 0, 0 },
             IsOnlyOnce = false,
         });
 
@@ -122,7 +119,7 @@ public class PunchSkillObject : SkillObject
     protected override void OnCancel()
     {
     }
-    
+
     private Vector3 GetMousePosition()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -150,9 +147,9 @@ public class PunchSkillObject : SkillObject
         {
             return null;
         }
-        
+
         var hitSystem = Author.GetComponent<ObjectHitSystem>();
-        
+
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
         {

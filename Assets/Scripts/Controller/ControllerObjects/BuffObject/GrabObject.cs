@@ -30,14 +30,14 @@ namespace EsperFightersCup
 
             if (Author is APlayer player)
             {
-                player.Animator.SetTrigger("Knockback");
+                player.Animator.SetTrigger("Knockback", false);
             }
 
 
             if (Author.photonView.IsMine)
             {
 
-                if (Author.GetComponent<Actor>() as ACharacter != null)
+                if ((Author.GetComponent<Actor>() as ACharacter) != null)
                 {
                     _rigd = Author.GetComponent<Actor>().GetComponent<Rigidbody>();
                     _rigd.useGravity = false;
@@ -84,11 +84,12 @@ namespace EsperFightersCup
                 {
 
                     if (currentType <= 1.0f)
+                    {
                         currentType += Time.deltaTime * 10;
-
+                    }
 
                     Author.transform.position = Vector3.Lerp(startPos, targettarns.position +
-                        targettarns.up * boundy, currentType);
+                        (targettarns.up * boundy), currentType);
                     yield return null;
                 }
 

@@ -20,8 +20,7 @@ public class ObjectHitSystem : MonoBehaviourPun
     private float _strength;
     public float Strength => _strength;
 
-    private bool _isDestroyable = true;
-    public bool IsDestroyable => _isDestroyable;
+    public bool IsDestroyable { get; private set; } = true;
 
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
@@ -60,13 +59,13 @@ public class ObjectHitSystem : MonoBehaviourPun
         }
         if (csvData.Get<float>("Destroyable", out var destroyableList))
         {
-            _isDestroyable = destroyableList[index] > 0;
+            IsDestroyable = destroyableList[index] > 0;
         }
     }
 
     private void Update()
     {
-        if (!_actor || !_actor.photonView.IsMine || !_isDestroyable)
+        if (!_actor || !_actor.photonView.IsMine || !IsDestroyable)
         {
             return;
         }
@@ -93,20 +92,20 @@ public class ObjectHitSystem : MonoBehaviourPun
         var otherStrength = otherHitSystem._strength;
         var difference = _strength - otherStrength;
         // 본인의 강도가 더 높은 경우
-        if (difference > 0 && otherHitSystem._isDestroyable)
+        if (difference > 0 && otherHitSystem.IsDestroyable)
         {
             otherHitSystem._isDestroy = true;
         }
         // 상대의 강도가 더 높은 경우
-        else if (difference < 0 && _isDestroyable)
+        else if (difference < 0 && IsDestroyable)
         {
             _isDestroy = true;
         }
         // 둘 다 강도값이 같은 경우
         else if (difference == 0)
         {
-            _isDestroy = _isDestroyable;
-            otherHitSystem._isDestroy = otherHitSystem._isDestroyable;
+            _isDestroy = IsDestroyable;
+            otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
         }
 
         if (otherHitSystem._isDestroy)

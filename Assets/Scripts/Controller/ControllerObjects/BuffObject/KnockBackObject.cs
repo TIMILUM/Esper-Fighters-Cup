@@ -42,7 +42,7 @@ public class KnockBackObject : BuffObject
 
         if (Author is APlayer player)
         {
-            player.Animator.SetTrigger("Knockback");
+            player.Animator.SetTrigger("Knockback", false);
         }
 
         if (Author.photonView.IsMine)
@@ -58,6 +58,7 @@ public class KnockBackObject : BuffObject
             StopCoroutine(_moving);
         }
 
+        /*
         if (Author is AStaticObject)
         {
             Author.BuffController.GenerateBuff(new BuffStruct()
@@ -66,6 +67,7 @@ public class KnockBackObject : BuffObject
                 ValueFloat = new float[2] { 0.0f, 0.0f }
             });
         }
+        */
     }
 
     private IEnumerator Knockback()

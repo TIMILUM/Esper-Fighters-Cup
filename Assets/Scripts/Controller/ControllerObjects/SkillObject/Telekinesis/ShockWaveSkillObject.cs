@@ -30,7 +30,6 @@ public class ShockWaveSkillObject : SkillObject
     public override void SetHit(ObjectBase to)
     {
         // TODO: 충격파 대쉬 적용
-
         var knockBackBuff = AnalyzeBuff(to);
         if (knockBackBuff is null)
         {
@@ -55,7 +54,7 @@ public class ShockWaveSkillObject : SkillObject
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
 
         _collider.transform.SetParent(null);
-        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 5, Size.y));
+        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 50, Size.y));
         _collider.OnCollision += SetHit;
     }
 
@@ -245,7 +244,7 @@ public class ShockWaveSkillObject : SkillObject
                 Type = BuffObject.Type.KnockBack,
                 AllowDuplicates = false,
                 Duration = movetime,
-                ValueFloat = new float[] // TOOD: ValueFloat 대신 ValueInt가 돼야 할듯
+                ValueFloat = new float[]
                 {
                     movespeed,
                     damage,
@@ -253,6 +252,7 @@ public class ShockWaveSkillObject : SkillObject
                 },
                 ValueVector3 = new Vector3[1]
             };
+
             return result;
         }
 

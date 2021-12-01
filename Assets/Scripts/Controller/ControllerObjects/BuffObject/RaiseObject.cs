@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public class RaiseObject : BuffObject
 {
     private float _limitPosY;
     private Sequence _raising;
+    private Coroutine _checking;
 
     public override Type BuffType => Type.Raise;
 
@@ -23,19 +25,13 @@ public class RaiseObject : BuffObject
             {
                 Author.Rigidbody.useGravity = false;
             }
-            var startPos = Author.Rigidbody.position;
+            var startPos = Author.transform.position;
             _raising = DOTween.Sequence()
                 .Append(Author.Rigidbody.DOMove(new Vector3(startPos.x, _limitPosY, startPos.z), Info.Duration * 0.001f))
-                .SetLink(gameObject, LinkBehaviour.KillOnDisable)
                 .SetEase(Ease.OutCubic)
-                .OnUpdate(() =>
-                {
-                    if (Controller.ActiveBuffs.Exists(Type.KnockBack))
-                    {
-                        _raising.Kill();
-                        Controller.ReleaseBuff(this);
-                    }
-                });
+                .SetLink(gameObject, LinkBehaviour.KillOnDisable);
+
+            _checking = StartCoroutine(CheckBuffRelease());
         }
     }
 
@@ -43,7 +39,12 @@ public class RaiseObject : BuffObject
     {
         if (Author.photonView.IsMine)
         {
+            if (_checking != null)
+            {
+                StopCoroutine(_checking);
+            }
             _raising.Kill();
+
             if (Author is APlayer)
             {
                 Author.Rigidbody.useGravity = true;
@@ -57,6 +58,16 @@ public class RaiseObject : BuffObject
                 });
             }
         }
+    }
+
+    private IEnumerator CheckBuffRelease()
+    {
+        while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
+        {
+            yield return null;
+        }
+        _raising.Kill();
+        Controller.ReleaseBuff(this);
     }
 
     /*

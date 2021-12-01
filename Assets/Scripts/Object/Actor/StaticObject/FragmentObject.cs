@@ -9,14 +9,21 @@ namespace EsperFightersCup
 
         private Collider[] _colliders;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
             _colliders = GetComponents<Collider>();
             foreach (var collider in _colliders)
             {
                 collider.enabled = false;
             }
+
+            base.Awake();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
             StartCoroutine(CheckAnimationIsCompleted());
         }
 
