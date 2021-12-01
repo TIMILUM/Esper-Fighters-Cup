@@ -119,7 +119,7 @@ public class ShockWaveSkillObject : SkillObject
     {
         ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
-        _collider.transform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
+        _collider.transform.SetPositionAndRotation(_castUI.transform.GetChild(0).position, Quaternion.LookRotation(_direction));
 
         GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
         await UniTask.DelayFrame(3);

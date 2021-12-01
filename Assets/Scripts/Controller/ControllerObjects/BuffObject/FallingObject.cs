@@ -4,6 +4,7 @@ namespace EsperFightersCup
 {
     public class FallingObject : BuffObject
     {
+        // private float _range;
         private float _decreaseHp = 0;
         private float _durationStunSeconds = 0;
 
@@ -14,10 +15,31 @@ namespace EsperFightersCup
             // BuffStruct Help
             // ValueFloat[0]    : _decreaseHp (0이면 HP감소 효과 없음)
             // ValueFloat[1]    : _durationStunSeconds (0이면 스턴 효과 없음)
+            // ValueFloat[2]    : _range (AfterBuff 적용 범위)
             // ---------------
-
             _decreaseHp = Info.ValueFloat[0];
             _durationStunSeconds = Info.ValueFloat[1];
+            // _range = 1f; // Info.ValueFloat[2];
+        }
+
+        public override void OnBuffReleased()
+        {
+            // 나중에 ObjectHitSystem 개선되면 고치기
+            var pos = Author.transform.position;
+            pos.y = 0.03f;
+
+            /*
+            var targets = Physics.OverlapSphere(pos, _range, (1 << 7) | (1 << 8)); // Object, Character
+
+            foreach (var target in targets)
+            {
+                var actor = target.GetComponent<Actor>();
+                var controller = actor.BuffController;
+                GenerateAfterBuff(controller);
+            }
+            */
+
+            ParticleManager.Instance.PullParticleToLocal("ObjectDropped", pos, Quaternion.identity);
         }
 
         public override void OnPlayerHitEnter(GameObject other)

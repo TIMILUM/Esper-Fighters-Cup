@@ -24,9 +24,9 @@ public sealed class BuffController : ControllerBase
         SetControllerType(ControllerManager.Type.BuffController);
     }
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
         foreach (var buffObject in prefabs)
@@ -45,6 +45,7 @@ public sealed class BuffController : ControllerBase
         var args = buffStruct.ToBuffArguments(id);
 
         photonView.RPC(nameof(GenerateBuffRPC), RpcTarget.All, args);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
@@ -54,6 +55,7 @@ public sealed class BuffController : ControllerBase
     public void ReleaseBuffsByType(BuffObject.Type buffType)
     {
         photonView.RPC(nameof(ReleaseBuffsByTypeRPC), RpcTarget.All, (int)buffType);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
@@ -78,6 +80,7 @@ public sealed class BuffController : ControllerBase
         }
 
         photonView.RPC(nameof(ReleaseBuffRPC), RpcTarget.All, id);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     [PunRPC]
@@ -88,13 +91,11 @@ public sealed class BuffController : ControllerBase
         {
             return;
         }
-
         var buffs = _activeBuffs[buffType];
         if (photonView.IsMine && !args.AllowDuplicates && buffs.Count > 0)
         {
             ReleaseBuffsByType(buffType);
         }
-
         var prefab = _buffTable[buffType];
         var buff = Instantiate(prefab, transform);
         buff.name = args.BuffId;

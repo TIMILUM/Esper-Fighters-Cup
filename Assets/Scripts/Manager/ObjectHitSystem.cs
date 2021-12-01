@@ -75,7 +75,7 @@ public class ObjectHitSystem : MonoBehaviourPun
             {
                 // PhotonNetwork.OpCleanRpcBuffer(photonView);
                 PhotonNetwork.Destroy(photonView);
-                PhotonNetwork.SendAllOutgoingCommands();
+                //PhotonNetwork.SendAllOutgoingCommands();
             }
             else
             {

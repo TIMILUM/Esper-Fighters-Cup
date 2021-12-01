@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6820238161038408815}
   - component: {fileID: 8635750689357678166}
   - component: {fileID: 2013565588130954225}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 9163902271404509405}
   - component: {fileID: 6819613831527960332}
   - component: {fileID: 6455006989233138703}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FragmentObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8221681106174132502}
@@ -294,6 +294,7 @@ MonoBehaviour:
   _audioEmitter: {fileID: 0}
   _fgravity: 30
   _boxcollider: {fileID: 1355987599181823549}
+  _collideSound: 
   _anim: {fileID: 7288119691118101877}
 --- !u!1001 &5469717882171134023
 PrefabInstance:
@@ -346,9 +347,53 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6250076149019478384, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -5795845215311118915, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -4507900262165122138, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -2815194613554758484, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -2422315340263230684, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -2254504247542753893, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -1554193974251969968, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
       propertyPath: m_Name
       value: stone_gathering
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5988881256312858879, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6159819195323411483, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8144394004440419581, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76629944d30dd744a8f6cac7c59da4c2, type: 3}

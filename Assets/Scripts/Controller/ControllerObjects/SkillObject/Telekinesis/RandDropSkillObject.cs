@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace EsperFightersCup
             public float DropRate { get; set; }
         }
 
-        [SerializeField] private List<DropObject> _dropObjectTemplates;
+        private const string CreateSound = "event:/SFX/Elena_Skill/SFX_RandDrop";
 
         private DropObjectData[] _dropObjects;
         private float _dropDelay;
@@ -28,6 +27,8 @@ namespace EsperFightersCup
         {
             base.OnInitializeSkill();
             LoadDropObjectCSVData();
+
+            _uiSize = Size * 0.1f;
 
             var rangeSize = new Vector2(Range, Range) * 2f;
             _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize * 0.1f);
@@ -111,6 +112,14 @@ namespace EsperFightersCup
 
         private async UniTask InstantiateRandomDropObjectAsync(Vector3 position)
         {
+            var audioInstance = FMODUnity.RuntimeManager.CreateInstance(CreateSound);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(audioInstance, gameObject.transform, Author.Rigidbody);
+            audioInstance.start();
+
+            var duration = _dropDelay * 0.001f;
+            GameUIManager.Instance.Play("RandDrop_Range", position, 0f, _uiSize, duration);
+            await UniTask.Delay((int)_dropDelay);
+
             // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.
             var mainCameraPos = Camera.main.transform.position + new Vector3(0.0f, 10.0f, 0.0f);
             var createObjectPos = position + new Vector3(0.0f, mainCameraPos.y, 0.0f);
@@ -123,7 +132,6 @@ namespace EsperFightersCup
                 return;
             }
 
-            var duration = _dropDelay * 0.001f;
             var objPV = obj.photonView;
             if (objPV == null)
             {
@@ -131,8 +139,16 @@ namespace EsperFightersCup
                 return;
             }
 
-            GameUIManager.Instance.Play("RandDrop_Range", position, 0f, _uiSize, duration, objPV.ViewID);
-            await UniTask.Delay((int)_dropDelay);
+            await UniTask.DelayFrame(1);
+            obj.BuffController.GenerateBuff(new BuffObject.BuffStruct
+            {
+                Type = BuffObject.Type.Falling,
+                ValueFloat = new float[] { Damage, StunGroggyDuration }
+            });
+
+            audioInstance.setParameterByName("Step", 1f);
+            audioInstance.release();
+            audioInstance.clearHandle();
         }
 
         private void ReleaseObjects()

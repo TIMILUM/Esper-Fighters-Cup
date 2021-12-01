@@ -3,8 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(ObjectHitSystem))]
 public class AStaticObject : Actor
 {
-    // Start is called before the first frame update
-
     [SerializeField]
     private float _fgravity = 30.0f;
     [SerializeField]
@@ -22,31 +20,26 @@ public class AStaticObject : Actor
         HitSystem.OnHit += PlayHitSound;
     }
 
-    protected override void Start()
-    {
-        base.Start();
-    }
-
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-
+        /*
         if (!photonView.IsMine)
         {
             return;
         }
+        */
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (Rigidbody.position.y > _boxcollider.bounds.extents.y + 0.03f)
+            if (Rigidbody.position.y > _boxcollider.bounds.extents.y + 0.1f)
             {
                 Rigidbody.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
-            else
+            else if (photonView.IsMine)
             {
                 BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
             }
-            return;
         }
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.KnockBack) || BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
@@ -66,6 +59,8 @@ public class AStaticObject : Actor
 
     private void PlayHitSound(HitInfo info)
     {
+        Debug.Log("PlayHitSound", gameObject);
+
         if (string.IsNullOrWhiteSpace(_collideSound))
         {
             return;

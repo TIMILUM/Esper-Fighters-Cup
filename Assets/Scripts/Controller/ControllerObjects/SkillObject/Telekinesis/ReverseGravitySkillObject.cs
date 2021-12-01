@@ -114,8 +114,6 @@ public class ReverseGravitySkillObject : SkillObject
         ParticleManager.Instance.PullParticle("ReverseGravityFiled", _castUI.transform.position, Quaternion.identity);
 
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
-        print(_castUI.transform.position);
-        print(_castUI.Position);
         GameUIManager.Instance.Play("ReverseGravity_Range", _castUI.Position, 0f, _uiSize, duration);
     }
 

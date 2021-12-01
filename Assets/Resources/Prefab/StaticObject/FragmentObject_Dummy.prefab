@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1851603496433671611}
   - component: {fileID: 3946745091902172346}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - component: {fileID: 8478606176459519823}
   - component: {fileID: -424789612485097538}
   - component: {fileID: 5451352787449924202}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FragmentObject_Dummy
   m_TagString: Object
   m_Icon: {fileID: 0}
@@ -213,6 +213,7 @@ MonoBehaviour:
   _audioEmitter: {fileID: 0}
   _fgravity: 30
   _boxcollider: {fileID: 1055047741637954412}
+  _collideSound: 
 --- !u!114 &5451352787449924202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +230,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8524433635644955736}
@@ -249,7 +250,7 @@ GameObject:
   - component: {fileID: 4103272454849058656}
   - component: {fileID: 7880215951347057334}
   - component: {fileID: 3912746176039644661}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuffController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
