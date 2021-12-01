@@ -11,6 +11,10 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     private GameObject _dropStaticObjectPrefab;
     [SerializeField]
     private GameObject _windLoadingObjectPrefab;
+    [SerializeField]
+    private GameObject _skillRockStaticObjectPrefab;
+
+
 
     [SerializeField]
     private GameObject _DropuiPrefabs;
@@ -25,15 +29,40 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         GameObject clone = null;
         if (objectname == "Stone")
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{ _stonePrefab.name}", pos, Quaternion.identity);
-        if (objectname == "Fragment")
+        else if (objectname == "Fragment")
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_fragmentStaticObjectPrefab.name}", pos, Quaternion.identity);
-        if (objectname == "DropObject")
+        else if (objectname == "DropObject")
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_dropStaticObjectPrefab.name}", pos, Quaternion.identity);
-        if (objectname == "WindLoadingObject")
+        else if (objectname == "WindLoadingObject")
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_windLoadingObjectPrefab.name}", pos, Quaternion.identity);
+        else if (objectname == "SkillRockObj")
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_skillRockStaticObjectPrefab.name}", pos, Quaternion.identity);
 
         return clone;
     }
+
+
+    public GameObject CreateSkillObject(string objectname, Vector3 pos, Quaternion Rot)
+    {
+
+        GameObject clone = null;
+        if (objectname == "Stone")
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{ _stonePrefab.name}", pos, Rot);
+        else if (objectname == "Fragment")
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_fragmentStaticObjectPrefab.name}", pos, Rot);
+        else if (objectname == "DropObject")
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_dropStaticObjectPrefab.name}", pos, Rot);
+        else if (objectname == "SkillRockObj")
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_skillRockStaticObjectPrefab.name}", pos, Rot);
+
+        return clone;
+    }
+
+
+
+
+
+
 
     /// <summary>
     ///     오브젝트의 ID 값을 가지고 오브젝트를 생성하는 함수입니다. (CSV의 ID값을 통해 오브젝트를 불러오기 때문에 생성되었습니다.)
@@ -44,11 +73,14 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     /// <returns>생성된 게임 오브젝트</returns>
     public GameObject CreateSkillObject(int objectId, Vector3 pos)
     {
+
         // 얻어오지 못한 경우 return null
         if (!IngameObjectIDParser.TryGetPrefabPackage(objectId, out var prefabPackage))
         {
+            Debug.Log(prefabPackage);
             return null;
         }
+        Debug.Log(prefabPackage);
         var clone = PhotonNetwork.Instantiate(prefabPackage.PrefabPath, pos, Quaternion.identity);
         Debug.Log(prefabPackage);
         return clone;

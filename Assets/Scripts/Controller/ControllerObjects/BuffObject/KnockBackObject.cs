@@ -1,4 +1,5 @@
 using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
 public class KnockBackObject : BuffObject
@@ -9,6 +10,7 @@ public class KnockBackObject : BuffObject
     private float _decreaseHp = 0;
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 스턴 지속기간(초) 지정됨
     private float _durationStunSeconds = 0;
+    private float _playerChracterID = -1;
     private Coroutine _moving;
 
     public Vector3 NormalizedDirection
@@ -34,6 +36,14 @@ public class KnockBackObject : BuffObject
         _decreaseHp = Info.ValueFloat[1];
         _durationStunSeconds = Info.ValueFloat[2];
 
+        if (Info.ValueFloat.Length > 3)
+        {
+            _playerChracterID = Info.ValueFloat[3];
+        }
+
+
+
+
         if (Author is APlayer player)
         {
             player.Animator.SetTrigger("Knockback");
@@ -51,6 +61,18 @@ public class KnockBackObject : BuffObject
         {
             StopCoroutine(_moving);
         }
+
+        if (Author as AStaticObject != null)
+        {
+            Author.BuffController.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
+        }
+
+
+
     }
 
     private IEnumerator Knockback()
@@ -65,7 +87,7 @@ public class KnockBackObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        if (!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall"))
+        if ((!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall")) || otherActor.photonView.ViewID == _playerChracterID)
         {
             return;
         }

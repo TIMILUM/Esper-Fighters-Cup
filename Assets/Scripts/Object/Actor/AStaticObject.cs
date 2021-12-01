@@ -10,6 +10,8 @@ public class AStaticObject : Actor
     [FMODUnity.EventRef]
     [SerializeField] private string _collideSound;
 
+    private Vector3 _colliderSize;
+
     public ObjectHitSystem HitSystem { get; private set; }
 
     protected override void Awake()
@@ -18,27 +20,25 @@ public class AStaticObject : Actor
 
         HitSystem = GetComponent<ObjectHitSystem>();
         HitSystem.OnHit += PlayHitSound;
+        
+        _colliderSize = _boxcollider.bounds.extents;
+        _boxcollider.enabled = false;
     }
 
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        /*
-        if (!photonView.IsMine)
-        {
-            return;
-        }
-        */
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (Rigidbody.position.y > _boxcollider.bounds.extents.y + 0.1f)
+            if (Rigidbody.position.y > _colliderSize.y + 0.1f)
             {
                 Rigidbody.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
             else if (photonView.IsMine)
             {
                 BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
+                transform.position = new Vector3(transform.position.x, _colliderSize.y, transform.position.z);
             }
         }
 
