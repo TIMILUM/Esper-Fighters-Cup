@@ -55,6 +55,7 @@ public abstract class BuffObject : ControllerObject<BuffController>
         StartTime = PhotonNetwork.ServerTimestamp;
         gameObject.SetActive(true);
 
+        // IsOnlyOnce일 경우 다음 프레임 기다리고 ReleaseBuff를 또 부를 필요 없이 바로 OnReleased 호출해서 삭제
         if (Author.photonView.IsMine)
         {
             _elapsedTimeout = StartCoroutine(CheckBuffRelease());
@@ -92,12 +93,13 @@ public abstract class BuffObject : ControllerObject<BuffController>
             yield break;
         }
 
-        if (Info.Duration <= 0f)
+        if (Info.Duration >= 0f - Mathf.Epsilon && Info.Duration <= 0f + Mathf.Epsilon)
         {
             yield break;
         }
 
-        yield return new WaitForSeconds(Info.Duration / 1000f);
+        print($"buff duration: {Info.Duration * 0.001f}");
+        yield return new WaitForSeconds(Info.Duration * 0.001f);
         Controller.ReleaseBuff(this);
     }
 

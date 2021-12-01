@@ -1,30 +1,42 @@
 using UnityEngine;
 
+[RequireComponent(typeof(ObjectHitSystem))]
 public class AStaticObject : Actor
 {
-    // Start is called before the first frame update
-
     [SerializeField]
     private float _fgravity = 30.0f;
     [SerializeField]
     private BoxCollider _boxcollider;
+    [FMODUnity.EventRef]
+    [SerializeField] private string _collideSound;
 
-    protected override void Start()
+    public ObjectHitSystem HitSystem { get; private set; }
+
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
+
+        HitSystem = GetComponent<ObjectHitSystem>();
+        HitSystem.OnHit += PlayHitSound;
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
+        /*
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        */
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (transform.position.y > _boxcollider.bounds.extents.y + 0.03f)
+            if (Rigidbody.position.y > _boxcollider.bounds.extents.y + 0.1f)
             {
-                transform.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
+                Rigidbody.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
-            else
+            else if (photonView.IsMine)
             {
                 BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
             }
@@ -32,16 +44,31 @@ public class AStaticObject : Actor
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.KnockBack) || BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (GetComponent<Rigidbody>().isKinematic)
+            if (Rigidbody.isKinematic)
             {
-                GetComponent<Rigidbody>().isKinematic = false;
+                Rigidbody.isKinematic = false;
             }
             return;
         }
 
-        if (!GetComponent<Rigidbody>().isKinematic)
+        if (!Rigidbody.isKinematic)
         {
-            GetComponent<Rigidbody>().isKinematic = true;
+            Rigidbody.isKinematic = true;
         }
+    }
+
+    private void PlayHitSound(HitInfo info)
+    {
+        Debug.Log("PlayHitSound", gameObject);
+
+        if (string.IsNullOrWhiteSpace(_collideSound))
+        {
+            return;
+        }
+        var instance = FMODUnity.RuntimeManager.CreateInstance(_collideSound);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform, Rigidbody);
+        instance.setParameterByName("DestroyCheck", info.IsDestroy ? 1f : 0f);
+        instance.start();
+        instance.release();
     }
 }

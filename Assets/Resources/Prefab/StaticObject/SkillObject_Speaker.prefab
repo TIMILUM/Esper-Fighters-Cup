@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1827495912437600304}
   - component: {fileID: 7454492160522824904}
   - component: {fileID: 4191022541528968379}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 2564127314813258419}
   - component: {fileID: 314960986298808249}
   - component: {fileID: 5209154817356717320}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 4981968151886316631}
   - component: {fileID: 1274650631967853095}
   - component: {fileID: 933994182246007344}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 5695602134794159884}
   - component: {fileID: 429591692874294693}
   - component: {fileID: 5776396631107418310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 4313616773330199715}
   - component: {fileID: 2200145111071626391}
   - component: {fileID: 6052056162476805358}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_015
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 6764304188755866269}
   - component: {fileID: 4207925976627306654}
   - component: {fileID: 2246136807485084648}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 4185472613749182337}
   - component: {fileID: 5398304928848359389}
   - component: {fileID: 8285374141068940593}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_014
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,17 +591,18 @@ GameObject:
   m_Component:
   - component: {fileID: 5313180026986373800}
   - component: {fileID: 774603751836251038}
-  - component: {fileID: 4856252141550382025}
-  - component: {fileID: 8016094465907375525}
   - component: {fileID: 7100973928262228261}
-  - component: {fileID: -8964775500989688084}
-  - component: {fileID: -870678768523667088}
   - component: {fileID: -202568319734150936}
   - component: {fileID: 5629258719865576800}
   - component: {fileID: 6332250995798064633}
   - component: {fileID: -1194800018035501244}
   - component: {fileID: -3404713667547975997}
-  m_Layer: 0
+  - component: {fileID: 8723209735390399545}
+  - component: {fileID: -8964775500989688084}
+  - component: {fileID: -870678768523667088}
+  - component: {fileID: 8016094465907375525}
+  - component: {fileID: 4856252141550382025}
+  m_Layer: 7
   m_Name: SkillObject_Speaker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -642,47 +643,15 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 4856252141550382025}
-  - {fileID: 8016094465907375525}
   - {fileID: -870678768523667088}
+  - {fileID: 8016094465907375525}
+  - {fileID: 4856252141550382025}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &4856252141550382025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &8016094465907375525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
 --- !u!54 &7100973928262228261
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -699,39 +668,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-8964775500989688084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _strength: 0
-  _objectID: 0
---- !u!114 &-870678768523667088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eaf348ff82e6e448976a068688b04f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _buffOnCollision: []
-  _controllerManager: {fileID: 1539758636296768190}
-  _hp: 0
-  _id: 10
-  _audioEmitter: {fileID: 0}
-  _fgravity: 30
-  _boxcollider: {fileID: -202568319734150936}
 --- !u!65 &-202568319734150936
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -801,6 +737,95 @@ CapsuleCollider:
   m_Height: 1.08
   m_Direction: 0
   m_Center: {x: 0, y: -0.38, z: -0.9}
+--- !u!114 &8723209735390399545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
+--- !u!114 &-8964775500989688084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
+--- !u!114 &-870678768523667088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eaf348ff82e6e448976a068688b04f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buffOnCollision: []
+  _controllerManager: {fileID: 1539758636296768190}
+  _hp: 0
+  _id: 9
+  _audioEmitter: {fileID: 8723209735390399545}
+  _fgravity: 30
+  _boxcollider: {fileID: -202568319734150936}
+  _collideSound: event:/SFX/OBJ_Collison/ArenaSpeaker_Coll
+--- !u!114 &8016094465907375525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &4856252141550382025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &5168320457803481529
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,7 +837,7 @@ GameObject:
   - component: {fileID: 9188615585215353634}
   - component: {fileID: 6428096507978434821}
   - component: {fileID: 1991273019117899244}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_007
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -895,7 +920,7 @@ GameObject:
   - component: {fileID: 1502411595695349943}
   - component: {fileID: 9003666875347226967}
   - component: {fileID: 691810984639851429}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -976,7 +1001,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6808536904681447566}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_FragmentsA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1013,7 +1038,7 @@ GameObject:
   - component: {fileID: 14371984397251845}
   - component: {fileID: 816565411978715296}
   - component: {fileID: 6161411758389203461}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1097,7 +1122,7 @@ GameObject:
   - component: {fileID: 1539758636296768190}
   - component: {fileID: 7598030588183542043}
   - component: {fileID: 7068919200006381021}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1176,7 +1201,7 @@ GameObject:
   - component: {fileID: 1029797143064350766}
   - component: {fileID: 3529235499657424934}
   - component: {fileID: 908418743903497533}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1259,7 +1284,7 @@ GameObject:
   - component: {fileID: 3624846435009740976}
   - component: {fileID: 5688925036717767808}
   - component: {fileID: 2004507142074426246}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1340,7 +1365,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1054822301217508962}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_FragmentsB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1377,7 +1402,7 @@ GameObject:
   - component: {fileID: 2087818897222501992}
   - component: {fileID: 2201873991693919445}
   - component: {fileID: 4325693614788385279}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1460,7 +1485,7 @@ GameObject:
   - component: {fileID: 3109040519747194899}
   - component: {fileID: 1149376815172559151}
   - component: {fileID: 4854959983123887134}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1541,7 +1566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5233199347459836531}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_FragmentsC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1578,7 +1603,7 @@ GameObject:
   - component: {fileID: 9088984997408304156}
   - component: {fileID: 8354050834962809222}
   - component: {fileID: 4952771950939113801}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_008
   m_TagString: Untagged
   m_Icon: {fileID: 0}

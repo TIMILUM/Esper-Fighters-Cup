@@ -93,6 +93,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var localplayer = player.GetComponent<APlayer>();
         localplayer.ResetPositionAndRotation();
 
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
         return localplayer;
     }
 
