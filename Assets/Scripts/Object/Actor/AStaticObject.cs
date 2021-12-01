@@ -20,7 +20,7 @@ public class AStaticObject : Actor
 
         HitSystem = GetComponent<ObjectHitSystem>();
         HitSystem.OnHit += PlayHitSound;
-        
+
         _colliderSize = _boxcollider.bounds.extents;
         _boxcollider.enabled = false;
     }

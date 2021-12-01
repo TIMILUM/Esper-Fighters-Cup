@@ -216,6 +216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3179342520512475395}
+  - component: {fileID: 3081782349151801843}
   - component: {fileID: 3126938505245127475}
   - component: {fileID: 1959413196410685931}
   - component: {fileID: 2328800679540335472}
@@ -251,6 +252,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3081782349151801843
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &3126938505245127475
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -432,7 +446,7 @@ MonoBehaviour:
   _id: 7
   _audioEmitter: {fileID: 8241065219527511304}
   _fgravity: 30
-  _boxcollider: {fileID: 3179342519834818329}
+  _boxcollider: {fileID: 3081782349151801843}
   _collideSound: event:/SFX/OBJ_Collison/Sawbalde_Rotate_Coll
   _allowBuffList: 
   _collider: {fileID: 3179342519834818331}

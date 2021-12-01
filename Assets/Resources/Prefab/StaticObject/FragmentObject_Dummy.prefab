@@ -57,10 +57,12 @@ GameObject:
   - component: {fileID: 5321458846510056528}
   - component: {fileID: 1688513004886174869}
   - component: {fileID: 1055047741637954412}
+  - component: {fileID: 6961634993102079101}
   - component: {fileID: 8524433635644955736}
   - component: {fileID: 8478606176459519823}
   - component: {fileID: -424789612485097538}
   - component: {fileID: 5451352787449924202}
+  - component: {fileID: 2015967462471446932}
   m_Layer: 7
   m_Name: FragmentObject_Dummy
   m_TagString: Object
@@ -162,6 +164,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &6961634993102079101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851603496711567382}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8524433635644955736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +254,20 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2015967462471446932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851603496711567382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
 --- !u!1 &5621490903234798928
 GameObject:
   m_ObjectHideFlags: 0

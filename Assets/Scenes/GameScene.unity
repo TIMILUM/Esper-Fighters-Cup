@@ -3555,7 +3555,7 @@ PrefabInstance:
       objectReference: {fileID: 2480101516244202184}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _defaultCharacterType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _startLocations.Array.data[0]
@@ -3721,6 +3721,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1076915466}
     m_Modifications:
+    - target: {fileID: 2470138121703495508, guid: 42223410487a13348b055ffc09a04eda, type: 3}
+      propertyPath: _uiParent
+      value: 
+      objectReference: {fileID: 1272904241}
     - target: {fileID: 2470138121703495510, guid: 42223410487a13348b055ffc09a04eda, type: 3}
       propertyPath: m_Name
       value: GameUIManager

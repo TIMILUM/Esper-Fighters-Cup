@@ -1,5 +1,4 @@
 using System.Collections;
-using Photon.Pun;
 using UnityEngine;
 
 public class KnockBackObject : BuffObject
@@ -41,9 +40,6 @@ public class KnockBackObject : BuffObject
             _playerChracterID = Info.ValueFloat[3];
         }
 
-
-
-
         if (Author is APlayer player)
         {
             player.Animator.SetTrigger("Knockback");
@@ -62,7 +58,7 @@ public class KnockBackObject : BuffObject
             StopCoroutine(_moving);
         }
 
-        if (Author as AStaticObject != null)
+        if (Author is AStaticObject)
         {
             Author.BuffController.GenerateBuff(new BuffStruct()
             {
@@ -70,9 +66,6 @@ public class KnockBackObject : BuffObject
                 ValueFloat = new float[2] { 0.0f, 0.0f }
             });
         }
-
-
-
     }
 
     private IEnumerator Knockback()
@@ -87,7 +80,12 @@ public class KnockBackObject : BuffObject
 
     public override void OnPlayerHitEnter(GameObject other)
     {
-        if ((!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall")) || otherActor.photonView.ViewID == _playerChracterID)
+        if (!other.TryGetComponent(out Actor otherActor) && !other.CompareTag("Wall"))
+        {
+            return;
+        }
+
+        if (otherActor != null && otherActor.photonView.ViewID == _playerChracterID)
         {
             return;
         }

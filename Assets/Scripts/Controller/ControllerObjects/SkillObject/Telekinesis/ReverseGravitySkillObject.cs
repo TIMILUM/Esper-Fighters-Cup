@@ -139,7 +139,7 @@ public class ReverseGravitySkillObject : SkillObject
 
     private async UniTask InstantiateStoneAsync(Vector3 position)
     {
-        var fragment = InGameSkillManager.Instance.CreateSkillObject("Stone", position);
+        var fragment = InGameSkillManager.Instance.CreateSkillObject("Fragment", position);
         // _lineRendererObj.SetActive(true);
 
         await UniTask.DelayFrame(3);
