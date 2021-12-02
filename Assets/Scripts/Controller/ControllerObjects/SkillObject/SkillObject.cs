@@ -73,7 +73,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     protected float EndDelayMoveSpeed { get; private set; }
     protected int StunGroggyDuration { get; private set; }
     protected int Damage { get; private set; }
-    
+
     //Effects CSV Data
     protected Vector4 EffectData { get; private set; }
     protected Vector2 EffectSize { get; private set; }
@@ -234,7 +234,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
         FrontDelayMoveSpeed = GetCSVData<float>("Pre_Delay_MoveSpeed");
         EndDelayMoveSpeed = GetCSVData<float>("After_Delay_MoveSpeed");
         Size = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
-        
+
         // Effect Data
         EffectData = new Vector4(GetCSVData<float>("Skill_Effect_Data_1"), GetCSVData<float>("Skill_Effect_Data_2"), 0, 0);
         EffectSize = new Vector2(GetCSVData<float>("Effect_Size_1"), GetCSVData<float>("Effect_Size_2"));

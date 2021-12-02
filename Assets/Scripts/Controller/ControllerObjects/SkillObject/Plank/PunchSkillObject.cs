@@ -80,6 +80,8 @@ public class PunchSkillObject : SkillObject
         Vector3 endPos = GetMousePosition();
         _direction = Vector3.Normalize(endPos - transform.position);
 
+
+        await UniTask.Yield();
         return true;
     }
 
