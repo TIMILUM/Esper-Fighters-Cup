@@ -149,6 +149,7 @@ public class ParticleManager : PunEventCallbacks
     /// <param name="trans">부모 트랜스폼</param>
     public void PullParticleToLocal(string particleName, Transform trans)
     {
+        // TODO: EffectTrans 인덱스 전달하는 방식으로 동기화할 것
         // EventSender.Broadcast(new GameParticlePlayEvent(particleName, pos, angle.eulerAngles), SendOptions.SendUnreliable);
 
         if (!_particleList.TryGetValue(particleName, out var particleQueue))

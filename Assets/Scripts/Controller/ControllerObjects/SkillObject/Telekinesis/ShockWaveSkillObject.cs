@@ -18,24 +18,29 @@ public class ShockWaveSkillObject : SkillObject
         public List<int> StunDuration { get; set; }
     }
 
-    [SerializeField] private float _onHitDuration = 0.5f;
     [Header("Collider")]
     [SerializeField] private ColliderChecker _collider;
 
     private ShockWaveSkillData _data;
-    private SkillUI _castObject;
+    private SkillUI _castUI;
     private Vector3 _startPos = Vector3.zero;
     private Vector3 _direction = Vector3.right;
+    private Vector2 _uiSize;
 
     public override void SetHit(ObjectBase to)
     {
+        // TODO: 충격파 대쉬 적용
         var knockBackBuff = AnalyzeBuff(to);
         if (knockBackBuff is null)
         {
             return;
         }
         knockBackBuff.ValueVector3[0] = _direction;
-        base.OnHit(this, to, new[] { knockBackBuff });
+
+        _buffOnCollision.Clear();
+        _buffOnCollision.Add(knockBackBuff);
+
+        base.SetHit(to);
     }
 
     protected override void OnInitializeSkill()
@@ -43,12 +48,14 @@ public class ShockWaveSkillObject : SkillObject
         base.OnInitializeSkill();
         LoadShockWaveData();
 
-        var colliderScale = new Vector3(Size.x, 1, Size.y);
-        _collider.transform.localScale = colliderScale;
+        _uiSize = new Vector2(Size.y, Size.y) * 0.1f;
 
-        Debug.Log("initialize");
-        _castObject = GameUIManager.Instance.PlayLocal("Skill_Range_Arrow", transform.position, 0f, Size);
-        GameObjectUtil.ActiveGameObject(_castObject.gameObject, false);
+        _castUI = GameUIManager.Instance.PlayLocal("ShockWave_Arrow", transform.position, 0f, _uiSize);
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+
+        _collider.transform.SetParent(null);
+        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 50, Size.y));
+        _collider.OnCollision += SetHit;
     }
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
@@ -61,8 +68,8 @@ public class ShockWaveSkillObject : SkillObject
         {
             return false;
         }
-        GameObjectUtil.ActiveGameObject(_castObject.gameObject, true);
-        GameObjectUtil.TranslateGameObject(_castObject.gameObject, _startPos);
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
+        GameObjectUtil.TranslateGameObject(_castUI.gameObject, _startPos);
 
         await UniTask.WaitUntil(() =>
         {
@@ -78,12 +85,11 @@ public class ShockWaveSkillObject : SkillObject
                 _direction = Vector3.Normalize(endPos - _startPos);
 
                 var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
-                GameObjectUtil.RotateGameObject(_castObject.gameObject, rotation);
+                GameObjectUtil.RotateGameObject(_castUI.gameObject, rotation);
             }
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
             {
-                Debug.Log("Button Up");
                 return true;
             }
 
@@ -91,41 +97,32 @@ public class ShockWaveSkillObject : SkillObject
 
         }, cancellationToken: cancellation);
 
-        if (isCanceled)
-        {
-            return false;
-        }
-
-        GameObjectUtil.ActiveGameObject(_castObject.gameObject, false);
-
-        return true;
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+        return !isCanceled;
     }
 
     protected override void BeforeFrontDelay()
     {
-        var pos = _castObject.transform.position;
-        var rot = _castObject.transform.rotation.eulerAngles;
+        var pos = _castUI.transform.position;
+        var rot = _castUI.transform.rotation.eulerAngles;
 
-        GameUIManager.Instance.Play("Shockwave_Range", new Vector2(pos.x, pos.z), rot.y, Size, 0.5f, Author.photonView.ViewID);
+        GameUIManager.Instance.Play("ShockWave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize, 0.5f, Author.photonView.ViewID);
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
-        ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
+        ParticleManager.Instance.PullParticleToLocal("ShockWaveHand", AuthorPlayer.EffectTrans[0]);
+        // ParticleManager.Instance.PullParticle("ShockWaveHand", _startPos, Quaternion.LookRotation(_direction));
     }
 
     protected override async UniTask OnUseAsync()
     {
         ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
 
-        _collider.transform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
-        _collider.OnCollision += SetHit;
-        _collider.transform.position = _startPos;
-        _collider.gameObject.SetActive(true);
+        _collider.transform.SetPositionAndRotation(_castUI.transform.GetChild(0).position, Quaternion.LookRotation(_direction));
 
-        await UniTask.NextFrame();
-
-        _collider.gameObject.SetActive(false);
-        _collider.OnCollision -= SetHit;
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
+        await UniTask.DelayFrame(3);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
     }
 
     protected override void BeforeEndDelay()
@@ -145,7 +142,7 @@ public class ShockWaveSkillObject : SkillObject
     private void ReleaseShockWave()
     {
         // 중간에 스킬이 취소되어서 미처 제거하지 못한 코드들 여기서 제거
-        GameObjectUtil.ActiveGameObject(_castObject.gameObject, false);
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
         _collider.gameObject.SetActive(false);
     }
 
@@ -247,7 +244,7 @@ public class ShockWaveSkillObject : SkillObject
                 Type = BuffObject.Type.KnockBack,
                 AllowDuplicates = false,
                 Duration = movetime,
-                ValueFloat = new float[] // TOOD: ValueFloat 대신 ValueInt가 돼야 할듯
+                ValueFloat = new float[]
                 {
                     movespeed,
                     damage,
@@ -255,6 +252,7 @@ public class ShockWaveSkillObject : SkillObject
                 },
                 ValueVector3 = new Vector3[1]
             };
+
             return result;
         }
 

@@ -24,6 +24,10 @@ public abstract class ObjectBase : MonoBehaviourPunCallbacks
     {
     }
 
+    protected virtual void FixedUpdate()
+    {
+    }
+
     protected virtual void OnDestroy()
     {
     }

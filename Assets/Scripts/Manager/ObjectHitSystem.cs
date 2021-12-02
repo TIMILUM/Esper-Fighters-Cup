@@ -1,16 +1,34 @@
 using Photon.Pun;
 using UnityEngine;
-public class ObjectHitSystem : MonoBehaviourPunCallbacks
+using UnityEngine.Events;
+
+public class HitInfo
+{
+    public GameObject Other { get; }
+    public bool IsDestroy { get; }
+
+    public HitInfo(GameObject other, bool isDestroy)
+    {
+        Other = other;
+        IsDestroy = isDestroy;
+    }
+}
+
+public class ObjectHitSystem : MonoBehaviourPun
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
-    private bool _isDestroyable = true;
+    public float Strength => _strength;
+
+    public bool IsDestroyable { get; private set; } = true;
 
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
 
     private Actor _actor;
     private bool _isDestroy = false;
+
+    public event UnityAction<HitInfo> OnHit;
 
     private void Awake()
     {
@@ -41,30 +59,20 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
         }
         if (csvData.Get<float>("Destroyable", out var destroyableList))
         {
-            _isDestroyable = destroyableList[index] > 0;
+            IsDestroyable = destroyableList[index] > 0;
         }
     }
 
     private void Update()
     {
-        if (!_actor || !_actor.photonView.IsMine || !_isDestroyable)
+        if (!_actor || !_actor.photonView.IsMine || !IsDestroyable)
         {
             return;
         }
 
         if (_isDestroy)
         {
-            var pv = gameObject.GetComponentInChildren<PhotonView>();
-            if (pv != null)
-            {
-                // PhotonNetwork.OpCleanRpcBuffer(photonView);
-                PhotonNetwork.Destroy(photonView);
-                PhotonNetwork.SendAllOutgoingCommands();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            DestroyObject();
         }
     }
 
@@ -84,20 +92,47 @@ public class ObjectHitSystem : MonoBehaviourPunCallbacks
         var otherStrength = otherHitSystem._strength;
         var difference = _strength - otherStrength;
         // 본인의 강도가 더 높은 경우
-        if (difference > 0 && otherHitSystem._isDestroyable)
+        if (difference > 0 && otherHitSystem.IsDestroyable)
         {
             otherHitSystem._isDestroy = true;
         }
         // 상대의 강도가 더 높은 경우
-        else if (difference < 0 && _isDestroyable)
+        else if (difference < 0 && IsDestroyable)
         {
             _isDestroy = true;
         }
         // 둘 다 강도값이 같은 경우
         else if (difference == 0)
         {
-            _isDestroy = _isDestroyable;
-            otherHitSystem._isDestroy = otherHitSystem._isDestroyable;
+            _isDestroy = IsDestroyable;
+            otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
+        }
+
+        if (otherHitSystem._isDestroy)
+        {
+            otherHitSystem.DestroyObject();
+        }
+
+        if (_isDestroy)
+        {
+            DestroyObject();
+        }
+
+        OnHit?.Invoke(new HitInfo(other, _isDestroy));
+    }
+
+    private void DestroyObject()
+    {
+        var pv = gameObject.GetComponentInChildren<PhotonView>();
+        if (pv != null)
+        {
+            // PhotonNetwork.OpCleanRpcBuffer(photonView);
+            PhotonNetwork.Destroy(photonView);
+            // PhotonNetwork.SendAllOutgoingCommands();
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }
