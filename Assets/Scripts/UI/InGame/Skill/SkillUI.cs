@@ -11,14 +11,12 @@ namespace EsperFightersCup.UI.InGame.Skill
         public float RotationY => transform.rotation.eulerAngles.y;
         public Vector2 Scale => new Vector2(transform.localScale.x, transform.localScale.z);
         public float Duration { get; private set; }
-        public int ViewID { get; private set; }
         public Actor Target { get; private set; }
 
         public void Init(GameUIPlayArguments args)
         {
             Name = args.Name;
             Duration = args.Duration;
-            ViewID = args.ViewID;
 
             var defaultRot = transform.rotation.eulerAngles;
 
@@ -26,7 +24,7 @@ namespace EsperFightersCup.UI.InGame.Skill
             transform.localRotation = Quaternion.Euler(new Vector3(defaultRot.x, args.RotationY, defaultRot.z));
             transform.localScale = new Vector3(args.Scale.x, 1, args.Scale.y);
 
-            ChangeTarget(ViewID);
+            ChangeTarget(args.ViewID);
 
             if (Duration > 0f)
             {
@@ -41,7 +39,6 @@ namespace EsperFightersCup.UI.InGame.Skill
                 var pv = PhotonNetwork.GetPhotonView(viewID);
                 if (pv != null && pv.TryGetComponent<Actor>(out var actor))
                 {
-                    ViewID = viewID;
                     Target = actor;
                 }
             }

@@ -48,7 +48,7 @@ namespace EsperFightersCup
 
         protected override void BeforeFrontDelay()
         {
-            GameUIManager.Instance.Play("GroundSmash_Range", transform.position, Author.transform.rotation.eulerAngles.y, _currentSize, _uIDuration);
+            GameUIManager.Instance.PlaySync(Author, "GroundSmash_Range", transform.position, _currentSize, Author.transform.rotation.eulerAngles.y, _uIDuration);
             AuthorPlayer.Animator.SetTrigger("GroundSkill");
         }
 

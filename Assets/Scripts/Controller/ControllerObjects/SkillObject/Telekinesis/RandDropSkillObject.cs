@@ -31,8 +31,8 @@ namespace EsperFightersCup
             _uiSize = Size * 0.1f;
 
             var rangeSize = new Vector2(Range, Range) * 2f;
-            _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize * 0.1f);
-            _castUI = GameUIManager.Instance.PlayLocal("RandDrop_Casting", transform.position, 0f, _uiSize);
+            _rangeUI = GameUIManager.Instance.PlayLocal(Author, "Skill_Range", transform.position, rangeSize * 0.1f);
+            _castUI = GameUIManager.Instance.PlayLocal(Author, "RandDrop_Casting", transform.position, _uiSize);
 
             GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
             GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
@@ -116,8 +116,8 @@ namespace EsperFightersCup
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(audioInstance, gameObject.transform, Author.Rigidbody);
             audioInstance.start();
 
-            var duration = _dropDelay * 0.001f;
-            GameUIManager.Instance.Play("RandDrop_Range", position, 0f, _uiSize, duration);
+            var delay = _dropDelay * 0.001f;
+            GameUIManager.Instance.PlaySync(Author, "RandDrop_Range", position, _uiSize, duration: delay);
             await UniTask.Delay((int)_dropDelay);
 
             // 카메라 위로 생성 하도록 하기 위해서 y값을 10을 더해줬습니다.

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3115769419818359703}
   - component: {fileID: 3115769419818359702}
+  - component: {fileID: 6694684491487169374}
   m_Layer: 0
   m_Name: GroundSmash_Range
   m_TagString: Untagged
@@ -44,6 +45,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5737527b20a33824fa376b7674b12302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6694684491487169374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3115769419818359705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f769ae68fbd32048afc9759cdb44104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetUI:
+  - _renderer: {fileID: 2876315268378518986}
+    _paletteUI:
+    - {fileID: 21300000, guid: baa592d9e3849f347aecae21a40154b8, type: 3}
+    - {fileID: 21300000, guid: 7cff4b548bba3f74abed7fc91c621cac, type: 3}
 --- !u!1 &5321762393150594863
 GameObject:
   m_ObjectHideFlags: 0

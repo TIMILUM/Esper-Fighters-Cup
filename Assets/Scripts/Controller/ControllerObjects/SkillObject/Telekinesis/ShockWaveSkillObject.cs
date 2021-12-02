@@ -50,7 +50,7 @@ public class ShockWaveSkillObject : SkillObject
 
         _uiSize = new Vector2(Size.y, Size.y) * 0.1f;
 
-        _castUI = GameUIManager.Instance.PlayLocal("ShockWave_Arrow", transform.position, 0f, _uiSize);
+        _castUI = GameUIManager.Instance.PlayLocal(Author, "ShockWave_Arrow", transform.position, _uiSize);
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
 
         _collider.transform.SetParent(null);
@@ -106,7 +106,7 @@ public class ShockWaveSkillObject : SkillObject
         var pos = _castUI.transform.position;
         var rot = _castUI.transform.rotation.eulerAngles;
 
-        GameUIManager.Instance.Play("ShockWave_Range", new Vector2(pos.x, pos.z), rot.y, _uiSize, 0.5f, Author.photonView.ViewID);
+        GameUIManager.Instance.PlaySync(Author, "ShockWave_Range", new Vector2(pos.x, pos.z), _uiSize, rot.y, 0.5f);
 
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");

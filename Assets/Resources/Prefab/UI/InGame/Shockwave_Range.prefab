@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7464291795492224268}
   - component: {fileID: -3706689521334415213}
   - component: {fileID: 7253189839268322557}
+  - component: {fileID: 8039171350126694628}
   m_Layer: 0
-  m_Name: ShockWave_Range
+  m_Name: Shockwave_Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,6 +69,23 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
+--- !u!114 &8039171350126694628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464291795492224270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f769ae68fbd32048afc9759cdb44104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetUI:
+  - _renderer: {fileID: 7974548278489287204}
+    _paletteUI:
+    - {fileID: 21300000, guid: 6f3bad38c99a598468eee5e52ca2a8fb, type: 3}
+    - {fileID: 21300000, guid: 6f3bad38c99a598468eee5e52ca2a8fb, type: 3}
 --- !u!1 &8052468629985726269
 GameObject:
   m_ObjectHideFlags: 0

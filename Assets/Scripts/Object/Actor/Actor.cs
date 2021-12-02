@@ -1,3 +1,4 @@
+using EsperFightersCup;
 using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
@@ -22,6 +23,18 @@ public class Actor : ObjectBase, IPunObservable
     public int ID => _id;
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
     public Rigidbody Rigidbody { get; protected set; }
+
+    public int Pallete
+    {
+        get
+        {
+            if (photonView.Controller.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerPalette, out var value))
+            {
+                return (int)value;
+            }
+            return 0;
+        }
+    }
 
     protected override void Awake()
     {
