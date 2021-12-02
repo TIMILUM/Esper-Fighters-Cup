@@ -1,43 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using FMOD;
-using FMODUnity;
 using UnityEngine.SceneManagement;
 
 namespace EsperFightersCup
 {
-    public class OutgameBGMManager : MonoBehaviour
+    [RequireComponent(typeof(FMODUnity.StudioEventEmitter))]
+    public class OutgameBGMManager : Singleton<OutgameBGMManager>
     {
+        private FMODUnity.StudioEventEmitter _emitter;
 
-        private FMOD.Studio.EventInstance OutGameBGM;   //아웃게임 배경음악 인스턴스 생성
-
-        private void Awake()
+        protected override void Awake()
         {
-            var sameOBJ = FindObjectsOfType<OutgameBGMManager>();
-            if(sameOBJ.Length == 1)
-            {
-                DontDestroyOnLoad(this.gameObject);
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
+            base.Awake();
+
+            _emitter = GetComponent<FMODUnity.StudioEventEmitter>();
+            DontDestroyOnLoad(gameObject);
         }
 
-        void Start()
+        private void Start()
         {
-            OutGameBGM = FMODUnity.RuntimeManager.CreateInstance("event:/BGM/OutGameBGM");  //인스턴스 초기화
-            OutGameBGM.start();     //배경음악 재생
+            _emitter.Play();     //배경음악 재생
+            SceneManager.activeSceneChanged += OnSceneChanged;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnSceneChanged(Scene current, Scene next)
         {
-            if(SceneManager.GetActiveScene().name == "GameScene")
+            if (next.name == "GameScene")
             {
-                OutGameBGM.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-                Destroy(this.gameObject,15);
+                _emitter.Stop();
+            }
+            else if (current.name == "GameScene")
+            {
+                _emitter.Play();
             }
         }
     }
