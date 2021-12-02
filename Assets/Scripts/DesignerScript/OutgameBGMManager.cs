@@ -28,7 +28,7 @@ namespace EsperFightersCup
             {
                 _emitter.Stop();
             }
-            else if (current.name == "GameScene")
+            else if (!_emitter.IsPlaying())
             {
                 _emitter.Play();
             }
