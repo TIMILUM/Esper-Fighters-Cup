@@ -43,8 +43,8 @@ public class ReverseGravitySkillObject : SkillObject
 
         // 범위 UI의 반지름 = Range
         var rangeSize = new Vector2(Range, Range) * 2f;
-        _rangeUI = GameUIManager.Instance.PlayLocal("Skill_Range", transform.position, 0f, rangeSize * 0.1f);
-        _castUI = GameUIManager.Instance.PlayLocal("ReverseGravity_Casting", transform.position, 0f, _uiSize);
+        _rangeUI = GameUIManager.Instance.PlayLocal(Author, "Skill_Range", transform.position, rangeSize * 0.1f);
+        _castUI = GameUIManager.Instance.PlayLocal(Author, "ReverseGravity_Casting", transform.position, _uiSize);
 
         GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
@@ -116,7 +116,7 @@ public class ReverseGravitySkillObject : SkillObject
         ParticleManager.Instance.PullParticle("ReverseGravityFiled", _castUI.transform.position, Quaternion.identity);
 
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
-        GameUIManager.Instance.Play("ReverseGravity_Range", _castUI.Position, 0f, _uiSize, duration);
+        GameUIManager.Instance.PlaySync(Author, "ReverseGravity_Range", _castUI.Position, _uiSize, duration: duration);
     }
 
     protected override async UniTask OnUseAsync()

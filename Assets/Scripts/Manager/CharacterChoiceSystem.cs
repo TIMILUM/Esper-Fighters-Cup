@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
@@ -31,10 +32,33 @@ namespace EsperFightersCup.Manager
             _count++;
             if (PhotonNetwork.IsMasterClient && _count >= PhotonNetwork.CurrentRoom.PlayerCount)
             {
+                SetPaletteOfRoomPlayers();
+
                 DOTween.Sequence()
                     .SetLink(gameObject)
                     .AppendInterval(3.0f)
                     .AppendCallback(() => PhotonNetwork.LoadLevel("GameScene"));
+            }
+        }
+
+        private void SetPaletteOfRoomPlayers()
+        {
+            var paletteIndex = new Dictionary<int, int>();
+
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                var characterType = (int)player.CustomProperties[CustomPropertyKeys.PlayerCharacterType];
+                if (paletteIndex.TryGetValue(characterType, out int index))
+                {
+                    index++;
+                }
+                else
+                {
+                    index = 0;
+                }
+
+                paletteIndex[characterType] = index;
+                player.SetCustomProperty(CustomPropertyKeys.PlayerPalette, index);
             }
         }
     }

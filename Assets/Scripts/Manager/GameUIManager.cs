@@ -30,44 +30,43 @@ namespace EsperFightersCup
             _uiParent.SetPositionAndRotation(new Vector3(0, _positionY, 0), Quaternion.identity);
         }
 
-        public void Play(string name, Vector3 position, float rotationY, Vector2 scale, float duration = 0f, int viewID = -1)
+        public void PlaySync(Actor author, string name, Vector3 position, Vector2 scale, float rotationY = 0f, float duration = 0f)
         {
-            Play(name, new Vector2(position.x, position.z), rotationY, scale, duration, viewID);
+            var uiPosition = new Vector2(position.x, position.z);
+            PlaySync(author, name, uiPosition, scale, rotationY, duration);
         }
 
         /// <summary>
         /// 모든 클라이언트에 UI를 생성합니다. UI 오브젝트에 있는 스크립트를 통해서만 조작 가능합니다.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="position"></param>
-        /// <param name="rotationY"></param>
-        /// <param name="scale"></param>
-        public void Play(string name, Vector2 position, float rotationY, Vector2 scale, float duration = 0f, int viewID = -1)
+        public void PlaySync(Actor author, string name, Vector2 position, Vector2 scale, float rotationY = 0f, float duration = 0f)
         {
-            EventSender.Broadcast(new GameUIPlayArguments(name, position, rotationY, scale, duration, viewID), SendOptions.SendReliable);
+            var viewID = author == null ? -1 : author.photonView.ViewID;
+            var args = new GameUIPlayArguments(name, position, rotationY, scale, duration, viewID);
+
+            EventSender.Broadcast(in args, SendOptions.SendReliable);
         }
 
-        public SkillUI PlayLocal(string name, Vector3 position, float rotationY, Vector2 scale, float duration = 0f, int viewID = -1)
+        public SkillUI PlayLocal(Actor author, string name, Vector3 position, Vector2 scale, float rotationY = 0f, float duration = 0f)
         {
-            return PlayLocal(name, new Vector2(position.x, position.z), rotationY, scale, duration, viewID);
+            var uiPosition = new Vector2(position.x, position.z);
+            return PlayLocal(author, name, uiPosition, scale, rotationY, duration);
         }
 
         /// <summary>
         /// 로컬에만 UI를 생성합니다. 반환값으로 받는 UI 오브젝트로 자유롭게 조작 가능합니다.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="position"></param>
-        /// <param name="rotationY"></param>
-        /// <param name="scale"></param>
-        /// <returns></returns>
-        public SkillUI PlayLocal(string name, Vector2 position, float rotationY, Vector2 scale, float duration = 0f, int viewID = -1)
+        public SkillUI PlayLocal(Actor author, string name, Vector2 position, Vector2 scale, float rotationY = 0f, float duration = 0f)
         {
-            return CloneUI(new GameUIPlayArguments(name, position, rotationY, scale, duration, viewID));
+            var viewID = author == null ? -1 : author.photonView.ViewID;
+            var args = new GameUIPlayArguments(name, position, rotationY, scale, duration, viewID);
+            return CloneUI(in args);
         }
 
-        private SkillUI CloneUI(GameUIPlayArguments args)
+        private SkillUI CloneUI(in GameUIPlayArguments args)
         {
-            var ui = _uiList.FirstOrDefault(x => x.Name == args.Name);
+            var name = args.Name;
+            var ui = _uiList.FirstOrDefault(x => x.Name == name);
             if (ui is null)
             {
                 Debug.LogError("이름과 일치하는 UI가 없습니다.");
@@ -88,7 +87,7 @@ namespace EsperFightersCup
             }
 
             var data = (GameUIPlayArguments)args.EventData;
-            CloneUI(data);
+            CloneUI(in data);
         }
     }
 }
