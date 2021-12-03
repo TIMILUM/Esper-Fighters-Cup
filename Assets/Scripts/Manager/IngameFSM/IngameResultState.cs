@@ -1,11 +1,21 @@
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace EsperFightersCup
 {
     public class IngameResultState : InGameFSMStateBase
     {
+        [SerializeField] private UnityEvent _onGameEnd;
+
         private int _count;
+
+        public event UnityAction OnGameEnd
+        {
+            add => _onGameEnd.AddListener(value);
+            remove => _onGameEnd.RemoveListener(value);
+        }
 
         protected override void Initialize()
         {
@@ -27,6 +37,7 @@ namespace EsperFightersCup
             }
 
             ResultEndAsync().Forget();
+            _onGameEnd?.Invoke();
         }
 
         private async UniTask ResultEndAsync()
