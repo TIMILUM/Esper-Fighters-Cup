@@ -33,7 +33,7 @@ namespace EsperFightersCup.Net
         private Actor _actor;
         private List<string> _syncTriggers;
 
-        public Animator Animator => _animator;
+        public Animator Local => _animator;
 
         private void Awake()
         {
@@ -69,10 +69,21 @@ namespace EsperFightersCup.Net
             }
         }
 
-        [Obsolete("트리거는 로컬 애니메이터에서 설정해주세요")]
-        public void SetTrigger(string name)
+        public void SetTrigger(string name, bool isSync = true)
         {
             _animator.SetTrigger(name);
+
+            if (!isSync)
+            {
+                return;
+            }
+
+            if (!photonView.IsMine)
+            {
+                Debug.LogWarning("AnimatorSync의 SetTrigger 동기화는 PhotonView.Controller가 본인일 때만 사용할 수 있습니다!");
+                return;
+            }
+
             if (_syncTriggers.Contains(name))
             {
                 photonView.RPC(nameof(AnimTriggerRPC), RpcTarget.Others, name);

@@ -24,7 +24,7 @@ namespace EsperFightersCup
             else
             {
                 Debug.LogWarning($"Can not instantiate {SingletonName} singleton game object because it is already exist");
-                Destroy(this);
+                Destroy(gameObject);
             }
         }
 

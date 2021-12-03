@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public class InGameSkillManager : Singleton<InGameSkillManager>
 {
-
     [SerializeField]
     private SkillObjectFactory _skillObjectfactory;
 
@@ -22,6 +21,18 @@ public class InGameSkillManager : Singleton<InGameSkillManager>
         return _skillObjectfactory.CreateSkillObject(objectname, pos);
     }
 
+    public GameObject CreateSkillObject(string objectname, Vector3 pos, Quaternion rot)
+    {
+        return _skillObjectfactory.CreateSkillObject(objectname, pos, rot);
+    }
+
+    /*
+    public GameObject CreateSkillObject(string objectname, Vector3 pos, Quaternion rot, Vector3 scale)
+    {
+        return _skillObjectfactory.CreateSkillObject(objectname, pos, rot, scale);
+    }
+    */
+
     /// <summary>
     ///     오브젝트의 ID 값을 가지고 오브젝트를 생성하는 함수입니다. (CSV의 ID값을 통해 오브젝트를 불러오기 때문에 생성되었습니다.)
     ///     수정이 필요하면 함수를 만든 사람에게 물어볼 필요 없이 바로 수정하셔도 됩니다.
@@ -34,14 +45,9 @@ public class InGameSkillManager : Singleton<InGameSkillManager>
         return _skillObjectfactory.CreateSkillObject(objectId, pos);
     }
 
-    public GameObject CreateSkillUI(string objectname, Vector3 pos)
-    {
-        return _skillObjectfactory.CreateSkillUI(objectname, pos);
-    }
-
     public void DestroySkillObj(GameObject obj)
     {
-        _skillObjectfactory.DestroyObj(obj);
+        _skillObjectfactory.DestroyObject(obj);
     }
 
 }

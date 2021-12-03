@@ -1,62 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 namespace EsperFightersCup
 {
     public class SlidingObject : BuffObject
     {
-
-        [SerializeField]
-        [Tooltip("이동 방향 입니다.")]
-        private Vector3 _startPosition = Vector3.zero;
+        private Vector3 _startPosition;
         private Vector3 _endPosition;
-
-        private ACharacter _character;
-        private Rigidbody _rigidbody;
         private float _moveTime;
-        private float _currentTime = 0;
+        private Coroutine _moving;
 
 
-        protected override void OnRegistered()
-        {
-            _rigidbody = Author.GetComponent<Rigidbody>();
-        }
+        public override Type BuffType => Type.Sliding;
 
-
-
-        protected override void Reset()
-        {
-            base.Reset();
-
-            _name = "";
-            _buffStruct.Type = Type.Sliding;
-
-            _character = Author as ACharacter;
-
-            if (!(_character is null))
-            {
-                _character.Animator.SetTrigger("Sliding");
-            }
-        }
-
-
-        public override void OnPlayerHitEnter(GameObject other)
-        {
-            // 부딪히면 버프 삭제
-            if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
-            {
-
-                myController.ReleaseBuff(this);
-
-            }
-
-        }
-
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void SetBuffStruct(BuffStruct buffStruct)
+        public override void OnBuffGenerated()
         {
             // BuffStruct Help
             // ---------------
@@ -65,33 +22,46 @@ namespace EsperFightersCup
             // ---------------
             // ValueFloat[0]    : _time
             // ---------------
+            _startPosition = Info.ValueVector3[0];
+            _endPosition = Info.ValueVector3[1];
+            _moveTime = Info.ValueFloat[0];
+            SlidingAnimationCancel(false);
 
-            base.SetBuffStruct(buffStruct);
-            _startPosition = buffStruct.ValueVector3[0];
-            _endPosition = buffStruct.ValueVector3[1];
-            _moveTime = buffStruct.ValueFloat[0];
+            if (Author.photonView.IsMine)
+            {
+                _moving = StartCoroutine(Slide());
+            }
         }
-        protected override void Update()
+
+        public override void OnPlayerHitEnter(GameObject other)
         {
-            base.Update();
-            if (!IsRegistered || !Author.photonView.IsMine)
+            SlidingAnimationCancel(true);
+            Controller.ReleaseBuff(this);
+        }
+
+
+
+        private IEnumerator Slide()
+        {
+            var currentTime = 0f;
+            var realTime = 0f;
+            var waitForFixedUpdate = new WaitForFixedUpdate();
+
+            while (realTime <= 1.0f - Mathf.Epsilon)
             {
-                return;
+                currentTime += Time.deltaTime * 1000.0f;
+                realTime = currentTime / _moveTime;
+                Author.Rigidbody.position = Vector3.Lerp(_startPosition, _endPosition, realTime);
+                yield return waitForFixedUpdate;
             }
-            _currentTime += Time.deltaTime * 1000.0f;
-            var realTime = _currentTime / _moveTime;
-            if (realTime > 1.0f)
-            {
-                if (Author.ControllerManager.TryGetController(ControllerManager.Type.BuffController, out BuffController myController))
-                {
-                    myController.ReleaseBuff(this);
-                }
-                return;
-            }
+            Controller.ReleaseBuff(this);
+        }
 
-            Author.transform.position = Vector3.Lerp(_startPosition, _endPosition, realTime);
-
-
+        private void SlidingAnimationCancel(bool isCancel)
+        {
+            var AuthorPlayer = Author as APlayer;
+            if (AuthorPlayer != null)
+                AuthorPlayer.Animator.SetBool("Cancel", isCancel);
         }
     }
 }

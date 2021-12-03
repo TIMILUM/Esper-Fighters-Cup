@@ -4,31 +4,42 @@ namespace EsperFightersCup
 {
     public class FallingObject : BuffObject
     {
+        // private float _range;
         private float _decreaseHp = 0;
         private float _durationStunSeconds = 0;
 
-        protected override void Reset()
-        {
-            base.Reset();
-            _name = "";
-            _buffStruct.Type = Type.Falling;
-        }
+        public override Type BuffType => Type.Falling;
 
-        public override void SetBuffStruct(BuffStruct buffStruct)
+        public override void OnBuffGenerated()
         {
             // BuffStruct Help
             // ValueFloat[0]    : _decreaseHp (0이면 HP감소 효과 없음)
             // ValueFloat[1]    : _durationStunSeconds (0이면 스턴 효과 없음)
+            // ValueFloat[2]    : _range (AfterBuff 적용 범위)
             // ---------------
-
-            base.SetBuffStruct(buffStruct);
-            _decreaseHp = buffStruct.ValueFloat[0];
-            _durationStunSeconds = buffStruct.ValueFloat[1];
+            _decreaseHp = Info.ValueFloat[0];
+            _durationStunSeconds = Info.ValueFloat[1];
+            // _range = 1f; // Info.ValueFloat[2];
         }
 
-        protected override void Update()
+        public override void OnBuffReleased()
         {
-            base.Update();
+            // 나중에 ObjectHitSystem 개선되면 고치기
+            var pos = Author.transform.position;
+            pos.y = 0.03f;
+
+            /*
+            var targets = Physics.OverlapSphere(pos, _range, (1 << 7) | (1 << 8)); // Object, Character
+
+            foreach (var target in targets)
+            {
+                var actor = target.GetComponent<Actor>();
+                var controller = actor.BuffController;
+                GenerateAfterBuff(controller);
+            }
+            */
+
+            ParticleManager.Instance.PullParticleToLocal("ObjectDropped", pos, Quaternion.identity);
         }
 
         public override void OnPlayerHitEnter(GameObject other)
@@ -49,12 +60,13 @@ namespace EsperFightersCup
             }
         }
 
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-        {
-        }
-
         private void GenerateAfterBuff(BuffController controller)
         {
+            if (_durationStunSeconds == 0)
+            {
+                return;
+            }
+
             controller.GenerateBuff(new BuffStruct()
             {
                 Type = Type.DecreaseHp,

@@ -1,55 +1,102 @@
+using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 
 namespace EsperFightersCup
 {
     public class GrabObject : BuffObject
     {
-        private ACharacter _character;
         private Collider[] _colliders;
 
-        protected override void Reset()
-        {
-            base.Reset();
+        public override Type BuffType => Type.Grab;
+        private Coroutine _moving;
+        private int _targetView;
+        private PhotonView _target;
+        private Rigidbody _rigd = null;
 
-            _name = "";
-            _buffStruct.Type = Type.Grab;
-            _character = Author as ACharacter;
-            if (!(_character is null))
-            {
-                _character.Animator.SetTrigger("Knockback");
-            }
-        }
-        protected override void Start()
-        {
-            base.Start();
 
+
+        public override void OnBuffGenerated()
+        {
             _colliders = Author.GetComponentsInChildren<Collider>();
+            _targetView = (int)Info.ValueFloat[0];
+            _target = PhotonNetwork.GetPhotonView(_targetView);
+
+
             foreach (var collider in _colliders)
             {
                 collider.isTrigger = true;
             }
 
-        }
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            foreach (var collider in _colliders)
+            if (Author is APlayer player)
             {
-                collider.isTrigger = false;
+                player.Animator.SetTrigger("Knockback", false);
+            }
+
+
+            if (Author.photonView.IsMine)
+            {
+
+                if ((Author.GetComponent<Actor>() as ACharacter) != null)
+                {
+                    _rigd = Author.GetComponent<Actor>().GetComponent<Rigidbody>();
+                    _rigd.useGravity = false;
+                }
+
+                _moving = StartCoroutine(Grab());
+
+
             }
         }
 
 
-        public override void OnPlayerHitEnter(GameObject other)
+
+        public override void OnBuffReleased()
         {
+            foreach (var collider in _colliders)
+            {
+                collider.isTrigger = false;
+            }
+
+            if (Author.photonView.IsMine)
+            {
+                StopCoroutine(_moving);
+
+                if (_rigd != null)
+                    _rigd.useGravity = true;
+            }
+
+
+
 
         }
-        protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
+
+        private IEnumerator Grab()
         {
+            var startPos = Author.transform.position;
+            var currentType = 0.0f;
+            var targettarns = _target.transform;
+            var boundy = 3.0f;
 
+            if (Author.photonView.IsMine)
+            {
+                while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
+                {
+
+                    if (currentType <= 1.0f)
+                    {
+                        currentType += Time.deltaTime * 10;
+                    }
+
+                    Author.transform.position = Vector3.Lerp(startPos, targettarns.position +
+                        (targettarns.up * boundy), currentType);
+                    yield return null;
+                }
+
+            }
+
+            Controller.ReleaseBuff(this);
         }
-
-
 
     }
 }

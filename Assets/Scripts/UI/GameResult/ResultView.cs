@@ -105,6 +105,7 @@ namespace EsperFightersCup.UI.GameResult
             _rematchButton.interactable = false;
 
             var canceled = await UniTask.Delay(TimeSpan.FromSeconds(10), cancellationToken: cancellation).SuppressCancellationThrow();
+            // BUG: 리매치 성공 후 씬 전환될 때 Cancel이 호출되는거 같은데 그거때문에 ResetRematch가 실행됨
             if (!canceled)
             {
                 ResetRematch();

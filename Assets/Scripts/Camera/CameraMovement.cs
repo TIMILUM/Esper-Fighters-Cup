@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
-    private int cameraViewState = 1;
+    private int _cameraViewState = 1;
 
     [SerializeField]
     private Camera _camera;
@@ -92,21 +92,21 @@ public class CameraMovement : MonoBehaviour
 
     private void ViewStateChanger()
     {
-        if (cameraViewState == 1) { cameraViewState = 2; Debug.Log("ViewState Changed to [" + cameraViewState + "]"); }
-        else if (cameraViewState == 2) { cameraViewState = 1; Debug.Log("ViewState Changed to [" + cameraViewState + "]"); }
-        CameraViewChanger(cameraViewState);
+        if (_cameraViewState == 1) { _cameraViewState = 2; Debug.Log("ViewState Changed to [" + _cameraViewState + "]"); }
+        else if (_cameraViewState == 2) { _cameraViewState = 1; Debug.Log("ViewState Changed to [" + _cameraViewState + "]"); }
+        CameraViewChanger(_cameraViewState);
     }
 
-    private void CameraViewChanger(int ViewState)
+    private void CameraViewChanger(int viewState)
     {
-        if(ViewState==1)        //60
+        if (viewState == 1)        //60
         {
             transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
             _offset.z = -11;
             _minZoom = 80;
             _maxZoom = 20;
         }
-        else if(ViewState==2)   //45
+        else if (viewState == 2)   //45
         {
             transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
             _offset.z = -20;
@@ -115,20 +115,20 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    public void CameraViewStateFirstInput(int InputedViewState)
+    public void CameraViewStateFirstInput(int inputedViewState)
     {
-        Debug.Log("Fitst ViewState Inputer Loaded. ViewState [" + InputedViewState + "] Inputed");
-        if (InputedViewState == 1)
+        Debug.Log("Fitst ViewState Inputer Loaded. ViewState [" + inputedViewState + "] Inputed");
+        if (inputedViewState == 1)
         {
-            cameraViewState = InputedViewState;
+            _cameraViewState = inputedViewState;
             transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
             _offset.z = -11;
             _minZoom = 80;
             _maxZoom = 20;
         }
-        else if(InputedViewState==2)
+        else if (inputedViewState == 2)
         {
-            cameraViewState = InputedViewState;
+            _cameraViewState = inputedViewState;
             transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
             _offset.z = -18;
             _minZoom = 65;

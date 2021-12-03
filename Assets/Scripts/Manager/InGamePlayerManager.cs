@@ -14,6 +14,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
+    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
 
     [SerializeField] private List<Transform> _startLocations;
     [SerializeField] private IngameFSMSystem _ingameFsmSystem;
@@ -35,6 +36,16 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     /// 인게임의 플레이어 시작 위치를 담고 있습니다.
     /// </summary>
     public List<Transform> StartLocations => _startLocations;
+
+    /// <summary>
+    /// 액터 번호로 정렬된 플레이어 목록 중 해당 플레이어가 몇 번째에 존재하는지 검색합니다.
+    /// </summary>
+    /// <param name="searchPlayer"></param>
+    /// <returns></returns>
+    public static int FindPlayerIndex(Player searchPlayer)
+    {
+        return Array.FindIndex(PhotonNetwork.PlayerList, p => p.ActorNumber == searchPlayer.ActorNumber);
+    }
 
     private void Start()
     {
@@ -77,7 +88,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         else
         {
             Debug.LogWarning($"Can not found local player's character type.");
-            characterType = ACharacter.Type.Telekinesis;
+            characterType = _defaultCharacterType;
         }
 
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
@@ -92,6 +103,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var localplayer = player.GetComponent<APlayer>();
         localplayer.ResetPositionAndRotation();
 
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
         return localplayer;
     }
 

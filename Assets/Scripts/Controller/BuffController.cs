@@ -10,7 +10,7 @@ public sealed class BuffController : ControllerBase
     private readonly BuffCollection _activeBuffs = new BuffCollection();
     // 캐싱용 딕셔너리
     private readonly Dictionary<BuffObject.Type, BuffObject> _buffTable = new Dictionary<BuffObject.Type, BuffObject>();
-    private readonly object _skillReleaseLock = new object();
+    private readonly object _buffReleaseLock = new object();
 
     // TODO: 값을 올바르게 리턴하는지 체크
     public IReadonlyBuffCollection ActiveBuffs => _activeBuffs;
@@ -24,9 +24,9 @@ public sealed class BuffController : ControllerBase
         SetControllerType(ControllerManager.Type.BuffController);
     }
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
         foreach (var buffObject in prefabs)
@@ -45,6 +45,7 @@ public sealed class BuffController : ControllerBase
         var args = buffStruct.ToBuffArguments(id);
 
         photonView.RPC(nameof(GenerateBuffRPC), RpcTarget.All, args);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
@@ -54,6 +55,7 @@ public sealed class BuffController : ControllerBase
     public void ReleaseBuffsByType(BuffObject.Type buffType)
     {
         photonView.RPC(nameof(ReleaseBuffsByTypeRPC), RpcTarget.All, (int)buffType);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
@@ -78,44 +80,45 @@ public sealed class BuffController : ControllerBase
         }
 
         photonView.RPC(nameof(ReleaseBuffRPC), RpcTarget.All, id);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     [PunRPC]
-    public void GenerateBuffRPC(BuffGenerateArguments args)
+    private void GenerateBuffRPC(BuffGenerateArguments args)
     {
         var buffType = (BuffObject.Type)args.Type;
         if (!_buffTable.ContainsKey(buffType))
         {
             return;
         }
-
         var buffs = _activeBuffs[buffType];
-        if (!args.AllowDuplicates && buffs.Count > 0)
+        if (photonView.IsMine && !args.AllowDuplicates && buffs.Count > 0)
         {
             ReleaseBuffsByType(buffType);
         }
-
         var prefab = _buffTable[buffType];
         var buff = Instantiate(prefab, transform);
         buff.name = args.BuffId;
         buff.BuffId = args.BuffId;
         buff.SetBuffStruct((BuffObject.BuffStruct)args);
-        buff.Register(this);
 
         _activeBuffs.Add(buff);
-
-        Debug.Log($"Buff generated [{buff.BuffType}] [{buff.BuffId}]");
+        Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        buff.Register(this, null);
     }
 
     [PunRPC]
     private void ReleaseBuffsByTypeRPC(int buffType)
     {
-        foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
+        lock (_buffReleaseLock)
         {
-            Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
-            Destroy(targetBuff.gameObject);
+            foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
+            {
+                Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+                targetBuff.Release();
+            }
+            _activeBuffs.Clear((BuffObject.Type)buffType);
         }
-        _activeBuffs.Clear((BuffObject.Type)buffType);
     }
 
     [PunRPC]
@@ -126,14 +129,17 @@ public sealed class BuffController : ControllerBase
             return;
         }
 
-        var targetBuff = _activeBuffs.Remove(id);
-        if (targetBuff is null)
+        lock (_buffReleaseLock)
         {
-            Debug.LogWarning($"ID와 일치하는 버프를 찾지 못했습니다. ({id})");
-            return;
-        }
+            var targetBuff = _activeBuffs.Remove(id);
+            if (targetBuff is null)
+            {
+                Debug.LogWarning($"ID와 일치하는 버프를 찾지 못했습니다. ({id})");
+                return;
+            }
 
-        Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
-        Destroy(targetBuff.gameObject);
+            Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+            targetBuff.Release();
+        }
     }
 }

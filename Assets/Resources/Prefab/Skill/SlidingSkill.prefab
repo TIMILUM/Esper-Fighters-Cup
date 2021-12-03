@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buffOnCollision:
   - _type: 8
-    _duration: 1
+    _duration: 1000
     _valueFloat:
     - 1000
     _valueVector3:
@@ -72,13 +72,5 @@ MonoBehaviour:
     _allowDuplicates: 0
     _damage: 0
     _isOnlyOnce: 0
-  _currentState: 0
   _id: 4
-  _slidingRange: 5
-  _grabRange: 3
-  _slidingFrontDelay: 300
-  _slidingEndDelay: 300
-  _grapFrontDelay: 300
-  _grapEndDelay: 300
-  _throwFrontDelay: 300
-  _throwEndDelay: 300
+  _inputKey: 0
