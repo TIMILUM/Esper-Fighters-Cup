@@ -41,14 +41,6 @@ public class ReverseGravitySkillObject : SkillObject
 
         _uiSize = Size * 0.1f;
 
-        // 범위 UI의 반지름 = Range
-        var rangeSize = new Vector2(Range, Range) * 2f;
-        _rangeUI = GameUIManager.Instance.PlayLocal(Author, "Skill_Range", transform.position, rangeSize * 0.1f);
-        _castUI = GameUIManager.Instance.PlayLocal(Author, "ReverseGravity_Casting", transform.position, _uiSize);
-
-        GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
-        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
-
         _collider.gameObject.SetActive(false);
         _collider.transform.SetParent(null);
         GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x * 0.5f, 5, Size.y * 0.5f));
@@ -57,6 +49,19 @@ public class ReverseGravitySkillObject : SkillObject
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
     {
+        if (_rangeUI == null)
+        {
+            // 범위 UI의 반지름 = Range
+            var rangeSize = new Vector2(Range, Range) * 2f;
+            _rangeUI = GameUIManager.Instance.PlayLocal(Author, "Skill_Range", transform.position, rangeSize * 0.1f);
+            GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+        }
+        if (_castUI == null)
+        {
+            _castUI = GameUIManager.Instance.PlayLocal(Author, "ReverseGravity_Casting", transform.position, _uiSize);
+            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+        }
+
         var isCanceled = false;
 
         _rangeUI.ChangeTarget(AuthorPlayer.photonView.ViewID);
