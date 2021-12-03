@@ -5154,6 +5154,7 @@ GameObject:
   - component: {fileID: 3581196146209380307}
   - component: {fileID: 6845190730239259319}
   - component: {fileID: 5474484803592411014}
+  - component: {fileID: 4274409511008480901}
   m_Layer: 5
   m_Name: Toggle (1)
   m_TagString: Untagged
@@ -5228,7 +5229,19 @@ MonoBehaviour:
   m_Group: {fileID: 5297924377703703416}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4274409511008480901}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!114 &5474484803592411014
 MonoBehaviour:
@@ -5243,6 +5256,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _screenMode: 3
+--- !u!114 &4274409511008480901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2848392335889334865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/UISFX/CheckBoxClick
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &2916191108976477932
 GameObject:
   m_ObjectHideFlags: 0
@@ -16101,6 +16137,7 @@ GameObject:
   - component: {fileID: 1551578314916889387}
   - component: {fileID: 2154092173620890686}
   - component: {fileID: 7442672092742764862}
+  - component: {fileID: 6359402499168871171}
   m_Layer: 5
   m_Name: Toggle
   m_TagString: Untagged
@@ -16175,7 +16212,19 @@ MonoBehaviour:
   m_Group: {fileID: 5297924377703703416}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6359402499168871171}
+        m_TargetAssemblyTypeName: FMODUnity.StudioEventEmitter, FMODUnity
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &7442672092742764862
 MonoBehaviour:
@@ -16190,6 +16239,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _screenMode: 2
+--- !u!114 &6359402499168871171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8915831657062660313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/UISFX/CheckBoxClick
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &8921765629503843193
 GameObject:
   m_ObjectHideFlags: 0
