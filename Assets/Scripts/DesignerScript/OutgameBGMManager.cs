@@ -19,18 +19,27 @@ namespace EsperFightersCup
         private void Start()
         {
             _emitter.Play();     //배경음악 재생
-            SceneManager.activeSceneChanged += OnSceneChanged;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private void OnSceneChanged(Scene current, Scene next)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-            if (next.name == "GameScene")
+            switch (scene.name)
             {
-                _emitter.Stop();
-            }
-            else if (!_emitter.IsPlaying())
-            {
-                _emitter.Play();
+                case "GameScene":
+                case "ResultScene":
+                    if (_emitter.IsPlaying())
+                    {
+                        _emitter.Stop();
+                    }
+                    break;
+
+                default:
+                    if (!_emitter.IsPlaying())
+                    {
+                        _emitter.Play();
+                    }
+                    break;
             }
         }
     }
