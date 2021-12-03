@@ -4,12 +4,28 @@ using Cysharp.Threading.Tasks;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace EsperFightersCup
 {
     public class IngameInBattleState : InGameFSMStateBase
     {
+        [SerializeField] private UnityEvent _onBattleStart;
+        [SerializeField] private UnityEvent _onBattleEnd;
+
         private CancellationTokenSource _checkCanllation;
+
+        public event UnityAction OnBattleStart
+        {
+            add => _onBattleStart.AddListener(value);
+            remove => _onBattleStart.RemoveListener(value);
+        }
+
+        public event UnityAction OnBattleEnd
+        {
+            add => _onBattleEnd.AddListener(value);
+            remove => _onBattleEnd.RemoveListener(value);
+        }
 
         protected override void Initialize()
         {
@@ -19,9 +35,17 @@ namespace EsperFightersCup
         public override void StartState()
         {
             base.StartState();
+
+            _onBattleStart?.Invoke();
+
             _checkCanllation = new CancellationTokenSource();
             CheckLocalPlayerHPAsync(_checkCanllation.Token).Forget();
             GenerateSawBladeAsync(_checkCanllation.Token).Forget();
+        }
+
+        public override void EndState()
+        {
+            base.EndState();
         }
 
         private async UniTask GenerateSawBladeAsync(CancellationToken cancellation)
@@ -46,7 +70,7 @@ namespace EsperFightersCup
                     }
                 }
 
-                await UniTask.Yield();
+                await UniTask.NextFrame();
             }
         }
 
@@ -83,7 +107,11 @@ namespace EsperFightersCup
                 return;
             }
 
+            print("IngameInBattleState - OnRoomPropertiesUpdate");
+
             _checkCanllation.Cancel();
+
+            _onBattleEnd?.Invoke();
 
             var winner = (int)value;
             Debug.Log($"Round winner is {winner}");
