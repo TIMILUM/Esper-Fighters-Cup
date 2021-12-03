@@ -41,7 +41,7 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
 
     public void ResetPositionAndRotation()
     {
-        var idx = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        var idx = InGamePlayerManager.FindPlayerIndex(PhotonNetwork.LocalPlayer);
         var startLocation = InGamePlayerManager.Instance.StartLocations[idx];
         transform.SetPositionAndRotation(startLocation.position, startLocation.rotation);
     }

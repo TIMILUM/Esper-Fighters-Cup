@@ -31,22 +31,23 @@ public class IngameTopUI : MonoBehaviourPunCallbacks
             return;
         }
 
-        foreach (var playerActorNumber in players.Keys)
+        foreach (var aplayer in players.Values)
         {
-            var player = players[playerActorNumber];
-            if (player == null)
+            if (aplayer == null)
             {
                 continue;
             }
 
-            var ui = _playerUIList[playerActorNumber - 1].transform;
+            // TODO: 플레이어가 직접 UI에 등록할 수 있도록 변경해야 함
+            var index = InGamePlayerManager.FindPlayerIndex(aplayer.photonView.Controller);
+            var ui = _playerUIList[index].transform;
 
             // BUG: 얘네 자식 오브젝트 순서 바뀌면 못알아봄
             var hpbar = ui.GetChild(1).GetComponent<Image>();
-            hpbar.fillAmount = player.HP / 100f;
+            hpbar.fillAmount = aplayer.HP / 100f;
 
             var nickname = ui.GetChild(2).GetComponent<Text>();
-            nickname.text = player.photonView.Controller.NickName ?? "unknown";
+            nickname.text = aplayer.photonView.Controller.NickName ?? "unknown";
         }
     }
 
