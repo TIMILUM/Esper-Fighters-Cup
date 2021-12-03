@@ -197,7 +197,7 @@ public class ReverseGravitySkillObject : SkillObject
     private void LoadSkillData()
     {
         _raiseDelay = GetCSVData<float>("Skill_Effect_Data_1");
-        _raiseTime = GetCSVData<float>("Skill_Effect_Data_2");
+        _raiseTime = GetCSVData<float>("Skill_Effect_Data_2") * 0.001f;
     }
 
     private Vector3 GetMousePosition()

@@ -71,7 +71,7 @@ namespace EsperFightersCup
             {
                 Type = Type.DecreaseHp,
                 Damage = _decreaseHp,
-                Duration = 0.001f
+                IsOnlyOnce = true
             });
 
             if (_durationStunSeconds > 0)
