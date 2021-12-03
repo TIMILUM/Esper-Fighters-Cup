@@ -5,9 +5,13 @@ using UnityEngine.UI;
 [System.Serializable]
 public class ChracterHpUIStruct
 {
-    public Text Text;
-    public ACharacter Chracter;
-    public string Name;
+    [SerializeField] private Text _text;
+    [SerializeField] private APlayer _player;
+    [SerializeField] private string _name;
+
+    public Text Text => _text;
+    public APlayer Player => _player;
+    public string Name => _name;
 }
 
 public class SimpleChracterHPUI : MonoBehaviour
@@ -19,7 +23,7 @@ public class SimpleChracterHPUI : MonoBehaviour
     {
         foreach (var data in _characterUIStruct)
         {
-            data.Text.text = data.Name + " : " + data.Chracter.HP.ToString();
+            data.Text.text = data.Name + " : " + data.Player.HP.ToString();
         }
     }
 }

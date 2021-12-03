@@ -78,7 +78,9 @@ public class MovementController : ControllerBase
             if (hitinfo.transform.CompareTag("Floor"))
             {
                 var lookAtDirection = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f) - playerPosition;
-                playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(lookAtDirection), _smoothLookat);
+                var rotate = Quaternion.LookRotation(lookAtDirection);
+                rotate.eulerAngles = new Vector3(0.0f, rotate.eulerAngles.y, 0.0f);
+                playerRotation = Quaternion.Lerp(playerRotation, rotate, _smoothLookat);
 
 
                 //바라보는 방향에 맞게 애니메이션 적용
@@ -133,6 +135,7 @@ public class MovementController : ControllerBase
         if (activeBuffs.Exists(BuffObject.Type.Stun)
             || activeBuffs.Exists(BuffObject.Type.Raise)
             || activeBuffs.Exists(BuffObject.Type.Sliding)
+            || activeBuffs.Exists(BuffObject.Type.KnockBack)
             || activeBuffs.Exists(BuffObject.Type.Grab))
         {
             dir = Vector3.zero;

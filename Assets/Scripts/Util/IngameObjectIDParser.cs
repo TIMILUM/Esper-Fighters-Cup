@@ -21,17 +21,17 @@ public class IngameObjectIDParser : MonoBehaviour
             var resources = Resources.LoadAll<Actor>(path);
             foreach (var resource in resources)
             {
+                var resourcePath = $"{path}/{resource.name}";
                 if (s_ingameObjectPrefabs.ContainsKey(resource.ID))
                 {
-                    Debug.LogWarning("[IngameObjectIDParser] 중복되는 ID 값을 가진 오브젝트가 있습니다. (" + resource.ID + ")\n대상 경로 : " +
-                                   path + "/" + resource.name);
+                    Debug.LogWarning($"[IngameObjectIDParser] 중복되는 ID 값을 가진 오브젝트가 있습니다. ({resource.ID})\n대상 경로 : {resourcePath}");
                     continue;
                 }
 
                 s_ingameObjectPrefabs.Add(resource.ID, new IngameObjectPrefabPackage()
                 {
                     PrefabActor = resource,
-                    PrefabPath = path + "/" + resource.name
+                    PrefabPath = resourcePath
                 });
             }
         }

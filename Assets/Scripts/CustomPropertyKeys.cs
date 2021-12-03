@@ -13,5 +13,6 @@ namespace EsperFightersCup
         public static readonly string PlayerGameRematch = "rematch";
         public static readonly string PlayerWinPoint = "win";
         public static readonly string PlayerPhotonView = "pv";
+        public static readonly string PlayerPalette = "palette";
     }
 }

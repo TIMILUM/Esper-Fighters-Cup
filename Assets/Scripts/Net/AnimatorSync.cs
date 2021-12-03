@@ -69,9 +69,21 @@ namespace EsperFightersCup.Net
             }
         }
 
-        public void SetTrigger(string name)
+        public void SetTrigger(string name, bool isSync = true)
         {
             _animator.SetTrigger(name);
+
+            if (!isSync)
+            {
+                return;
+            }
+
+            if (!photonView.IsMine)
+            {
+                Debug.LogWarning("AnimatorSync의 SetTrigger 동기화는 PhotonView.Controller가 본인일 때만 사용할 수 있습니다!");
+                return;
+            }
+
             if (_syncTriggers.Contains(name))
             {
                 photonView.RPC(nameof(AnimTriggerRPC), RpcTarget.Others, name);
