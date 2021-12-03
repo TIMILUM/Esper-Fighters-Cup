@@ -960,6 +960,8 @@ GameObject:
   m_Component:
   - component: {fileID: 450440739}
   - component: {fileID: 450440740}
+  - component: {fileID: 450440742}
+  - component: {fileID: 450440741}
   m_Layer: 0
   m_Name: Plank_IntroCamera
   m_TagString: Untagged
@@ -1023,6 +1025,41 @@ PlayableDirector:
     value: {fileID: 527497438}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &450440741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450440738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &450440742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450440738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Entry/Plank_Enrty
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1001 &458274904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1445,6 +1482,8 @@ GameObject:
   m_Component:
   - component: {fileID: 569803330}
   - component: {fileID: 569803331}
+  - component: {fileID: 569803333}
+  - component: {fileID: 569803332}
   m_Layer: 0
   m_Name: Elena_WinCamera
   m_TagString: Untagged
@@ -1508,6 +1547,41 @@ PlayableDirector:
     value: {fileID: 1816211477}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &569803332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569803329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &569803333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569803329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Win/Elena_Win
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!4 &604767304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4180087773423436115, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
@@ -1977,6 +2051,8 @@ GameObject:
   m_Component:
   - component: {fileID: 802149734}
   - component: {fileID: 802149735}
+  - component: {fileID: 802149737}
+  - component: {fileID: 802149736}
   m_Layer: 0
   m_Name: Elena_IntroCamera
   m_TagString: Untagged
@@ -2040,6 +2116,41 @@ PlayableDirector:
     value: {fileID: 883982318}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &802149736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802149733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &802149737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 802149733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Entry/Elena_Entry
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &821624615
 GameObject:
   m_ObjectHideFlags: 0
@@ -2193,6 +2304,8 @@ GameObject:
   m_Component:
   - component: {fileID: 824530261}
   - component: {fileID: 824530262}
+  - component: {fileID: 824530264}
+  - component: {fileID: 824530263}
   m_Layer: 0
   m_Name: Plank_WinCamera (Swap)
   m_TagString: Untagged
@@ -2256,6 +2369,41 @@ PlayableDirector:
     value: {fileID: 1875278860}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &824530263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824530260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &824530264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824530260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Win/Plank_Win
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &873093734 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4180087773155155837, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
@@ -2387,6 +2535,8 @@ GameObject:
   m_Component:
   - component: {fileID: 892870343}
   - component: {fileID: 892870344}
+  - component: {fileID: 892870346}
+  - component: {fileID: 892870345}
   m_Layer: 0
   m_Name: Elena_WinCamera (Swap)
   m_TagString: Untagged
@@ -2450,6 +2600,41 @@ PlayableDirector:
     value: {fileID: 2105388564}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &892870345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892870342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &892870346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892870342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Win/Elena_Win
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &917188292
 GameObject:
   m_ObjectHideFlags: 0
@@ -3335,6 +3520,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1136996539}
   - component: {fileID: 1136996540}
+  - component: {fileID: 1136996542}
+  - component: {fileID: 1136996541}
   m_Layer: 0
   m_Name: Plank_IntroCamera (Swap)
   m_TagString: Untagged
@@ -3398,6 +3585,41 @@ PlayableDirector:
     value: {fileID: 458274906}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &1136996541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136996538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1136996542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136996538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Entry/Plank_Enrty
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &1209296981
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,7 +3961,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1579794687}
+  - component: {fileID: 1579794690}
   - component: {fileID: 1579794688}
+  - component: {fileID: 1579794691}
+  - component: {fileID: 1579794689}
   m_Layer: 0
   m_Name: Plank_WinCamera
   m_TagString: Untagged
@@ -3803,6 +4028,64 @@ PlayableDirector:
     value: {fileID: 985265880}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &1579794689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579794686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Win/Plank_Win
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
+--- !u!114 &1579794690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579794686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Win/Plank_Win
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
+--- !u!114 &1579794691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1579794686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1596856300
 GameObject:
   m_ObjectHideFlags: 0
@@ -4231,6 +4514,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1727524117}
   - component: {fileID: 1727524118}
+  - component: {fileID: 1727524120}
+  - component: {fileID: 1727524119}
   m_Layer: 0
   m_Name: Elena_IntroCamera (Swap)
   m_TagString: Untagged
@@ -4294,6 +4579,41 @@ PlayableDirector:
     value: {fileID: 1128157717}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &1727524119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727524116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c0cbca7fa4f5c48bc12e869a5a2e63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1727524120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1727524116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/InGameEvent/Entry/Elena_Entry
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &1783701353
 GameObject:
   m_ObjectHideFlags: 0
@@ -5812,7 +6132,7 @@ PrefabInstance:
     - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _intro
       value: 
-      objectReference: {fileID: 802149735}
+      objectReference: {fileID: 450440740}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
 --- !u!114 &2480101516244202184 stripped
