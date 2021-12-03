@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6996670360225874549}
   - component: {fileID: 4592305596412645706}
   m_Layer: 0
-  m_Name: Fx_Elena_Blink
+  m_Name: Fx_Elena_Blink_Sub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3274366373025206198}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.24, y: 2.6, z: -57.99}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1371,8 +1371,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.84829617, g: 0, b: 1, a: 1}
-        key1: {r: 0.87309694, g: 0, b: 1, a: 1}
+        key0: {r: 0, g: 1, b: 0.27450982, a: 1}
+        key1: {r: 0, g: 1, b: 0.27450982, a: 1}
         key2: {r: 0.48490566, g: 0.99591714, b: 1, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
