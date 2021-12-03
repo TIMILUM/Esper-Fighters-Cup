@@ -2,15 +2,26 @@ using Cysharp.Threading.Tasks;
 using EsperFightersCup.UI.InGame;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace EsperFightersCup
 {
     public class IngameRoundEndState : InGameFSMStateBase
     {
-        [SerializeField]
-        private GameStateView _gameStateView;
+        [SerializeField] private GameStateView _gameStateView;
+        [SerializeField] private UnityEvent<int> _onRoundEnd;
 
         private int _count;
+
+        /// <summary>
+        /// 라운드가 끝나고 페이드인 후 이벤트 발생<para/>
+        /// <see cref="int"/> -> 끝난 라운드
+        /// </summary>
+        public event UnityAction<int> OnRoundEnd
+        {
+            add => _onRoundEnd.AddListener(value);
+            remove => _onRoundEnd.RemoveListener(value);
+        }
 
         protected override void Initialize()
         {
@@ -30,6 +41,8 @@ namespace EsperFightersCup
         {
             await UniTask.Delay(2000);
             await FsmSystem.Curtain.FadeInAsync();
+
+            _onRoundEnd?.Invoke(FsmSystem.Round);
 
             FsmSystem.photonView.RPC(nameof(RoundEndRPC), RpcTarget.MasterClient);
         }
