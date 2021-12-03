@@ -50,9 +50,6 @@ public class ShockWaveSkillObject : SkillObject
 
         _uiSize = new Vector2(Size.y, Size.y) * 0.1f;
 
-        _castUI = GameUIManager.Instance.PlayLocal(Author, "ShockWave_Arrow", transform.position, _uiSize);
-        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
-
         _collider.transform.SetParent(null);
         GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 50, Size.y));
         _collider.OnCollision += SetHit;
@@ -60,6 +57,13 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
     {
+        if (_castUI == null)
+        {
+            print(Author);
+            _castUI = GameUIManager.Instance.PlayLocal(Author, "ShockWave_Arrow", transform.position, _uiSize);
+            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+        }
+
         bool isCanceled = false;
         Vector3 endPos;
 
