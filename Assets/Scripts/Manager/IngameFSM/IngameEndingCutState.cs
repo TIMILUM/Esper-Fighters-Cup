@@ -14,6 +14,7 @@ namespace EsperFightersCup
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.EndingCut;
+            _outro.gameObject.SetActive(false);
         }
 
         public override void StartState()
