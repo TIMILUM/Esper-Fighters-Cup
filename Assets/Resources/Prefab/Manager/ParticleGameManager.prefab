@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _particleInfo:
   - _particleName: ShockWave
-    _particleFrefab: {fileID: 1562547645984578419, guid: 4008374dca3d8894e9e41c7f0d9f7d7e, type: 3}
+    _particleFrefab: {fileID: 5054131772038377439, guid: f03b19dd2df182340bdaef229a84f4b5, type: 3}
     _maxNum: 30
     _lifeTime: 2000
   - _particleName: ReverseGravityFiled
@@ -66,5 +66,21 @@ MonoBehaviour:
     _lifeTime: 1500
   - _particleName: ShockWaveHand
     _particleFrefab: {fileID: 8508841593130726734, guid: 79af6b9abf16f2f48b3737cbd13c1e14, type: 3}
-    _maxNum: 100
+    _maxNum: 10
     _lifeTime: 1500
+  - _particleName: ReverseGravityGlow
+    _particleFrefab: {fileID: 5782834038631021691, guid: 0a2fa9d40050cf94784cbdab256e76c2, type: 3}
+    _maxNum: 50
+    _lifeTime: 1500
+  - _particleName: ObjectDropped
+    _particleFrefab: {fileID: 8055399218500536941, guid: 7f9840d2acb63a646ae6a0fab69e3654, type: 3}
+    _maxNum: 50
+    _lifeTime: 1500
+  - _particleName: Sliding
+    _particleFrefab: {fileID: 9099147860344955467, guid: ca9da471a41a57849a8ae9c4713564e1, type: 3}
+    _maxNum: 10
+    _lifeTime: 2000
+  - _particleName: GroundSkill
+    _particleFrefab: {fileID: 1081832489839075987, guid: d00f20c75ac67504da6b3990ab52c2e6, type: 3}
+    _maxNum: 20
+    _lifeTime: 2000

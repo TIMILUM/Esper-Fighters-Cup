@@ -1,171 +1,145 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using EsperFightersCup.Net;
-using ExitGames.Client.Photon;
-using Photon.Realtime;
+using Photon.Pun;
 using UnityEngine;
 
-using EventCode = EsperFightersCup.Net.EventCode;
-
+[RequireComponent(typeof(PhotonView))]
 public sealed class BuffController : ControllerBase
 {
-    // dictionary로 해야할 필요가 있을까요?
-    private readonly Dictionary<BuffObject.Type, List<BuffObject>> _buffObjects =
-        new Dictionary<BuffObject.Type, List<BuffObject>>();
+    private readonly BuffCollection _activeBuffs = new BuffCollection();
+    // 캐싱용 딕셔너리
+    private readonly Dictionary<BuffObject.Type, BuffObject> _buffTable = new Dictionary<BuffObject.Type, BuffObject>();
+    private readonly object _buffReleaseLock = new object();
 
-    // Todo: 반드시 Static Util Class 형식으로 빼놓도록 수정해야한다!
-    private readonly Dictionary<BuffObject.Type, BuffObject> _buffPrefabLists =
-        new Dictionary<BuffObject.Type, BuffObject>();
+    // TODO: 값을 올바르게 리턴하는지 체크
+    public IReadonlyBuffCollection ActiveBuffs => _activeBuffs;
 
-    private RaiseEventOptions _generateBuffEventOption;
-
-    private void Awake()
+    protected override void Reset()
     {
-        var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
-        foreach (var buffObject in prefabs)
-        {
-            _buffPrefabLists.Add(buffObject.BuffType, buffObject);
-        }
+        base.Reset();
 
-        _generateBuffEventOption = new RaiseEventOptions
-        {
-            TargetActors = new int[] { photonView.Controller.ActorNumber }
-        };
-    }
-
-    private void Reset()
-    {
         // 컨트롤러 타입 지정을 위해 Reset 함수로 이렇게 선언을 해줘야 합니다.
         // 리플렉션으로 전환할 예정 (IL2CPP 모듈 추가가 필요하기 때문에 나중에 전환할 예정)
         SetControllerType(ControllerManager.Type.BuffController);
     }
 
-    public List<BuffObject> GetBuff(BuffObject.Type buffType)
+    protected override void Awake()
     {
-        if (!_buffObjects.TryGetValue(buffType, out var result))
-        {
-            return null;
-        }
+        base.Awake();
 
-        return result.Count == 0 ? null : result;
+        var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
+        foreach (var buffObject in prefabs)
+        {
+            _buffTable.Add(buffObject.BuffType, buffObject);
+        }
     }
 
+    /// <summary>
+    /// 버프를 생성합니다. RPC를 통해 모든 플레이어들에게 동기화됩니다.
+    /// </summary>
+    /// <param name="buffStruct">생성할 버프 정보</param>
     public void GenerateBuff(BuffObject.BuffStruct buffStruct)
     {
-        if (photonView is null)
-        {
-            Debug.LogError("PhotonView가 없습니다.");
-            return;
-        }
-
         var id = Guid.NewGuid().ToString("N");
-        var packet = buffStruct.ToBuffEvent(photonView.ViewID, id);
-        EventSender.Broadcast(in packet, SendOptions.SendReliable, _generateBuffEventOption);
+        var args = buffStruct.ToBuffArguments(id);
+
+        photonView.RPC(nameof(GenerateBuffRPC), RpcTarget.All, args);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
-    /// 버프 타입과 일치하는 모든 버프를 해제합니다.
+    /// 버프 타입과 일치하는 모든 버프를 해제합니다. RPC를 통해 동기화됩니다.
     /// </summary>
-    /// <param name="buffType"></param>
-    public bool ReleaseBuff(BuffObject.Type buffType)
+    /// <param name="buffType">해제할 버프 타입</param>
+    public void ReleaseBuffsByType(BuffObject.Type buffType)
     {
-        if (!_buffObjects.TryGetValue(buffType, out var buffList))
-        {
-            return false;
-        }
-
-        foreach (var buffObject in buffList.ToList())
-        {
-            Debug.Log($"Buff released - [{buffObject.BuffId}]");
-            Destroy(buffObject.gameObject);
-        }
-        buffList.Clear();
-        return true;
-    }
-
-    public bool ReleaseBuff(BuffObject buff)
-    {
-        return ReleaseBuff(buff.BuffId);
+        photonView.RPC(nameof(ReleaseBuffsByTypeRPC), RpcTarget.All, (int)buffType);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
-    /// 버프를 해제합니다.
+    /// 버프 오브젝트를 해제합니다. 버프 오브젝트의 ID를 기반으로 RPC를 통해 동기화됩니다.
+    /// </summary>
+    /// <param name="buff">해제할 버프 오브젝트</param>
+    public void ReleaseBuff(BuffObject buff)
+    {
+        ReleaseBuff(buff.BuffId);
+    }
+
+    /// <summary>
+    /// 아이디와 일치하는 버프를 해제합니다. RPC를 통해 동기화됩니다.
     /// </summary>
     /// <param name="id">버프오브젝트 아이디</param>
-    public bool ReleaseBuff(string id)
+    public void ReleaseBuff(string id)
     {
         if (string.IsNullOrWhiteSpace(id))
         {
-            throw new ArgumentException("ID는 비어있을 수 없습니다.", nameof(id));
+            Debug.LogError("해제할 버프의 ID가 비어 있어 버프를 해제하지 못했습니다.");
+            return;
         }
 
-        if (photonView is null)
-        {
-            Debug.LogError("PhotonView가 없습니다.");
-            return false;
-        }
+        photonView.RPC(nameof(ReleaseBuffRPC), RpcTarget.All, id);
+        PhotonNetwork.SendAllOutgoingCommands();
+    }
 
-        foreach (var buffs in _buffObjects)
+    [PunRPC]
+    private void GenerateBuffRPC(BuffGenerateArguments args)
+    {
+        var buffType = (BuffObject.Type)args.Type;
+        if (!_buffTable.ContainsKey(buffType))
         {
-            var idx = buffs.Value.FindIndex(buff => buff.BuffId == id);
-            if (idx != -1)
+            return;
+        }
+        var buffs = _activeBuffs[buffType];
+        if (photonView.IsMine && !args.AllowDuplicates && buffs.Count > 0)
+        {
+            ReleaseBuffsByType(buffType);
+        }
+        var prefab = _buffTable[buffType];
+        var buff = Instantiate(prefab, transform);
+        buff.name = args.BuffId;
+        buff.BuffId = args.BuffId;
+        buff.SetBuffStruct((BuffObject.BuffStruct)args);
+
+        _activeBuffs.Add(buff);
+        Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        buff.Register(this, null);
+    }
+
+    [PunRPC]
+    private void ReleaseBuffsByTypeRPC(int buffType)
+    {
+        lock (_buffReleaseLock)
+        {
+            foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
-                var targetBuff = buffs.Value[idx];
-                buffs.Value.RemoveAt(idx);
-                Debug.Log($"Buff released - [{targetBuff.BuffId}]");
-                Destroy(targetBuff.gameObject);
-                return true;
+                Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+                targetBuff.Release();
             }
+            _activeBuffs.Clear((BuffObject.Type)buffType);
         }
-
-        return false;
     }
 
-    protected override void OnGameEventReceived(GameEventArguments args)
+    [PunRPC]
+    private void ReleaseBuffRPC(string id)
     {
-        if (photonView is null || args.Code != EventCode.BuffGenerate)
+        if (string.IsNullOrWhiteSpace(id))
         {
             return;
         }
 
-        HandleBuffGenerate(args);
-    }
-
-    private void HandleBuffGenerate(GameEventArguments args)
-    {
-        var data = (GameBuffGenerateEvent)args.EventData;
-        if (data.TargetViewID != photonView.ViewID) // 같은 ViewID에서 보낸 것인지 체크
+        lock (_buffReleaseLock)
         {
-            return;
+            var targetBuff = _activeBuffs.Remove(id);
+            if (targetBuff is null)
+            {
+                Debug.LogWarning($"ID와 일치하는 버프를 찾지 못했습니다. ({id})");
+                return;
+            }
+
+            Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+            targetBuff.Release();
         }
-
-        var buffType = (BuffObject.Type)data.Type;
-        if (!_buffPrefabLists.ContainsKey(buffType))
-        {
-            return;
-        }
-
-        if (!_buffObjects.ContainsKey(buffType))
-        {
-            _buffObjects.Add(buffType, new List<BuffObject>());
-        }
-
-        var buffObjectList = _buffObjects[buffType];
-        if (!data.AllowDuplicates && buffObjectList.Count > 0)
-        {
-            ReleaseBuff(buffType);
-        }
-
-        var prefab = _buffPrefabLists[buffType];
-        var buffObject = Instantiate(prefab, transform);
-        buffObject.name = data.BuffId;
-        buffObject.BuffId = data.BuffId;
-        buffObject.SetBuffStruct((BuffObject.BuffStruct)data);
-        buffObject.Register(this);
-
-        buffObjectList.Add(buffObject);
-
-        Debug.Log($"Buff generated - [{data.BuffId}]");
     }
 }

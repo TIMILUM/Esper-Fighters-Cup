@@ -14,6 +14,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
+    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
 
     [SerializeField] private List<Transform> _startLocations;
     [SerializeField] private IngameFSMSystem _ingameFsmSystem;
@@ -22,19 +23,29 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     [SerializeField] private CameraMovement _cameraMovement;
 
     /// <summary>
-    /// ?꾩옱 ?ъ쓽 濡쒖뺄 ?뚮젅?댁뼱 ?몄뒪?댁뒪瑜?媛?몄샃?덈떎.
+    /// 현재 씬의 로컬 플레이어 인스턴스를 가져옵니다.
     /// </summary>
     public APlayer LocalPlayer { get; private set; }
 
     /// <summary>
-    /// ?ㅺ? ActorNumber, 媛믪씠 ?뚮젅?댁뼱 ?몄뒪?댁뒪???뺤뀛?덈━瑜??쒓났?⑸땲?ㅳ뀖.
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다.
     /// </summary>
     public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
 
     /// <summary>
-    /// ?멸쾶?꾩쓽 ?뚮젅?댁뼱 ?쒖옉 ?꾩튂瑜??닿퀬 ?덉뒿?덈떎.
+    /// 인게임의 플레이어 시작 위치를 담고 있습니다.
     /// </summary>
     public List<Transform> StartLocations => _startLocations;
+
+    /// <summary>
+    /// 액터 번호로 정렬된 플레이어 목록 중 해당 플레이어가 몇 번째에 존재하는지 검색합니다.
+    /// </summary>
+    /// <param name="searchPlayer"></param>
+    /// <returns></returns>
+    public static int FindPlayerIndex(Player searchPlayer)
+    {
+        return Array.FindIndex(PhotonNetwork.PlayerList, p => p.ActorNumber == searchPlayer.ActorNumber);
+    }
 
     private void Start()
     {
@@ -77,13 +88,13 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         else
         {
             Debug.LogWarning($"Can not found local player's character type.");
-            characterType = ACharacter.Type.Telekinesis;
+            characterType = _defaultCharacterType;
         }
 
         var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
         if (prefab == null)
         {
-            throw new Exception("?앹꽦??罹먮┃?곗쓽 ??낆쓣 李얠쓣 ???놁뒿?덈떎.");
+            throw new Exception("생성할 캐릭터의 타입을 찾을 수 없습니다.");
         }
 
         var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
@@ -92,6 +103,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var localplayer = player.GetComponent<APlayer>();
         localplayer.ResetPositionAndRotation();
 
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
         return localplayer;
     }
 

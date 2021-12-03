@@ -52,16 +52,16 @@ namespace EsperFightersCup
 
         private async UniTask CheckLocalPlayerHPAsync(CancellationToken cancellation)
         {
-            // ?곷?諛⑹씠 癒쇱? ?쇨? 0???섏뼱??RPC瑜?蹂대궡硫?WaitUntil 醫낅즺 諛?false 諛섑솚
+            // 상대방이 먼저 피가 0이 되어서 RPC를 보내면 WaitUntil 종료 및 false 반환
             var isDead = !await UniTask.WaitUntil(CheckLocalPlayerIsDead, cancellationToken: cancellation)
                 .SuppressCancellationThrow();
 
-            // 蹂몄씤??癒쇱? ?쇨? 0????寃쎌슦??RPC ?몄텧
+            // 본인이 먼저 피가 0이 된 경우에 RPC 호출
             if (isDead)
             {
                 Debug.Log($"LocalPlayer is dead!");
                 var actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-                var winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                int winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
                 PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameRoundWinner, winner);
             }
 
@@ -89,8 +89,7 @@ namespace EsperFightersCup
             Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-
-                // ?쇱슫???곗듅?먮뒗 WinPoint??1???뷀븯怨?RoundEnd濡?GameState 蹂寃?
+                // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
                 var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
                 Debug.Log($"Add WinPoint to LocalPlayer - {winPoint}");

@@ -7,10 +7,10 @@ namespace EsperFightersCup
     {
         private void Start()
         {
-            PhotonNetwork.LocalPlayer.SetCustomProperties(GameRoomOptions.DefaultPlayerCustomProperties);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(PhotonOptions.DefaultCustomPlayerProperties);
             if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.CurrentRoom.SetCustomProperties(GameRoomOptions.DefaultRoomCustomProperties);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(PhotonOptions.DefaultCustomRoomProperties);
             }
             PhotonNetwork.SendAllOutgoingCommands();
         }

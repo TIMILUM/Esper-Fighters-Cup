@@ -34,11 +34,15 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AnimTriggerRPC
   - ClickRpc
   - DestroyRpc
   - DropPreSeondRPC
+  - GenerateBuffRPC
   - IntroEndRPC
   - OutroEndRPC
+  - ReleaseBuffRPC
+  - ReleaseBuffsByTypeRPC
   - ResultEndRPC
   - RoundEndNextRPC
   - RoundEndRPC

@@ -50,14 +50,13 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(6)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(5)
             {
                 { typeof(Vector3[]), 0 },
-                { typeof(global::EsperFightersCup.Net.GameAnimatorTriggerSyncEvent), 1 },
-                { typeof(global::EsperFightersCup.Net.GameBuffGenerateEvent), 2 },
-                { typeof(global::EsperFightersCup.Net.GameBuffReleaseEvent), 3 },
-                { typeof(global::EsperFightersCup.Net.GameFragmentAreaGenEvent), 4 },
-                { typeof(global::EsperFightersCup.Net.GameParticlePlayEvent), 5 },
+                { typeof(global::EsperFightersCup.Net.BuffGenerateArguments), 1 },
+                { typeof(global::EsperFightersCup.Net.GameParticlePlayArguments), 2 },
+                { typeof(global::EsperFightersCup.Net.GameSoundPlayArguments), 3 },
+                { typeof(global::EsperFightersCup.Net.GameUIPlayArguments), 4 },
             };
         }
 
@@ -72,11 +71,10 @@ namespace MessagePack.Resolvers
             switch (key)
             {
                 case 0: return new global::MessagePack.Formatters.ArrayFormatter<Vector3>();
-                case 1: return new MessagePack.Formatters.EsperFightersCup.Net.GameAnimatorTriggerSyncEventFormatter();
-                case 2: return new MessagePack.Formatters.EsperFightersCup.Net.GameBuffGenerateEventFormatter();
-                case 3: return new MessagePack.Formatters.EsperFightersCup.Net.GameBuffReleaseEventFormatter();
-                case 4: return new MessagePack.Formatters.EsperFightersCup.Net.GameFragmentAreaGenEventFormatter();
-                case 5: return new MessagePack.Formatters.EsperFightersCup.Net.GameParticlePlayEventFormatter();
+                case 1: return new MessagePack.Formatters.EsperFightersCup.Net.BuffGenerateArgumentsFormatter();
+                case 2: return new MessagePack.Formatters.EsperFightersCup.Net.GameParticlePlayArgumentsFormatter();
+                case 3: return new MessagePack.Formatters.EsperFightersCup.Net.GameSoundPlayArgumentsFormatter();
+                case 4: return new MessagePack.Formatters.EsperFightersCup.Net.GameUIPlayArgumentsFormatter();
                 default: return null;
             }
         }
@@ -118,60 +116,13 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
     using MessagePack;
     using UnityEngine;
 
-    public sealed class GameAnimatorTriggerSyncEventFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameAnimatorTriggerSyncEvent>
+    public sealed class BuffGenerateArgumentsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.BuffGenerateArguments>
     {
 
-        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameAnimatorTriggerSyncEvent value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.BuffGenerateArguments value, global::MessagePack.MessagePackSerializerOptions options)
         {
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            writer.Write(value.ActorViewID);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
-        }
-
-        public global::EsperFightersCup.Net.GameAnimatorTriggerSyncEvent Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                throw new InvalidOperationException("typecode is null, struct not supported");
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __ActorViewID__ = default(int);
-            var __Name__ = default(string);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __ActorViewID__ = reader.ReadInt32();
-                        break;
-                    case 1:
-                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::EsperFightersCup.Net.GameAnimatorTriggerSyncEvent(__ActorViewID__, __Name__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class GameBuffGenerateEventFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameBuffGenerateEvent>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameBuffGenerateEvent value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(9);
-            writer.Write(value.TargetViewID);
+            writer.WriteArrayHeader(8);
             writer.Write(value.Type);
             formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.BuffId, options);
             writer.Write(value.Duration);
@@ -182,7 +133,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
             writer.Write(value.IsOnlyOnce);
         }
 
-        public global::EsperFightersCup.Net.GameBuffGenerateEvent Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::EsperFightersCup.Net.BuffGenerateArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -192,7 +143,6 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __TargetViewID__ = default(int);
             var __Type__ = default(int);
             var __BuffId__ = default(string);
             var __Duration__ = default(float);
@@ -207,30 +157,27 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
                 switch (i)
                 {
                     case 0:
-                        __TargetViewID__ = reader.ReadInt32();
-                        break;
-                    case 1:
                         __Type__ = reader.ReadInt32();
                         break;
-                    case 2:
+                    case 1:
                         __BuffId__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
-                    case 3:
+                    case 2:
                         __Duration__ = reader.ReadSingle();
                         break;
-                    case 4:
+                    case 3:
                         __ValueFloat__ = formatterResolver.GetFormatterWithVerify<float[]>().Deserialize(ref reader, options);
                         break;
-                    case 5:
+                    case 4:
                         __ValueVector3__ = formatterResolver.GetFormatterWithVerify<Vector3[]>().Deserialize(ref reader, options);
                         break;
-                    case 6:
+                    case 5:
                         __AllowDuplicates__ = reader.ReadBoolean();
                         break;
-                    case 7:
+                    case 6:
                         __Damage__ = reader.ReadSingle();
                         break;
-                    case 8:
+                    case 7:
                         __IsOnlyOnce__ = reader.ReadBoolean();
                         break;
                     default:
@@ -239,113 +186,16 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
                 }
             }
 
-            var ____result = new global::EsperFightersCup.Net.GameBuffGenerateEvent(__TargetViewID__, __Type__, __BuffId__, __Duration__, __ValueFloat__, __ValueVector3__, __AllowDuplicates__, __Damage__, __IsOnlyOnce__);
+            var ____result = new global::EsperFightersCup.Net.BuffGenerateArguments(__Type__, __BuffId__, __Duration__, __ValueFloat__, __ValueVector3__, __AllowDuplicates__, __Damage__, __IsOnlyOnce__);
             reader.Depth--;
             return ____result;
         }
     }
 
-    public sealed class GameBuffReleaseEventFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameBuffReleaseEvent>
+    public sealed class GameParticlePlayArgumentsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameParticlePlayArguments>
     {
 
-        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameBuffReleaseEvent value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            writer.Write(value.TargetViewID);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.BuffId, options);
-        }
-
-        public global::EsperFightersCup.Net.GameBuffReleaseEvent Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                throw new InvalidOperationException("typecode is null, struct not supported");
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __TargetViewID__ = default(int);
-            var __BuffId__ = default(string);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __TargetViewID__ = reader.ReadInt32();
-                        break;
-                    case 1:
-                        __BuffId__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::EsperFightersCup.Net.GameBuffReleaseEvent(__TargetViewID__, __BuffId__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class GameFragmentAreaGenEventFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameFragmentAreaGenEvent>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameFragmentAreaGenEvent value, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(3);
-            writer.Write(value.FragmentAuthorViewID);
-            formatterResolver.GetFormatterWithVerify<Vector3>().Serialize(ref writer, value.Position, options);
-            writer.Write(value.Range);
-        }
-
-        public global::EsperFightersCup.Net.GameFragmentAreaGenEvent Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
-        {
-            if (reader.TryReadNil())
-            {
-                throw new InvalidOperationException("typecode is null, struct not supported");
-            }
-
-            options.Security.DepthStep(ref reader);
-            IFormatterResolver formatterResolver = options.Resolver;
-            var length = reader.ReadArrayHeader();
-            var __FragmentAuthorViewID__ = default(int);
-            var __Position__ = default(Vector3);
-            var __Range__ = default(float);
-
-            for (int i = 0; i < length; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        __FragmentAuthorViewID__ = reader.ReadInt32();
-                        break;
-                    case 1:
-                        __Position__ = formatterResolver.GetFormatterWithVerify<Vector3>().Deserialize(ref reader, options);
-                        break;
-                    case 2:
-                        __Range__ = reader.ReadSingle();
-                        break;
-                    default:
-                        reader.Skip();
-                        break;
-                }
-            }
-
-            var ____result = new global::EsperFightersCup.Net.GameFragmentAreaGenEvent(__FragmentAuthorViewID__, __Position__, __Range__);
-            reader.Depth--;
-            return ____result;
-        }
-    }
-
-    public sealed class GameParticlePlayEventFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameParticlePlayEvent>
-    {
-
-        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameParticlePlayEvent value, global::MessagePack.MessagePackSerializerOptions options)
+        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameParticlePlayArguments value, global::MessagePack.MessagePackSerializerOptions options)
         {
             IFormatterResolver formatterResolver = options.Resolver;
             writer.WriteArrayHeader(3);
@@ -354,7 +204,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
             formatterResolver.GetFormatterWithVerify<Vector3>().Serialize(ref writer, value.Angle, options);
         }
 
-        public global::EsperFightersCup.Net.GameParticlePlayEvent Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        public global::EsperFightersCup.Net.GameParticlePlayArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
         {
             if (reader.TryReadNil())
             {
@@ -387,7 +237,119 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
                 }
             }
 
-            var ____result = new global::EsperFightersCup.Net.GameParticlePlayEvent(__Name__, __Position__, __Angle__);
+            var ____result = new global::EsperFightersCup.Net.GameParticlePlayArguments(__Name__, __Position__, __Angle__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class GameSoundPlayArgumentsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameSoundPlayArguments>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameSoundPlayArguments value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Id, options);
+            formatterResolver.GetFormatterWithVerify<Vector3>().Serialize(ref writer, value.Position, options);
+        }
+
+        public global::EsperFightersCup.Net.GameSoundPlayArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Id__ = default(string);
+            var __Position__ = default(Vector3);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Id__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __Position__ = formatterResolver.GetFormatterWithVerify<Vector3>().Deserialize(ref reader, options);
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::EsperFightersCup.Net.GameSoundPlayArguments(__Id__, __Position__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
+    public sealed class GameUIPlayArgumentsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameUIPlayArguments>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameUIPlayArguments value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(6);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            formatterResolver.GetFormatterWithVerify<Vector2>().Serialize(ref writer, value.Position, options);
+            writer.Write(value.RotationY);
+            formatterResolver.GetFormatterWithVerify<Vector2>().Serialize(ref writer, value.Scale, options);
+            writer.Write(value.Duration);
+            writer.Write(value.ViewID);
+        }
+
+        public global::EsperFightersCup.Net.GameUIPlayArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Name__ = default(string);
+            var __Position__ = default(Vector2);
+            var __RotationY__ = default(float);
+            var __Scale__ = default(Vector2);
+            var __Duration__ = default(float);
+            var __ViewID__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __Position__ = formatterResolver.GetFormatterWithVerify<Vector2>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __RotationY__ = reader.ReadSingle();
+                        break;
+                    case 3:
+                        __Scale__ = formatterResolver.GetFormatterWithVerify<Vector2>().Deserialize(ref reader, options);
+                        break;
+                    case 4:
+                        __Duration__ = reader.ReadSingle();
+                        break;
+                    case 5:
+                        __ViewID__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::EsperFightersCup.Net.GameUIPlayArguments(__Name__, __Position__, __RotationY__, __Scale__, __Duration__, __ViewID__);
             reader.Depth--;
             return ____result;
         }

@@ -1,3 +1,4 @@
+using System.Linq;
 using EsperFightersCup.UI.InGame;
 using UnityEngine;
 
@@ -30,26 +31,26 @@ public class MovementController : ControllerBase
 
     [SerializeField] private GameObject _positionUIPrefab;
 
-    private void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         // 컨트롤러 타입 지정을 위해 Reset 함수로 이렇게 선언을 해줘야 합니다.
         // 리플렉션으로 전환할 예정 (IL2CPP 모듈 추가가 필요하기 때문에 나중에 전환할 예정)
         SetControllerType(ControllerManager.Type.MovementController);
     }
 
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        _player = _controllerManager.GetActor() as APlayer;
-        _buffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        _player = ControllerManager.GetActor() as APlayer;
+        _buffController = ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
 
         var positionUI = Instantiate(_positionUIPrefab).GetComponent<CharacterPositionUI>();
         positionUI.TargetPlayer = _player.transform;
         positionUI.IsLocalPlayer = photonView.IsMine;
     }
 
-    // Update is called once per frame
     protected override void Update()
     {
         base.Update();
@@ -77,7 +78,9 @@ public class MovementController : ControllerBase
             if (hitinfo.transform.CompareTag("Floor"))
             {
                 var lookAtDirection = hitinfo.point + new Vector3(0.0f, _player.GetComponent<Collider>().bounds.extents.y, 0.0f) - playerPosition;
-                playerRotation = Quaternion.Lerp(playerRotation, Quaternion.LookRotation(lookAtDirection), _smoothLookat);
+                var rotate = Quaternion.LookRotation(lookAtDirection);
+                rotate.eulerAngles = new Vector3(0.0f, rotate.eulerAngles.y, 0.0f);
+                playerRotation = Quaternion.Lerp(playerRotation, rotate, _smoothLookat);
 
 
                 //바라보는 방향에 맞게 애니메이션 적용
@@ -88,8 +91,8 @@ public class MovementController : ControllerBase
                 float sin = Vector3.Dot(crossProduct, Vector3.up);
                 float cos = Vector3.Dot(tempPos, targetDirctionNormal);
 
-                _player.CharacterAnimatorSync.SetFloat("Cos", cos);
-                _player.CharacterAnimatorSync.SetFloat("Sin", sin);
+                _player.Animator.SetFloat("Cos", cos);
+                _player.Animator.SetFloat("Sin", sin);
             }
         }
 
@@ -126,9 +129,14 @@ public class MovementController : ControllerBase
             return;
         }
 
+        var activeBuffs = _buffController.ActiveBuffs;
+
         // 스턴 및 띄움상태 확인 시 움직임을 멈춥니다.
-        if (_buffController.GetBuff(BuffObject.Type.Stun) != null || _buffController.GetBuff(BuffObject.Type.Raise) != null ||
-            _buffController.GetBuff(BuffObject.Type.Sliding) != null || _buffController.GetBuff(BuffObject.Type.Grab) != null)
+        if (activeBuffs.Exists(BuffObject.Type.Stun)
+            || activeBuffs.Exists(BuffObject.Type.Raise)
+            || activeBuffs.Exists(BuffObject.Type.Sliding)
+            || activeBuffs.Exists(BuffObject.Type.KnockBack)
+            || activeBuffs.Exists(BuffObject.Type.Grab))
         {
             dir = Vector3.zero;
             _currentDecreaseSpeed = 1.0f;
@@ -138,16 +146,17 @@ public class MovementController : ControllerBase
         }
 
         {   // 움직임 버프 관련 요소 확인 후 추가적인 스피드를 지정합니다.
-            var moveSpeedBuff = _buffController.GetBuff(BuffObject.Type.MoveSpeed);
-            _addedMoveSpeed = moveSpeedBuff != null
-                ? _moveSpeed * (((MoveSpeedObject)moveSpeedBuff[moveSpeedBuff.Count - 1]).AddedSpeed / 100.0f)
+            var moveSpeedBuff = _buffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+
+            _addedMoveSpeed = moveSpeedBuff.Count > 0
+                ? _moveSpeed * (((MoveSpeedObject)moveSpeedBuff.Last()).AddedSpeed / 100.0f)
                 : 0;
         }
 
         var playerPosition = _player.transform.position;
 
-        _player.CharacterAnimatorSync.SetFloat("DirX", dirx);
-        _player.CharacterAnimatorSync.SetFloat("DirZ", dirz);
+        _player.Animator.SetFloat("DirX", dirx);
+        _player.Animator.SetFloat("DirZ", dirz);
 
         var currentSpeedTime = 0.0f;
 
@@ -174,7 +183,8 @@ public class MovementController : ControllerBase
 
         _currentMoveDir = Vector3.Lerp(tempDirection, dir, currentSpeedTime);
 
-        playerPosition += (_moveSpeed + _addedMoveSpeed) * Time.deltaTime * _currentMoveDir;
+        var totalSpeed = Mathf.Max(0, _moveSpeed + _addedMoveSpeed);
+        playerPosition += totalSpeed * Time.deltaTime * _currentMoveDir;
 
         _player.transform.position = playerPosition;
 
