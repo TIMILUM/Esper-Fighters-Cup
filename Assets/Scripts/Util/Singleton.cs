@@ -24,7 +24,6 @@ namespace EsperFightersCup
                 if (Instance == null)
                 {
                     Instance = gameObject.GetComponent<T>();
-
                 }
                 else
                 {
