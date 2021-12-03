@@ -29,17 +29,23 @@ namespace EsperFightersCup
             LoadDropObjectCSVData();
 
             _uiSize = Size * 0.1f;
-
-            var rangeSize = new Vector2(Range, Range) * 2f;
-            _rangeUI = GameUIManager.Instance.PlayLocal(Author, "Skill_Range", transform.position, rangeSize * 0.1f);
-            _castUI = GameUIManager.Instance.PlayLocal(Author, "RandDrop_Casting", transform.position, _uiSize);
-
-            GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
-            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
         }
 
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
+            if (_rangeUI == null)
+            {
+                var rangeSize = new Vector2(Range, Range) * 2f;
+                print(Author);
+                _rangeUI = GameUIManager.Instance.PlayLocal(Author, "Skill_Range", transform.position, rangeSize * 0.1f);
+                GameObjectUtil.ActiveGameObject(_rangeUI.gameObject, false);
+            }
+            if (_castUI == null)
+            {
+                _castUI = GameUIManager.Instance.PlayLocal(Author, "RandDrop_Casting", transform.position, _uiSize);
+                GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+            }
+
             var isCanceled = false;
 
             _rangeUI.ChangeTarget(AuthorPlayer.photonView.ViewID);
