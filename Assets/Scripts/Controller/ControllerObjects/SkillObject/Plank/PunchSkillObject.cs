@@ -35,7 +35,7 @@ public class PunchSkillObject : SkillObject
         {
             Type = BuffObject.Type.KnockBack,
             Damage = 0,
-            Duration = (Range / _moveSpeed) * 1000,
+            Duration = Range / _moveSpeed,
             AllowDuplicates = false,
             ValueVector3 = new[] { _direction },
             ValueFloat = new[] { _moveSpeed, 0, 0 },
@@ -55,8 +55,8 @@ public class PunchSkillObject : SkillObject
             _buffOnCollision.Add(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.DecreaseHp,
-                Damage = this.Damage,
-                Duration = 0.001f
+                Damage = Damage,
+                IsOnlyOnce = true
             });
             _buffOnCollision.Add(knockBackBuff);
         }
@@ -97,7 +97,7 @@ public class PunchSkillObject : SkillObject
         {
             Type = BuffObject.Type.KnockBack,
             Damage = 0,
-            Duration = duration * 1000,
+            Duration = duration,
             AllowDuplicates = true,
             ValueVector3 = new[] { _direction },
             ValueFloat = new[] { _moveSpeed, 0, 0 },

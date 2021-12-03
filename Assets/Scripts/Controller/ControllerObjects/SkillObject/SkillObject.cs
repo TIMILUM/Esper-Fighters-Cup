@@ -244,7 +244,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
         var stunBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.Stun);
         if (stunBuff != null)
         {
-            stunBuff.Duration = GetCSVData<float>("Groggy_Duration");
+            stunBuff.Duration = GetCSVData<float>("Groggy_Duration") * 0.001f;
         }
 
         // 데미지
@@ -321,9 +321,9 @@ public abstract class SkillObject : ControllerObject<SkillController>
         BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
             Type = BuffObject.Type.MoveSpeed,
-            Duration = 0,
+            Duration = 0f,
             AllowDuplicates = true,
-            Damage = 0,
+            Damage = 0f,
             IsOnlyOnce = false,
             ValueFloat = new[] { value }
         });

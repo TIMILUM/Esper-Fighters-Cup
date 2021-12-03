@@ -247,12 +247,12 @@ public class ShockWaveSkillObject : SkillObject
             {
                 Type = BuffObject.Type.KnockBack,
                 AllowDuplicates = false,
-                Duration = movetime,
+                Duration = movetime * 0.001f,
                 ValueFloat = new float[]
                 {
                     movespeed,
                     damage,
-                    stunDuration
+                    stunDuration * 0.001f
                 },
                 ValueVector3 = new Vector3[1]
             };

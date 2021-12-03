@@ -93,13 +93,13 @@ public abstract class BuffObject : ControllerObject<BuffController>
             yield break;
         }
 
-        if (Info.Duration >= 0f - Mathf.Epsilon && Info.Duration <= 0f + Mathf.Epsilon)
+        if (Info.Duration == 0f)
         {
             yield break;
         }
 
-        print($"buff duration: {Info.Duration * 0.001f}");
-        yield return new WaitForSeconds(Info.Duration * 0.001f);
+        print($"buff duration: {Info.Duration}");
+        yield return new WaitForSeconds(Info.Duration);
         Controller.ReleaseBuff(this);
     }
 
@@ -131,7 +131,13 @@ public abstract class BuffObject : ControllerObject<BuffController>
         [SerializeField] private bool _isOnlyOnce;
 
         public Type Type { get => _type; set => _type = value; }
+        /// <summary>
+        /// Duration은 무조건 초 단위로 넘겨주셔야 됩니다. (1000ms -> 0.1s)
+        /// </summary>
         public float Duration { get => _duration; set => _duration = value; }
+        /// <summary>
+        /// 시간 정보를 가지는 값들은 초 단위로 변환 후 넘겨주세요.
+        /// </summary>
         public float[] ValueFloat { get => _valueFloat; set => _valueFloat = value; }
         public Vector3[] ValueVector3 { get => _valueVector3; set => _valueVector3 = value; }
         public bool AllowDuplicates { get => _allowDuplicates; set => _allowDuplicates = value; }

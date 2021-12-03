@@ -14,7 +14,7 @@ public class RaiseObject : BuffObject
     {
         // BuffStruct Help
         // ----------------
-        // ValueFloat[0] : limitPosY (0이면 스턴 효과 없음)
+        // ValueFloat[0] : limitPosY
         // ----------------
         _limitPosY = Info.ValueFloat[0];
 
@@ -27,7 +27,7 @@ public class RaiseObject : BuffObject
             }
             var startPos = Author.transform.position;
             _raising = DOTween.Sequence()
-                .Append(Author.Rigidbody.DOMove(new Vector3(startPos.x, _limitPosY, startPos.z), Info.Duration * 0.001f))
+                .Append(Author.Rigidbody.DOMove(new Vector3(startPos.x, _limitPosY, startPos.z), Info.Duration))
                 .SetEase(Ease.OutCubic)
                 .SetLink(gameObject, LinkBehaviour.KillOnDisable);
 
