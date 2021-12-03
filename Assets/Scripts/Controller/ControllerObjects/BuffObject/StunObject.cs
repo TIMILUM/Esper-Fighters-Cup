@@ -14,4 +14,9 @@ public class StunObject : BuffObject
             ParticleManager.Instance.PullParticle("Hit", position, Quaternion.Euler(90f, 0f, 0f));
         }
     }
+
+    public override void OnBuffReleased()
+    {
+        base.OnBuffReleased();
+    }
 }

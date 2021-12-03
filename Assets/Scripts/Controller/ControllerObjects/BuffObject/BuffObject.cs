@@ -124,8 +124,8 @@ public abstract class BuffObject : ControllerObject<BuffController>
     {
         [SerializeField] private Type _type;
         [SerializeField] private float _duration;
-        [SerializeField] private float[] _valueFloat;
-        [SerializeField] private Vector3[] _valueVector3;
+        [SerializeField] private float[] _valueFloat = new float[0];
+        [SerializeField] private Vector3[] _valueVector3 = new Vector3[0];
         [SerializeField] private bool _allowDuplicates;
         [SerializeField] private float _damage;
         [SerializeField] private bool _isOnlyOnce;
@@ -144,6 +144,18 @@ public abstract class BuffObject : ControllerObject<BuffController>
         public float Damage { get => _damage; set => _damage = value; }
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
+
+        public override string ToString()
+        {
+            return string.Join(",",
+                Type,
+                Duration,
+                string.Join(",", ValueFloat),
+                string.Join(",", ValueVector3),
+                AllowDuplicates,
+                Damage,
+                IsOnlyOnce);
+        }
 
         public BuffGenerateArguments ToBuffArguments(string id)
         {

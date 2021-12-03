@@ -20,6 +20,12 @@ public class KnockBackObject : BuffObject
 
     public override Type BuffType => Type.KnockBack;
 
+    public override void SetHit(ObjectBase to)
+    {
+        print("set hit");
+        base.SetHit(to);
+    }
+
     public override void OnBuffGenerated()
     {
         // BuffStruct Help
@@ -91,7 +97,7 @@ public class KnockBackObject : BuffObject
         {
             return;
         }
-
+        print("knockback trigger");
         Author.Rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
 
         GenerateAfterBuff(Controller);
