@@ -41,6 +41,7 @@ namespace EsperFightersCup
         {
             // var ui = GameUIManager.Instance.PlayLocal()
             AudioEmitter.SetParameter("Step", 1f);
+            await UniTask.Yield();
         }
     }
 }

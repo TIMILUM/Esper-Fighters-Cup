@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 
 namespace EsperFightersCup
@@ -8,28 +9,45 @@ namespace EsperFightersCup
     public class IngameIntroCutState : InGameFSMStateBase
     {
         [SerializeField] private PlayableDirector _intro;
+        [SerializeField] private UnityEvent _onIntroStart;
+        [SerializeField] private UnityEvent _onIntroEnd;
 
         private int _count;
+
+        public event UnityAction OnIntroStart
+        {
+            add => _onIntroStart.AddListener(value);
+            remove => _onIntroStart.RemoveListener(value);
+        }
+
+        public event UnityAction OnIntroEnd
+        {
+            add => _onIntroEnd.AddListener(value);
+            remove => _onIntroEnd.RemoveListener(value);
+        }
 
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.IntroCut;
+            _intro.gameObject.SetActive(false);
         }
 
         public override void StartState()
         {
             base.StartState();
 
+            _onIntroStart?.Invoke();
+
             _intro.gameObject.SetActive(true);
             FsmSystem.Curtain.FadeOutAsync();
-            _intro.stopped += OnIntroEnd;
+            _intro.stopped += HandleIntroStopped;
             _intro.Play();
         }
 
         // 컷씬 끝났을 때 실행
-        private void OnIntroEnd(PlayableDirector director)
+        private void HandleIntroStopped(PlayableDirector director)
         {
-            director.stopped -= OnIntroEnd;
+            director.stopped -= HandleIntroStopped;
             EndIntroCutAsync().Forget();
         }
 
@@ -40,6 +58,8 @@ namespace EsperFightersCup
 
             // 컷씬 비활성화
             _intro.gameObject.SetActive(false);
+
+            _onIntroEnd?.Invoke();
 
             // 마스터클라이언트로 RPC보내서 컷씬 완료 신호
             FsmSystem.photonView.RPC(nameof(IntroEndRPC), RpcTarget.MasterClient);

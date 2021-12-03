@@ -89,7 +89,7 @@ MonoBehaviour:
   _audioEmitter: {fileID: 6623127734546534237}
   _characterType: 1
   _effectTrans:
-  - {fileID: 0}
+  - {fileID: 486757356099596439}
   _hp: 100
 --- !u!114 &8663577832037187048
 MonoBehaviour:
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2112b5df1b378439d4526b64127f13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
+  _animator: {fileID: 2268602983233434781}
   _parameters:
   - _name: DirX
     _type: 1
@@ -560,6 +560,11 @@ GameObject:
 --- !u!4 &6481726948249560520 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
+  m_PrefabInstance: {fileID: 6807473600904331811}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &486757356099596439 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6392945504394638004, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
   m_PrefabInstance: {fileID: 6807473600904331811}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &2268602983233434781

@@ -91,6 +91,9 @@ MonoBehaviour:
   _state: 0
   _activeGameObjects: []
   _inactiveGameObjects: []
+  _onReadyToPlay:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &8395176605604419108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,6 +110,12 @@ MonoBehaviour:
   _activeGameObjects: []
   _inactiveGameObjects: []
   _intro: {fileID: 0}
+  _onIntroStart:
+    m_PersistentCalls:
+      m_Calls: []
+  _onIntroEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4873366967118284923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,6 +132,9 @@ MonoBehaviour:
   _activeGameObjects: []
   _inactiveGameObjects: []
   _gameStateView: {fileID: 0}
+  _onRoundStart:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4965811384383455457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +150,12 @@ MonoBehaviour:
   _state: 3
   _activeGameObjects: []
   _inactiveGameObjects: []
+  _onBattleStart:
+    m_PersistentCalls:
+      m_Calls: []
+  _onBattleEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5403316554260806962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +172,9 @@ MonoBehaviour:
   _activeGameObjects: []
   _inactiveGameObjects: []
   _gameStateView: {fileID: 0}
+  _onRoundEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4636467517903307537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +191,12 @@ MonoBehaviour:
   _activeGameObjects: []
   _inactiveGameObjects: []
   _outro: {fileID: 0}
+  _onOutroStart:
+    m_PersistentCalls:
+      m_Calls: []
+  _onOutroEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1904775894025419200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,3 +212,6 @@ MonoBehaviour:
   _state: 6
   _activeGameObjects: []
   _inactiveGameObjects: []
+  _onGameEnd:
+    m_PersistentCalls:
+      m_Calls: []
