@@ -17,6 +17,8 @@ namespace EsperFightersCup.UI.Match
         private void Start()
         {
             _matchingText.text = "매칭 중...";
+            PhotonNetwork.JoinLobby(PhotonOptions.RandomMatchLobby);
+
             CoroutineTimer.SetTimerOnce(StartRandomMatch, 1f);
         }
 
@@ -31,7 +33,8 @@ namespace EsperFightersCup.UI.Match
             _matchFaildTimer = CoroutineTimer.SetTimerOnce(OnMatchFailed, 20f);
             GameMatchSystem.Instance.OnMatched += OnMatched;
 
-            var result = PhotonNetwork.JoinRandomOrCreateRoom(roomOptions: GameRoomOptions.DefaultRoomOptions);
+            var result = PhotonNetwork.JoinRandomOrCreateRoom(
+                roomOptions: PhotonOptions.DefaultRoomOption, typedLobby: PhotonOptions.RandomMatchLobby);
 
             if (!result)
             {

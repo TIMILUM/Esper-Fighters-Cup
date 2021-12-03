@@ -37,6 +37,16 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     /// </summary>
     public List<Transform> StartLocations => _startLocations;
 
+    /// <summary>
+    /// 액터 번호로 정렬된 플레이어 목록 중 해당 플레이어가 몇 번째에 존재하는지 검색합니다.
+    /// </summary>
+    /// <param name="searchPlayer"></param>
+    /// <returns></returns>
+    public static int FindPlayerIndex(Player searchPlayer)
+    {
+        return Array.FindIndex(PhotonNetwork.PlayerList, p => p.ActorNumber == searchPlayer.ActorNumber);
+    }
+
     private void Start()
     {
         LocalPlayer = SpawnLocalPlayer();
