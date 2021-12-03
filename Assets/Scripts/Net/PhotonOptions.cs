@@ -4,19 +4,22 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EsperFightersCup
 {
-    public static class GameRoomOptions
+    public static class PhotonOptions
     {
         public const byte MaxPlayers = 2;
 
-        public static readonly RoomOptions DefaultRoomOptions = new RoomOptions
+        public static readonly TypedLobby RandomMatchLobby = new TypedLobby("RandomMatch", LobbyType.Default);
+        public static readonly TypedLobby CustomMatchLobby = new TypedLobby("CustomMatch", LobbyType.Default);
+
+        public static readonly RoomOptions DefaultRoomOption = new RoomOptions
         {
             MaxPlayers = MaxPlayers,
             PublishUserId = true,
-            CustomRoomProperties = DefaultRoomCustomProperties,
-            BroadcastPropsChangeToAll = true
+            CustomRoomProperties = DefaultCustomRoomProperties,
+            BroadcastPropsChangeToAll = true,
+            CleanupCacheOnLeave = true
         };
-
-        public static readonly Hashtable DefaultRoomCustomProperties = new Hashtable
+        public static readonly Hashtable DefaultCustomRoomProperties = new Hashtable
         {
             [CustomPropertyKeys.GameStarted] = false,
             [CustomPropertyKeys.GameRound] = 0,
@@ -26,7 +29,7 @@ namespace EsperFightersCup
             [CustomPropertyKeys.GameLooser] = null
         };
 
-        public static readonly Hashtable DefaultPlayerCustomProperties = new Hashtable
+        public static readonly Hashtable DefaultCustomPlayerProperties = new Hashtable
         {
             [CustomPropertyKeys.PlayerCharacterType] = null,
             [CustomPropertyKeys.PlayerGameRematch] = false,
