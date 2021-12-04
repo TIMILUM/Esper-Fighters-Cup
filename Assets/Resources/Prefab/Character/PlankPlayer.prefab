@@ -489,6 +489,10 @@ PrefabInstance:
       value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 21849732020840252, guid: ccd0d07e82152ce46b88ca0c5fee9009, type: 3}
+      propertyPath: _frontDelay
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 21849732020840252, guid: ccd0d07e82152ce46b88ca0c5fee9009, type: 3}
       propertyPath: _buffOnCollision.Array.data[0]._duration
       value: 1000
       objectReference: {fileID: 0}
@@ -565,6 +569,14 @@ PrefabInstance:
     - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
       propertyPath: _inputKey
       value: 323
+      objectReference: {fileID: 0}
+    - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
+      propertyPath: _colliderSize.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
+      propertyPath: _colliderSize.y
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
       propertyPath: _ThrowfrontDelayTime
@@ -650,7 +662,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1291937362183563711, guid: 1a9a3f6622364064bb3f6e0f0cbdb325, type: 3}
       propertyPath: _frontDelay
-      value: 1000
+      value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 1291937362183563711, guid: 1a9a3f6622364064bb3f6e0f0cbdb325, type: 3}
+      propertyPath: _uIDuration
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1291937362183563711, guid: 1a9a3f6622364064bb3f6e0f0cbdb325, type: 3}
       propertyPath: _stunDuration
