@@ -57,12 +57,6 @@ namespace EsperFightersCup
                 .Forget();
         }
 
-        public override void EndState()
-        {
-            base.EndState();
-            _onRoundStart?.Invoke(FsmSystem.Round);
-        }
-
         [PunRPC]
         private void RoundSetCompleteRPC()
         {
@@ -83,6 +77,8 @@ namespace EsperFightersCup
         private async UniTask RoundIntroAsync(int round)
         {
             IngameBGMManager.Instance.IngameBGMUpdate(round);
+            _onRoundStart?.Invoke(FsmSystem.Round);
+
             await FsmSystem.Curtain.FadeOutAsync();
 
             await UniTask.Delay(2000);
