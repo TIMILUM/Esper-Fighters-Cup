@@ -6293,7 +6293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.size
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[6]._maxNum
@@ -6339,6 +6339,14 @@ PrefabInstance:
       propertyPath: _particleInfo.Array.data[10]._particleFrefab
       value: 
       objectReference: {fileID: 3202762442003905626, guid: 8ee9687ecd71db04596817f8f528bcf9, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[9]._paletteParticle1
+      value: 
+      objectReference: {fileID: 7145649949678259631, guid: 0257bc8b50f6d154d83132866844472d, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[9]._paletteParticle2
+      value: 
+      objectReference: {fileID: 7145649949678259631, guid: 29993b9b1b54fff49ab2b13fb1a55b67, type: 3}
     - target: {fileID: 3466341873098705245, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: m_Name
       value: ParticleGameManager

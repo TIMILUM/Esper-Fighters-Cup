@@ -44,7 +44,7 @@ namespace EsperFightersCup
             }
             */
             if (_dropSkillEffect != 0)
-                ParticleManager.Instance.PullParticleToLocal("DropSkillEffect", pos, Quaternion.identity);
+                ParticleManager.Instance.PullParticleSync("DropSkillEffect", pos, Quaternion.identity);
 
             ParticleManager.Instance.PullParticleLocal("Break_Dust", pos, Quaternion.identity);
         }
