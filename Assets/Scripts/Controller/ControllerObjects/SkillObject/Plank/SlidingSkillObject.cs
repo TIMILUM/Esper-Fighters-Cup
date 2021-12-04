@@ -9,7 +9,7 @@ namespace EsperFightersCup
     public class SlidingSkillObject : SkillObject
     {
         private Vector3 _mousePosition;
-        [SerializeField]
+        [SerializeField, Tooltip("Range의 값")]
         private float _dummyRange;
 
         protected override void OnInitializeSkill()
@@ -24,9 +24,7 @@ namespace EsperFightersCup
         /// </summary>
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
-            if (Range == 0)
-                _dummyRange = 5.0f;
-            else
+            if (Range > 0)
                 _dummyRange = Range;
 
             _mousePosition = GetMousePosition();

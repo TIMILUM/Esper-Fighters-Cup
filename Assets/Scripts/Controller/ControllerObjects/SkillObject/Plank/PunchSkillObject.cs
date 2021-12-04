@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class PunchSkillObject : SkillObject
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Skill_Effect_Data_1의 값")]
     private float _moveSpeed = 1.0f;
-    [SerializeField]
-    private float _damage = 10;
-    [SerializeField]
-    private float _stunDuration = 0.5f;
 
     [SerializeField]
     private ColliderChecker _colliderChecker;
@@ -26,6 +22,7 @@ public class PunchSkillObject : SkillObject
         _colliderTransform.localScale = new Vector3(Size.x, 10, Size.y);
         _colliderChecker.gameObject.SetActive(false);
         _colliderChecker.OnCollision += SetHit;
+        _moveSpeed = EffectData.x;
     }
 
     public override void SetHit(ObjectBase to)
@@ -35,10 +32,10 @@ public class PunchSkillObject : SkillObject
         {
             Type = BuffObject.Type.KnockBack,
             Damage = 0,
-            Duration = Range / _moveSpeed,
+            Duration = Range / SkillSpeed,
             AllowDuplicates = false,
             ValueVector3 = new[] { _direction },
-            ValueFloat = new[] { _moveSpeed, 0, 0 },
+            ValueFloat = new[] { SkillSpeed, 0, 0 },
             IsOnlyOnce = false,
         };
 

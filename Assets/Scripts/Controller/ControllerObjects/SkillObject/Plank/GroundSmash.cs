@@ -15,7 +15,8 @@ namespace EsperFightersCup
 
 
         [SerializeField] private ColliderChecker _collider;
-        [SerializeField] private float _uIDuration;
+        [SerializeField, Tooltip("Effect_Duration의 값")] 
+        private float _uIDuration;
 
 
 
@@ -26,6 +27,7 @@ namespace EsperFightersCup
 
             _currentRange = Range;
             _currentSize = Size;
+            _uIDuration = EffectDuration;
 
             if (Range == 0)
                 _currentRange = 5.0f;

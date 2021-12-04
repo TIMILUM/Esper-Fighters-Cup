@@ -8,15 +8,11 @@ namespace EsperFightersCup
 {
     public class GrabSkill : SkillObject
     {
-
-        [SerializeField]
-        private float _range;
-
-
-        [SerializeField]
+        
+        [SerializeField, Tooltip("Skill_Effect_Data_1의 값")]
         private float _ThrowfrontDelayTime;
 
-        [SerializeField]
+        [SerializeField, Tooltip("Skill_Effect_Data_2의 값")]
         private float _ThrowendDelayTime;
 
 
@@ -27,7 +23,7 @@ namespace EsperFightersCup
         private GameObject _colliderParent;
 
 
-        [SerializeField]
+        [SerializeField, Tooltip("ShapeData_1, ShapeData_2의 값")]
         private Vector2 _colliderSize = new Vector2(5.0f, 10.0f);
 
 
@@ -43,7 +39,9 @@ namespace EsperFightersCup
 
             base.OnInitializeSkill();
 
-
+            _ThrowfrontDelayTime = EffectData.x;
+            _ThrowendDelayTime = EffectData.y;
+            _colliderSize = Size;
             var colliderScale = new Vector3(_colliderSize.x, 1.0f, _colliderSize.y);
             _collider.transform.localScale = colliderScale;
         }

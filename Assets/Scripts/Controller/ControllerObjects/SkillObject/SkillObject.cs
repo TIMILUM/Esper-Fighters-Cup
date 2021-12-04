@@ -30,8 +30,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
     //넣어 달라고 부탁하셔서 넣었습니다.
     //csv가 0일때 인스펙터의 딜레이가 들어갑니다.
 
-    [SerializeField] private int _frontDelay;
-    [SerializeField] private int _endDelay;
+    [SerializeField, Tooltip("CSV의 Pre_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")]
+    private int _frontDelay;
+    [SerializeField, Tooltip("CSV의 After_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")] 
+    private int _endDelay;
 
     private CSVData _commonCsvData;
     private int _commonCsvIndex;
@@ -82,6 +84,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
     protected float EndDelayMoveSpeed { get; private set; }
     protected int StunGroggyDuration { get; private set; }
     protected int Damage { get; private set; }
+    protected float EffectDuration { get; private set; }
+    protected float SkillSpeed { get; private set; }
 
     //Effects CSV Data
     protected Vector4 EffectData { get; private set; }
@@ -272,6 +276,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
         // Name = GetCSVData<string>("Name");
         Range = GetCSVData<float>("Range");
         Damage = (int)GetCSVData<float>("Damage");
+        EffectDuration = GetCSVData<float>("Effect_Duration");
+        SkillSpeed = GetCSVData<float>("Skill_Speed");
         StunGroggyDuration = (int)GetCSVData<float>("Groggy_Duration");
         FrontDelayMilliseconds = (int)GetCSVData<float>("Pre_Delay_Duration");
         EndDelayMilliseconds = (int)GetCSVData<float>("After_Delay_Duration");
