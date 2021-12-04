@@ -73,7 +73,7 @@ namespace EsperFightersCup.UI.CharacterChoice
                 _localPlayerStateText.text = "준비 완료";
 
                 var characterType = (ACharacter.Type)playerChoose;
-                _localPlayerCharacterDummyText.text = characterType.ToString();
+                _localPlayerCharacterDummyText.text = "READY"; //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
 
                 //캐릭터 UI 패널에 들어있는 컴포넌트(스크립트)의 함수를 호출해 랜더 텍스처를 수정했습니다.
                 if(characterType.ToString()== "Telekinesis")
@@ -93,7 +93,7 @@ namespace EsperFightersCup.UI.CharacterChoice
                 }
 
                 var characterType = (ACharacter.Type)playerChoose;
-                _otherPlayerCharacterDummyText.text = characterType.ToString();
+                _otherPlayerCharacterDummyText.text = "READY";  //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
 
                 //캐릭터 UI 패널에 들어있는 컴포넌트(스크립트)의 함수를 호출해 랜더 텍스처를 수정했습니다.
                 if (characterType.ToString() == "Telekinesis")
