@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 740977408721668119}
   - component: {fileID: 740977408721668116}
   m_Layer: 0
-  m_Name: Fx_Character_Hit
+  m_Name: Fx_Plank_TacklePunch_Swing_Sub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1193,7 +1193,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 1
@@ -1381,8 +1381,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.73821133, b: 0, a: 1}
-        key1: {r: 1, g: 0.59131837, b: 0, a: 1}
+        key0: {r: 0.78431374, g: 0, b: 1, a: 1}
+        key1: {r: 0.78431374, g: 0, b: 1, a: 1}
         key2: {r: 1, g: 1, b: 1, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -6075,7 +6075,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 1
