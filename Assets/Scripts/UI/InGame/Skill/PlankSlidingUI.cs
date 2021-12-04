@@ -14,11 +14,11 @@ namespace EsperFightersCup.UI.InGame.Skill
             if (Target.photonView.IsMine)
             {
                 var TargetPos = Target.transform.position;
-                var TargetForword = Target.transform.forward;
-                var LookDir = Quaternion.LookRotation(TargetPos, TargetPos + TargetForword);
+                var TargetForword = Target.transform.forward * 2.0f;
+
 
                 transform.SetPositionAndRotation
-                    (TargetPos + TargetForword, LookDir);
+                    (TargetPos + TargetForword, Target.transform.rotation);
 
                 if (!Target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Sliding))
                 {

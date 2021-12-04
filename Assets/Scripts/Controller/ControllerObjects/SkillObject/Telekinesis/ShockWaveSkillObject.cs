@@ -120,7 +120,9 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override async UniTask OnUseAsync()
     {
-        ParticleManager.Instance.PullParticle("ShockWave", _startPos - (_direction * 2), Quaternion.LookRotation(_direction));
+        //
+        ParticleManager.Instance.PullParticle("ShockWave", _startPos + _direction ,
+            Quaternion.LookRotation(_direction));
 
         _collider.transform.SetPositionAndRotation(_castUI.transform.GetChild(0).position, Quaternion.LookRotation(_direction));
 

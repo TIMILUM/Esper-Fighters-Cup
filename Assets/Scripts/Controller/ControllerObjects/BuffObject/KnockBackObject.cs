@@ -46,11 +46,6 @@ public class KnockBackObject : BuffObject
             _playerChracterID = Info.ValueFloat[3];
         }
 
-        if (Author is APlayer player)
-        {
-            player.Animator.SetTrigger("Knockback", false);
-        }
-
         if (Author.photonView.IsMine)
         {
             _moving = StartCoroutine(Knockback());
