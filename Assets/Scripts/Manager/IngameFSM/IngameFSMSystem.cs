@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using Photon.Pun;
 using UnityEngine;
-
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 [RequireComponent(typeof(PhotonView))]
@@ -25,6 +24,11 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     // private DateTime _sawUsingStartTime = DateTime.MinValue;
 
     public static IngameFSMSystem Instance { get; private set; }
+
+    /// <summary>
+    /// 게임 라운드
+    /// </summary>
+    public int Round => (int)(PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound] ?? 0);
 
     public CurtainAnimation Curtain => _curtain;
 
@@ -53,6 +57,10 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
 #endif
     }
 
+    /// <summary>
+    /// 해당 FSMSystem의 State를 변경합니다. CustomRoomProperty를 이용하여 모든 클라이언트에 동기화됩니다.
+    /// </summary>
+    /// <param name="state"></param>
     public override void ChangeState(State state)
     {
         if (state == CurrentState)
@@ -61,7 +69,6 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         }
 
         PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameState, (int)state);
-        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
@@ -78,9 +85,29 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     {
         // Enumerator가 중간에 제거되는 불상사를 막기 위해
         // OnRoomPropertiesUpdate가 모두 끝날 때까지 기다림
-        await UniTask.Yield();
+        await UniTask.NextFrame();
 
-        Debug.Log($"Next GameState: {state}");
+        // 각 STATE에 맞는 이벤트 발생
+        switch (state)
+        {
+            case State.Init:
+                break;
+            case State.IntroCut:
+                break;
+            case State.RoundIntro:
+                break;
+            case State.InBattle:
+                break;
+            case State.RoundEnd:
+                break;
+            case State.EndingCut:
+                break;
+            case State.Result:
+                break;
+            default:
+                break;
+        }
+
         base.ChangeState(state);
     }
 }

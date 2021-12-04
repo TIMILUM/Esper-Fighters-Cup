@@ -6,9 +6,15 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
     private bool _isRegistered;
 
     /// <summary>
-    /// 컨트롤러 오브젝트의 주인 액터입니다.
+    /// 컨트롤러 오브젝트의 주인 액터입니다.<para/>
+    /// <see cref="Register(T, Action)"/>가 호출 될 때 설정되므로 Initialize 시점에 사용하지 마세요.
     /// </summary>
     protected Actor Author { get; private set; }
+
+    /// <summary>
+    /// 컨트롤러 오브젝트의 부모 컨트롤러입니다.<para/>
+    /// <see cref="Register(T, Action)"/>가 호출 될 때 설정되므로 Initialize 시점에 사용하지 마세요.
+    /// </summary>
     protected T Controller { get; private set; }
 
     protected sealed override void Awake()

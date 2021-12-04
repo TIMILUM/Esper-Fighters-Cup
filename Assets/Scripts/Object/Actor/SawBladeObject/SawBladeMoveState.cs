@@ -14,7 +14,7 @@ public class SawBladeMoveState : SawBladeFSMBase
         }
 
         var position = transform.position;
-        position += direction * _sawBladeObject.Speed * Time.deltaTime;
+        position += _sawBladeObject.Speed * Time.deltaTime * direction;
         transform.position = position;
 
         var endPosition = _sawBladeObject.EndPosition;

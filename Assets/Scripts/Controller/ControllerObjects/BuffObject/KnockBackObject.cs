@@ -9,6 +9,7 @@ public class KnockBackObject : BuffObject
     private float _decreaseHp = 0;
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 스턴 지속기간(초) 지정됨
     private float _durationStunSeconds = 0;
+    private float _playerChracterID = -1;
     private Coroutine _moving;
 
     public Vector3 NormalizedDirection
@@ -18,6 +19,12 @@ public class KnockBackObject : BuffObject
     }
 
     public override Type BuffType => Type.KnockBack;
+
+    public override void SetHit(ObjectBase to)
+    {
+        print("set hit");
+        base.SetHit(to);
+    }
 
     public override void OnBuffGenerated()
     {
@@ -34,9 +41,14 @@ public class KnockBackObject : BuffObject
         _decreaseHp = Info.ValueFloat[1];
         _durationStunSeconds = Info.ValueFloat[2];
 
+        if (Info.ValueFloat.Length > 3)
+        {
+            _playerChracterID = Info.ValueFloat[3];
+        }
+
         if (Author is APlayer player)
         {
-            player.Animator.SetTrigger("Knockback");
+            player.Animator.SetTrigger("Knockback", false);
         }
 
         if (Author.photonView.IsMine)
@@ -51,6 +63,17 @@ public class KnockBackObject : BuffObject
         {
             StopCoroutine(_moving);
         }
+
+        /*
+        if (Author is AStaticObject)
+        {
+            Author.BuffController.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
+        }
+        */
     }
 
     private IEnumerator Knockback()
@@ -70,10 +93,19 @@ public class KnockBackObject : BuffObject
             return;
         }
 
+        if (otherActor != null && otherActor.photonView.ViewID == _playerChracterID)
+        {
+            return;
+        }
+
         Author.Rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
 
         GenerateAfterBuff(Controller);
-        GenerateAfterBuff(otherActor.BuffController);
+
+        if (otherActor != null)
+        {
+            GenerateAfterBuff(otherActor.BuffController);
+        }
 
         Controller.ReleaseBuff(this);
     }
@@ -87,7 +119,7 @@ public class KnockBackObject : BuffObject
             {
                 Type = Type.DecreaseHp,
                 Damage = _decreaseHp,
-                Duration = 0.001f
+                IsOnlyOnce = true
             });
         }
 

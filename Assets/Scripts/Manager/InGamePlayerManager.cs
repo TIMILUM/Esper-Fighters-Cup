@@ -37,14 +37,25 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     /// </summary>
     public List<Transform> StartLocations => _startLocations;
 
+    /// <summary>
+    /// 액터 번호로 정렬된 플레이어 목록 중 해당 플레이어가 몇 번째에 존재하는지 검색합니다.
+    /// </summary>
+    /// <param name="searchPlayer"></param>
+    /// <returns></returns>
+    public static int FindPlayerIndex(Player searchPlayer)
+    {
+        return Array.FindIndex(PhotonNetwork.PlayerList, p => p.ActorNumber == searchPlayer.ActorNumber);
+    }
+
     private void Start()
     {
         LocalPlayer = SpawnLocalPlayer();
         var pvID = LocalPlayer.photonView.ViewID;
-        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
 
         Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
-        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+        // Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -58,7 +69,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
         GamePlayers[targetPlayer.ActorNumber] = playerInstance;
         Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
-        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+        // Debug.Log($"GamePlayers count: {GamePlayers.Count}");
 
         if (PhotonNetwork.IsMasterClient && GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
         {
@@ -93,12 +104,12 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var localplayer = player.GetComponent<APlayer>();
         localplayer.ResetPositionAndRotation();
 
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
         return localplayer;
     }
 
     private async UniTask NextStateAsync()
     {
-        Debug.Log($"Change state to IntroCut");
         await UniTask.Delay(1000);
         IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
     }

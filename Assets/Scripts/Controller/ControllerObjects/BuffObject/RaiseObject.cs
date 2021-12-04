@@ -1,10 +1,12 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 public class RaiseObject : BuffObject
 {
     private float _limitPosY;
-    private Coroutine _raising;
+    private Sequence _raising;
+    private Coroutine _checking;
 
     public override Type BuffType => Type.Raise;
 
@@ -12,14 +14,24 @@ public class RaiseObject : BuffObject
     {
         // BuffStruct Help
         // ----------------
-        // ValueFloat[0] : limitPosY (0이면 스턴 효과 없음)
+        // ValueFloat[0] : limitPosY
         // ----------------
         _limitPosY = Info.ValueFloat[0];
 
         if (Author.photonView.IsMine)
         {
-            Author.Rigidbody.useGravity = false;
-            _raising = StartCoroutine(Raise());
+            // useGravity 동기화됨
+            if (Author is APlayer)
+            {
+                Author.Rigidbody.useGravity = false;
+            }
+            var startPos = Author.transform.position;
+            _raising = DOTween.Sequence()
+                .Append(Author.Rigidbody.DOMove(new Vector3(startPos.x, _limitPosY, startPos.z), Info.Duration))
+                .SetEase(Ease.OutCubic)
+                .SetLink(gameObject, LinkBehaviour.KillOnDisable);
+
+            _checking = StartCoroutine(CheckBuffRelease());
         }
     }
 
@@ -27,29 +39,53 @@ public class RaiseObject : BuffObject
     {
         if (Author.photonView.IsMine)
         {
-            Author.Rigidbody.useGravity = true;
-            StopCoroutine(_raising);
-            Controller.GenerateBuff(new BuffStruct()
+            if (_checking != null)
             {
-                Type = Type.Falling,
-                ValueFloat = new float[2] { 0.0f, 0.0f }
-            });
+                StopCoroutine(_checking);
+            }
+            _raising.Kill();
+
+            if (Author is APlayer)
+            {
+                Author.Rigidbody.useGravity = true;
+            }
+            else
+            {
+                Controller.GenerateBuff(new BuffStruct()
+                {
+                    Type = Type.Falling,
+                    ValueFloat = new float[2] { 0.0f, 0.0f }
+                });
+            }
         }
     }
 
+    private IEnumerator CheckBuffRelease()
+    {
+        while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
+        {
+            yield return null;
+        }
+        _raising.Kill();
+        Controller.ReleaseBuff(this);
+    }
+
+    /*
     private IEnumerator Raise()
     {
         var startTime = Time.time;
         var waitForFixedUpdate = new WaitForFixedUpdate();
         var startPos = Author.Rigidbody.position;
         var endPos = new Vector3(startPos.x, _limitPosY, startPos.z);
+        var duration = Info.Duration * 0.001f;
 
         while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
         {
             var currentTime = Time.time - startTime;
-            Author.Rigidbody.position = Vector3.Lerp(startPos, endPos, currentTime / Info.Duration);
+            Author.Rigidbody.position = Vector3.Lerp(startPos, endPos, currentTime / duration);
             yield return waitForFixedUpdate;
         }
         Controller.ReleaseBuff(this);
     }
+    */
 }

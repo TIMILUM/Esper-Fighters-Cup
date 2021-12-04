@@ -55,6 +55,7 @@ public abstract class BuffObject : ControllerObject<BuffController>
         StartTime = PhotonNetwork.ServerTimestamp;
         gameObject.SetActive(true);
 
+        // IsOnlyOnce일 경우 다음 프레임 기다리고 ReleaseBuff를 또 부를 필요 없이 바로 OnReleased 호출해서 삭제
         if (Author.photonView.IsMine)
         {
             _elapsedTimeout = StartCoroutine(CheckBuffRelease());
@@ -92,7 +93,7 @@ public abstract class BuffObject : ControllerObject<BuffController>
             yield break;
         }
 
-        if (Info.Duration <= 0f)
+        if (Info.Duration == 0f)
         {
             yield break;
         }
@@ -122,20 +123,38 @@ public abstract class BuffObject : ControllerObject<BuffController>
     {
         [SerializeField] private Type _type;
         [SerializeField] private float _duration;
-        [SerializeField] private float[] _valueFloat;
-        [SerializeField] private Vector3[] _valueVector3;
+        [SerializeField] private float[] _valueFloat = new float[0];
+        [SerializeField] private Vector3[] _valueVector3 = new Vector3[0];
         [SerializeField] private bool _allowDuplicates;
         [SerializeField] private float _damage;
         [SerializeField] private bool _isOnlyOnce;
 
         public Type Type { get => _type; set => _type = value; }
+        /// <summary>
+        /// Duration은 무조건 초 단위로 넘겨주셔야 됩니다. (1000ms -> 0.1s)
+        /// </summary>
         public float Duration { get => _duration; set => _duration = value; }
+        /// <summary>
+        /// 시간 정보를 가지는 값들은 초 단위로 변환 후 넘겨주세요.
+        /// </summary>
         public float[] ValueFloat { get => _valueFloat; set => _valueFloat = value; }
         public Vector3[] ValueVector3 { get => _valueVector3; set => _valueVector3 = value; }
         public bool AllowDuplicates { get => _allowDuplicates; set => _allowDuplicates = value; }
         public float Damage { get => _damage; set => _damage = value; }
         /// 해당 버프 한번만 적용 되는지 판별하는 변수
         public bool IsOnlyOnce { get => _isOnlyOnce; set => _isOnlyOnce = value; }
+
+        public override string ToString()
+        {
+            return string.Join(",",
+                Type,
+                Duration,
+                string.Join(",", ValueFloat),
+                string.Join(",", ValueVector3),
+                AllowDuplicates,
+                Damage,
+                IsOnlyOnce);
+        }
 
         public BuffGenerateArguments ToBuffArguments(string id)
         {

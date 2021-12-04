@@ -8,10 +8,15 @@ public class StunObject : BuffObject
     {
         if (Author is APlayer player && player.Animator != null)
         {
-            player.Animator.SetTrigger("Hit");
+            player.Animator.SetTrigger("Hit", false);
 
             var position = Author.transform.position + new Vector3(0f, 0.01f, 0f);
-            ParticleManager.Instance.PullParticle("Hit", position, Quaternion.identity);
+            ParticleManager.Instance.PullParticle("Hit", position, Quaternion.Euler(90f, 0f, 0f));
         }
+    }
+
+    public override void OnBuffReleased()
+    {
+        base.OnBuffReleased();
     }
 }

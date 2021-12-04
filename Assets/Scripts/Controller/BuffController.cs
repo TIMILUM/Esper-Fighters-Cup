@@ -24,9 +24,9 @@ public sealed class BuffController : ControllerBase
         SetControllerType(ControllerManager.Type.BuffController);
     }
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
         foreach (var buffObject in prefabs)
@@ -45,6 +45,7 @@ public sealed class BuffController : ControllerBase
         var args = buffStruct.ToBuffArguments(id);
 
         photonView.RPC(nameof(GenerateBuffRPC), RpcTarget.All, args);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
@@ -54,6 +55,7 @@ public sealed class BuffController : ControllerBase
     public void ReleaseBuffsByType(BuffObject.Type buffType)
     {
         photonView.RPC(nameof(ReleaseBuffsByTypeRPC), RpcTarget.All, (int)buffType);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     /// <summary>
@@ -78,33 +80,32 @@ public sealed class BuffController : ControllerBase
         }
 
         photonView.RPC(nameof(ReleaseBuffRPC), RpcTarget.All, id);
+        PhotonNetwork.SendAllOutgoingCommands();
     }
 
     [PunRPC]
-    public void GenerateBuffRPC(BuffGenerateArguments args)
+    private void GenerateBuffRPC(BuffGenerateArguments args)
     {
         var buffType = (BuffObject.Type)args.Type;
         if (!_buffTable.ContainsKey(buffType))
         {
             return;
         }
-
         var buffs = _activeBuffs[buffType];
-        if (!args.AllowDuplicates && buffs.Count > 0)
+        if (photonView.IsMine && !args.AllowDuplicates && buffs.Count > 0)
         {
             ReleaseBuffsByType(buffType);
         }
-
         var prefab = _buffTable[buffType];
         var buff = Instantiate(prefab, transform);
         buff.name = args.BuffId;
         buff.BuffId = args.BuffId;
         buff.SetBuffStruct((BuffObject.BuffStruct)args);
-        buff.Register(this, null);
 
         _activeBuffs.Add(buff);
-
-        Debug.Log($"Buff generated [{buff.BuffType}] [{buff.BuffId}]");
+        // Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        // Debug.Log((BuffObject.BuffStruct)args);
+        buff.Register(this, null);
     }
 
     [PunRPC]
@@ -114,7 +115,8 @@ public sealed class BuffController : ControllerBase
         {
             foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
-                Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
+                // Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+                // Debug.Log(targetBuff.Info.ToString());
                 targetBuff.Release();
             }
             _activeBuffs.Clear((BuffObject.Type)buffType);
@@ -138,7 +140,8 @@ public sealed class BuffController : ControllerBase
                 return;
             }
 
-            Debug.Log($"Buff released [{targetBuff.BuffType}] [{targetBuff.BuffId}]");
+            // Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+            // Debug.Log(targetBuff.Info.ToString());
             targetBuff.Release();
         }
     }

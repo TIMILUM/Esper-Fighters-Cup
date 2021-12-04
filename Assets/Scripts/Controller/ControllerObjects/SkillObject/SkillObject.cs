@@ -23,6 +23,15 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     [SerializeField] private int _id;
     [SerializeField] private KeyCode _inputKey;
+    [SerializeField] private bool _debuging;
+
+
+    //기획자 분들께서 밸런스 맞추기 위해서 인스펙터에 frontDelay및 endDelay를
+    //넣어 달라고 부탁하셔서 넣었습니다.
+    //csv가 0일때 인스펙터의 딜레이가 들어갑니다.
+
+    [SerializeField] private int _frontDelay;
+    [SerializeField] private int _endDelay;
 
     private CSVData _commonCsvData;
     private int _commonCsvIndex;
@@ -74,6 +83,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
     protected int StunGroggyDuration { get; private set; }
     protected int Damage { get; private set; }
 
+    //Effects CSV Data
+    protected Vector4 EffectData { get; private set; }
+    protected Vector2 EffectSize { get; private set; }
+
     #region abstract
 
     /// <summary>
@@ -115,7 +128,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     protected sealed override void OnRegistered(Action continueFunc)
     {
-        Debug.Log($"[{ID}] OnRegistered");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] OnRegistered");
+        }
         BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
         AuthorPlayer = Author as APlayer;
 
@@ -126,7 +142,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     protected sealed override void OnReleased()
     {
-        Debug.Log($"[{ID}] OnReleased");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] OnReleased");
+        }
         ReleaseMoveSpeedBuffAll();
         gameObject.SetActive(false);
 
@@ -135,7 +154,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     public sealed override void Release()
     {
-        Debug.Log($"[{ID}] Release (Cancel)");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] Release (Cancel)");
+        }
         _stateCancellation?.Cancel();
     }
 
@@ -145,7 +167,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
         if (isCanceled)
         {
-            Debug.Log($"[{ID}] Canceled");
+            if (_debuging)
+            {
+                Debug.Log($"[{ID}] Canceled");
+            }
             CurrentState = State.Canceled;
             ApplyMovementSpeed(State.Canceled);
             OnCancel();
@@ -156,7 +181,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillReadyToUse(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] ReadyToUse");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] ReadyToUse");
+        }
         CurrentState = State.ReadyToUse;
         await UniTask.Yield();
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
@@ -173,17 +201,27 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillFrontDelay(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] FrontDelay {FrontDelayMilliseconds}");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] FrontDelay {FrontDelayMilliseconds}");
+        }
         CurrentState = State.FrontDelay;
         ApplyMovementSpeed(State.FrontDelay);
         BeforeFrontDelay();
+
+        if (FrontDelayMilliseconds == 0)
+            FrontDelayMilliseconds = _frontDelay;
+
         await UniTask.Delay(FrontDelayMilliseconds, cancellationToken: cancelltaion);
         await SkillUse(cancelltaion);
     }
 
     private async UniTask SkillUse(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] Use");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] Use");
+        }
         CurrentState = State.Use;
         ApplyMovementSpeed(State.Use);
         await OnUseAsync();
@@ -192,17 +230,27 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillEndDelay(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] EndDelay {EndDelayMilliseconds}");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] EndDelay {EndDelayMilliseconds}");
+        }
         CurrentState = State.EndDelay;
         ApplyMovementSpeed(State.EndDelay);
         BeforeEndDelay();
+
+        if (FrontDelayMilliseconds == 0)
+            EndDelayMilliseconds = _endDelay;
+
         await UniTask.Delay(EndDelayMilliseconds, cancellationToken: cancelltaion);
         SkillRelease();
     }
 
     private void SkillRelease()
     {
-        Debug.Log($"[{ID}] Release");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] Release");
+        }
         CurrentState = State.Release;
         ApplyMovementSpeed(State.Release);
         OnRelease();
@@ -231,12 +279,16 @@ public abstract class SkillObject : ControllerObject<SkillController>
         EndDelayMoveSpeed = GetCSVData<float>("After_Delay_MoveSpeed");
         Size = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
 
+        // Effect Data
+        EffectData = new Vector4(GetCSVData<float>("Skill_Effect_Data_1"), GetCSVData<float>("Skill_Effect_Data_2"), 0, 0);
+        EffectSize = new Vector2(GetCSVData<float>("Effect_Size_1"), GetCSVData<float>("Effect_Size_2"));
+
         // TODO: 아래 코드 제거
         // 스턴 지속 시간
         var stunBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.Stun);
         if (stunBuff != null)
         {
-            stunBuff.Duration = GetCSVData<float>("Groggy_Duration");
+            stunBuff.Duration = GetCSVData<float>("Groggy_Duration") * 0.001f;
         }
 
         // 데미지
@@ -313,9 +365,9 @@ public abstract class SkillObject : ControllerObject<SkillController>
         BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
             Type = BuffObject.Type.MoveSpeed,
-            Duration = 0,
+            Duration = 0f,
             AllowDuplicates = true,
-            Damage = 0,
+            Damage = 0f,
             IsOnlyOnce = false,
             ValueFloat = new[] { value }
         });

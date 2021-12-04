@@ -1,3 +1,4 @@
+using EsperFightersCup;
 using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
@@ -11,9 +12,6 @@ public class Actor : ObjectBase, IPunObservable
     [Tooltip("오브젝트를 직접 넣어주세요!")]
     protected ControllerManager _controllerManager;
 
-    [SerializeField]
-    private int _hp;
-
     [SerializeField, Tooltip("해당 오브젝트의 ID 값입니다.")]
     private int _id;
 
@@ -22,10 +20,21 @@ public class Actor : ObjectBase, IPunObservable
 
     public ControllerManager ControllerManager => _controllerManager;
     public BuffController BuffController { get; protected set; }
-    public int HP { get => _hp; set => _hp = Mathf.Clamp(value, 0, int.MaxValue); }
     public int ID => _id;
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
     public Rigidbody Rigidbody { get; protected set; }
+
+    public int Pallete
+    {
+        get
+        {
+            if (photonView.Controller.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerPalette, out var value))
+            {
+                return (int)value;
+            }
+            return 0;
+        }
+    }
 
     protected override void Awake()
     {
@@ -79,14 +88,12 @@ public class Actor : ObjectBase, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(_hp);
-            stream.SendNext(Rigidbody.isKinematic);
+            // stream.SendNext(Rigidbody.isKinematic);
             stream.SendNext(Rigidbody.useGravity);
         }
         else
         {
-            _hp = (int)stream.ReceiveNext();
-            Rigidbody.isKinematic = (bool)stream.ReceiveNext();
+            // Rigidbody.isKinematic = (bool)stream.ReceiveNext();
             Rigidbody.useGravity = (bool)stream.ReceiveNext();
         }
     }

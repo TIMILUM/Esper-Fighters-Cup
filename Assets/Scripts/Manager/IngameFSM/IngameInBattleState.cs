@@ -3,13 +3,30 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace EsperFightersCup
 {
     public class IngameInBattleState : InGameFSMStateBase
     {
+        [SerializeField] private UnityEvent _onBattleStart;
+        [SerializeField] private UnityEvent _onBattleEnd;
+
         private CancellationTokenSource _checkCanllation;
+
+        public event UnityAction OnBattleStart
+        {
+            add => _onBattleStart.AddListener(value);
+            remove => _onBattleStart.RemoveListener(value);
+        }
+
+        public event UnityAction OnBattleEnd
+        {
+            add => _onBattleEnd.AddListener(value);
+            remove => _onBattleEnd.RemoveListener(value);
+        }
 
         protected override void Initialize()
         {
@@ -19,9 +36,17 @@ namespace EsperFightersCup
         public override void StartState()
         {
             base.StartState();
+
+            _onBattleStart?.Invoke();
+
             _checkCanllation = new CancellationTokenSource();
             CheckLocalPlayerHPAsync(_checkCanllation.Token).Forget();
             GenerateSawBladeAsync(_checkCanllation.Token).Forget();
+        }
+
+        public override void EndState()
+        {
+            base.EndState();
         }
 
         private async UniTask GenerateSawBladeAsync(CancellationToken cancellation)
@@ -46,7 +71,7 @@ namespace EsperFightersCup
                     }
                 }
 
-                await UniTask.Yield();
+                await UniTask.NextFrame();
             }
         }
 
@@ -61,7 +86,7 @@ namespace EsperFightersCup
             {
                 Debug.Log($"LocalPlayer is dead!");
                 var actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-                var winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                int winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
                 PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameRoundWinner, winner);
             }
 
@@ -85,17 +110,30 @@ namespace EsperFightersCup
 
             _checkCanllation.Cancel();
 
+            _onBattleEnd?.Invoke();
+
             var winner = (int)value;
             Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-
-                // ?쇱슫???곗듅?먮뒗 WinPoint??1???뷀븯怨?RoundEnd濡?GameState 蹂寃?
+                // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
                 var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
-                Debug.Log($"Add WinPoint to LocalPlayer - {winPoint}");
+            }
+        }
 
-                PhotonNetwork.SendAllOutgoingCommands();
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
+            {
+                return;
+            }
+            var winPoint = (int)value;
+            Debug.Log($"Added WinPoint to [{targetPlayer.ActorNumber}]{targetPlayer.NickName} - {winPoint}");
+
+            // 상대방 플레이어가 WinPoint 변경을 확인했을 때 RoundEnd로 넘어감
+            if (targetPlayer != PhotonNetwork.LocalPlayer)
+            {
                 ChangeState(IngameFSMSystem.State.RoundEnd);
             }
         }
