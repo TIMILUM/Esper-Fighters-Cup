@@ -10,11 +10,13 @@ namespace EsperFightersCup
     {
 
         private Vector2 _currentSize;
+        private Vector3 _startPos;
         private float _currentRange;
 
 
         [SerializeField] private ColliderChecker _collider;
         [SerializeField] private float _uIDuration;
+
 
 
         protected override void OnInitializeSkill()
@@ -40,9 +42,7 @@ namespace EsperFightersCup
 
         protected override void BeforeEndDelay()
         {
-            var CreatePos = new Vector3(Author.transform.position.x, 0.03f, Author.transform.position.z);
-            InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", CreatePos, Author.transform.rotation);
-            ParticleManager.Instance.PullParticle("GroundSkill", CreatePos + Author.transform.forward, Quaternion.identity);
+
 
         }
 
@@ -76,6 +76,7 @@ namespace EsperFightersCup
 
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
+            _startPos = new Vector3(Author.transform.position.x, 0.03f, Author.transform.position.z);
             await UniTask.NextFrame();
             return true;
         }
@@ -93,8 +94,8 @@ namespace EsperFightersCup
 
         protected override async UniTask OnUseAsync()
         {
-
-
+            InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, Author.transform.rotation);
+            ParticleManager.Instance.PullParticle("GroundSkill", _startPos + Author.transform.forward, Quaternion.identity);
             await UniTask.NextFrame();
 
 
