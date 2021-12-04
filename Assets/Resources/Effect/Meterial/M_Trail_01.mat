@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Trail_01
-  m_Shader: {fileID: -6465566751694194690, guid: 43c7ec18dba036a45b260b382d7b88b4, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e44c348efb9043143a55473fae1cad91, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - T_Main:
-        m_Texture: {fileID: 2800000, guid: 6665c156179872747868ea659c3c8e6b, type: 3}
+        m_Texture: {fileID: 2800000, guid: d201a5fe29c81da4abce1720a1dbfdaa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -64,8 +64,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_85f477e888cc4b0abe02c318a2f298b5_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 88d9a982aa0d3a54696157c5968dbcfc, type: 3}
+    - _SampleTexture2D_7c93a9d3af23483a9ce2748107fccf08_Texture_1:
+        m_Texture: {fileID: 2800000, guid: af3c2ab93e087104791cff7e9cad559a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -86,7 +86,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Inten: 0.5
+    - Inten: 2.5
+    - Intensity: 1
     - _AlphaClip: 0
     - _Blend: 2
     - _BumpScale: 1
