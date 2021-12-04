@@ -23,6 +23,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     [SerializeField] private int _id;
     [SerializeField] private KeyCode _inputKey;
+    [SerializeField] private bool _debuging;
 
     private CSVData _commonCsvData;
     private int _commonCsvIndex;
@@ -119,7 +120,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     protected sealed override void OnRegistered(Action continueFunc)
     {
-        Debug.Log($"[{ID}] OnRegistered");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] OnRegistered");
+        }
         BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
         AuthorPlayer = Author as APlayer;
 
@@ -130,7 +134,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     protected sealed override void OnReleased()
     {
-        Debug.Log($"[{ID}] OnReleased");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] OnReleased");
+        }
         ReleaseMoveSpeedBuffAll();
         gameObject.SetActive(false);
 
@@ -139,7 +146,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     public sealed override void Release()
     {
-        Debug.Log($"[{ID}] Release (Cancel)");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] Release (Cancel)");
+        }
         _stateCancellation?.Cancel();
     }
 
@@ -149,7 +159,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
         if (isCanceled)
         {
-            Debug.Log($"[{ID}] Canceled");
+            if (_debuging)
+            {
+                Debug.Log($"[{ID}] Canceled");
+            }
             CurrentState = State.Canceled;
             ApplyMovementSpeed(State.Canceled);
             OnCancel();
@@ -160,7 +173,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillReadyToUse(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] ReadyToUse");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] ReadyToUse");
+        }
         CurrentState = State.ReadyToUse;
         await UniTask.Yield();
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
@@ -177,7 +193,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillFrontDelay(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] FrontDelay {FrontDelayMilliseconds}");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] FrontDelay {FrontDelayMilliseconds}");
+        }
         CurrentState = State.FrontDelay;
         ApplyMovementSpeed(State.FrontDelay);
         BeforeFrontDelay();
@@ -187,7 +206,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillUse(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] Use");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] Use");
+        }
         CurrentState = State.Use;
         ApplyMovementSpeed(State.Use);
         await OnUseAsync();
@@ -196,7 +218,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private async UniTask SkillEndDelay(CancellationToken cancelltaion)
     {
-        Debug.Log($"[{ID}] EndDelay {EndDelayMilliseconds}");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] EndDelay {EndDelayMilliseconds}");
+        }
         CurrentState = State.EndDelay;
         ApplyMovementSpeed(State.EndDelay);
         BeforeEndDelay();
@@ -206,7 +231,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private void SkillRelease()
     {
-        Debug.Log($"[{ID}] Release");
+        if (_debuging)
+        {
+            Debug.Log($"[{ID}] Release");
+        }
         CurrentState = State.Release;
         ApplyMovementSpeed(State.Release);
         OnRelease();

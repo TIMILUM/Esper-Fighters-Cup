@@ -87,8 +87,6 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         // OnRoomPropertiesUpdate가 모두 끝날 때까지 기다림
         await UniTask.NextFrame();
 
-        Debug.Log($"Next GameState: {state}");
-
         // 각 STATE에 맞는 이벤트 발생
         switch (state)
         {

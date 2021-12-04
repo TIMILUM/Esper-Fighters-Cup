@@ -61,6 +61,8 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : PunEventCallb
 
         CurrentState = state;
         nextState.enabled = true;
+
+        Debug.Log($"Changed GameState: {state}");
         nextState.StartState();
     }
 

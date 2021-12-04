@@ -78,8 +78,6 @@ public class AStaticObject : Actor
 
     private void PlayHitSound(HitInfo info)
     {
-        Debug.Log("PlayHitSound", gameObject);
-
         if (string.IsNullOrWhiteSpace(_collideSound))
         {
             return;

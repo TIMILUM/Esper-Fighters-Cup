@@ -97,7 +97,7 @@ public class KnockBackObject : BuffObject
         {
             return;
         }
-        print("knockback trigger");
+
         Author.Rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
 
         GenerateAfterBuff(Controller);
