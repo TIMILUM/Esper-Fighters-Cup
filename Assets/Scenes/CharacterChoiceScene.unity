@@ -840,6 +840,7 @@ GameObject:
   - component: {fileID: 563149439}
   - component: {fileID: 563149440}
   - component: {fileID: 563149438}
+  - component: {fileID: 563149441}
   m_Layer: 5
   m_Name: User 2
   m_TagString: Untagged
@@ -922,6 +923,22 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &563149441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563149436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac83c301e88bdcd4c9d709ca57f0fd10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ElenaRenderTexture: {fileID: 8400000, guid: a13ad5063d5831a4082c3c1d51a5455e, type: 2}
+  ElenaSwapRenderTexture: {fileID: 8400000, guid: ff9c443f55d11b640891f8d8e5708722, type: 2}
+  PlankRenderTexture: {fileID: 8400000, guid: aeef8f5a658a41f4fa99aae234950fb2, type: 2}
+  PlankSwapRenderTexture: {fileID: 8400000, guid: c8b2e8380ebdc6d4cba221ee734fe093, type: 2}
 --- !u!1 &574838322
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,6 +2446,7 @@ GameObject:
   - component: {fileID: 1349492549}
   - component: {fileID: 1349492550}
   - component: {fileID: 1349492548}
+  - component: {fileID: 1349492551}
   m_Layer: 5
   m_Name: User 1
   m_TagString: Untagged
@@ -2511,6 +2529,22 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1349492551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349492546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac83c301e88bdcd4c9d709ca57f0fd10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ElenaRenderTexture: {fileID: 8400000, guid: a13ad5063d5831a4082c3c1d51a5455e, type: 2}
+  ElenaSwapRenderTexture: {fileID: 8400000, guid: ff9c443f55d11b640891f8d8e5708722, type: 2}
+  PlankRenderTexture: {fileID: 8400000, guid: aeef8f5a658a41f4fa99aae234950fb2, type: 2}
+  PlankSwapRenderTexture: {fileID: 8400000, guid: c8b2e8380ebdc6d4cba221ee734fe093, type: 2}
 --- !u!1 &1397100486
 GameObject:
   m_ObjectHideFlags: 0
