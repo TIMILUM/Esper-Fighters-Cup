@@ -25,6 +25,14 @@ public abstract class SkillObject : ControllerObject<SkillController>
     [SerializeField] private KeyCode _inputKey;
     [SerializeField] private bool _debuging;
 
+
+    //기획자 분들께서 밸런스 맞추기 위해서 인스펙터에 frontDelay및 endDelay를
+    //넣어 달라고 부탁하셔서 넣었습니다.
+    //csv가 0일때 인스펙터의 딜레이가 들어갑니다.
+
+    [SerializeField] private int _frontDelay;
+    [SerializeField] private int _endDelay;
+
     private CSVData _commonCsvData;
     private int _commonCsvIndex;
 
@@ -200,6 +208,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
         CurrentState = State.FrontDelay;
         ApplyMovementSpeed(State.FrontDelay);
         BeforeFrontDelay();
+
+        if (FrontDelayMilliseconds == 0)
+            FrontDelayMilliseconds = _frontDelay;
+
         await UniTask.Delay(FrontDelayMilliseconds, cancellationToken: cancelltaion);
         await SkillUse(cancelltaion);
     }
@@ -225,6 +237,10 @@ public abstract class SkillObject : ControllerObject<SkillController>
         CurrentState = State.EndDelay;
         ApplyMovementSpeed(State.EndDelay);
         BeforeEndDelay();
+
+        if (FrontDelayMilliseconds == 0)
+            EndDelayMilliseconds = _endDelay;
+
         await UniTask.Delay(EndDelayMilliseconds, cancellationToken: cancelltaion);
         SkillRelease();
     }
