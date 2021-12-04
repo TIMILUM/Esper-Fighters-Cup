@@ -25,6 +25,8 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : PunEventCallb
 {
     [SerializeField] private TStateEnum _startState;
 
+    public TBaseClass this[TStateEnum state] => StatePool[state];
+
     protected virtual void Awake()
     {
         StatePool = new Dictionary<TStateEnum, TBaseClass>();
