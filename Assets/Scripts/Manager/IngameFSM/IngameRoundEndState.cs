@@ -42,8 +42,6 @@ namespace EsperFightersCup
             await UniTask.Delay(2000);
             await FsmSystem.Curtain.FadeInAsync();
 
-
-
             FsmSystem.photonView.RPC(nameof(RoundEndRPC), RpcTarget.MasterClient);
         }
 

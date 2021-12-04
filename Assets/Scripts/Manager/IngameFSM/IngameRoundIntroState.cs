@@ -50,11 +50,16 @@ namespace EsperFightersCup
             var localplayer = InGamePlayerManager.Instance.LocalPlayer;
             localplayer.ResetPositionAndRotation();
             localplayer.HP = 100;
+        }
 
-            // 설정 완료 후 MasterClient에게 신호
-            UniTask.NextFrame()
-                .ContinueWith(() => FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient))
-                .Forget();
+        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+        {
+            if (!propertiesThatChanged.ContainsKey(CustomPropertyKeys.GameRound))
+            {
+                return;
+            }
+
+            FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
         }
 
         [PunRPC]
@@ -63,21 +68,21 @@ namespace EsperFightersCup
             _count++;
             if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
             {
-                FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All, FsmSystem.Round);
+                FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All);
             }
         }
 
         [PunRPC]
-        private void RoundIntroRPC(int round)
+        private void RoundIntroRPC()
         {
             _count = 0;
-            RoundIntroAsync(round).Forget();
+            RoundIntroAsync(FsmSystem.Round).Forget();
         }
 
         private async UniTask RoundIntroAsync(int round)
         {
             IngameBGMManager.Instance.IngameBGMUpdate(round);
-            _onRoundStart?.Invoke(FsmSystem.Round);
+            _onRoundStart?.Invoke(round);
 
             await FsmSystem.Curtain.FadeOutAsync();
 
