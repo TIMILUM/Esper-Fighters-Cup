@@ -9,6 +9,7 @@ namespace EsperFightersCup
     public class SlidingSkillObject : SkillObject
     {
         private Vector3 _mousePosition;
+        [SerializeField]
         private float _dummyRange;
 
         protected override void OnInitializeSkill()
