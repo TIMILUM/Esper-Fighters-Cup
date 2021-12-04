@@ -16,8 +16,7 @@ namespace EsperFightersCup.UI.CharacterChoice
         [SerializeField] private Text _localPlayerCharacterDummyText;
         [SerializeField] private Text _otherPlayerCharacterDummyText;
 
-        //캐릭터 패널에 raw 이미지를 컨트롤 하기 위해(해당 컴포넌트 접근을 위해) 인스펙터에서 참조했습니다.
-        [SerializeField] private GameObject _localPlayerCharacterImagePanal;
+        //상대 플레이어가 준비 완료
         [SerializeField] private GameObject _otherPlayerCharacterImagePanal;
 
         private Text _localPlayerStateText;
@@ -74,16 +73,6 @@ namespace EsperFightersCup.UI.CharacterChoice
 
                 var characterType = (ACharacter.Type)playerChoose;
                 _localPlayerCharacterDummyText.text = "READY"; //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
-
-                //캐릭터 UI 패널에 들어있는 컴포넌트(스크립트)의 함수를 호출해 랜더 텍스처를 수정했습니다.
-                if(characterType.ToString()== "Telekinesis")
-                {
-                    _localPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
-                }
-                else if(characterType.ToString() == "Plank")
-                {
-                    _localPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
-                }
             }
             else
             {
@@ -95,14 +84,14 @@ namespace EsperFightersCup.UI.CharacterChoice
                 var characterType = (ACharacter.Type)playerChoose;
                 _otherPlayerCharacterDummyText.text = "READY";  //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
 
-                //캐릭터 UI 패널에 들어있는 컴포넌트(스크립트)의 함수를 호출해 랜더 텍스처를 수정했습니다.
-                if (characterType.ToString() == "Telekinesis")
+                //상대 플레이어가 준비 완료 시에 랜더 텍스처를 출력합니다.
+                if(characterType.ToString()== "Telekinesis")
                 {
-                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
+                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나의 랜더 텍스처로 변경하는 함수를 호출합니다.
                 }
-                else if (characterType.ToString() == "Plank")
+                else if(characterType.ToString() == "Plank")
                 {
-                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
+                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크의 랜더 텍스처로 변경하는 함수를 호출합니다.
                 }
             }
         }

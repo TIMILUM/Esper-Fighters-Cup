@@ -530,6 +530,7 @@ GameObject:
   - component: {fileID: 308749739}
   - component: {fileID: 308749742}
   - component: {fileID: 308749743}
+  - component: {fileID: 308749744}
   m_Layer: 5
   m_Name: Character 1
   m_TagString: Untagged
@@ -613,6 +614,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 308749744}
+        m_TargetAssemblyTypeName: EsperFightersCup.Ch_SelectButton, Assembly-CSharp
+        m_MethodName: ElenaImage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &308749740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,6 +700,19 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
+--- !u!114 &308749744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308749737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b27410442928fc4d81fdd0a895d72b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _localPlayerCharacterImagePanal: {fileID: 1349492546}
 --- !u!1 &331120641
 GameObject:
   m_ObjectHideFlags: 0
@@ -3770,7 +3796,6 @@ MonoBehaviour:
   _otherPlayerStateText: {fileID: 1319173313}
   _localPlayerCharacterDummyText: {fileID: 574838325}
   _otherPlayerCharacterDummyText: {fileID: 1109235187}
-  _localPlayerCharacterImagePanal: {fileID: 1349492546}
   _otherPlayerCharacterImagePanal: {fileID: 563149436}
 --- !u!4 &1844021665
 Transform:
@@ -4007,6 +4032,7 @@ GameObject:
   - component: {fileID: 1998891909}
   - component: {fileID: 1998891912}
   - component: {fileID: 1998891913}
+  - component: {fileID: 1998891914}
   m_Layer: 5
   m_Name: Character 2
   m_TagString: Untagged
@@ -4090,6 +4116,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1998891914}
+        m_TargetAssemblyTypeName: EsperFightersCup.Ch_SelectButton, Assembly-CSharp
+        m_MethodName: PlankImage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1998891910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4164,6 +4202,19 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
+--- !u!114 &1998891914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998891907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b27410442928fc4d81fdd0a895d72b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _localPlayerCharacterImagePanal: {fileID: 1349492546}
 --- !u!1001 &2050365752
 PrefabInstance:
   m_ObjectHideFlags: 0
