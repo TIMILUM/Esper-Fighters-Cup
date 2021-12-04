@@ -443,7 +443,7 @@ MonoBehaviour:
   _roomCodeText: {fileID: 1779672179}
   _masterClientNameText: {fileID: 1625612687}
   _otherClientNameText: {fileID: 388543899}
-  _exitButton: {fileID: 0}
+  _exitButton: {fileID: 1427959425}
   _startButton: {fileID: 887631777}
 --- !u!4 &397792788
 Transform:
@@ -1464,6 +1464,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1427959425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1327917423471662249, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
+  m_PrefabInstance: {fileID: 1427959422}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1497485813
