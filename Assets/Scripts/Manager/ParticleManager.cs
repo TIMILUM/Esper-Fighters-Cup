@@ -160,7 +160,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
 
     /// <summary>
     /// 모든 클라이언트에서 파티클을 실행합니다.<para/>
-    /// 팔레트 스왑 이펙트인 경우 이벤트를 보낸 플레이어(로컬 플레이어)의 팔레트 컬러가 사용됩니다.
+    /// 팔레트 스왑 이펙트인 경우 이벤트를 보낸 플레이어(로컬 플레이어)의 팔레트 컬러를 사용합니다.
     /// </summary>
     /// <param name="particleName"> 파티클 이름</param>
     /// <param name="pos"> 파티클 시작 위치</param>
@@ -173,7 +173,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
 
     /// <summary>
     /// 모든 클라이언트에서 플레이어의 특정 트랜스폼의 자식으로 파티클을 실행합니다.<para/>
-    /// 팔레트 스왑 이펙트인 경우 이벤트를 보낸 플레이어(로컬 플레이어)의 팔레트 컬러가 사용됩니다.
+    /// 팔레트 스왑 이펙트인 경우 이벤트를 보낸 플레이어(로컬 플레이어)의 팔레트 컬러를 사용합니다.
     /// </summary>
     /// <param name="particleName">파티클 이름</param>
     /// <param name="attachIndex">파티클을 붙일 <see cref="APlayer.EffectTrans"/>의 인덱스 번호</param>
@@ -185,7 +185,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
 
     /// <summary>
     /// 로컬 클라이언트에서 파티클을 실행합니다.<para/>
-    /// 팔레트 스왑 이펙트인 경우 로컬 플레이어의 팔레트로 고정됩니다.
+    /// 팔레트 스왑 이펙트인 경우 로컬 플레이어의 팔레트 컬러를 사용합니다.
     /// </summary>
     /// <param name="particleName"> 파티클 이름</param>
     /// <param name="pos"> 파티클 시작 위치</param>
@@ -197,8 +197,8 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
     }
 
     /// <summary>
-    /// 로컬 클라이언트에서 플레이어의 특정 트랜스폼의 자식으로 파티클을 실행합니다.<para/>
-    /// 팔레트 스왑 이펙트인 경우 로컬 플레이어의 팔레트로 고정됩니다.
+    /// 로컬 클라이언트에서 로컬 플레이어의 특정 트랜스폼의 자식으로 파티클을 실행합니다.<para/>
+    /// 팔레트 스왑 이펙트인 경우 로컬 플레이어의 팔레트 컬러를 사용합니다.
     /// </summary>
     /// <param name="particleName">파티클 이름</param>
     /// <param name="attachIndex">파티클을 붙일 <see cref="APlayer.EffectTrans"/>의 인덱스 번호</param>
@@ -206,6 +206,18 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
     {
         var localPlayer = InGamePlayerManager.Instance.LocalPlayer;
         PlayParticleAttached(localPlayer, particleName, attachIndex);
+    }
+
+    /// <summary>
+    /// 로컬 클라이언트에서 대상 플레이어의 특정 트랜스폼의 자식으로 파티클을 실행합니다.<para/>
+    /// 팔레트 스왑 이펙트인 경우 대상 플레이어의 팔레트 컬러를 사용합니다.
+    /// </summary>
+    /// <param name="particleName">파티클 이름</param>
+    /// <param name="attachIndex">파티클을 붙일 <see cref="APlayer.EffectTrans"/>의 인덱스 번호</param>
+    /// /// <param name="targetPlayer">파티클을 실행할 대상 플레이어</param>
+    public void PullParticleAttachedLocal(string particleName, int attachIndex, APlayer targetPlayer)
+    {
+        PlayParticleAttached(targetPlayer, particleName, attachIndex);
     }
 
     protected override void OnGameEventReceived(GameEventArguments args)
