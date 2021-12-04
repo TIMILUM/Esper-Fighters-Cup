@@ -39,7 +39,7 @@ namespace EsperFightersCup
             }
             */
 
-            ParticleManager.Instance.PullParticleToLocal("ObjectDropped", pos, Quaternion.identity);
+            ParticleManager.Instance.PullParticleLocal("ObjectDropped", pos, Quaternion.identity);
         }
 
         public override void OnPlayerHitEnter(GameObject other)

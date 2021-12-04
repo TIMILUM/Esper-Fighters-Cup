@@ -25,7 +25,7 @@ namespace EsperFightersCup
                 FMODUnity.RuntimeManager.PlayOneShotAttached(_hitGroundSound, gameObject);
                 var pos = transform.position;
                 pos.y = 0.03f;
-                ParticleManager.Instance.PullParticleToLocal("ObjectDropped", pos, Quaternion.identity);
+                ParticleManager.Instance.PullParticleLocal("ObjectDropped", pos, Quaternion.identity);
             }
         }
 

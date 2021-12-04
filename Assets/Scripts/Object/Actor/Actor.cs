@@ -24,11 +24,14 @@ public class Actor : ObjectBase, IPunObservable
     public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
     public Rigidbody Rigidbody { get; protected set; }
 
-    public int Pallete
+    /// <summary>
+    /// 액터의 Owner 플레이어 팔레트 스왑용 인덱스를 제공합니다.
+    /// </summary>
+    public int PaletteIndex
     {
         get
         {
-            if (photonView.Controller.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerPalette, out var value))
+            if (photonView.Owner.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerPalette, out var value))
             {
                 return (int)value;
             }

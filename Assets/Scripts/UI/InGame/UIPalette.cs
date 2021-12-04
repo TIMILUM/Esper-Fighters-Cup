@@ -28,7 +28,7 @@ namespace EsperFightersCup.UI.InGame
                 return;
             }
 
-            var paletteIndex = target.Pallete;
+            var paletteIndex = target.PaletteIndex;
             foreach (var palette in _targetUI)
             {
                 if (paletteIndex >= palette.PaletteUIs.Count)
