@@ -87,10 +87,10 @@ namespace EsperFightersCup
             await FsmSystem.Curtain.FadeOutAsync();
 
             await UniTask.Delay(2000);
-            _gameStateView.Show($"Round {round}", Vector2.left * 20f);
+            _gameStateView.Ready();
 
             await UniTask.Delay(1500);
-            _gameStateView.Show("Fight!", Vector2.left * 20f);
+            _gameStateView.Fight();
 
             FsmSystem.photonView.RPC(nameof(RoundIntroEndRPC), RpcTarget.MasterClient);
         }

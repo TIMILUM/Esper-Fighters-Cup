@@ -4,40 +4,53 @@ using UnityEngine.UI;
 
 namespace EsperFightersCup.UI.InGame
 {
-    [RequireComponent(typeof(Text))]
     public class GameStateView : MonoBehaviour
     {
-        [SerializeField]
-        private Text _stateText;
-        [SerializeField]
-        private RectTransform _transform;
+        [SerializeField] private Image _sourceImage;
+        [SerializeField] private RectTransform _transform;
+        [SerializeField] private Sprite _battleEndImage;
+        [SerializeField] private Sprite _roundReadyImage;
+        [SerializeField] private Sprite _roundFightImage;
 
         private void Awake()
         {
-            _stateText = GetComponent<Text>();
             _transform = GetComponent<RectTransform>();
 
-            _stateText.DOFade(0f, 0f);
-            _transform.DOAnchorPos(Vector2.zero, 0f);
+            _sourceImage.DOFade(0f, 0f);
+            _transform.anchoredPosition = Vector2.zero;
             gameObject.SetActive(false);
-
-            // CoroutineTimer.SetTimerOnce(() => Show("Ready?", Vector2.left * 20f), 3f);
-            // CoroutineTimer.SetTimerOnce(() => Show("Fight!", Vector2.left * 20f), 4f);
-            // CoroutineTimer.SetTimerOnce(() => Show("K.O", Vector2.up * 20f), 10f);
         }
 
-        public void Show(string text, Vector2 transitionStart)
+        public void Ready()
         {
-            _stateText.text = text;
-            gameObject.SetActive(false);
-            gameObject.SetActive(true);
+            StartAnimation(_roundReadyImage);
+        }
 
+        public void Fight()
+        {
+            StartAnimation(_roundFightImage);
+        }
+
+        public void End()
+        {
+            StartAnimation(_battleEndImage);
+        }
+
+        private void StartAnimation(Sprite source)
+        {
+            if (gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
+            _sourceImage.sprite = source;
+            gameObject.SetActive(true);
             DOTween.Sequence()
-                .Join(_transform.DOAnchorPos(transitionStart, 0f))
-                .Append(_stateText.DOFade(1f, 0.25f))
+                .Join(_transform.DOAnchorPos(Vector2.left * 20f, 0f))
+                .Append(_sourceImage.DOFade(1f, 0.25f))
                 .Join(_transform.DOAnchorPos(Vector2.zero, 0.25f).SetEase(Ease.OutExpo))
                 .AppendInterval(0.25f)
-                .Append(_stateText.DOFade(0f, 0.25f))
+                .Append(_sourceImage.DOFade(0f, 0.25f))
                 .AppendCallback(() => gameObject.SetActive(false))
                 .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
         }

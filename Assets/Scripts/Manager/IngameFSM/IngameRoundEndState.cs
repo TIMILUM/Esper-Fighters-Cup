@@ -32,7 +32,7 @@ namespace EsperFightersCup
         {
             _count = 0;
             base.StartState();
-            _gameStateView.Show("K.O.", Vector2.left * 20f);
+            _gameStateView.End();
 
             NextStateAsync().Forget();
         }

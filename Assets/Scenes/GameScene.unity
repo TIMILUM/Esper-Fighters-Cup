@@ -3300,7 +3300,6 @@ GameObject:
   - component: {fileID: 1121800800}
   - component: {fileID: 1121800802}
   - component: {fileID: 1121800801}
-  - component: {fileID: 1121800804}
   - component: {fileID: 1121800803}
   m_Layer: 5
   m_Name: Game State Text
@@ -3325,8 +3324,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2447, y: 287}
-  m_SizeDelta: {x: 600, y: 200}
+  m_AnchoredPosition: {x: 2562, y: 0}
+  m_SizeDelta: {x: 400, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1121800801
 MonoBehaviour:
@@ -3337,7 +3336,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1121800799}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -3348,20 +3347,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: acd57204af95f714dab07718587c11a4, type: 3}
-    m_FontSize: 100
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 117
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Ready?
+  m_Sprite: {fileID: 21300000, guid: edf0ab2fdbce0a4469e634fc3a2d7f2c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1121800802
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3382,25 +3377,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db83397922d8344fa67a39d4f2655ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateText: {fileID: 1121800801}
+  _sourceImage: {fileID: 1121800801}
   _transform: {fileID: 1121800800}
---- !u!114 &1121800804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121800799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0848bff101191904ead4bb831f7084db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BlurFactor: 1
-  m_Style: 3
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 3, y: -3}
-  m_UseGraphicAlpha: 1
+  _battleEndImage: {fileID: 21300000, guid: ab7adaca8ebd2b440bca588aaa3ad863, type: 3}
+  _roundReadyImage: {fileID: 21300000, guid: edf0ab2fdbce0a4469e634fc3a2d7f2c, type: 3}
+  _roundFightImage: {fileID: 21300000, guid: 724e45346999dfc43bb3169f140bdb6d, type: 3}
 --- !u!1001 &1128157715
 PrefabInstance:
   m_ObjectHideFlags: 0
