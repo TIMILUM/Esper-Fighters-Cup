@@ -21,7 +21,7 @@ namespace EsperFightersCup.UI.InGame.Skill
 
             if (!Target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Sliding))
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
 
 

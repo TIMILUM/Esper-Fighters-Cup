@@ -96,7 +96,7 @@ namespace EsperFightersCup
 
         protected override async UniTask OnUseAsync()
         {
-            
+            ParticleManager.Instance.PullParticleSync("Plank_Ground_Smash", Author.transform.position + Author.transform.forward, Quaternion.identity);
             await UniTask.NextFrame();
         }
     }

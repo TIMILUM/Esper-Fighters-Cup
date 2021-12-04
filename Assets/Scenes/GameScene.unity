@@ -5990,7 +5990,7 @@ PrefabInstance:
       objectReference: {fileID: 2480101516244202184}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _defaultCharacterType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _startLocations.Array.data[0]
@@ -6293,7 +6293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.size
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[6]._maxNum
@@ -6305,11 +6305,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[10]._maxNum
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[10]._lifeTime
-      value: 1000
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[8]._particleName
@@ -6321,7 +6321,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[10]._particleName
-      value: FlankBreakDust
+      value: Plank_Ground_Smash
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[11]._particleName
+      value: Plank_Sliding
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[4]._particleFrefab
@@ -6345,6 +6349,22 @@ PrefabInstance:
       objectReference: {fileID: 7145649949678259631, guid: 0257bc8b50f6d154d83132866844472d, type: 3}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[9]._paletteParticle2
+      value: 
+      objectReference: {fileID: 7145649949678259631, guid: 29993b9b1b54fff49ab2b13fb1a55b67, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[10]._paletteParticle1
+      value: 
+      objectReference: {fileID: 1081832489839075987, guid: d00f20c75ac67504da6b3990ab52c2e6, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[10]._paletteParticle2
+      value: 
+      objectReference: {fileID: 1081832489839075987, guid: 273d8dcbcbbf00549853bb1e3f28e404, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[11]._paletteParticle1
+      value: 
+      objectReference: {fileID: 2924432639335813765, guid: 295706f671fc6df4297f010cfa106125, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[11]._paletteParticle2
       value: 
       objectReference: {fileID: 7145649949678259631, guid: 29993b9b1b54fff49ab2b13fb1a55b67, type: 3}
     - target: {fileID: 3466341873098705245, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
