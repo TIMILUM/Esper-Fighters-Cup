@@ -9,6 +9,7 @@ namespace EsperFightersCup
     public class SlidingSkillObject : SkillObject
     {
         private Vector3 _mousePosition;
+        [SerializeField]
         private float _dummyRange;
 
         protected override void OnInitializeSkill()
@@ -53,7 +54,8 @@ namespace EsperFightersCup
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
 
-            ParticleManager.Instance.PullParticle("Sliding", Author.transform.position, Quaternion.identity);
+            GameUIManager.Instance.PlaySync(Author, "SlidingUI", Author.transform.position, new Vector2(1.0f, 1.0f) ,
+                Author.transform.rotation.eulerAngles.y, _buffOnCollision[0].Duration);
 
             await UniTask.Yield();
         }

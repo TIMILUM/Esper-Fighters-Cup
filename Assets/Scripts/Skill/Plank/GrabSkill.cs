@@ -54,11 +54,6 @@ namespace EsperFightersCup
 
         }
 
-
-
-
-
-
         public override void SetHit(ObjectBase to)
         {
 
@@ -101,13 +96,16 @@ namespace EsperFightersCup
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
 
+            if (AuthorPlayer.photonView.IsMine)
+                AuthorPlayer.Animator.SetBool("Grab", true);
+
             _grabTarget = null;
             _minDistance = float.MaxValue;
+
             _colliderParent.SetActive(true);
             _collider.OnCollision += SetHit;
 
             await UniTask.NextFrame();
-
 
             _collider.OnCollision -= SetHit;
             _colliderParent.SetActive(false);
@@ -115,14 +113,16 @@ namespace EsperFightersCup
 
 
             if (_grabTarget == null)
+            {
+                AuthorPlayer.Animator.SetBool("Grab", false);
                 return false;
+            }
 
             return true;
         }
 
         protected override void BeforeFrontDelay()
         {
-
         }
 
 
@@ -134,16 +134,12 @@ namespace EsperFightersCup
             {
 
                 var Obj = _grabTarget as Actor;
-                AuthorPlayer.Animator.SetBool("Grab", true);
 
                 _buffOnCollision[0].ValueFloat[0] = Author.photonView.ViewID;
                 Obj.BuffController.GenerateBuff(_buffOnCollision[0]);
-                AuthorPlayer.Animator.SetTrigger("Grab");
 
                 await UniTask.WaitUntil(() =>
                 {
-
-
                     if (Input.GetMouseButton(0))
                     {
                         AuthorPlayer.Animator.SetTrigger("Throw");
