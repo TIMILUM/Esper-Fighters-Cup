@@ -3325,7 +3325,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 2562, y: 0}
-  m_SizeDelta: {x: 400, y: 200}
+  m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1121800801
 MonoBehaviour:
@@ -3377,6 +3377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db83397922d8344fa67a39d4f2655ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _transitionType: 27
+  _duration: 0.25
   _sourceImage: {fileID: 1121800801}
   _transform: {fileID: 1121800800}
   _battleEndImage: {fileID: 21300000, guid: ab7adaca8ebd2b440bca588aaa3ad863, type: 3}

@@ -6,6 +6,10 @@ namespace EsperFightersCup.UI.InGame
 {
     public class GameStateView : MonoBehaviour
     {
+        [SerializeField] private Ease _transitionType;
+        [Range(0f, 2f)]
+        [SerializeField] private float _duration;
+
         [SerializeField] private Image _sourceImage;
         [SerializeField] private RectTransform _transform;
         [SerializeField] private Sprite _battleEndImage;
@@ -19,6 +23,18 @@ namespace EsperFightersCup.UI.InGame
             _sourceImage.DOFade(0f, 0f);
             _transform.anchoredPosition = Vector2.zero;
             gameObject.SetActive(false);
+        }
+
+        private void OnEnable()
+        {
+            DOTween.Sequence()
+                .Join(_transform.DOScale(2f, 0f))
+                .Append(_sourceImage.DOFade(1f, _duration))
+                .Join(_transform.DOScale(1f, _duration).SetEase(_transitionType))
+                .AppendInterval(0.25f)
+                .Append(_sourceImage.DOFade(0f, _duration))
+                .AppendCallback(() => gameObject.SetActive(false))
+                .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
         }
 
         public void Ready()
@@ -45,14 +61,6 @@ namespace EsperFightersCup.UI.InGame
 
             _sourceImage.sprite = source;
             gameObject.SetActive(true);
-            DOTween.Sequence()
-                .Join(_transform.DOAnchorPos(Vector2.left * 20f, 0f))
-                .Append(_sourceImage.DOFade(1f, 0.25f))
-                .Join(_transform.DOAnchorPos(Vector2.zero, 0.25f).SetEase(Ease.OutExpo))
-                .AppendInterval(0.25f)
-                .Append(_sourceImage.DOFade(0f, 0.25f))
-                .AppendCallback(() => gameObject.SetActive(false))
-                .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
         }
     }
 }
