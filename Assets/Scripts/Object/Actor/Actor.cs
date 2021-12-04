@@ -88,13 +88,13 @@ public class Actor : ObjectBase, IPunObservable
     {
         if (stream.IsWriting)
         {
-            //stream.SendNext(Rigidbody.isKinematic);
-            //stream.SendNext(Rigidbody.useGravity);
+            // stream.SendNext(Rigidbody.isKinematic);
+            stream.SendNext(Rigidbody.useGravity);
         }
         else
         {
-            //Rigidbody.isKinematic = (bool)stream.ReceiveNext();
-            //Rigidbody.useGravity = (bool)stream.ReceiveNext();
+            // Rigidbody.isKinematic = (bool)stream.ReceiveNext();
+            Rigidbody.useGravity = (bool)stream.ReceiveNext();
         }
     }
 }

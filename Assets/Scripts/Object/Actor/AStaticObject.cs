@@ -1,3 +1,5 @@
+using EsperFightersCup;
+using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(ObjectHitSystem))]
@@ -23,6 +25,23 @@ public class AStaticObject : Actor
 
         _colliderSize = _boxcollider.bounds.extents;
         _boxcollider.enabled = false;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        var state = IngameFSMSystem.Instance[IngameFSMSystem.State.RoundEnd] as IngameRoundEndState;
+        state.OnRoundEnd += HandleRoundEnd;
+    }
+
+    private void HandleRoundEnd(int round)
+    {
+        if (photonView == null || !photonView.IsMine)
+        {
+            return;
+        }
+        PhotonNetwork.Destroy(gameObject);
     }
 
     protected override void FixedUpdate()

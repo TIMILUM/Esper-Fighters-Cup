@@ -123,16 +123,6 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void DestroyObject()
     {
-        var pv = gameObject.GetComponentInChildren<PhotonView>();
-        if (pv != null)
-        {
-            // PhotonNetwork.OpCleanRpcBuffer(photonView);
-            PhotonNetwork.Destroy(photonView);
-            // PhotonNetwork.SendAllOutgoingCommands();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        PhotonNetwork.Destroy(gameObject);
     }
 }
