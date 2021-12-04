@@ -39,13 +39,17 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
     /// </summary>
     private class Particle
     {
+        private Queue<Particle> _parent;
+
         public string Name { get; set; }
         public GameObject Object { get; set; }
         public float LifeTime { get; set; }
         public float StartTime { get; set; }
 
-        public Particle(GameObject particleFrefab, float lifeTime)
+        public Particle(GameObject particleFrefab, float lifeTime, Queue<Particle> parent)
         {
+            _parent = parent;
+
             Object = particleFrefab;
             LifeTime = lifeTime;
         }
@@ -54,6 +58,12 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
         {
             StartTime = Time.time;
             Name = particleName;
+        }
+
+        public void ReturnToPool()
+        {
+            Object.SetActive(false);
+            _parent.Enqueue(this);
         }
     }
 
@@ -104,31 +114,26 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
                 {
                     var clone1 = Instantiate(info.PaletteParticle1, transform);
                     clone1.SetActive(false);
-                    _particleList[$"{info.Name}0"].Enqueue(new Particle(clone1, info.LifeTime));
+                    var palette1Queue = _particleList[$"{info.Name}0"];
+                    palette1Queue.Enqueue(new Particle(clone1, info.LifeTime, palette1Queue));
 
                     var clone2 = Instantiate(info.PaletteParticle1, transform);
                     clone2.SetActive(false);
-                    _particleList[$"{info.Name}1"].Enqueue(new Particle(clone2, info.LifeTime));
+                    var palette2Queue = _particleList[$"{info.Name}1"];
+                    palette2Queue.Enqueue(new Particle(clone2, info.LifeTime, palette2Queue));
                 }
                 else
                 {
                     var clone = Instantiate(info.DefaultParticle, transform);
                     clone.SetActive(false);
-                    _particleList[info.Name].Enqueue(new Particle(clone, info.LifeTime));
+                    var queue = _particleList[info.Name];
+                    queue.Enqueue(new Particle(clone, info.LifeTime, queue));
                 }
             }
         }
     }
 
     private void Update()
-    {
-        PutParticle();
-    }
-
-    /// <summary>
-    /// 큐에 넣는 작업
-    /// </summary>
-    private void PutParticle()
     {
         // foreach에 List.remove함수 불러오면 에러 메시지 발생해서 큐를 만들어 삭제를 했습니다.
         foreach (var item in _activeParticle)
@@ -142,8 +147,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
                     item.Object.transform.SetParent(transform);
                 }
 
-                item.Object.SetActive(false);
-                _particleList[item.Name].Enqueue(item);
+                item.ReturnToPool();
                 _removeParticle.Enqueue(item);
             }
         }

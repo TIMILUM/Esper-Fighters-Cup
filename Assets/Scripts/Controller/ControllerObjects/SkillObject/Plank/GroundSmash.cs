@@ -95,7 +95,7 @@ namespace EsperFightersCup
         protected override async UniTask OnUseAsync()
         {
             InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, Author.transform.rotation);
-            ParticleManager.Instance.PullParticleSync("GroundSkill", _startPos + Author.transform.forward, Quaternion.identity);
+            ParticleManager.Instance.PullParticleSync("Plank_GroundSmash_Smite", _startPos + Author.transform.forward, Quaternion.identity);
             await UniTask.NextFrame();
 
 
