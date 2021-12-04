@@ -5990,7 +5990,7 @@ PrefabInstance:
       objectReference: {fileID: 2480101516244202184}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _defaultCharacterType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _startLocations.Array.data[0]
@@ -6293,7 +6293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.size
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[6]._maxNum
@@ -6304,8 +6304,24 @@ PrefabInstance:
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[10]._maxNum
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[10]._lifeTime
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[8]._particleName
       value: GroundSkill
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[9]._particleName
+      value: DropSkillEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[10]._particleName
+      value: FlankBreakDust
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[4]._particleFrefab
@@ -6315,6 +6331,14 @@ PrefabInstance:
       propertyPath: _particleInfo.Array.data[8]._particleFrefab
       value: 
       objectReference: {fileID: 1081832489839075987, guid: d00f20c75ac67504da6b3990ab52c2e6, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[9]._particleFrefab
+      value: 
+      objectReference: {fileID: 7145649949678259631, guid: 0257bc8b50f6d154d83132866844472d, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[10]._particleFrefab
+      value: 
+      objectReference: {fileID: 3202762442003905626, guid: 8ee9687ecd71db04596817f8f528bcf9, type: 3}
     - target: {fileID: 3466341873098705245, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: m_Name
       value: ParticleGameManager

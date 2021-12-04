@@ -11,7 +11,10 @@ namespace EsperFightersCup
 
         private Vector2 _currentSize;
         private Vector3 _startPos;
+
+        private Quaternion _startRot;
         private float _currentRange;
+
 
 
         [SerializeField] private ColliderChecker _collider;
@@ -77,6 +80,7 @@ namespace EsperFightersCup
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
             _startPos = new Vector3(Author.transform.position.x, 0.03f, Author.transform.position.z);
+            _startRot = Author.transform.rotation;
             await UniTask.NextFrame();
             return true;
         }
@@ -85,20 +89,15 @@ namespace EsperFightersCup
             base.SetHit(to);
         }
 
-
-
         protected override void OnRelease()
         {
-
+            InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, _startRot);
         }
 
         protected override async UniTask OnUseAsync()
         {
-            InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, Author.transform.rotation);
-            ParticleManager.Instance.PullParticle("GroundSkill", _startPos + Author.transform.forward, Quaternion.identity);
+            
             await UniTask.NextFrame();
-
-
         }
     }
 }

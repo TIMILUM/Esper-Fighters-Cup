@@ -28,25 +28,15 @@ namespace EsperFightersCup
                 collider.isTrigger = true;
             }
 
-            if (Author is APlayer player)
+
+
+            if ((Author.GetComponent<Actor>() as ACharacter) != null)
             {
-                player.Animator.SetTrigger("Knockback", false);
+                _rigd = Author.GetComponent<Actor>().GetComponent<Rigidbody>();
+                _rigd.useGravity = false;
             }
+            _moving = StartCoroutine(Grab());
 
-
-            if (Author.photonView.IsMine)
-            {
-
-                if ((Author.GetComponent<Actor>() as ACharacter) != null)
-                {
-                    _rigd = Author.GetComponent<Actor>().GetComponent<Rigidbody>();
-                    _rigd.useGravity = false;
-                }
-
-                _moving = StartCoroutine(Grab());
-
-
-            }
         }
 
 
@@ -78,22 +68,21 @@ namespace EsperFightersCup
             var targettarns = _target.transform;
             var boundy = 3.0f;
 
-            if (Author.photonView.IsMine)
+
+            while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
             {
-                while (!Controller.ActiveBuffs.Exists(Type.KnockBack))
+
+                if (currentType <= 1.0f)
                 {
-
-                    if (currentType <= 1.0f)
-                    {
-                        currentType += Time.deltaTime * 10;
-                    }
-
-                    Author.transform.position = Vector3.Lerp(startPos, targettarns.position +
-                        (targettarns.up * boundy), currentType);
-                    yield return null;
+                    currentType += Time.deltaTime * 10;
                 }
 
+                Author.transform.position = Vector3.Lerp(startPos, targettarns.position +
+                    (targettarns.up * boundy), currentType);
+                yield return null;
             }
+
+
 
             Controller.ReleaseBuff(this);
         }

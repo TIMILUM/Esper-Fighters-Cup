@@ -7,6 +7,7 @@ namespace EsperFightersCup
         // private float _range;
         private float _decreaseHp = 0;
         private float _durationStunSeconds = 0;
+        private float _dropSkillEffect = 0;
 
         public override Type BuffType => Type.Falling;
 
@@ -19,6 +20,10 @@ namespace EsperFightersCup
             // ---------------
             _decreaseHp = Info.ValueFloat[0];
             _durationStunSeconds = Info.ValueFloat[1];
+
+            if (Info.ValueFloat.Length == 3)
+                _dropSkillEffect = Info.ValueFloat[2];
+
             // _range = 1f; // Info.ValueFloat[2];
         }
 
@@ -38,6 +43,8 @@ namespace EsperFightersCup
                 GenerateAfterBuff(controller);
             }
             */
+            if (_dropSkillEffect != 0)
+                ParticleManager.Instance.PullParticleToLocal("DropSkillEffect", pos, Quaternion.identity);
 
             ParticleManager.Instance.PullParticleToLocal("ObjectDropped", pos, Quaternion.identity);
         }
