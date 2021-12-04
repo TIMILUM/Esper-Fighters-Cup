@@ -16,6 +16,10 @@ namespace EsperFightersCup.UI.CharacterChoice
         [SerializeField] private Text _localPlayerCharacterDummyText;
         [SerializeField] private Text _otherPlayerCharacterDummyText;
 
+        //캐릭터 패널에 raw 이미지를 컨트롤 하기 위해(해당 컴포넌트 접근을 위해) 인스펙터에서 참조했습니다.
+        [SerializeField] private GameObject _localPlayerCharacterImagePanal;
+        [SerializeField] private GameObject _otherPlayerCharacterImagePanal;
+
         private Text _localPlayerStateText;
         private Sequence _localPlayerSubmitTimeout;
 
