@@ -11,7 +11,7 @@ namespace EsperFightersCup.Net
         [Key(2)] public float RotationY { get; }
         [Key(3)] public Vector2 Scale { get; }
         [Key(4)] public float Duration { get; }
-        [Key(5)] public int ViewID { get; }
+        [Key(5)] public int AuthorViewID { get; }
 
         public GameUIPlayArguments(string name, Vector2 position, float rotationY, Vector2 scale, float duration, int viewID)
         {
@@ -20,7 +20,7 @@ namespace EsperFightersCup.Net
             RotationY = rotationY;
             Scale = scale;
             Duration = duration;
-            ViewID = viewID;
+            AuthorViewID = viewID;
         }
 
         public byte GetEventCode()

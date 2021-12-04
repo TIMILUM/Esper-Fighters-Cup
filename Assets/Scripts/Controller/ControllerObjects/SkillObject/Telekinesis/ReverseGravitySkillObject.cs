@@ -109,6 +109,8 @@ public class ReverseGravitySkillObject : SkillObject
 
     protected override void BeforeFrontDelay()
     {
+        ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 0);
+
         //Idle 상태일때 애니메이션 실행
         if (AuthorPlayer.Animator.Local.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
@@ -118,7 +120,7 @@ public class ReverseGravitySkillObject : SkillObject
         //하체는 그냥 실행
         AuthorPlayer.Animator.SetTrigger("ReverseGravityA");
 
-        ParticleManager.Instance.PullParticle("ReverseGravityFiled", _castUI.transform.position, Quaternion.identity);
+        ParticleManager.Instance.PullParticleSync("Elena_ReverseGravity", _castUI.transform.position, Quaternion.identity);
 
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
         GameUIManager.Instance.PlaySync(Author, "ReverseGravity_Range", _castUI.Position, _uiSize, duration: duration);
@@ -175,7 +177,7 @@ public class ReverseGravitySkillObject : SkillObject
         }
         */
         await UniTask.Delay((int)_raiseDelay);
-        ParticleManager.Instance.PullParticle("ReverseGravityGlow", position, Quaternion.identity);
+        ParticleManager.Instance.PullParticleSync("Elena_ReverseGravity_Glow", position, Quaternion.identity);
 
         // 혹시 해당 비동기메소드가 여러번 실행될 경우 콜라이더 체크가 중간에 취소되는 일 없게 lock 적용
         Monitor.Enter(_collider);

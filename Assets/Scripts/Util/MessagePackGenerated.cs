@@ -50,13 +50,14 @@ namespace MessagePack.Resolvers
 
         static GeneratedResolverGetFormatterHelper()
         {
-            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(5)
+            lookup = new global::System.Collections.Generic.Dictionary<Type, int>(6)
             {
                 { typeof(Vector3[]), 0 },
                 { typeof(global::EsperFightersCup.Net.BuffGenerateArguments), 1 },
                 { typeof(global::EsperFightersCup.Net.GameParticlePlayArguments), 2 },
-                { typeof(global::EsperFightersCup.Net.GameSoundPlayArguments), 3 },
-                { typeof(global::EsperFightersCup.Net.GameUIPlayArguments), 4 },
+                { typeof(global::EsperFightersCup.Net.GameParticlePlayAttachedArguments), 3 },
+                { typeof(global::EsperFightersCup.Net.GameSoundPlayArguments), 4 },
+                { typeof(global::EsperFightersCup.Net.GameUIPlayArguments), 5 },
             };
         }
 
@@ -73,8 +74,9 @@ namespace MessagePack.Resolvers
                 case 0: return new global::MessagePack.Formatters.ArrayFormatter<Vector3>();
                 case 1: return new MessagePack.Formatters.EsperFightersCup.Net.BuffGenerateArgumentsFormatter();
                 case 2: return new MessagePack.Formatters.EsperFightersCup.Net.GameParticlePlayArgumentsFormatter();
-                case 3: return new MessagePack.Formatters.EsperFightersCup.Net.GameSoundPlayArgumentsFormatter();
-                case 4: return new MessagePack.Formatters.EsperFightersCup.Net.GameUIPlayArgumentsFormatter();
+                case 3: return new MessagePack.Formatters.EsperFightersCup.Net.GameParticlePlayAttachedArgumentsFormatter();
+                case 4: return new MessagePack.Formatters.EsperFightersCup.Net.GameSoundPlayArgumentsFormatter();
+                case 5: return new MessagePack.Formatters.EsperFightersCup.Net.GameUIPlayArgumentsFormatter();
                 default: return null;
             }
         }
@@ -243,6 +245,52 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
         }
     }
 
+    public sealed class GameParticlePlayAttachedArgumentsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameParticlePlayAttachedArguments>
+    {
+
+        public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameParticlePlayAttachedArguments value, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            IFormatterResolver formatterResolver = options.Resolver;
+            writer.WriteArrayHeader(2);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            writer.Write(value.AttachIndex);
+        }
+
+        public global::EsperFightersCup.Net.GameParticlePlayAttachedArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
+        {
+            if (reader.TryReadNil())
+            {
+                throw new InvalidOperationException("typecode is null, struct not supported");
+            }
+
+            options.Security.DepthStep(ref reader);
+            IFormatterResolver formatterResolver = options.Resolver;
+            var length = reader.ReadArrayHeader();
+            var __Name__ = default(string);
+            var __AttachIndex__ = default(int);
+
+            for (int i = 0; i < length; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 1:
+                        __AttachIndex__ = reader.ReadInt32();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+
+            var ____result = new global::EsperFightersCup.Net.GameParticlePlayAttachedArguments(__Name__, __AttachIndex__);
+            reader.Depth--;
+            return ____result;
+        }
+    }
+
     public sealed class GameSoundPlayArgumentsFormatter : global::MessagePack.Formatters.IMessagePackFormatter<global::EsperFightersCup.Net.GameSoundPlayArguments>
     {
 
@@ -301,7 +349,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
             writer.Write(value.RotationY);
             formatterResolver.GetFormatterWithVerify<Vector2>().Serialize(ref writer, value.Scale, options);
             writer.Write(value.Duration);
-            writer.Write(value.ViewID);
+            writer.Write(value.AuthorViewID);
         }
 
         public global::EsperFightersCup.Net.GameUIPlayArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -319,7 +367,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
             var __RotationY__ = default(float);
             var __Scale__ = default(Vector2);
             var __Duration__ = default(float);
-            var __ViewID__ = default(int);
+            var __AuthorViewID__ = default(int);
 
             for (int i = 0; i < length; i++)
             {
@@ -341,7 +389,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
                         __Duration__ = reader.ReadSingle();
                         break;
                     case 5:
-                        __ViewID__ = reader.ReadInt32();
+                        __AuthorViewID__ = reader.ReadInt32();
                         break;
                     default:
                         reader.Skip();
@@ -349,7 +397,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
                 }
             }
 
-            var ____result = new global::EsperFightersCup.Net.GameUIPlayArguments(__Name__, __Position__, __RotationY__, __Scale__, __Duration__, __ViewID__);
+            var ____result = new global::EsperFightersCup.Net.GameUIPlayArguments(__Name__, __Position__, __RotationY__, __Scale__, __Duration__, __AuthorViewID__);
             reader.Depth--;
             return ____result;
         }

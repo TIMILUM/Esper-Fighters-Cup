@@ -49,6 +49,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
     private void Start()
     {
+        // TODO: 플레이어를 MasterClient에서 생성하고 소유권을 각자에게 나눠주도록 구현해보기
         LocalPlayer = SpawnLocalPlayer();
         var pvID = LocalPlayer.photonView.ViewID;
 
