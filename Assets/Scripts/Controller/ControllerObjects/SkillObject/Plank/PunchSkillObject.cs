@@ -68,6 +68,7 @@ public class PunchSkillObject : SkillObject
         }
 
         base.SetHit(to);
+        AuthorPlayer.Animator.SetTrigger("Punch");
     }
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
@@ -91,7 +92,7 @@ public class PunchSkillObject : SkillObject
 
     protected override async UniTask OnUseAsync()
     {
-        AuthorPlayer.Animator.SetBool("Punch", true);
+        AuthorPlayer.Animator.SetTrigger("Tackle");
         var duration = Range / _moveSpeed;
         BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
