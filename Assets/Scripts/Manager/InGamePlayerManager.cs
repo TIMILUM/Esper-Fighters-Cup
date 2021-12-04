@@ -51,10 +51,11 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     {
         LocalPlayer = SpawnLocalPlayer();
         var pvID = LocalPlayer.photonView.ViewID;
-        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
 
         Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
-        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+        // Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -68,7 +69,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
         GamePlayers[targetPlayer.ActorNumber] = playerInstance;
         Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
-        Debug.Log($"GamePlayers count: {GamePlayers.Count}");
+        // Debug.Log($"GamePlayers count: {GamePlayers.Count}");
 
         if (PhotonNetwork.IsMasterClient && GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
         {
@@ -109,7 +110,6 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
     private async UniTask NextStateAsync()
     {
-        Debug.Log($"Change state to IntroCut");
         await UniTask.Delay(1000);
         IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
     }

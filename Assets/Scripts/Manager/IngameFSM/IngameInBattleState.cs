@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -107,8 +108,6 @@ namespace EsperFightersCup
                 return;
             }
 
-            print("IngameInBattleState - OnRoomPropertiesUpdate");
-
             _checkCanllation.Cancel();
 
             _onBattleEnd?.Invoke();
@@ -120,9 +119,21 @@ namespace EsperFightersCup
                 // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
                 var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
-                Debug.Log($"Add WinPoint to LocalPlayer - {winPoint}");
+            }
+        }
 
-                PhotonNetwork.SendAllOutgoingCommands();
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
+            {
+                return;
+            }
+            var winPoint = (int)value;
+            Debug.Log($"Added WinPoint to [{targetPlayer.ActorNumber}]{targetPlayer.NickName} - {winPoint}");
+
+            // 상대방 플레이어가 WinPoint 변경을 확인했을 때 RoundEnd로 넘어감
+            if (targetPlayer != PhotonNetwork.LocalPlayer)
+            {
                 ChangeState(IngameFSMSystem.State.RoundEnd);
             }
         }

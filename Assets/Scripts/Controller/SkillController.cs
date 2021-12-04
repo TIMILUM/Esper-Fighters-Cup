@@ -82,7 +82,7 @@ public class SkillController : ControllerBase
         {
             if (Input.GetKeyDown(skillTemplate.InputKey) && !_activeSkills.Exist(skillTemplate.ID))
             {
-                Debug.Log($"UseSkill({skillTemplate.ID})");
+                // Debug.Log($"UseSkill({skillTemplate.ID})");
                 // TODO: GenerateSkill 이후 다음 프레임에 바로 GetSkill에서 확인이 되는지 체크
                 UseSkill(skillTemplate.ID);
             }
@@ -151,7 +151,6 @@ public class SkillController : ControllerBase
 
     private void RemoveAfterReleased(SkillObject skill)
     {
-        Debug.Log($"RemoveAfterReleased({skill.ID})");
         _activeSkills.Remove(skill.ID, out var _);
     }
 }

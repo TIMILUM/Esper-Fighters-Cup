@@ -50,17 +50,16 @@ namespace EsperFightersCup
             var localplayer = InGamePlayerManager.Instance.LocalPlayer;
             localplayer.ResetPositionAndRotation();
             localplayer.HP = 100;
-
-            // 설정 완료 후 MasterClient에게 신호
-            UniTask.NextFrame()
-                .ContinueWith(() => FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient))
-                .Forget();
         }
 
-        public override void EndState()
+        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
-            base.EndState();
-            _onRoundStart?.Invoke(FsmSystem.Round);
+            if (!propertiesThatChanged.ContainsKey(CustomPropertyKeys.GameRound))
+            {
+                return;
+            }
+
+            FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
         }
 
         [PunRPC]
@@ -69,27 +68,29 @@ namespace EsperFightersCup
             _count++;
             if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
             {
-                FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All, FsmSystem.Round);
+                FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All);
             }
         }
 
         [PunRPC]
-        private void RoundIntroRPC(int round)
+        private void RoundIntroRPC()
         {
             _count = 0;
-            RoundIntroAsync(round).Forget();
+            RoundIntroAsync(FsmSystem.Round).Forget();
         }
 
         private async UniTask RoundIntroAsync(int round)
         {
             IngameBGMManager.Instance.IngameBGMUpdate(round);
+            _onRoundStart?.Invoke(round);
+
             await FsmSystem.Curtain.FadeOutAsync();
 
             await UniTask.Delay(2000);
-            _gameStateView.Show($"Round {round}", Vector2.left * 20f);
+            _gameStateView.Ready();
 
             await UniTask.Delay(1500);
-            _gameStateView.Show("Fight!", Vector2.left * 20f);
+            _gameStateView.Fight();
 
             FsmSystem.photonView.RPC(nameof(RoundIntroEndRPC), RpcTarget.MasterClient);
         }

@@ -32,7 +32,7 @@ namespace EsperFightersCup
         {
             _count = 0;
             base.StartState();
-            _gameStateView.Show("K.O.", Vector2.left * 20f);
+            _gameStateView.End();
 
             NextStateAsync().Forget();
         }
@@ -41,8 +41,6 @@ namespace EsperFightersCup
         {
             await UniTask.Delay(2000);
             await FsmSystem.Curtain.FadeInAsync();
-
-            _onRoundEnd?.Invoke(FsmSystem.Round);
 
             FsmSystem.photonView.RPC(nameof(RoundEndRPC), RpcTarget.MasterClient);
         }
@@ -60,13 +58,15 @@ namespace EsperFightersCup
         [PunRPC]
         private void RoundEndNextRPC()
         {
+            _onRoundEnd?.Invoke(FsmSystem.Round);
+            /*
             var sawblades = SawBladeSystem.Instance.LocalSpawnedSawBlades;
             Debug.Log($"Destroying {sawblades.Count} sawblades");
             foreach (var sawblade in sawblades.Values)
             {
                 PhotonNetwork.Destroy(sawblade.gameObject);
             }
-
+            */
             var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
             Debug.Log($"My win point: {winPoint}");
 
