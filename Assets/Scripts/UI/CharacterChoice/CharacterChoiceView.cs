@@ -74,6 +74,16 @@ namespace EsperFightersCup.UI.CharacterChoice
 
                 var characterType = (ACharacter.Type)playerChoose;
                 _localPlayerCharacterDummyText.text = characterType.ToString();
+
+                //캐릭터 UI 패널에 들어있는 컴포넌트(스크립트)의 함수를 호출해 랜더 텍스처를 수정했습니다.
+                if(characterType.ToString()== "Telekinesis")
+                {
+                    _localPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
+                }
+                else if(characterType.ToString() == "Plank")
+                {
+                    _localPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
+                }
             }
             else
             {
@@ -84,6 +94,16 @@ namespace EsperFightersCup.UI.CharacterChoice
 
                 var characterType = (ACharacter.Type)playerChoose;
                 _otherPlayerCharacterDummyText.text = characterType.ToString();
+
+                //캐릭터 UI 패널에 들어있는 컴포넌트(스크립트)의 함수를 호출해 랜더 텍스처를 수정했습니다.
+                if (characterType.ToString() == "Telekinesis")
+                {
+                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
+                }
+                else if (characterType.ToString() == "Plank")
+                {
+                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크가 출력되는 렌더 텍스처로 변경해주는 함수입니다.
+                }
             }
         }
     }
