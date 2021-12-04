@@ -27,7 +27,8 @@ namespace EsperFightersCup
         private Vector2 _colliderSize = new Vector2(5.0f, 10.0f);
 
 
-
+        [SerializeField]
+        private int _animationDelay;
 
 
 
@@ -95,7 +96,7 @@ namespace EsperFightersCup
         {
 
             if (AuthorPlayer.photonView.IsMine)
-                AuthorPlayer.Animator.SetBool("Grab", true);
+                AuthorPlayer.Animator.SetTrigger("Grab");
 
             _grabTarget = null;
             _minDistance = float.MaxValue;
@@ -112,7 +113,10 @@ namespace EsperFightersCup
 
             if (_grabTarget == null)
             {
-                AuthorPlayer.Animator.SetBool("Grab", false);
+                AuthorPlayer.Animator.SetBool("GrabCancel", true);
+                await UniTask.Delay(_animationDelay, cancellationToken : cancellation);
+                AuthorPlayer.Animator.SetBool("GrabCancel", false);
+
                 return false;
             }
 
@@ -154,6 +158,7 @@ namespace EsperFightersCup
 
                     if (currentTime > _ThrowfrontDelayTime)
                     {
+
                         _buffOnCollision[1].ValueVector3[0] = Vector3.Normalize(GetMousePosition() - _grabTarget.transform.position);
                         _buffOnCollision[1].ValueFloat[3] = Author.photonView.ViewID;
                         Obj.BuffController.GenerateBuff(_buffOnCollision[1]);
@@ -186,7 +191,7 @@ namespace EsperFightersCup
 
         protected override void OnRelease()
         {
-
+            AuthorPlayer.Animator.SetBool("Grab", false);
         }
 
 

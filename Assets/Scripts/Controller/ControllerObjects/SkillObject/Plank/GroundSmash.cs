@@ -11,12 +11,14 @@ namespace EsperFightersCup
 
         private Vector2 _currentSize;
         private Vector3 _startPos;
+
+        private Quaternion _startRot;
         private float _currentRange;
 
 
+
         [SerializeField] private ColliderChecker _collider;
-        [SerializeField, Tooltip("Effect_Duration의 값")] 
-        private float _uIDuration;
+        [SerializeField] private float _uIDuration;
 
 
 
@@ -27,7 +29,6 @@ namespace EsperFightersCup
 
             _currentRange = Range;
             _currentSize = Size;
-            _uIDuration = EffectDuration;
 
             if (Range == 0)
                 _currentRange = 5.0f;
@@ -79,6 +80,7 @@ namespace EsperFightersCup
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
             _startPos = new Vector3(Author.transform.position.x, 0.03f, Author.transform.position.z);
+            _startRot = Author.transform.rotation;
             await UniTask.NextFrame();
             return true;
         }
@@ -87,20 +89,15 @@ namespace EsperFightersCup
             base.SetHit(to);
         }
 
-
-
         protected override void OnRelease()
         {
-
+            InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, _startRot);
         }
 
         protected override async UniTask OnUseAsync()
         {
-            InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, Author.transform.rotation);
-            ParticleManager.Instance.PullParticleSync("Plank_GroundSmash_Smite", _startPos + Author.transform.forward, Quaternion.identity);
+            
             await UniTask.NextFrame();
-
-
         }
     }
 }

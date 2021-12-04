@@ -150,7 +150,7 @@ namespace EsperFightersCup
             obj.BuffController.GenerateBuff(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.Falling,
-                ValueFloat = new float[] { Damage, StunGroggyDuration * 0.001f }
+                ValueFloat = new float[] { Damage, StunGroggyDuration * 0.001f , 1.0f}
             });
 
             audioInstance.setParameterByName("Step", 1f);
