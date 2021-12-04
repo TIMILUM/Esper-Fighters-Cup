@@ -14,6 +14,7 @@ namespace EsperFightersCup
 
         protected override void OnInitializeSkill()
         {
+            base.OnInitializeSkill();
             // _buffOnCollision[0] = Slide
             // _buffOnCollision[1] = Grab
             // _buffOnCollision[2] = Knockback
