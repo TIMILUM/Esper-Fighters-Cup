@@ -453,8 +453,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8362198494138024948, guid: 46a3bd322c7104e4eb86fd0236497da2, type: 3}
+      propertyPath: _endDelay
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362198494138024948, guid: 46a3bd322c7104e4eb86fd0236497da2, type: 3}
       propertyPath: _objectRaiseHeight
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8362198494138024948, guid: 46a3bd322c7104e4eb86fd0236497da2, type: 3}
       propertyPath: _fragmentRaiseHeight
@@ -598,6 +602,14 @@ PrefabInstance:
       value: RandDropSkill
       objectReference: {fileID: 0}
     - target: {fileID: 3839221633854377787, guid: cf2efe36a6e48ce4b9bd50d9a85f7c56, type: 3}
+      propertyPath: _endDelay
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3839221633854377787, guid: cf2efe36a6e48ce4b9bd50d9a85f7c56, type: 3}
+      propertyPath: _frontDelay
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 3839221633854377787, guid: cf2efe36a6e48ce4b9bd50d9a85f7c56, type: 3}
       propertyPath: _buffOnCollision.Array.data[0]._valueFloat.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -706,6 +718,14 @@ PrefabInstance:
     - target: {fileID: 502394932971514453, guid: 5fee2229364c9e146ae94f6e0028d138, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3750393118598012776, guid: 5fee2229364c9e146ae94f6e0028d138, type: 3}
+      propertyPath: _endDelay
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3750393118598012776, guid: 5fee2229364c9e146ae94f6e0028d138, type: 3}
+      propertyPath: _frontDelay
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 8280799062219633593, guid: 5fee2229364c9e146ae94f6e0028d138, type: 3}
       propertyPath: m_Name
