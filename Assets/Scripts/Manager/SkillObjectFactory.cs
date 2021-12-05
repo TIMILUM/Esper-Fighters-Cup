@@ -67,14 +67,14 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
     /// <param name="objectId">오브젝트 ID</param>
     /// <param name="pos">생성 포지션</param>
     /// <returns>생성된 게임 오브젝트</returns>
-    public GameObject CreateSkillObject(int objectId, Vector3 pos)
+    public GameObject CreateSkillObject(int objectId, Vector3 pos, Vector3 rotation)
     {
         // 얻어오지 못한 경우 return null
         if (!IngameObjectIDParser.TryGetPrefabPackage(objectId, out var prefabPackage))
         {
             return null;
         }
-        var clone = PhotonNetwork.Instantiate(prefabPackage.PrefabPath, pos, Quaternion.identity);
+        var clone = PhotonNetwork.Instantiate(prefabPackage.PrefabPath, pos, Quaternion.Euler(rotation));
         return clone;
     }
 

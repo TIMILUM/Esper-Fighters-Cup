@@ -40,9 +40,9 @@ public class InGameSkillManager : Singleton<InGameSkillManager>
     /// <param name="objectId">오브젝트 ID</param>
     /// <param name="pos">생성 포지션</param>
     /// <returns>생성된 게임 오브젝트</returns>
-    public GameObject CreateSkillObject(int objectId, Vector3 pos)
+    public GameObject CreateSkillObject(int objectId, Vector3 pos, Vector3 rotation)
     {
-        return _skillObjectfactory.CreateSkillObject(objectId, pos);
+        return _skillObjectfactory.CreateSkillObject(objectId, pos, rotation);
     }
 
     public void DestroySkillObj(GameObject obj)
