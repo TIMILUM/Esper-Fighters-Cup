@@ -242,7 +242,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
         ApplyMovementSpeed(State.EndDelay);
         BeforeEndDelay();
 
-        if (FrontDelayMilliseconds == 0)
+        if (EndDelayMilliseconds == 0)
             EndDelayMilliseconds = _endDelay;
 
         await UniTask.Delay(EndDelayMilliseconds, cancellationToken: cancelltaion);

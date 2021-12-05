@@ -25,6 +25,10 @@ public class ObjectHitSystem : MonoBehaviourPun
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
 
+    [SerializeField, Tooltip("파괴 모션이 나타날 포지션을 뜻합니다. 기본값은 현재 포지션입니다.")]
+    private Transform _destroyEffectPosition = null;
+    
+
     private Actor _actor;
     private bool _isDestroy = false;
 
@@ -123,7 +127,11 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void DestroyObject()
     {
-        ParticleManager.Instance.PullParticleSync("Object_Destroy", transform.position, Quaternion.identity);
+        if (_destroyEffectPosition == null)
+        {
+            _destroyEffectPosition = transform;
+        }
+        ParticleManager.Instance.PullParticleSync("Object_Destroy", _destroyEffectPosition.position, Quaternion.identity);
         PhotonNetwork.Destroy(gameObject);
     }
 }
