@@ -123,6 +123,7 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void DestroyObject()
     {
+        ParticleManager.Instance.PullParticleSync("Object_Destroy", transform.position, Quaternion.identity);
         PhotonNetwork.Destroy(gameObject);
     }
 }
