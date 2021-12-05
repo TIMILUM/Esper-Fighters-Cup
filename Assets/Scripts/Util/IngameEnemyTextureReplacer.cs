@@ -24,7 +24,7 @@ public class IngameEnemyTextureReplacer : MonoBehaviour
             return;
         }
 
-        if (_actor.photonView.IsMine)
+        if (_actor.PaletteIndex != 1)
         {
             return;
         }
