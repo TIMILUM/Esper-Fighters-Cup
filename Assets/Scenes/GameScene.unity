@@ -6351,6 +6351,42 @@ PrefabInstance:
       propertyPath: _outro
       value: 
       objectReference: {fileID: 892870344}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[0]._character
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[1]._character
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[0]._palettes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[1]._palettes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[0]._palettes.Array.data[0]
+      value: 
+      objectReference: {fileID: 569803331}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[0]._palettes.Array.data[1]
+      value: 
+      objectReference: {fileID: 892870344}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[1]._palettes.Array.data[0]
+      value: 
+      objectReference: {fileID: 1579794688}
+    - target: {fileID: 4636467517903307537, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _outroCutScenes.Array.data[1]._palettes.Array.data[1]
+      value: 
+      objectReference: {fileID: 824530262}
     - target: {fileID: 4873366967118284923, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _gameStateView
       value: 
@@ -6436,13 +6472,53 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 450440740}
     - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _intro.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[0]._character
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[1]._character
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _onIntroEnd.m_PersistentCalls.m_Calls.Array.size
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[0]._palettes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[1]._palettes.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _onIntroStart.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[0]._palettes.Array.data[0]
+      value: 
+      objectReference: {fileID: 802149735}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[0]._palettes.Array.data[1]
+      value: 
+      objectReference: {fileID: 1727524118}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[1]._palettes.Array.data[0]
+      value: 
+      objectReference: {fileID: 450440740}
+    - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _introCutScenes.Array.data[1]._palettes.Array.data[1]
+      value: 
+      objectReference: {fileID: 1136996540}
     - target: {fileID: 8395176605604419108, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _onIntroEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1

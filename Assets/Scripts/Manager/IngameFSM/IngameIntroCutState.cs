@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using UnityEngine;
@@ -8,7 +10,7 @@ namespace EsperFightersCup
 {
     public class IngameIntroCutState : InGameFSMStateBase
     {
-        [SerializeField] private PlayableDirector _intro;
+        [SerializeField] private PaletteSwapItem<PlayableDirector>[] _introCutScenes;
         [SerializeField] private UnityEvent _onIntroStart;
         [SerializeField] private UnityEvent _onIntroEnd;
 
@@ -29,43 +31,92 @@ namespace EsperFightersCup
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.IntroCut;
-            _intro.gameObject.SetActive(false);
         }
 
         public override void StartState()
         {
             base.StartState();
 
-            UniTask.Delay(1000).ContinueWith(() =>
+            RunIntroCutAsync().Forget();
+        }
+
+        private async UniTask RunIntroCutAsync()
+        {
+            await UniTask.NextFrame();
+
+            var introQueue = new Queue<PlayableDirector>();
+            await SetupIntroCutAsync(introQueue);
+            _onIntroStart?.Invoke();
+
+            while (introQueue.Count > 0)
             {
-                _onIntroStart?.Invoke();
+                var intro = introQueue.Dequeue();
+                intro.gameObject.SetActive(true);
 
-                _intro.gameObject.SetActive(true);
-                FsmSystem.Curtain.FadeOutAsync();
-                _intro.stopped += HandleIntroStopped;
-                _intro.Play();
-            }).Forget();
-        }
+                var uniTaskCompletion = new UniTaskCompletionSource();
+                intro.stopped += (director) => uniTaskCompletion.TrySetResult();
+                intro.Play();
+                await FsmSystem.Curtain.FadeOutAsync();
 
-        // 컷씬 끝났을 때 실행
-        private void HandleIntroStopped(PlayableDirector director)
-        {
-            director.stopped -= HandleIntroStopped;
-            EndIntroCutAsync().Forget();
-        }
+                await uniTaskCompletion.Task;
 
-        private async UniTask EndIntroCutAsync()
-        {
-            // 컷씬이 비활성화되면 바로 게임카메라가 보이기 때문에 페이드아웃 후 비활성화해야 함
-            await FsmSystem.Curtain.FadeInAsync();
-
-            // 컷씬 비활성화
-            _intro.gameObject.SetActive(false);
+                await FsmSystem.Curtain.FadeInAsync();
+                intro.gameObject.SetActive(false);
+            }
 
             _onIntroEnd?.Invoke();
-
             // 마스터클라이언트로 RPC보내서 컷씬 완료 신호
             FsmSystem.photonView.RPC(nameof(IntroEndRPC), RpcTarget.MasterClient);
+        }
+
+        private async UniTask SetupIntroCutAsync(Queue<PlayableDirector> queue)
+        {
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                var properties = player.CustomProperties;
+                var characterType = ACharacter.Type.None;
+                var paletteIndex = 0;
+
+                await UniTask.WaitUntil(() =>
+                {
+                    if (PhotonNetwork.OfflineMode)
+                    {
+                        characterType = ACharacter.Type.Telekinesis;
+                        return true;
+                    }
+
+                    if (properties.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var value) && value is int type)
+                    {
+                        characterType = (ACharacter.Type)type;
+                        return true;
+                    }
+                    return false;
+                });
+
+                await UniTask.WaitUntil(() =>
+                {
+                    if (PhotonNetwork.OfflineMode)
+                    {
+                        paletteIndex = 0;
+                        return true;
+                    }
+
+                    if (properties.TryGetValue(CustomPropertyKeys.PlayerPalette, out var value) && value is int index)
+                    {
+                        paletteIndex = index;
+                        return true;
+                    }
+                    return false;
+                });
+
+                var characterPalette = Array.Find(_introCutScenes, x => x.Character == characterType);
+                if (characterPalette == null || paletteIndex >= characterPalette.Palettes.Length)
+                {
+                    continue;
+                }
+
+                queue.Enqueue(characterPalette.Palettes[paletteIndex]);
+            }
         }
 
         [PunRPC]
