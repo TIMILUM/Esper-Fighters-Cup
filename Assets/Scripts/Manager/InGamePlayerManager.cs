@@ -11,15 +11,10 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 {
     private const string CharacterPrefabLocation = "Prefab/Character/{0}";
 
+    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
     [Header("[Player Generate]")]
     [SerializeField] private List<ACharacter> _characterPrefabs;
-    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
-
     [SerializeField] private List<Transform> _startLocations;
-    [SerializeField] private IngameFSMSystem _ingameFsmSystem;
-
-    [Header("[Player's Camera]")]
-    [SerializeField] private CameraMovement _cameraMovement;
 
     /// <summary>
     /// 현재 씬의 로컬 플레이어 인스턴스를 가져옵니다.

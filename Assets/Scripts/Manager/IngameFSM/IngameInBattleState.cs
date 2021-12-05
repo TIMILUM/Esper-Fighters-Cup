@@ -86,7 +86,17 @@ namespace EsperFightersCup
             {
                 Debug.Log($"LocalPlayer is dead!");
                 var actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-                int winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                int winner;
+                try
+                {
+                    winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                }
+                catch (System.InvalidOperationException)
+                {
+                    // NOTE: 오프라인 디버깅용 코드임. 본인이 죽어도 본인이 이긴걸로 판단함
+                    winner = actorNumber;
+                }
+
                 PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameRoundWinner, winner);
             }
 
