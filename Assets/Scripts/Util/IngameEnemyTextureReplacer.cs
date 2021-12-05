@@ -24,17 +24,11 @@ public class IngameEnemyTextureReplacer : MonoBehaviour
             return;
         }
 
-        if (_actor.photonView.IsMine)
+        if (_actor.PaletteIndex != 1)
         {
             return;
         }
 
         _material.SetTexture("_BaseMap", _enemyTexture);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    
     }
 }
