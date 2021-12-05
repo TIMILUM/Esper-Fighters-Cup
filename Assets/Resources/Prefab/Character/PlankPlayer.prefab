@@ -596,7 +596,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
       propertyPath: _buffOnCollision.Array.data[1]._duration
-      value: 0.5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
       propertyPath: _buffOnCollision.Array.data[0]._valueFloat.Array.size
@@ -605,6 +605,10 @@ PrefabInstance:
     - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
       propertyPath: _buffOnCollision.Array.data[0]._valueVector3.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6298943108756766876, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
+      propertyPath: _buffOnCollision.Array.data[1]._valueFloat.Array.data[0]
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6298943108756766877, guid: c203d930b133e8b46aac1fd8615da574, type: 3}
       propertyPath: m_RootOrder
