@@ -23,6 +23,23 @@ namespace EsperFightersCup.UI
         private APlayer _targetPlayer;
         private List<PaletteSwapUI> _swapUIs;
 
+        public APlayer TargetPlayer
+        {
+            get => _targetPlayer;
+            set
+            {
+                _targetPlayer = value;
+
+                if (value == null)
+                {
+                    return;
+                }
+                _nameText.text = value.photonView.Owner.NickName;
+                SetWinPoint(value.WinPoint);
+                _swapUIs.ForEach(ui => ui.Swap(value.CharacterType, value.PaletteIndex));
+            }
+        }
+
         private void Awake()
         {
             _swapUIs = new List<PaletteSwapUI>
@@ -40,24 +57,39 @@ namespace EsperFightersCup.UI
                 return;
             }
 
-            // MasterClient가 무조건 왼쪽으로 가게 함
-            if (targetPlayer.IsMasterClient && _targetPlayerIndex == 1)
+            if (TargetPlayer == null || TargetPlayer.photonView.OwnerActorNr != targetPlayer.ActorNumber)
             {
                 return;
             }
 
             var winPoint = (int)value;
-            for (int i = 0; i < _winPoints.Length; i++)
-            {
-                _winPoints[i].gameObject.SetActive(i < winPoint);
-            }
+            SetWinPoint(winPoint);
         }
 
         private void Update()
         {
-            if (_targetPlayer == null)
+            if (TargetPlayer == null)
             {
                 return;
+            }
+
+            var hp = TargetPlayer.HP;
+            var maxHp = TargetPlayer.MaxHP;
+            _healthBarForground.TargetImage.fillAmount = hp / (float)maxHp;
+            /*
+            var amount = (float)System.Math.Round(hp / (double)maxHp, 3);
+            if (amount != _healthBarForground.TargetImage.fillAmount)
+            {
+                _healthBarBackground.TargetImage.DOFillAmount(amount, 0.25f);
+            }
+            */
+        }
+
+        private void SetWinPoint(int winPoint)
+        {
+            for (int i = 0; i < _winPoints.Length; i++)
+            {
+                _winPoints[i].gameObject.SetActive(i < winPoint);
             }
         }
     }

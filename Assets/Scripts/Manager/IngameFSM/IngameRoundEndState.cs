@@ -76,6 +76,11 @@ namespace EsperFightersCup
                 return;
             }
 
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+            }
+
             if (winPoint < 3)
             {
                 ChangeState(IngameFSMSystem.State.RoundIntro);

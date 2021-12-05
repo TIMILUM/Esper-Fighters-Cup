@@ -30,7 +30,7 @@ namespace EsperFightersCup
         public void Swap(ACharacter.Type character, int index)
         {
             var palette = Array.Find(_characterPalettes, palette => palette.Character == character);
-            if (palette != null)
+            if (palette == null)
             {
                 Debug.LogWarning($"{character} 타입과 일치하는 팔레트를 찾지 못했습니다.", gameObject);
                 return;
