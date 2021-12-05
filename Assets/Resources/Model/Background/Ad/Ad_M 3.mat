@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ad_M 2
+  m_Name: Ad_M 3
   m_Shader: {fileID: -6465566751694194690, guid: 1ef96a136a048ef49b59fd28d50257fb, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -73,24 +73,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_c74efafcea3941bcb60dd536faae2649_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 0b2adfb98f025b444a12813c27dca7dc, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_daa2001393f948eca5b3b2cb6dad9102_Texture_1:
         m_Texture: {fileID: 2800000, guid: 9ae0eb75f3bda524da0b86a1acf2d2cf, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_dbc821a5737f4b159b07a17542bc51f2_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 1d3fc6421d50eec4ca3f4997cd5d7cad, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_f2768353c12e4aa091c68cad8a4c77d0_Texture_1:
-        m_Texture: {fileID: 2800000, guid: b41e286ac3a2b40498d9d04860518049, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_fe2f64f70f1b43569552e8e59ac874c5_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 0b2adfb98f025b444a12813c27dca7dc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -98,11 +82,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: b41e286ac3a2b40498d9d04860518049, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9ae0eb75f3bda524da0b86a1acf2d2cf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texture:
-        m_Texture: {fileID: 2800000, guid: b41e286ac3a2b40498d9d04860518049, type: 3}
+        m_Texture: {fileID: 2800000, guid: c4c41fa7d2e923547b79aea59aa9e78a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -131,13 +115,12 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 1
     - _EnvironmentReflections: 1
-    - _Float: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _Offset: -0.566
+    - _Offset: 0.43
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
@@ -150,7 +133,6 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - Vector2: {r: 1, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
