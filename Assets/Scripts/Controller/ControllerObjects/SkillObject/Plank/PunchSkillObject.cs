@@ -32,7 +32,7 @@ public class PunchSkillObject : SkillObject
         {
             Type = BuffObject.Type.KnockBack,
             Damage = 0,
-            Duration = Range / SkillSpeed,
+            Duration = EffectDuration / SkillSpeed,
             AllowDuplicates = false,
             ValueVector3 = new[] { _direction },
             ValueFloat = new[] { SkillSpeed, 0, 0 },

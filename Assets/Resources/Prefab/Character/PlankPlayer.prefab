@@ -197,6 +197,10 @@ MonoBehaviour:
     _type: 4
   - _name: Throw
     _type: 9
+  - _name: Punch
+    _type: 9
+  - _name: Tackle
+    _type: 9
 --- !u!114 &8211835443746325872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,6 +871,47 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
   m_PrefabInstance: {fileID: 5872387958442266756}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4872141492265002004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1361137549424080016, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4186426326198989335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1484000759336623469, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7925509373639754346 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4360603143418417902, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4568001603331588745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4186426326198989335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyTexture: {fileID: 2800000, guid: a9c6a33d5d994ec4fb5516a55716d861, type: 3}
+--- !u!114 &6680050749953162245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4872141492265002004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyTexture: {fileID: 2800000, guid: aa6a1df5599ad0c42a6aa11fe6567b11, type: 3}
 --- !u!95 &3766738328980702234
 Animator:
   serializedVersion: 3
@@ -886,3 +931,16 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8000532000662165625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7925509373639754346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyTexture: {fileID: 2800000, guid: a3c5318c07f3dba4ea1796f7d3056dc7, type: 3}

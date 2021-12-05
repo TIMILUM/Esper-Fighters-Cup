@@ -571,6 +571,42 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6392945504394638004, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
   m_PrefabInstance: {fileID: 6807473600904331811}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5540942837717328885 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1341055690044760534, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
+  m_PrefabInstance: {fileID: 6807473600904331811}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3422650084259434206 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8144394004440419581, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
+  m_PrefabInstance: {fileID: 6807473600904331811}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1937474197734260531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3422650084259434206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyTexture: {fileID: 2800000, guid: 3b623df187d315e45b195accb15a0a79, type: 3}
+--- !u!114 &1056153413781396803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5540942837717328885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyTexture: {fileID: 2800000, guid: 3dfbacd1910327646a9b6943e0dc7d5a, type: 3}
 --- !u!95 &2268602983233434781
 Animator:
   serializedVersion: 3
