@@ -2,25 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup
+namespace EsperFightersCup.UI
 {
     [RequireComponent(typeof(Image))]
     public class PaletteSwapUI : MonoBehaviour
     {
-        [Serializable]
-        public class Palette
-        {
-            [SerializeField] private ACharacter.Type _character;
-            [SerializeField] private Sprite[] _paletteSprites;
-
-            public ACharacter.Type Character => _character;
-            public Sprite[] PaletteSprites => _paletteSprites;
-        }
-
-        [SerializeField] private Palette[] _characterPalettes;
+        [SerializeField] private PaletteSwapItem<Sprite>[] _characterPalettes;
 
         public Image TargetImage { get; private set; }
-        public Palette[] CharacterPalettes => _characterPalettes;
+        public PaletteSwapItem<Sprite>[] CharacterPalettes => _characterPalettes;
 
         private void Awake()
         {
@@ -36,13 +26,13 @@ namespace EsperFightersCup
                 return;
             }
 
-            if (index < 0 || index >= palette.PaletteSprites.Length)
+            if (index < 0 || index >= palette.Palettes.Length)
             {
                 Debug.LogWarning($"{index}번과 일치하는 팔레트 이미지를 찾지 못했습니다.", gameObject);
                 return;
             }
 
-            TargetImage.sprite = palette.PaletteSprites[index];
+            TargetImage.sprite = palette.Palettes[index];
         }
     }
 }

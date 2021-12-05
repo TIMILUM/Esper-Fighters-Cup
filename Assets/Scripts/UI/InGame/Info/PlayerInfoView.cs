@@ -9,8 +9,6 @@ namespace EsperFightersCup.UI
 {
     public class PlayerInfoView : MonoBehaviourPunCallbacks
     {
-        [SerializeField, Min(0f)]
-        private int _targetPlayerIndex;
         [SerializeField]
         private Text _nameText;
         [SerializeField]
