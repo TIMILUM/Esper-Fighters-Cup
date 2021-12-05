@@ -21,19 +21,34 @@ namespace EsperFightersCup.UI
             _roundImage.sprite = _roundImages[0];
         }
 
+        public override void OnEnable()
+        {
+            base.OnEnable();
+
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.GameRound, out var value))
+            {
+                var round = (int)value;
+                SetRoundImage(round);
+            }
+        }
+
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
             if (propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRound, out var value))
             {
                 var round = (int)value;
-
-                if (_roundImages.Length == 0)
-                {
-                    return;
-                }
-
-                _roundImage.sprite = _roundImages[(round > _roundImages.Length ? _roundImages.Length : round) - 1];
+                SetRoundImage(round);
             }
+        }
+
+        private void SetRoundImage(int round)
+        {
+            if (_roundImages.Length == 0 || round == 0)
+            {
+                return;
+            }
+
+            _roundImage.sprite = _roundImages[(round > _roundImages.Length ? _roundImages.Length : round) - 1];
         }
     }
 }
