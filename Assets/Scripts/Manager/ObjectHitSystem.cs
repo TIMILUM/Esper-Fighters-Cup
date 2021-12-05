@@ -25,8 +25,14 @@ public class ObjectHitSystem : MonoBehaviourPun
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
 
+    [Header("Destroy Effects")]
     [SerializeField, Tooltip("파괴 모션이 나타날 포지션을 뜻합니다. 기본값은 현재 포지션입니다.")]
     private Transform _destroyEffectPosition = null;
+    
+    [SerializeField, Tooltip("파괴 시 나타날 파티클의 이름을 작성합니다.")]
+    private string _particleName = "Object_Destroy";
+
+    private Vector3 _collisionDirection = Vector3.up;
     
 
     private Actor _actor;
@@ -82,6 +88,7 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision other)
     {
+        _collisionDirection = Vector3.Normalize(transform.position - other.contacts[0].point);
         OnPlayerHitEnter(other.gameObject);
     }
 
@@ -131,7 +138,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         {
             _destroyEffectPosition = transform;
         }
-        ParticleManager.Instance.PullParticleSync("Object_Destroy", _destroyEffectPosition.position, Quaternion.identity);
+        ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, Quaternion.LookRotation(_collisionDirection));
         PhotonNetwork.Destroy(gameObject);
     }
 }
