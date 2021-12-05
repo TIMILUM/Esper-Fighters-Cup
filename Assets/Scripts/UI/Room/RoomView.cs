@@ -1,10 +1,9 @@
-using EsperFightersCup.UI.Popup;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace EsperFightersCup
+namespace EsperFightersCup.UI
 {
     public class RoomView : MonoBehaviour
     {

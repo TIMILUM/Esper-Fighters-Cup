@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.InGame
+namespace EsperFightersCup.UI
 {
     public class GameStateView : MonoBehaviour
     {

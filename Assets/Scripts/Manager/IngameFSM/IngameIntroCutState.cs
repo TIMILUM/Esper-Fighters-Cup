@@ -36,12 +36,15 @@ namespace EsperFightersCup
         {
             base.StartState();
 
-            _onIntroStart?.Invoke();
+            UniTask.Delay(1000).ContinueWith(() =>
+            {
+                _onIntroStart?.Invoke();
 
-            _intro.gameObject.SetActive(true);
-            FsmSystem.Curtain.FadeOutAsync();
-            _intro.stopped += HandleIntroStopped;
-            _intro.Play();
+                _intro.gameObject.SetActive(true);
+                FsmSystem.Curtain.FadeOutAsync();
+                _intro.stopped += HandleIntroStopped;
+                _intro.Play();
+            }).Forget();
         }
 
         // 컷씬 끝났을 때 실행
@@ -70,7 +73,7 @@ namespace EsperFightersCup
         {
             // 이 RPC는 MasterClient만 받기 때문에 MasterClient가 체크 후 GameState 변경
             _count++;
-            if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+            if (_count == FsmSystem.RoomPlayers.Count)
             {
                 ChangeState(IngameFSMSystem.State.RoundIntro);
             }

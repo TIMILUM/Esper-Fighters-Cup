@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using EsperFightersCup.UI.InGame.Skill;
+using EsperFightersCup.UI;
 using UnityEngine;
 
 namespace EsperFightersCup

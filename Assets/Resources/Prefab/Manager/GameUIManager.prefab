@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiParent: {fileID: 0}
-  _positionY: 0.03
+  _positionY: 0.05
   _uiList:
   - _name: Skill_Range
     _prefab: {fileID: 1506241234304734123, guid: 528957cb890354e47833efa81797618b, type: 3}
@@ -64,3 +64,7 @@ MonoBehaviour:
     _prefab: {fileID: 504102112461806419, guid: b618ca803942232459999ef945bfcd68, type: 3}
   - _name: SlidingUI
     _prefab: {fileID: 1586190273804344815, guid: 295706f671fc6df4297f010cfa106125, type: 3}
+  - _name: Position_LocalPlayer
+    _prefab: {fileID: 2979315643931502337, guid: 3438e6a935a9e514a992aa835fc877a2, type: 3}
+  - _name: Position_EnemyPlayer
+    _prefab: {fileID: 8381760829762192651, guid: 3e7b822d04c20b14bbd9728fecd311db, type: 3}

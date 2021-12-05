@@ -1,10 +1,9 @@
 using System.Text.RegularExpressions;
-using EsperFightersCup.UI.Popup;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.Main
+namespace EsperFightersCup.UI
 {
     [RequireComponent(typeof(GoToScene))]
     public class RegisterUserID : MonoBehaviour

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace EsperFightersCup.UI.InGame.Skill
+namespace EsperFightersCup.UI
 {
     public class FollowSkillUI : SkillUI
     {

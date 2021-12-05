@@ -2,7 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.Animation
+namespace EsperFightersCup.UI
 {
     [RequireComponent(typeof(RectTransform), typeof(Image))]
     public class RotateLoopAnimation : MonoBehaviour

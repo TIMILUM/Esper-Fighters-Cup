@@ -64,7 +64,7 @@ namespace EsperFightersCup
         private void OutroEndRPC()
         {
             _count++;
-            if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+            if (_count == FsmSystem.RoomPlayers.Count)
             {
                 ChangeState(IngameFSMSystem.State.Result);
             }

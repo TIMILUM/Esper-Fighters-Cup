@@ -7,6 +7,11 @@ namespace EsperFightersCup
     {
         private void Start()
         {
+            if (!PhotonNetwork.IsConnected && !PhotonNetwork.OfflineMode)
+            {
+                return;
+            }
+
             PhotonNetwork.LocalPlayer.SetCustomProperties(PhotonOptions.DefaultCustomPlayerProperties);
             if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient)
             {

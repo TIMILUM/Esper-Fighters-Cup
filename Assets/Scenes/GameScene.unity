@@ -542,6 +542,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &325223911 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
+  m_PrefabInstance: {fileID: 296787508222268312}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf56f4bf2205cc24683baee1700618b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &327073935
 GameObject:
   m_ObjectHideFlags: 0
@@ -6180,10 +6191,18 @@ PrefabInstance:
       propertyPath: _gameStateView
       value: 
       objectReference: {fileID: 1121800803}
+    - target: {fileID: 4873366967118284923, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _onRoundStart.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 325223911}
     - target: {fileID: 5403316554260806962, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: _gameStateView
       value: 
       objectReference: {fileID: 1121800803}
+    - target: {fileID: 5403316554260806962, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
+      propertyPath: _onRoundEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 325223911}
     - target: {fileID: 6704078585159148731, guid: 9787673ff2578814aa699100c0a6d496, type: 3}
       propertyPath: sceneViewId
       value: 1
@@ -6403,7 +6422,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4019695465054591280, guid: 0b19a613dd405cb4d9735a9f62225406, type: 3}
       propertyPath: m_UiScaleMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7377205101438985829, guid: 0b19a613dd405cb4d9735a9f62225406, type: 3}
       propertyPath: m_RootOrder

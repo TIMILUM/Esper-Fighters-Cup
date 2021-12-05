@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace EsperFightersCup.UI.Settings
+namespace EsperFightersCup.UI
 {
     public abstract class SettingPanel : MonoBehaviour, ISettingPanel
     {

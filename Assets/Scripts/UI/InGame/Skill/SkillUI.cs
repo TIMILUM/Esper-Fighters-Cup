@@ -2,7 +2,7 @@ using EsperFightersCup.Net;
 using Photon.Pun;
 using UnityEngine;
 
-namespace EsperFightersCup.UI.InGame.Skill
+namespace EsperFightersCup.UI
 {
     public abstract class SkillUI : MonoBehaviour
     {

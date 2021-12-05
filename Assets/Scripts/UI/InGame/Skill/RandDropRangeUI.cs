@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace EsperFightersCup.UI.InGame.Skill
+namespace EsperFightersCup.UI
 {
     public class RandDropRangeUI : SkillUI
     {

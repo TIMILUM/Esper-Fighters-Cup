@@ -1,4 +1,3 @@
-using EsperFightersCup.UI.Popup;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;

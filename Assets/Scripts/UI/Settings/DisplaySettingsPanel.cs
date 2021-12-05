@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.Settings
+namespace EsperFightersCup.UI
 {
     public class DisplaySettingsPanel : SettingPanel
     {

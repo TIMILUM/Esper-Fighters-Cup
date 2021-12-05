@@ -1,6 +1,6 @@
 using System.Linq;
 using EsperFightersCup.Net;
-using EsperFightersCup.UI.InGame.Skill;
+using EsperFightersCup.UI;
 using ExitGames.Client.Photon;
 using UnityEngine;
 

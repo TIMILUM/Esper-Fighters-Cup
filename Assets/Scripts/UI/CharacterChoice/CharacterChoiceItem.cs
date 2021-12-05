@@ -2,7 +2,7 @@ using EsperFightersCup.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.CharacterChoice
+namespace EsperFightersCup.UI
 {
     [RequireComponent(typeof(Button))]
     public class CharacterChoiceItem : MonoBehaviour

@@ -1,4 +1,4 @@
-namespace EsperFightersCup.UI.InGame.Skill
+namespace EsperFightersCup.UI
 {
     public class GroundSmashUI : SkillUI
     {
