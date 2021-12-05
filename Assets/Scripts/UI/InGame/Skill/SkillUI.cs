@@ -43,5 +43,13 @@ namespace EsperFightersCup.UI.InGame.Skill
                 }
             }
         }
+
+        protected virtual void LateUpdate()
+        {
+            if (Target == null && gameObject != null)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 }

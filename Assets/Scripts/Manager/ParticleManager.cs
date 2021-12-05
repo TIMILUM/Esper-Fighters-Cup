@@ -39,7 +39,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
     /// </summary>
     private class Particle
     {
-        private Queue<Particle> _parent;
+        private readonly Queue<Particle> _parent;
 
         public string Name { get; set; }
         public GameObject Object { get; set; }
