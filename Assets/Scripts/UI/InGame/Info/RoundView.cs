@@ -1,19 +1,39 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace EsperFightersCup.UI
 {
-    public class RoundView : MonoBehaviour
+    public class RoundView : MonoBehaviourPunCallbacks
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        [SerializeField]
+        private Image _roundImage;
+        [SerializeField]
+        private Sprite[] _roundImages;
 
+        private void Start()
+        {
+            if (_roundImages.Length == 0)
+            {
+                return;
+            }
+            _roundImage.sprite = _roundImages[0];
         }
 
-        // Update is called once per frame
-        void Update()
+        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
+            if (propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRound, out var value))
+            {
+                var round = (int)value;
 
+                if (_roundImages.Length == 0)
+                {
+                    return;
+                }
+
+                _roundImage.sprite = _roundImages[(round > _roundImages.Length ? _roundImages.Length : round) - 1];
+            }
         }
     }
 }
