@@ -256,7 +256,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
         var info = _particleInfo.Find(x => x.Name == particleName);
         if (info == null)
         {
-            Debug.LogWarning("동일한 파티클 이름이 없습니다.");
+            Debug.LogWarning($"{particleName}와 동일한 파티클 이름이 없습니다.");
             return;
         }
 
@@ -268,7 +268,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
 
         if (!_particleList.TryGetValue(name, out var particleQueue))
         {
-            Debug.LogWarning("동일한 파티클 이름이 없습니다.");
+            Debug.LogWarning($"{name}와 동일한 파티클 큐가 없습니다.");
             return;
         }
 

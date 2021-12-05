@@ -22,7 +22,9 @@ namespace EsperFightersCup
             _durationStunSeconds = Info.ValueFloat[1];
 
             if (Info.ValueFloat.Length == 3)
+            {
                 _dropSkillEffect = Info.ValueFloat[2];
+            }
 
             // _range = 1f; // Info.ValueFloat[2];
         }
@@ -44,9 +46,9 @@ namespace EsperFightersCup
             }
             */
             if (_dropSkillEffect != 0)
-                ParticleManager.Instance.PullParticleSync("DropSkillEffect", pos, Quaternion.identity);
-
-            ParticleManager.Instance.PullParticleLocal("Break_Dust", pos, Quaternion.identity);
+            {
+                ParticleManager.Instance.PullParticleLocal("Break_Dust", pos, Quaternion.identity);
+            }
         }
 
         public override void OnPlayerHitEnter(GameObject other)
