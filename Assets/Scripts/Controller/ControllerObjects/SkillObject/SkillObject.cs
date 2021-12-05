@@ -335,7 +335,8 @@ public abstract class SkillObject : ControllerObject<SkillController>
             return;
         }
 
-        var value = state == State.FrontDelay ? FrontDelayMoveSpeed : EndDelayMoveSpeed;
+        var value = state == State.FrontDelay ? FrontDelayMilliseconds : EndDelayMilliseconds;
+        var moveSpeed = state == State.FrontDelay ? FrontDelayMoveSpeed : EndDelayMoveSpeed;
         ReleaseMoveSpeedBuffAll();
 
         if (value <= 0)
@@ -350,7 +351,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
             _generateMoveSpeedCoroutine = null;
         }
 
-        _generateMoveSpeedCoroutine = StartCoroutine(GenerateMoveSpeedBuff(value));
+        _generateMoveSpeedCoroutine = StartCoroutine(GenerateMoveSpeedBuff(moveSpeed));
     }
 
     private void ReleaseMoveSpeedBuffAll()
