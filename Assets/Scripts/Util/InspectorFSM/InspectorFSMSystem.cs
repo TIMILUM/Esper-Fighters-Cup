@@ -80,6 +80,20 @@ public abstract class InspectorFSMSystem<TStateEnum, TBaseClass> : PunEventCallb
         }
 
         // 첫 스테이트로 전환해줍니다.
-        ChangeState(StartState);
+        Debug.Log($"Init state: {StartState}");
+        if (!StatePool.TryGetValue(StartState, out var initState))
+        {
+            Debug.LogError("Dont have Key in InspectorFSMSystem");
+            return;
+        }
+
+        foreach (var pair in StatePool)
+        {
+            pair.Value.enabled = false;
+        }
+
+        CurrentState = StartState;
+        initState.enabled = true;
+        initState.StartState();
     }
 }

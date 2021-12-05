@@ -49,7 +49,7 @@ namespace EsperFightersCup
         private void RoundEndRPC()
         {
             _count++;
-            if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+            if (_count == FsmSystem.RoomPlayers.Count)
             {
                 FsmSystem.photonView.RPC(nameof(RoundEndNextRPC), RpcTarget.All);
             }

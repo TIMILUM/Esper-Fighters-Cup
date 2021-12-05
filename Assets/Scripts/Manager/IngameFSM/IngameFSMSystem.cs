@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using Photon.Pun;
@@ -9,7 +10,6 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
 {
     public enum State
     {
-        Init,
         IntroCut,
         RoundIntro,
         InBattle,
@@ -29,6 +29,8 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
     /// 게임 라운드
     /// </summary>
     public int Round => (int)(PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRound] ?? 0);
+
+    public IReadOnlyDictionary<int, Photon.Realtime.Player> RoomPlayers => PhotonNetwork.CurrentRoom.Players;
 
     public CurtainAnimation Curtain => _curtain;
 
@@ -67,7 +69,6 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         {
             return;
         }
-
         PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameState, (int)state);
     }
 
@@ -77,7 +78,6 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         {
             return;
         }
-
         ChangeStateAsync((State)(int)value).Forget();
     }
 
@@ -86,28 +86,6 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
         // Enumerator가 중간에 제거되는 불상사를 막기 위해
         // OnRoomPropertiesUpdate가 모두 끝날 때까지 기다림
         await UniTask.NextFrame();
-
-        // 각 STATE에 맞는 이벤트 발생
-        switch (state)
-        {
-            case State.Init:
-                break;
-            case State.IntroCut:
-                break;
-            case State.RoundIntro:
-                break;
-            case State.InBattle:
-                break;
-            case State.RoundEnd:
-                break;
-            case State.EndingCut:
-                break;
-            case State.Result:
-                break;
-            default:
-                break;
-        }
-
         base.ChangeState(state);
     }
 }

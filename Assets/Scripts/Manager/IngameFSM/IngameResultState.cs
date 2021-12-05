@@ -42,8 +42,6 @@ namespace EsperFightersCup
 
         private async UniTask ResultEndAsync()
         {
-            PhotonNetwork.Destroy(InGamePlayerManager.Instance.LocalPlayer.gameObject);
-
             await UniTask.Delay(1000);
             FsmSystem.photonView.RPC(nameof(ResultEndRPC), RpcTarget.MasterClient);
         }
@@ -52,7 +50,7 @@ namespace EsperFightersCup
         private void ResultEndRPC()
         {
             _count++;
-            if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+            if (_count == FsmSystem.RoomPlayers.Count)
             {
                 PhotonNetwork.LoadLevel("ResultScene");
             }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using EsperFightersCup;
 using Photon.Pun;
 using Photon.Realtime;
@@ -47,38 +46,7 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         return Array.FindIndex(PhotonNetwork.PlayerList, p => p.ActorNumber == searchPlayer.ActorNumber);
     }
 
-    private void Start()
-    {
-        // TODO: 플레이어를 MasterClient에서 생성하고 소유권을 각자에게 나눠주도록 구현해보기
-        LocalPlayer = SpawnLocalPlayer();
-        var pvID = LocalPlayer.photonView.ViewID;
-
-        Debug.Log($"New local player instance = {pvID}-{LocalPlayer}");
-        // Debug.Log($"GamePlayers count: {GamePlayers.Count}");
-
-        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
-    }
-
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    {
-        if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value))
-        {
-            return;
-        }
-
-        var targetPV = (int)value;
-        var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
-        GamePlayers[targetPlayer.ActorNumber] = playerInstance;
-        Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
-        // Debug.Log($"GamePlayers count: {GamePlayers.Count}");
-
-        if (PhotonNetwork.IsMasterClient && GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount)
-        {
-            NextStateAsync().Forget();
-        }
-    }
-
-    private APlayer SpawnLocalPlayer()
+    public void SpawnLocalPlayer()
     {
         ACharacter.Type characterType;
         var props = PhotonNetwork.LocalPlayer.CustomProperties;
@@ -106,12 +74,40 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         localplayer.ResetPositionAndRotation();
 
         Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
-        return localplayer;
+
+        LocalPlayer = localplayer;
+        var pvID = LocalPlayer.photonView.ViewID;
+
+        Debug.Log($"Create new local player instance = [{pvID}]{LocalPlayer}");
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
     }
 
-    private async UniTask NextStateAsync()
+    public void RemoveLocalPlayer()
     {
-        await UniTask.Delay(1000);
-        IngameFSMSystem.Instance.ChangeState(IngameFSMSystem.State.IntroCut);
+        PhotonNetwork.Destroy(LocalPlayer.gameObject);
+        LocalPlayer = null;
+        Debug.Log($"Remove local player instance");
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, -1);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value))
+        {
+            return;
+        }
+
+        var targetPV = (int)value;
+
+        if (targetPV == -1)
+        {
+            Debug.Log($"Remove player instance: [{targetPlayer.ActorNumber}]");
+            GamePlayers.Remove(targetPlayer.ActorNumber);
+            return;
+        }
+
+        var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
+        GamePlayers[targetPlayer.ActorNumber] = playerInstance;
+        Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
     }
 }

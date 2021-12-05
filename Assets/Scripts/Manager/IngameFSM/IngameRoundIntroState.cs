@@ -46,10 +46,12 @@ namespace EsperFightersCup
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
             }
 
+            /*
             // 로컬플레이어 설정
             var localplayer = InGamePlayerManager.Instance.LocalPlayer;
             localplayer.ResetPositionAndRotation();
             localplayer.HP = 100;
+            */
         }
 
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
@@ -58,7 +60,6 @@ namespace EsperFightersCup
             {
                 return;
             }
-
             FsmSystem.photonView.RPC(nameof(RoundSetCompleteRPC), RpcTarget.MasterClient);
         }
 
@@ -66,7 +67,7 @@ namespace EsperFightersCup
         private void RoundSetCompleteRPC()
         {
             _count++;
-            if (_count == InGamePlayerManager.Instance.GamePlayers.Count)
+            if (_count == FsmSystem.RoomPlayers.Count)
             {
                 FsmSystem.photonView.RPC(nameof(RoundIntroRPC), RpcTarget.All);
             }
@@ -81,8 +82,11 @@ namespace EsperFightersCup
 
         private async UniTask RoundIntroAsync(int round)
         {
+            await UniTask.NextFrame();
+
             IngameBGMManager.Instance.IngameBGMUpdate(round);
             _onRoundStart?.Invoke(round);
+            await UniTask.WaitUntil(() => InGamePlayerManager.Instance.GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount);
 
             await FsmSystem.Curtain.FadeOutAsync();
 
