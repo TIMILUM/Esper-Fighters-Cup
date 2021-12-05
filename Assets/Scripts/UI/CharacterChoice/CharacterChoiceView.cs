@@ -16,6 +16,9 @@ namespace EsperFightersCup.UI.CharacterChoice
         [SerializeField] private Text _localPlayerCharacterDummyText;
         [SerializeField] private Text _otherPlayerCharacterDummyText;
 
+        //상대 플레이어가 준비 완료
+        [SerializeField] private GameObject _otherPlayerCharacterImagePanal;
+
         private Text _localPlayerStateText;
         private Sequence _localPlayerSubmitTimeout;
 
@@ -69,7 +72,7 @@ namespace EsperFightersCup.UI.CharacterChoice
                 _localPlayerStateText.text = "준비 완료";
 
                 var characterType = (ACharacter.Type)playerChoose;
-                _localPlayerCharacterDummyText.text = characterType.ToString();
+                _localPlayerCharacterDummyText.text = "READY"; //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
             }
             else
             {
@@ -79,7 +82,17 @@ namespace EsperFightersCup.UI.CharacterChoice
                 }
 
                 var characterType = (ACharacter.Type)playerChoose;
-                _otherPlayerCharacterDummyText.text = characterType.ToString();
+                _otherPlayerCharacterDummyText.text = "READY";  //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
+
+                //상대 플레이어가 준비 완료 시에 랜더 텍스처를 출력합니다.
+                if(characterType.ToString()== "Telekinesis")
+                {
+                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나의 랜더 텍스처로 변경하는 함수를 호출합니다.
+                }
+                else if(characterType.ToString() == "Plank")
+                {
+                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크의 랜더 텍스처로 변경하는 함수를 호출합니다.
+                }
             }
         }
     }

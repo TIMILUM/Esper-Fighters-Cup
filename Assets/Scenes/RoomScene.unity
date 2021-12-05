@@ -443,7 +443,7 @@ MonoBehaviour:
   _roomCodeText: {fileID: 1779672179}
   _masterClientNameText: {fileID: 1625612687}
   _otherClientNameText: {fileID: 388543899}
-  _exitButton: {fileID: 0}
+  _exitButton: {fileID: 1427959425}
   _startButton: {fileID: 887631777}
 --- !u!4 &397792788
 Transform:
@@ -1466,6 +1466,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1427959425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1327917423471662249, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
+  m_PrefabInstance: {fileID: 1427959422}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1497485813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1477,6 +1488,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Background
       objectReference: {fileID: 0}
+    - target: {fileID: 5008633269006301471, guid: 6256a280e8cc90f47a382abd1697b59e, type: 3}
+      propertyPath: m_Color.b
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 5008633269006301471, guid: 6256a280e8cc90f47a382abd1697b59e, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 7752999620056512096, guid: 6256a280e8cc90f47a382abd1697b59e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
