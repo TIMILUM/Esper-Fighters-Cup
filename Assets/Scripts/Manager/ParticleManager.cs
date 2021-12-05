@@ -117,7 +117,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
                     var palette1Queue = _particleList[$"{info.Name}0"];
                     palette1Queue.Enqueue(new Particle(clone1, info.LifeTime, palette1Queue));
 
-                    var clone2 = Instantiate(info.PaletteParticle1, transform);
+                    var clone2 = Instantiate(info.PaletteParticle2, transform);
                     clone2.SetActive(false);
                     var palette2Queue = _particleList[$"{info.Name}1"];
                     palette2Queue.Enqueue(new Particle(clone2, info.LifeTime, palette2Queue));
