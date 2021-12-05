@@ -5,7 +5,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.Settings
+namespace EsperFightersCup.UI
 {
     [Serializable]
     public class Settings

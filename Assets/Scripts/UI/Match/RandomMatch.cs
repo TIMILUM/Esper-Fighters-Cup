@@ -1,12 +1,11 @@
 using EsperFightersCup.Net;
-using EsperFightersCup.UI.Popup;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-namespace EsperFightersCup.UI.Match
+namespace EsperFightersCup.UI
 {
     public class RandomMatch : PunEventCallbacks
     {

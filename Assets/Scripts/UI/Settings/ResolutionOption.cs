@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace EsperFightersCup.UI.Settings
+namespace EsperFightersCup.UI
 {
     public class ResolutionOption : MonoBehaviour
     {

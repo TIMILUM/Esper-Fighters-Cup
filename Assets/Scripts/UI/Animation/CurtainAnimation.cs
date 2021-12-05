@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-namespace EsperFightersCup
+namespace EsperFightersCup.UI
 {
     public class CurtainAnimation : MonoBehaviour
     {

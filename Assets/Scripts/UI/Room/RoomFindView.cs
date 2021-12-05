@@ -1,11 +1,10 @@
 using System;
 using Cysharp.Threading.Tasks;
-using EsperFightersCup.UI.Popup;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.Room
+namespace EsperFightersCup.UI
 {
     public class RoomFindView : MonoBehaviour
     {

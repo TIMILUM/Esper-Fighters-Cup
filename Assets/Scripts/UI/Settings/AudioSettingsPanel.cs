@@ -1,4 +1,4 @@
-namespace EsperFightersCup.UI.Settings
+namespace EsperFightersCup.UI
 {
     public class AudioSettingsPanel : SettingPanel
     {

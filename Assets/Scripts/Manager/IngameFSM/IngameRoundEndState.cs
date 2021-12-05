@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using EsperFightersCup.UI.InGame;
+using EsperFightersCup.UI;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Events;

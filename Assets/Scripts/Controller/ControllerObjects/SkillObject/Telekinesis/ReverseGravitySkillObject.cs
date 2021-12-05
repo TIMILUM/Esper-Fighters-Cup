@@ -1,7 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
-using EsperFightersCup.UI.InGame.Skill;
+using EsperFightersCup.UI;
 using UnityEngine;
 
 public class ReverseGravitySkillObject : SkillObject

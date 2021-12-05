@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.GameResult
+namespace EsperFightersCup.UI
 {
     public class ResultView : MonoBehaviourPunCallbacks
     {

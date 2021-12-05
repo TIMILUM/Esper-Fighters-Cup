@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace EsperFightersCup.UI.Popup
+namespace EsperFightersCup.UI
 {
     // TODO: 싱글톤으로 PopupManager 만들어서 관리 및 호출
     public class BasicPopup : MonoBehaviour

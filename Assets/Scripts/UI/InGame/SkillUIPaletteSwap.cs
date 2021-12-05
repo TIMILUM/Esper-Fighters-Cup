@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using EsperFightersCup.UI.InGame.Skill;
 using UnityEngine;
 
-namespace EsperFightersCup.UI.InGame
+namespace EsperFightersCup.UI
 {
     [RequireComponent(typeof(SkillUI))]
     public class SkillUIPaletteSwap : MonoBehaviour
