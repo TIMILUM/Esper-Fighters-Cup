@@ -31,10 +31,4 @@ public class IngameEnemyTextureReplacer : MonoBehaviour
 
         _material.SetTexture("_BaseMap", _enemyTexture);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    
-    }
 }

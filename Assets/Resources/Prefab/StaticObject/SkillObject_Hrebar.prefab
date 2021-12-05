@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: -4530229189367020624}
   - component: {fileID: 1118214125026070496}
   - component: {fileID: -3415517569157895527}
+  - component: {fileID: 426786889950875360}
   m_Layer: 7
   m_Name: SkillObject_Hrebar
   m_TagString: Untagged
@@ -234,6 +235,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &426786889950875360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371705745396489365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &5383269068083354524
 GameObject:
   m_ObjectHideFlags: 0

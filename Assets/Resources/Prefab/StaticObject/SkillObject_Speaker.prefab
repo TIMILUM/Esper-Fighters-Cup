@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1827495912437600304}
   - component: {fileID: 7454492160522824904}
   - component: {fileID: 4191022541528968379}
+  - component: {fileID: 5464378066496742416}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_011
   m_TagString: Untagged
@@ -83,6 +84,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5464378066496742416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335614031168738575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &1213053009451786230
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +111,7 @@ GameObject:
   - component: {fileID: 2564127314813258419}
   - component: {fileID: 314960986298808249}
   - component: {fileID: 5209154817356717320}
+  - component: {fileID: 1037737024752630258}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_010
   m_TagString: Untagged
@@ -166,6 +184,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1037737024752630258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213053009451786230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &1630532009988023156
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,6 +211,7 @@ GameObject:
   - component: {fileID: 4981968151886316631}
   - component: {fileID: 1274650631967853095}
   - component: {fileID: 933994182246007344}
+  - component: {fileID: 7180468740182769013}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_001
   m_TagString: Untagged
@@ -249,6 +284,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7180468740182769013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1630532009988023156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &1735891597397493701
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +311,7 @@ GameObject:
   - component: {fileID: 5695602134794159884}
   - component: {fileID: 429591692874294693}
   - component: {fileID: 5776396631107418310}
+  - component: {fileID: 3895420677584030614}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_003
   m_TagString: Untagged
@@ -332,6 +384,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3895420677584030614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735891597397493701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &2156747765702068243
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,6 +411,7 @@ GameObject:
   - component: {fileID: 4313616773330199715}
   - component: {fileID: 2200145111071626391}
   - component: {fileID: 6052056162476805358}
+  - component: {fileID: 6952975051221539091}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_015
   m_TagString: Untagged
@@ -415,6 +484,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6952975051221539091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156747765702068243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &2218002912871081062
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,6 +555,7 @@ GameObject:
   - component: {fileID: 6764304188755866269}
   - component: {fileID: 4207925976627306654}
   - component: {fileID: 2246136807485084648}
+  - component: {fileID: 4582065156971055653}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_009
   m_TagString: Untagged
@@ -542,6 +628,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4582065156971055653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3136759405092263356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &3491362674620820855
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,6 +655,7 @@ GameObject:
   - component: {fileID: 4185472613749182337}
   - component: {fileID: 5398304928848359389}
   - component: {fileID: 8285374141068940593}
+  - component: {fileID: 1999487962835248559}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_014
   m_TagString: Untagged
@@ -625,6 +728,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1999487962835248559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3491362674620820855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &4825578108793485330
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,6 +998,7 @@ GameObject:
   - component: {fileID: 9188615585215353634}
   - component: {fileID: 6428096507978434821}
   - component: {fileID: 1991273019117899244}
+  - component: {fileID: 6210664668522281277}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_007
   m_TagString: Untagged
@@ -951,6 +1071,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6210664668522281277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5168320457803481529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &5286161095692854960
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,6 +1098,7 @@ GameObject:
   - component: {fileID: 1502411595695349943}
   - component: {fileID: 9003666875347226967}
   - component: {fileID: 691810984639851429}
+  - component: {fileID: 4621089779125671319}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_006
   m_TagString: Untagged
@@ -1034,6 +1171,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4621089779125671319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5286161095692854960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &5677478547542990971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,6 +1233,7 @@ GameObject:
   - component: {fileID: 14371984397251845}
   - component: {fileID: 816565411978715296}
   - component: {fileID: 6161411758389203461}
+  - component: {fileID: 304279395996732063}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_012
   m_TagString: Untagged
@@ -1152,6 +1306,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &304279395996732063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6008667228849917832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &6210638015795968725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1243,6 +1413,7 @@ GameObject:
   - component: {fileID: 1029797143064350766}
   - component: {fileID: 3529235499657424934}
   - component: {fileID: 908418743903497533}
+  - component: {fileID: 4287313711058243246}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_002
   m_TagString: Untagged
@@ -1315,6 +1486,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4287313711058243246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155790193512133013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &7319521713869067658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1326,6 +1513,7 @@ GameObject:
   - component: {fileID: 3624846435009740976}
   - component: {fileID: 5688925036717767808}
   - component: {fileID: 2004507142074426246}
+  - component: {fileID: 7920530499502473003}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_004
   m_TagString: Untagged
@@ -1398,6 +1586,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7920530499502473003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7319521713869067658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &7348860551553326295
 GameObject:
   m_ObjectHideFlags: 0
@@ -1477,6 +1681,7 @@ GameObject:
   - component: {fileID: 2087818897222501992}
   - component: {fileID: 2201873991693919445}
   - component: {fileID: 4325693614788385279}
+  - component: {fileID: 9194192975413475275}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_013
   m_TagString: Untagged
@@ -1549,6 +1754,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &9194192975413475275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8445413386577218085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &8507987621557394900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1560,6 +1781,7 @@ GameObject:
   - component: {fileID: 3109040519747194899}
   - component: {fileID: 1149376815172559151}
   - component: {fileID: 4854959983123887134}
+  - component: {fileID: 845994326173216385}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_005
   m_TagString: Untagged
@@ -1632,6 +1854,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &845994326173216385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8507987621557394900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
 --- !u!1 &8543468814921752180
 GameObject:
   m_ObjectHideFlags: 0
@@ -1678,6 +1916,7 @@ GameObject:
   - component: {fileID: 9088984997408304156}
   - component: {fileID: 8354050834962809222}
   - component: {fileID: 4952771950939113801}
+  - component: {fileID: 106297401555360953}
   m_Layer: 7
   m_Name: SkillObject_Speaker_Fragments_008
   m_TagString: Untagged
@@ -1750,3 +1989,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &106297401555360953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9097116882781019095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 055e2207b33175b4ebbbd7a103b53325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isChangeWhenStart: 1
+  _defaultDurationSeconds: 1
+  _mineMaterial: {fileID: 2100000, guid: 7c58cffc4565e9447976fba891758bf6, type: 2}
+  _enemyMaterial: {fileID: 2100000, guid: 89bcbe2db9928ab4d8fe390dbc9ba7fb, type: 2}
