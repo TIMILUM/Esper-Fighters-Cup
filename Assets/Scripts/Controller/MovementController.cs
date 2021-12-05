@@ -142,7 +142,7 @@ public class MovementController : ControllerBase
             var moveSpeedBuff = _buffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
 
             _addedMoveSpeed = moveSpeedBuff.Count > 0
-                ? _moveSpeed * (((MoveSpeedObject)moveSpeedBuff.Last()).AddedSpeed / 100.0f)
+                ? _moveSpeed * (((MoveSpeedObject)moveSpeedBuff.Last()).AddedSpeed / 10.0f)
                 : 0;
         }
 
