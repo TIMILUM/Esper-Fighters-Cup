@@ -132,7 +132,9 @@ namespace EsperFightersCup
             var createObjectPos = position + new Vector3(0.0f, mainCameraPos.y, 0.0f);
 
             var id = GetRandomDropObjectID();
-            var obj = InGameSkillManager.Instance.CreateSkillObject(id, createObjectPos).GetComponent<AStaticObject>();
+            var randomRotation = new Vector3(0, Random.Range(-180f, 180f), 0);
+
+            var obj = InGameSkillManager.Instance.CreateSkillObject(id, createObjectPos, randomRotation).GetComponent<AStaticObject>();
             if (obj == null)
             {
                 Debug.LogError("DropObject가 AStaticObject가 아닙니다!");
