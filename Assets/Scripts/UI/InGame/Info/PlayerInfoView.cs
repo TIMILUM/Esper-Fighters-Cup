@@ -75,7 +75,11 @@ namespace EsperFightersCup.UI
 
             var hp = TargetPlayer.HP;
             var maxHp = TargetPlayer.MaxHP;
-            _healthBarForground.TargetImage.fillAmount = hp / (float)maxHp;
+
+            var beforeAmount = _healthBarForground.TargetImage.fillAmount;
+            var afterAmount = hp / (float)maxHp;
+
+            _healthBarForground.TargetImage.fillAmount = Mathf.Lerp(beforeAmount, afterAmount, Time.deltaTime * 20f);
             /*
             var amount = (float)System.Math.Round(hp / (double)maxHp, 3);
             if (amount != _healthBarForground.TargetImage.fillAmount)
