@@ -1,5 +1,4 @@
 using System.Linq;
-using EsperFightersCup.UI.InGame;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -29,8 +28,6 @@ public class MovementController : ControllerBase
 
     [SerializeField, Range(0.01f, 1.0f)] private float _smoothLookat;
 
-    [SerializeField] private GameObject _positionUIPrefab;
-
     protected override void Reset()
     {
         base.Reset();
@@ -45,10 +42,6 @@ public class MovementController : ControllerBase
         base.Start();
         _player = ControllerManager.GetActor() as APlayer;
         _buffController = ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
-
-        var positionUI = Instantiate(_positionUIPrefab).GetComponent<CharacterPositionUI>();
-        positionUI.TargetPlayer = _player.transform;
-        positionUI.IsLocalPlayer = photonView.IsMine;
     }
 
     protected override void Update()

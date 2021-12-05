@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EsperFightersCup;
 using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
@@ -30,6 +31,9 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
         {
             Camera.main.GetComponent<StudioListener>().attenuationObject = gameObject;
         }
+
+        var positionUI = photonView.Owner.IsLocal ? "Position_LocalPlayer" : "Position_EnemyPlayer";
+        GameUIManager.Instance.PlayLocal(this, positionUI, transform.position, Vector2.one);
     }
 
     protected override void OnDestroy()
