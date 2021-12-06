@@ -20,6 +20,7 @@ namespace EsperFightersCup.UI
 
         private Text _rematchButtonText;
         private CancellationTokenSource _rematchCancellation;
+        private string _nextScene;
 
         private void Start()
         {
@@ -65,6 +66,11 @@ namespace EsperFightersCup.UI
             }
         }
 
+        private void OnDestroy()
+        {
+            _rematchCancellation?.Cancel();
+        }
+
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             if (PhotonNetwork.InRoom && PhotonNetwork.CurrentRoom.PlayerCount == 1)
@@ -73,6 +79,11 @@ namespace EsperFightersCup.UI
                 _rematchButtonText.text = "상대방 나감";
                 _rematchButton.interactable = false;
             }
+        }
+
+        public override void OnLeftRoom()
+        {
+            SceneManager.LoadScene(_nextScene ?? "MainScene");
         }
 
         public void GoToLobby()
@@ -105,7 +116,6 @@ namespace EsperFightersCup.UI
             _rematchButton.interactable = false;
 
             var canceled = await UniTask.Delay(TimeSpan.FromSeconds(10), cancellationToken: cancellation).SuppressCancellationThrow();
-            // BUG: 리매치 성공 후 씬 전환될 때 Cancel이 호출되는거 같은데 그거때문에 ResetRematch가 실행됨
             if (!canceled)
             {
                 ResetRematch();
@@ -137,7 +147,7 @@ namespace EsperFightersCup.UI
                 var keys = PhotonNetwork.LocalPlayer.CustomProperties.Keys;
                 PhotonNetwork.RemovePlayerCustomProperties(keys.Select(key => key as string).ToArray());
             }
-            SceneManager.LoadScene(nextScene);
+            _nextScene = nextScene;
         }
     }
 }

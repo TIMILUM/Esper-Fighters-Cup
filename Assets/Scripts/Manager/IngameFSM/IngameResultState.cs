@@ -26,7 +26,12 @@ namespace EsperFightersCup
         {
             base.StartState();
 
-            var myWinPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
+            int myWinPoint = 0;
+            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
+            {
+                myWinPoint = (int)value;
+            }
+
             if (myWinPoint == 3)
             {
                 PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameWinner, PhotonNetwork.LocalPlayer.NickName);

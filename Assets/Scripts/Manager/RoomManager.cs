@@ -41,6 +41,7 @@ namespace EsperFightersCup
         {
             if (PhotonNetwork.InRoom)
             {
+                PhotonNetwork.OpRemoveCompleteCache();
                 PhotonNetwork.LeaveRoom();
             }
             else
