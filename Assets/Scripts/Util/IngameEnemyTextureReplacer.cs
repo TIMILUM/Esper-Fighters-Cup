@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Renderer))]
@@ -17,7 +16,7 @@ public class IngameEnemyTextureReplacer : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if (_actor == null)
         {
