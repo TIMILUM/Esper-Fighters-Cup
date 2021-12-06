@@ -55,7 +55,7 @@ public class IngameFSMSystem : InspectorFSMSystem<IngameFSMSystem.State, InGameF
             Debug.LogWarning("Enable Offline Mode!");
             PhotonNetwork.OfflineMode = true;
             PhotonNetwork.NickName = "OfflinePlayer";
-            PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.CreateRoom("OfflineRoom");
         }
 #endif
     }

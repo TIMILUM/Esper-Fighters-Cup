@@ -34,7 +34,13 @@ namespace EsperFightersCup.UI
                     _localCharacterInfo.Character.SetActive(false);
                 }
                 var palette = Array.Find(_localCharacterPalettes, x => x.Character == type);
-                int index = _otherCharacterInfo != null && _otherCharacterInfo.Type == type ? 1 : 0;
+
+                int index = 0;
+                if (_otherCharacterInfo != null && _otherCharacterInfo.Type == type)
+                {
+                    index = _otherCharacterInfo.PaletteIndex == 0 ? 1 : 0;
+                }
+
                 var go = palette.Palettes[index];
                 _localCharacterInfo = new CharacterChoiceInfo
                 {
@@ -52,7 +58,13 @@ namespace EsperFightersCup.UI
                     _otherCharacterInfo.Character.SetActive(false);
                 }
                 var palette = Array.Find(_otherCharacterPalettes, x => x.Character == type);
-                int index = _localCharacterInfo != null && _localCharacterInfo.Type == type ? 1 : 0;
+
+                int index = 0;
+                if (_localCharacterInfo != null && _localCharacterInfo.Type == type)
+                {
+                    index = _localCharacterInfo.PaletteIndex == 0 ? 1 : 0;
+                }
+
                 var go = palette.Palettes[index];
                 _otherCharacterInfo = new CharacterChoiceInfo
                 {
