@@ -68,6 +68,17 @@ namespace EsperFightersCup
         private async UniTask<PlayableDirector> GetVictoryCutAsync()
         {
             await UniTask.Delay(2000);
+
+            if (PhotonNetwork.OfflineMode)
+            {
+                var player = PhotonNetwork.LocalPlayer;
+
+                var type = (ACharacter.Type)(int)player.CustomProperties[CustomPropertyKeys.PlayerCharacterType];
+                var paletteIndex = (int)player.CustomProperties[CustomPropertyKeys.PlayerPalette];
+                var characterPalette = Array.Find(_outroCutScenes, x => x.Character == type);
+                return characterPalette.Palettes[paletteIndex];
+            }
+
             foreach (var player in PhotonNetwork.PlayerList)
             {
                 var winPoint = (int)player.CustomProperties[CustomPropertyKeys.PlayerWinPoint];

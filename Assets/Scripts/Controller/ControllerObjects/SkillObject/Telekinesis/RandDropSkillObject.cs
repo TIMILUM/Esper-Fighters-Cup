@@ -14,7 +14,7 @@ namespace EsperFightersCup
             public float DropRate { get; set; }
         }
 
-        private const string CreateSound = "event:/SFX/Elena_Skill/SFX_RandDrop";
+        // private const string CreateSound = "event:/SFX/Elena_Skill/SFX_RandDrop";
 
         private DropObjectData[] _dropObjects;
         private float _dropDelay;
@@ -29,6 +29,14 @@ namespace EsperFightersCup
             LoadDropObjectCSVData();
 
             _uiSize = Size * 0.1f;
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            Destroy(_rangeUI.gameObject);
+            Destroy(_castUI.gameObject);
         }
 
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
@@ -62,7 +70,7 @@ namespace EsperFightersCup
                     {
                         GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
                     }
-                    GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
+                    _castUI.SetPosition(mousePos);
                 }
                 else
                 {

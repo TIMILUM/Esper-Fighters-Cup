@@ -1,19 +1,16 @@
-using UnityEngine;
-
 namespace EsperFightersCup.UI
 {
     public class FollowSkillUI : SkillUI
     {
         private void Update()
         {
-            if (Target == null)
+            if (!Target)
             {
                 return;
             }
 
-            var pos = transform.position;
             var targetPos = Target.transform.position;
-            transform.position = new Vector3(targetPos.x, pos.y, targetPos.z);
+            SetPosition(targetPos);
         }
     }
 }

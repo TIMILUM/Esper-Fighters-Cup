@@ -65,9 +65,19 @@ namespace EsperFightersCup
             {
                 PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
             }
+
+            if (PhotonNetwork.OfflineMode)
+            {
+                ChangeNextState();
+            }
         }
 
         public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            ChangeNextState();
+        }
+
+        private void ChangeNextState()
         {
             var roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
             if (!roomProps.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var winnerValue))

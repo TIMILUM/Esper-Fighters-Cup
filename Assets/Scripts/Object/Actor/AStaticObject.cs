@@ -21,10 +21,23 @@ public class AStaticObject : Actor
         base.Awake();
 
         HitSystem = GetComponent<ObjectHitSystem>();
-        HitSystem.OnHit += PlayHitSound;
+        HitSystem.OnHit += HandleObjectHit;
 
         _colliderSize = _boxcollider.bounds.extents;
         _boxcollider.enabled = false;
+    }
+
+    private void HandleObjectHit(object sender, HitEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(_collideSound))
+        {
+            return;
+        }
+        var instance = FMODUnity.RuntimeManager.CreateInstance(_collideSound);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform, Rigidbody);
+        instance.setParameterByName("DestroyCheck", e.IsDestroy ? 1f : 0f);
+        instance.start();
+        instance.release();
     }
 
     protected override void Start()
@@ -41,7 +54,10 @@ public class AStaticObject : Actor
         {
             return;
         }
-        PhotonNetwork.Destroy(gameObject);
+        if (gameObject)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 
     protected override void FixedUpdate()
@@ -74,18 +90,5 @@ public class AStaticObject : Actor
         {
             Rigidbody.isKinematic = true;
         }
-    }
-
-    private void PlayHitSound(HitInfo info)
-    {
-        if (string.IsNullOrWhiteSpace(_collideSound))
-        {
-            return;
-        }
-        var instance = FMODUnity.RuntimeManager.CreateInstance(_collideSound);
-        FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform, Rigidbody);
-        instance.setParameterByName("DestroyCheck", info.IsDestroy ? 1f : 0f);
-        instance.start();
-        instance.release();
     }
 }
