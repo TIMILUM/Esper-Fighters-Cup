@@ -12,11 +12,11 @@ namespace EsperFightersCup
         {
             [SerializeField]
             private string _name;
-            [SerializeField, FMODUnity.EventRef]
-            private string _path;
+            [SerializeField]
+            private FMODUnity.EventReference _path;
 
             public string Name => _name;
-            public string Path => _path;
+            public FMODUnity.EventReference Path => _path;
         }
 
         [SerializeField]

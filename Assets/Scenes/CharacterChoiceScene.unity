@@ -1911,10 +1911,10 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
+      Data1: -1827245427
+      Data2: 1249476839
+      Data3: 161165223
+      Data4: 1795631421
     Path: event:/UISFX/NormalButtonClick
   Event: 
   PlayEvent: 0
@@ -2191,10 +2191,10 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
+      Data1: -2097536804
+      Data2: 1160101292
+      Data3: 732135334
+      Data4: 410493314
     Path: event:/UISFX/SettingTabClick
   Event: 
   PlayEvent: 0
@@ -2911,10 +2911,10 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
+      Data1: -2097536804
+      Data2: 1160101292
+      Data3: 732135334
+      Data4: 410493314
     Path: event:/UISFX/SettingTabClick
   Event: 
   PlayEvent: 0
@@ -3670,10 +3670,10 @@ MonoBehaviour:
   CollisionTag: 
   EventReference:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
+      Data1: -1827245427
+      Data2: 1249476839
+      Data3: 161165223
+      Data4: 1795631421
     Path: event:/UISFX/NormalButtonClick
   Event: 
   PlayEvent: 0
@@ -3834,6 +3834,22 @@ PrefabInstance:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
       propertyPath: OverrideMinDistance
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: 765161262
+      objectReference: {fileID: 0}
+    - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1173718967
+      objectReference: {fileID: 0}
+    - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: -611291729
+      objectReference: {fileID: 0}
+    - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: 885610508
       objectReference: {fileID: 0}
     - target: {fileID: 8691749528087962880, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
       propertyPath: m_Enabled

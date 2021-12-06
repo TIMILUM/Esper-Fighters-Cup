@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -364,6 +364,22 @@ PrefabInstance:
     - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
       propertyPath: OverrideMinDistance
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
+      propertyPath: EventReference.Guid.Data1
+      value: -1359343234
+      objectReference: {fileID: 0}
+    - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
+      propertyPath: EventReference.Guid.Data2
+      value: 1296002415
+      objectReference: {fileID: 0}
+    - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
+      propertyPath: EventReference.Guid.Data3
+      value: 144082305
+      objectReference: {fileID: 0}
+    - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
+      propertyPath: EventReference.Guid.Data4
+      value: -1470502467
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}

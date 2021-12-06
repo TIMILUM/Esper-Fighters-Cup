@@ -490,16 +490,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1499837768
+      Data2: 1285419415
+      Data3: 29877658
+      Data4: -600328220
+    Path: event:/SFX/OBJ_Collison/ArenaLight_HitGround
   Event: 
-  PlayEvent: 0
+  PlayEvent: 7
   StopEvent: 0
   AllowFadeout: 1
-  TriggerOnce: 0
+  TriggerOnce: 1
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &8245475252214133918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,6 +521,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound:
+    Guid:
+      Data1: -1122615831
+      Data2: 1331978549
+      Data3: -24179583
+      Data4: 1288939427
+    Path: event:/SFX/OBJ_Collison/ArenaLight_Coll
   _destroyEffectPosition: {fileID: 0}
   _particleName: Lighting_Object_Destroy
 --- !u!114 &1285394932241494094
@@ -531,10 +545,8 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 239474858897439303}
   _id: 10
-  _audioEmitter: {fileID: 3423570747809605514}
   _fgravity: 80
   _boxcollider: {fileID: 1109486194728789953}
-  _collideSound: event:/SFX/OBJ_Collison/ArenaLight_Coll
 --- !u!114 &1623772674390140268
 MonoBehaviour:
   m_ObjectHideFlags: 0

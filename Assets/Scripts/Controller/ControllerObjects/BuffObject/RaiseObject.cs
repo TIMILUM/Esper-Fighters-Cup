@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RaiseObject : BuffObject
 {
-    [SerializeField, FMODUnity.EventRef]
-    private string _objectWaverSound;
+    [SerializeField]
+    private FMODUnity.EventReference _objectWaverSound;
 
     private float _limitPosY;
     private Sequence _raising;

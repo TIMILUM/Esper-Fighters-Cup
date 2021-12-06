@@ -108,16 +108,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1436179513
+      Data2: 1136040367
+      Data3: -1056547659
+      Data4: 1873637749
+    Path: event:/SFX/OBJ_Collison/HRaber_HitGround
   Event: 
-  PlayEvent: 0
+  PlayEvent: 7
   StopEvent: 0
   AllowFadeout: 1
-  TriggerOnce: 0
+  TriggerOnce: 1
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &-2979233819102827446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +139,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound:
+    Guid:
+      Data1: 1013230459
+      Data2: 1318692129
+      Data3: -289393249
+      Data4: 874444593
+    Path: event:/SFX/OBJ_Collison/HRaber_Coll
   _destroyEffectPosition: {fileID: 0}
   _particleName: Object_Destroy
 --- !u!114 &-4530229189367020624
@@ -149,10 +163,8 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 7075808432558130420}
   _id: 11
-  _audioEmitter: {fileID: 5358728560939682690}
   _fgravity: 80
   _boxcollider: {fileID: 6641473126098826297}
-  _collideSound: 
 --- !u!114 &1118214125026070496
 MonoBehaviour:
   m_ObjectHideFlags: 0

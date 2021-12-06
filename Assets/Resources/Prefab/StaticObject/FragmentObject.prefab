@@ -264,6 +264,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound:
+    Guid:
+      Data1: 1930292761
+      Data2: 1337390624
+      Data3: -1537460300
+      Data4: 2081423270
+    Path: event:/SFX/OBJ_Collison/Fragments_Coll
   _destroyEffectPosition: {fileID: 0}
   _particleName: Fragment_Object_Destroy
 --- !u!114 &6455006989233138703
@@ -284,7 +291,6 @@ MonoBehaviour:
   _audioEmitter: {fileID: 0}
   _fgravity: 30
   _boxcollider: {fileID: 3862832075524448634}
-  _collideSound: 
   _anim: {fileID: 7288119691118101877}
 --- !u!1001 &5469717882171134023
 PrefabInstance:
