@@ -44,7 +44,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: event:/UISFX/Matching
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: event:/UISFX/Matching
+  Event: 
   PlayEvent: 1
   StopEvent: 2
   AllowFadeout: 1

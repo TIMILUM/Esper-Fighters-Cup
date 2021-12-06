@@ -142,7 +142,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 401000663}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/SaveSound
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -326,7 +326,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _idInput: {fileID: 1173054357}
-  _popup: {fileID: 6694802900750450610, guid: ea671774ddf043347a3ad8ef1f472392, type: 3}
 --- !u!114 &303430078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,7 +485,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: event:/BGM/OutGameBGM
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: event:/BGM/OutGameBGM
+  Event: 
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
@@ -565,7 +571,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: event:/AMB/OutGameAMB
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: event:/AMB/OutGameAMB
+  Event: 
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
@@ -622,7 +635,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 571257302225158529, guid: c7c932aa488b8ea47a241f92cfb1331f, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 571257302225158529, guid: c7c932aa488b8ea47a241f92cfb1331f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2913,7 +2926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1327917423471662255, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1327917423471662255, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2988,7 +3001,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/BackButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
@@ -3164,7 +3177,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 568065162}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/SettingOpen
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -3189,7 +3202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8691749528087962881, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8691749528087962881, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
       propertyPath: m_AnchorMax.x

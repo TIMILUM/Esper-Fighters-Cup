@@ -210,7 +210,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 419801802}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/NormalButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -518,7 +518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465627c9027dde544839f63030348c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popup: {fileID: 6694802900750450610, guid: ea671774ddf043347a3ad8ef1f472392, type: 3}
   _roomCodeInputField: {fileID: 1535650882}
   _roomFindButton: {fileID: 178596196}
 --- !u!4 &327627166
@@ -1310,7 +1309,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/BackButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 6477402139594975543, guid: c16f2657d9f3bd14f815389ef26f89a3, type: 3}

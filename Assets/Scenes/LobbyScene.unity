@@ -154,7 +154,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: event:/BGM/OutGameBGM
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: event:/BGM/OutGameBGM
+  Event: 
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
@@ -424,7 +431,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1561379401}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/BackButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -729,7 +736,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 1465235832}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/NormalButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -1213,7 +1220,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 422888512}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/NormalButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -1415,7 +1422,7 @@ PrefabInstance:
     m_TransformParent: {fileID: 422888512}
     m_Modifications:
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
-      propertyPath: Event
+      propertyPath: EventReference.Path
       value: event:/UISFX/NormalButtonClick
       objectReference: {fileID: 0}
     - target: {fileID: 4360315724252116679, guid: 8d07cffa7366c164e914ff4b8d63bcc9, type: 3}
@@ -1859,7 +1866,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: event:/AMB/OutGameAMB
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: event:/AMB/OutGameAMB
+  Event: 
   PlayEvent: 0
   StopEvent: 0
   AllowFadeout: 1
