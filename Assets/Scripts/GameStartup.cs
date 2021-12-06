@@ -1,9 +1,8 @@
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-public static class GameStartup
+public class GameStartup : MonoBehaviour
 {
     // private const string PhotonAppIdFilePath = "photon-cloud";
 
@@ -16,14 +15,7 @@ public static class GameStartup
         InitGameVersion();
         // InitAppId();
         PhotonNetworkSettings();
-    }
-
-    /// <summary>
-    /// 최초로 씬이 로드될 때 호출됩니다.
-    /// </summary>
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void StartGame()
-    {
+        CreateStartupObject();
         CreatePhotonStatus();
     }
 
@@ -74,6 +66,12 @@ public static class GameStartup
         PhotonNetwork.NetworkingClient.LoadBalancingPeer.ReuseEventInstance = true;
     }
 
+    private static void CreateStartupObject()
+    {
+        var instance = new GameObject("Game Startup");
+        instance.AddComponent<GameStartup>();
+    }
+
     private static void CreatePhotonStatus()
     {
         // Development Build에서만 생성
@@ -85,6 +83,18 @@ public static class GameStartup
         // 포톤 연결 상태 확인용 테스트 UI
         var statusUi = new GameObject { name = "Photon Status" };
         statusUi.AddComponent<PhotonStatsGui>();
-        Object.DontDestroyOnLoad(statusUi);
+        DontDestroyOnLoad(statusUi);
+    }
+
+    private void Awake()
+    {
+        var objects = Resources.LoadAll<GameObject>("Prefab/InitializeOnStart");
+
+        foreach (var obj in objects)
+        {
+            var newInstace = Instantiate(obj);
+            newInstace.name = obj.name;
+        }
+        Destroy(gameObject);
     }
 }

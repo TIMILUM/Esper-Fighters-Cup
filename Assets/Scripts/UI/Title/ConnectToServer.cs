@@ -8,8 +8,6 @@ namespace EsperFightersCup.UI
     [RequireComponent(typeof(Button), typeof(GoToScene))]
     public class ConnectToServer : MonoBehaviourPunCallbacks
     {
-        [SerializeField] private BasicPopup _connectFaildPopup;
-
         private Button _connectButton;
         private Text _connectButtonText;
 
@@ -30,7 +28,7 @@ namespace EsperFightersCup.UI
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            var popup = Instantiate(_connectFaildPopup, FindObjectOfType<Canvas>().transform);
+            var popup = PopupManager.Instance.CreateNewBasicPopup();
 
             popup.OnYesButtonClicked += () => CoroutineTimer.SetTimerOnce(ResetButton, 1f);
             popup.Open("<color=red>연결에 실패했습니다.</color>", cause.ToString());

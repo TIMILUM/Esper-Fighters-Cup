@@ -7,7 +7,6 @@ namespace EsperFightersCup.UI
 {
     public class RoomView : MonoBehaviour
     {
-        [SerializeField] private BasicPopup _popup;
         [SerializeField] private Text _roomCodeText;
         [SerializeField] private Text _masterClientNameText;
         [SerializeField] private Text _otherClientNameText;
@@ -36,7 +35,7 @@ namespace EsperFightersCup.UI
 
         private void OnRoomCreateFaild(string message)
         {
-            var popup = Instantiate(_popup, FindObjectOfType<Canvas>().transform);
+            var popup = PopupManager.Instance.CreateNewBasicPopup();
             popup.OnYesButtonClicked += () => SceneManager.LoadScene("LobbyScene");
             popup.Open("<color=red>방 생성에 실패했습니다.</color>", message);
         }

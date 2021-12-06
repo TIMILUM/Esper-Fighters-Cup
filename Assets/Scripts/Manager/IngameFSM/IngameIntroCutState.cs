@@ -48,6 +48,7 @@ namespace EsperFightersCup
             await SetupIntroCutAsync(introQueue);
             _onIntroStart?.Invoke();
 
+            // BUG: 컷씬 진행 중에 플레이어 나가면 로비로 이동하면서 삭제된 오브젝트라는 에러가 뜸
             while (introQueue.Count > 0)
             {
                 var intro = introQueue.Dequeue();
