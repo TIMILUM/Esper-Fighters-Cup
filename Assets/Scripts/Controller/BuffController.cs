@@ -103,7 +103,7 @@ public sealed class BuffController : ControllerBase
         buff.SetBuffStruct((BuffObject.BuffStruct)args);
 
         _activeBuffs.Add(buff);
-        // Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
         // Debug.Log((BuffObject.BuffStruct)args);
         buff.Register(this, null);
     }
@@ -115,7 +115,7 @@ public sealed class BuffController : ControllerBase
         {
             foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
-                // Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+                Debug.Log($"Buff release by type [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
                 // Debug.Log(targetBuff.Info.ToString());
                 targetBuff.Release();
             }
@@ -140,7 +140,7 @@ public sealed class BuffController : ControllerBase
                 return;
             }
 
-            // Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+            Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
             // Debug.Log(targetBuff.Info.ToString());
             targetBuff.Release();
         }

@@ -44,9 +44,31 @@ namespace EsperFightersCup.UI
             }
         }
 
+        public void SetPosition(Vector3 position)
+        {
+            var uiPos = new Vector3(position.x, transform.position.y, position.z);
+            transform.position = uiPos;
+        }
+
+        public void SetRotation(Vector3 rotation)
+        {
+            var rot = transform.rotation.eulerAngles;
+            var uiRot = Quaternion.Euler(rot.x, rotation.y, rot.z);
+            transform.rotation = uiRot;
+        }
+
+        public void SetPositionAndRotation(Vector3 position, Vector3 rotation)
+        {
+            var uiPos = new Vector3(position.x, transform.position.y, position.z);
+
+            var rot = transform.rotation.eulerAngles;
+            var uiRot = Quaternion.Euler(rot.x, rotation.y, rot.z);
+            transform.SetPositionAndRotation(uiPos, uiRot);
+        }
+
         protected virtual void LateUpdate()
         {
-            if (Target == null && gameObject != null)
+            if (!Target && gameObject)
             {
                 Destroy(gameObject);
             }

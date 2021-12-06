@@ -34,6 +34,14 @@ public class ReverseGravitySkillObject : SkillObject
         base.SetHit(to);
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        Destroy(_collider.gameObject);
+        Destroy(_rangeUI.gameObject);
+        Destroy(_castUI.gameObject);
+    }
+
     protected override void OnInitializeSkill()
     {
         base.OnInitializeSkill();
@@ -78,7 +86,7 @@ public class ReverseGravitySkillObject : SkillObject
                 {
                     GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
                 }
-                GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
+                _castUI.SetPosition(mousePos);
             }
             else
             {

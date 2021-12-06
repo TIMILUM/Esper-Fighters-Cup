@@ -156,7 +156,7 @@ public class PunchSkillObject : SkillObject
         if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
         {
             var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1));
-            targetHitSystem.OnPlayerHitEnter(Author.gameObject);
+            targetHitSystem.Hit(Author.gameObject);
             obj.transform.rotation = Quaternion.LookRotation(_direction);
             obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
             return obj.GetComponent<ObjectBase>();
