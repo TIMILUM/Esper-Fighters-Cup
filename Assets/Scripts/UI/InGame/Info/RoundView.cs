@@ -25,6 +25,10 @@ namespace EsperFightersCup.UI
         {
             base.OnEnable();
 
+            if (!PhotonNetwork.InRoom)
+            {
+                return;
+            }
             if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.GameRound, out var value))
             {
                 var round = (int)value;

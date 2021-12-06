@@ -90,6 +90,7 @@ MonoBehaviour:
   _characterType: 1
   _effectTrans:
   - {fileID: 486757356099596439}
+  - {fileID: 5962739431116478967}
   _hp: 100
 --- !u!114 &8663577832037187048
 MonoBehaviour:
@@ -161,6 +162,7 @@ MonoBehaviour:
   _strength: 0
   _objectID: 0
   _destroyEffectPosition: {fileID: 0}
+  _particleName: Object_Destroy
 --- !u!114 &2942519444146996577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,6 +571,11 @@ Transform:
 --- !u!4 &486757356099596439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6392945504394638004, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
+  m_PrefabInstance: {fileID: 6807473600904331811}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5962739431116478967 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 920676918501120980, guid: 5196756a8acc9ea43a3e4b9588730783, type: 3}
   m_PrefabInstance: {fileID: 6807473600904331811}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &5540942837717328885 stripped

@@ -94,7 +94,7 @@ namespace EsperFightersCup
         protected override void BeforeFrontDelay()
         {
             AuthorPlayer.Animator.SetTrigger("RandomDrop");
-            ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 0);
+            ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 1);
         }
 
         protected override async UniTask OnUseAsync()
