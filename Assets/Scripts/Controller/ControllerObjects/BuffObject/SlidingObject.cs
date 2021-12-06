@@ -35,6 +35,10 @@ namespace EsperFightersCup
 
         public override void OnPlayerHitEnter(GameObject other)
         {
+            if (Author.photonView.IsMine)
+            {
+                StopCoroutine(_moving);
+            }
             SlidingAnimationCancel(true);
             Controller.ReleaseBuff(this);
         }

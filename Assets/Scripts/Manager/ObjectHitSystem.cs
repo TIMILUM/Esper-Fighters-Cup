@@ -18,9 +18,6 @@ public class ObjectHitSystem : MonoBehaviourPun
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
-    public float Strength => _strength;
-
-    public bool IsDestroyable { get; private set; } = true;
 
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
@@ -36,9 +33,22 @@ public class ObjectHitSystem : MonoBehaviourPun
     private string _particleName = "Object_Destroy";
 
     private Vector3 _collisionDirection = Vector3.up;
-
     private Actor _actor;
-    private bool _isDestroy = false;
+
+    /// <summary>
+    /// 강도값
+    /// </summary>
+    public float Strength => _strength;
+
+    /// <summary>
+    /// 오브젝트가 파괴가 가능한지 여부
+    /// </summary>
+    public bool IsDestroyable { get; private set; } = true;
+
+    /// <summary>
+    /// 오브젝트가 충돌하고나서 삭제될 상태인지 여부
+    /// </summary>
+    public bool IsDestroyed { get; private set; } = false;
 
     public event EventHandler<HitEventArgs> OnHit;
 
@@ -113,12 +123,12 @@ public class ObjectHitSystem : MonoBehaviourPun
         // 상대의 강도가 더 높은 경우
         else if (difference < 0 && IsDestroyable)
         {
-            _isDestroy = true;
+            IsDestroyed = true;
         }
         // 둘 다 강도값이 같은 경우
         else if (difference == 0)
         {
-            _isDestroy = IsDestroyable;
+            IsDestroyed = IsDestroyable;
             // otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
         }
 
@@ -133,7 +143,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         {
             var instance = FMODUnity.RuntimeManager.CreateInstance(_hitSound);
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform);
-            if (_isDestroy)
+            if (IsDestroyed)
             {
                 instance.setParameterByName("DestroyCheck", 1f);
             }
@@ -141,8 +151,8 @@ public class ObjectHitSystem : MonoBehaviourPun
             instance.release();
         }
 
-        OnHit?.Invoke(this, new HitEventArgs(other, _isDestroy));
-        if (_isDestroy && photonView.IsMine)
+        OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
+        if (IsDestroyed && photonView.IsMine)
         {
             DestroyObject();
         }

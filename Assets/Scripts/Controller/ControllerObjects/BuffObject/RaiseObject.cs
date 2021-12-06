@@ -71,11 +71,16 @@ public class RaiseObject : BuffObject
 
     protected override void OnDestroy()
     {
-        print("raise disable");
+        base.OnDestroy();
+
+        if (_checking != null)
+        {
+            StopCoroutine(_checking);
+        }
+
         _audioInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         _audioInstance.release();
         _audioInstance.clearHandle();
-        base.OnDestroy();
     }
 
     private IEnumerator CheckBuffRelease()

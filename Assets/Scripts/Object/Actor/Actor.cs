@@ -50,6 +50,13 @@ public class Actor : ObjectBase, IPunObservable
         BuffController = _controllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        print("destroy");
+        PhotonNetwork.CleanRpcBufferIfMine(photonView);
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         OnPlayerHitEnter(other.gameObject);

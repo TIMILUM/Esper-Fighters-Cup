@@ -3,21 +3,18 @@ using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(ObjectHitSystem))]
+[RequireComponent(typeof(Collider))]
 public class AStaticObject : Actor
 {
     [SerializeField]
     private float _fgravity = 30.0f;
-    [SerializeField]
-    private BoxCollider _boxcollider;
 
     private Vector3 _colliderSize;
 
     protected override void Awake()
     {
         base.Awake();
-
-        _colliderSize = _boxcollider.bounds.extents;
-        _boxcollider.enabled = false;
+        _colliderSize = GetComponent<Collider>().bounds.extents;
     }
 
     protected override void Start()
@@ -53,7 +50,7 @@ public class AStaticObject : Actor
             else if (photonView.IsMine)
             {
                 BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
-                transform.position = new Vector3(transform.position.x, _colliderSize.y, transform.position.z);
+                transform.position = new Vector3(transform.position.x, _colliderSize.y + 0.1f, transform.position.z);
             }
         }
 

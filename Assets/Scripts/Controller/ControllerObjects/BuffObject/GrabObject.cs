@@ -14,8 +14,6 @@ namespace EsperFightersCup
         private PhotonView _target;
         private Rigidbody _rigd = null;
 
-
-
         public override void OnBuffGenerated()
         {
             _colliders = Author.GetComponentsInChildren<Collider>();
