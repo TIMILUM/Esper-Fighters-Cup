@@ -1,4 +1,3 @@
-using EsperFightersCup.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,19 +8,12 @@ namespace EsperFightersCup.UI
     {
         [SerializeField] private ACharacter.Type _characterType;
 
-        private Button _targetButton;
-
         public ACharacter.Type CharacterType => _characterType;
+        public Button TargetButton { get; private set; }
 
         private void Awake()
         {
-            _targetButton = GetComponent<Button>();
-            _targetButton.onClick.AddListener(Choose);
-        }
-
-        private void Choose()
-        {
-            CharacterChoiceSystem.Instance.ChooseCharacter = _characterType;
+            TargetButton = GetComponent<Button>();
         }
     }
 }

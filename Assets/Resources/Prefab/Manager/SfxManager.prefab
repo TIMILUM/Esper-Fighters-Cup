@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6809152244936392300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6809152244936392303}
+  - component: {fileID: 6809152244936392302}
+  m_Layer: 0
+  m_Name: SfxManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6809152244936392303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809152244936392300}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6809152244936392302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6809152244936392300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a251e1534b7737458ae8fe2570ad269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sfxList:
+  - _name: RandDrop
+    _path: event:/SFX/Elena_Skill/SFX_RandDrop
+  - _name: ReverseGravity
+    _path: event:/SFX/Elena_Skill/SFX_ReverseGravity
+  - _name: Shockwave
+    _path: event:/SFX/Elena_Skill/SFX_Shockwave
+  - _name: Grab
+    _path: event:/SFX/Plank_Skill/SFX_Grab
+  - _name: Grab_Success
+    _path: event:/SFX/Plank_Skill/SFX_GrabSuccess
+  - _name: GroundSmash
+    _path: event:/SFX/Plank_Skill/SFX_GroundSmash
+  - _name: Punch
+    _path: event:/SFX/Plank_Skill/SFX_Punch
+  - _name: PunchWind
+    _path: event:/SFX/Plank_Skill/SFX_PunchWind
+  - _name: Slide
+    _path: event:/SFX/Plank_Skill/SFX_Slide
+  - _name: Throw
+    _path: event:/SFX/Plank_Skill/SFX_Throw

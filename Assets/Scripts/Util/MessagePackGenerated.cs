@@ -297,9 +297,11 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
         public void Serialize(ref MessagePackWriter writer, global::EsperFightersCup.Net.GameSoundPlayArguments value, global::MessagePack.MessagePackSerializerOptions options)
         {
             IFormatterResolver formatterResolver = options.Resolver;
-            writer.WriteArrayHeader(2);
-            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Id, options);
+            writer.WriteArrayHeader(4);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
             formatterResolver.GetFormatterWithVerify<Vector3>().Serialize(ref writer, value.Position, options);
+            formatterResolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.InitParameter, options);
+            writer.Write(value.ParameterValue);
         }
 
         public global::EsperFightersCup.Net.GameSoundPlayArguments Deserialize(ref MessagePackReader reader, global::MessagePack.MessagePackSerializerOptions options)
@@ -312,18 +314,26 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
             options.Security.DepthStep(ref reader);
             IFormatterResolver formatterResolver = options.Resolver;
             var length = reader.ReadArrayHeader();
-            var __Id__ = default(string);
+            var __Name__ = default(string);
             var __Position__ = default(Vector3);
+            var __InitParameter__ = default(string);
+            var __ParameterValue__ = default(float);
 
             for (int i = 0; i < length; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        __Id__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        __Name__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
                         break;
                     case 1:
                         __Position__ = formatterResolver.GetFormatterWithVerify<Vector3>().Deserialize(ref reader, options);
+                        break;
+                    case 2:
+                        __InitParameter__ = formatterResolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+                        break;
+                    case 3:
+                        __ParameterValue__ = reader.ReadSingle();
                         break;
                     default:
                         reader.Skip();
@@ -331,7 +341,7 @@ namespace MessagePack.Formatters.EsperFightersCup.Net
                 }
             }
 
-            var ____result = new global::EsperFightersCup.Net.GameSoundPlayArguments(__Id__, __Position__);
+            var ____result = new global::EsperFightersCup.Net.GameSoundPlayArguments(__Name__, __Position__, __InitParameter__, __ParameterValue__);
             reader.Depth--;
             return ____result;
         }

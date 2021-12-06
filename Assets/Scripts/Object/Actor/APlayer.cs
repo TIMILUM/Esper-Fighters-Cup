@@ -13,17 +13,29 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
     [SerializeField]
     private int _hp;
 
-    private Rigidbody _rigidbody;
     private CameraMovement _cameraMovement;
 
     public List<Transform> EffectTrans => _effectTrans;
     public int HP { get => _hp; set => _hp = Mathf.Clamp(value, 0, int.MaxValue); }
+    public int MaxHP { get; private set; }
+
+    /// <summary>
+    /// 해당 플레이어의 승리 횟수입니다.
+    /// </summary>
+    public int WinPoint { get; private set; }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        MaxHP = HP;
+    }
 
     protected override void Start()
     {
         base.Start();
-        _rigidbody = GetComponent<Rigidbody>();
-        _rigidbody.isKinematic = !photonView.IsMine;
+
+        Rigidbody.isKinematic = !photonView.IsMine;
         _cameraMovement = Camera.main.gameObject.GetComponent<CameraMovement>();
         _cameraMovement.AddTarget(transform); // 카메라 타겟 추가 설정
 
@@ -34,18 +46,22 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
 
         var positionUI = photonView.Owner.IsLocal ? "Position_LocalPlayer" : "Position_EnemyPlayer";
         GameUIManager.Instance.PlayLocal(this, positionUI, transform.position, Vector2.one);
+
+        WinPoint = (int)(photonView.Owner.CustomProperties[CustomPropertyKeys.PlayerWinPoint] ?? 0);
+
+        PlayerInfoUIManager.Instance.SetPlayer(this);
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-
         _cameraMovement.RemoveTarget(transform); // 카메라 타겟 삭제
     }
 
     public void ResetPositionAndRotation()
     {
-        var idx = InGamePlayerManager.FindPlayerIndex(PhotonNetwork.LocalPlayer);
+        // var idx = InGamePlayerManager.FindPlayerIndex(PhotonNetwork.LocalPlayer);
+        var idx = PhotonNetwork.IsMasterClient ? 0 : 1;
         var startLocation = InGamePlayerManager.Instance.StartLocations[idx];
         transform.SetPositionAndRotation(startLocation.position, startLocation.rotation);
     }

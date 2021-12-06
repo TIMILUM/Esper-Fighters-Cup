@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2924432639335813764}
   - component: {fileID: 1586190273804344815}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: SlidingUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,6 +114,10 @@ PrefabInstance:
     - target: {fileID: 5184613066365441504, guid: 2e33fbb4b4abccd40b7b76132043529a, type: 3}
       propertyPath: m_Name
       value: Fx_Plank_Sliding_Sonic_Boom_Main
+      objectReference: {fileID: 0}
+    - target: {fileID: 5184613066365441504, guid: 2e33fbb4b4abccd40b7b76132043529a, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e33fbb4b4abccd40b7b76132043529a, type: 3}

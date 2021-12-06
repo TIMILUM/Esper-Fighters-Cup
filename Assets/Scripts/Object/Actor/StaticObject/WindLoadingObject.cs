@@ -41,6 +41,9 @@ public class WindLoadingObject : AStaticObject
         yield return new WaitUntil(() => BuffController.ActiveBuffs[BuffObject.Type.KnockBack].Count > 0);
         yield return new WaitUntil(() => BuffController.ActiveBuffs[BuffObject.Type.KnockBack].Count <= 0);
 
-        PhotonNetwork.Destroy(gameObject);
+        if (gameObject)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 }

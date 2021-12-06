@@ -36,7 +36,6 @@ namespace EsperFightersCup
                 _rigd.useGravity = false;
             }
             _moving = StartCoroutine(Grab());
-
         }
 
 

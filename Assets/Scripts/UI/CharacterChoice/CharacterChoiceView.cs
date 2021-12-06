@@ -1,98 +1,78 @@
-using DG.Tweening;
+using System;
 using EsperFightersCup.Manager;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EsperFightersCup.UI
 {
     public class CharacterChoiceView : MonoBehaviourPunCallbacks
     {
-        [SerializeField] private Button _localPlayerSubmitButton;
-        [SerializeField] private Text _otherPlayerStateText;
-
-        [SerializeField] private Text _localPlayerCharacterDummyText;
-        [SerializeField] private Text _otherPlayerCharacterDummyText;
-
-        //상대 플레이어가 준비 완료
-        [SerializeField] private GameObject _otherPlayerCharacterImagePanal;
-
-        private Text _localPlayerStateText;
-        private Sequence _localPlayerSubmitTimeout;
-
-        private void Awake()
+        private class CharacterChoiceInfo
         {
-            if (_localPlayerSubmitButton)
-            {
-                _localPlayerStateText = _localPlayerSubmitButton.GetComponentInChildren<Text>();
-                _localPlayerStateText.text = "준비";
-
-                _localPlayerSubmitButton.onClick.AddListener(Submit);
-            }
-
-            if (_otherPlayerStateText)
-            {
-                _otherPlayerStateText.text = "대기 중";
-            }
+            public GameObject Character { get; set; }
+            public ACharacter.Type Type { get; set; }
+            public int PaletteIndex { get; set; }
         }
 
-        private void Submit()
+        [SerializeField]
+        private Button _localPlayerSubmitButton;
+        [SerializeField]
+        private PaletteSwapItem<GameObject>[] _localCharacterPalettes;
+        [SerializeField]
+        private PaletteSwapItem<GameObject>[] _otherCharacterPalettes;
+
+        private CharacterChoiceInfo _localCharacterInfo;
+        private CharacterChoiceInfo _otherCharacterInfo;
+
+        public void ChangeViewCharacter(int sender, ACharacter.Type type)
         {
-            _localPlayerSubmitButton.interactable = false;
-            if (CharacterChoiceSystem.Instance.Submit())
+            if (sender == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-                _localPlayerSubmitTimeout = DOTween.Sequence()
-                    .SetLink(gameObject)
-                    .AppendInterval(3.0f)
-                    .AppendCallback(() => _localPlayerSubmitButton.interactable = true);
+                if (_localCharacterInfo != null)
+                {
+                    _localCharacterInfo.Character.SetActive(false);
+                }
+                var palette = Array.Find(_localCharacterPalettes, x => x.Character == type);
+
+                int index = 0;
+                if (_otherCharacterInfo != null && _otherCharacterInfo.Type == type)
+                {
+                    index = _otherCharacterInfo.PaletteIndex == 0 ? 1 : 0;
+                }
+
+                var go = palette.Palettes[index];
+                _localCharacterInfo = new CharacterChoiceInfo
+                {
+                    Character = go,
+                    Type = type,
+                    PaletteIndex = index
+                };
+                go.SetActive(true);
+                CharacterChoiceSystem.Instance.ChooseCharacter = (type, index);
             }
             else
             {
-                DOTween.Sequence()
-                    .SetLink(gameObject)
-                    .AppendInterval(1.0f)
-                    .AppendCallback(() => _localPlayerSubmitButton.interactable = true);
-            }
-        }
-
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-        {
-            if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var value) || value is null)
-            {
-                return;
-            }
-
-            var playerChoose = (int)value;
-
-            if (targetPlayer == PhotonNetwork.LocalPlayer)
-            {
-                _localPlayerSubmitTimeout?.Kill();
-                _localPlayerStateText.text = "준비 완료";
-
-                var characterType = (ACharacter.Type)playerChoose;
-                _localPlayerCharacterDummyText.text = "READY"; //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
-            }
-            else
-            {
-                if (_otherPlayerStateText)
+                if (_otherCharacterInfo != null)
                 {
-                    _otherPlayerStateText.text = "준비 완료";
+                    _otherCharacterInfo.Character.SetActive(false);
+                }
+                var palette = Array.Find(_otherCharacterPalettes, x => x.Character == type);
+
+                int index = 0;
+                if (_localCharacterInfo != null && _localCharacterInfo.Type == type)
+                {
+                    index = _localCharacterInfo.PaletteIndex == 0 ? 1 : 0;
                 }
 
-                var characterType = (ACharacter.Type)playerChoose;
-                _otherPlayerCharacterDummyText.text = "READY";  //캐릭터 타입대신 준비 완료 텍스트가 뜨게 했습니다.
-
-                //상대 플레이어가 준비 완료 시에 랜더 텍스처를 출력합니다.
-                if (characterType.ToString() == "Telekinesis")
+                var go = palette.Palettes[index];
+                _otherCharacterInfo = new CharacterChoiceInfo
                 {
-                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToElenaImage();   //엘레나의 랜더 텍스처로 변경하는 함수를 호출합니다.
-                }
-                else if (characterType.ToString() == "Plank")
-                {
-                    _otherPlayerCharacterImagePanal.GetComponent<Ch_Select_RenderTexcure_Con>().ChangeToPlankImage();   //플랭크의 랜더 텍스처로 변경하는 함수를 호출합니다.
-                }
+                    Character = go,
+                    Type = type,
+                    PaletteIndex = index
+                };
+                go.SetActive(true);
             }
         }
     }

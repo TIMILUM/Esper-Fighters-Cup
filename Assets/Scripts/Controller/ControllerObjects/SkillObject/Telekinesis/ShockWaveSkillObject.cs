@@ -39,8 +39,23 @@ public class ShockWaveSkillObject : SkillObject
 
         _buffOnCollision.Clear();
         _buffOnCollision.Add(knockBackBuff);
+        print($"buff on collision count: {_buffOnCollision.Count}");
 
+        print("shockwave sethit");
         base.SetHit(to);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        if (_collider)
+        {
+            Destroy(_collider.gameObject);
+        }
+        if (_castUI)
+        {
+            Destroy(_castUI);
+        }
     }
 
     protected override void OnInitializeSkill()
@@ -73,7 +88,7 @@ public class ShockWaveSkillObject : SkillObject
             return false;
         }
         GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
-        GameObjectUtil.TranslateGameObject(_castUI.gameObject, _startPos);
+        _castUI.SetPositionAndRotation(_startPos, Vector3.zero);
 
         await UniTask.WaitUntil(() =>
         {
@@ -89,7 +104,7 @@ public class ShockWaveSkillObject : SkillObject
                 _direction = Vector3.Normalize(endPos - _startPos);
 
                 var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
-                GameObjectUtil.RotateGameObject(_castUI.gameObject, rotation);
+                _castUI.SetRotation(rotation.eulerAngles);
             }
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
@@ -115,6 +130,8 @@ public class ShockWaveSkillObject : SkillObject
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
         ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 0);
+
+        SfxManager.Instance.PlaySFXSync("Shockwave", Author.transform.position);
     }
 
     protected override async UniTask OnUseAsync()

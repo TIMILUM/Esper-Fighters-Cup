@@ -34,6 +34,24 @@ public class ReverseGravitySkillObject : SkillObject
         base.SetHit(to);
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (_collider)
+        {
+            Destroy(_collider.gameObject);
+        }
+        if (_rangeUI)
+        {
+            Destroy(_rangeUI.gameObject);
+        }
+        if (_castUI)
+        {
+            Destroy(_castUI.gameObject);
+        }
+    }
+
     protected override void OnInitializeSkill()
     {
         base.OnInitializeSkill();
@@ -78,7 +96,7 @@ public class ReverseGravitySkillObject : SkillObject
                 {
                     GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
                 }
-                GameObjectUtil.TranslateGameObject(_castUI.gameObject, mousePos);
+                _castUI.SetPosition(mousePos);
             }
             else
             {
@@ -124,6 +142,8 @@ public class ReverseGravitySkillObject : SkillObject
 
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
         GameUIManager.Instance.PlaySync(Author, "ReverseGravity_Range", _castUI.Position, _uiSize, duration: duration);
+
+        SfxManager.Instance.PlaySFXSync("ReverseGravity", Author.transform.position);
     }
 
     protected override async UniTask OnUseAsync()

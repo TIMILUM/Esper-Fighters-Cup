@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace EsperFightersCup
 {
     public class IngameEndingCutState : InGameFSMStateBase
     {
-        [SerializeField] private PlayableDirector _outro;
+        [SerializeField] private PaletteSwapItem<PlayableDirector>[] _outroCutScenes;
         [SerializeField] private UnityEvent _onOutroStart;
         [SerializeField] private UnityEvent _onOutroEnd;
 
@@ -29,35 +30,67 @@ namespace EsperFightersCup
         protected override void Initialize()
         {
             State = IngameFSMSystem.State.EndingCut;
-            _outro.gameObject.SetActive(false);
         }
 
         public override void StartState()
         {
             base.StartState();
-
-            _onOutroStart?.Invoke();
-            // outro 새로 만들어서 등록 필요
-            _outro.gameObject.SetActive(true);
-            FsmSystem.Curtain.FadeOutAsync();
-            _outro.stopped += HandleOutroStopped;
-            _outro.Play();
+            RunOutroCutAsync().Forget();
         }
 
-        private void HandleOutroStopped(PlayableDirector director)
+        private async UniTask RunOutroCutAsync()
         {
-            director.stopped -= HandleOutroStopped;
-            EndEndingCutAsync().Forget();
-        }
+            await UniTask.NextFrame();
+            var outro = await GetVictoryCutAsync();
 
-        private async UniTask EndEndingCutAsync()
-        {
+            if (outro == null)
+            {
+                Debug.LogError("우승자 아웃트로를 찾지 못함!");
+                return;
+            }
+
+            outro.gameObject.SetActive(true);
+
+            var uniTaskCompletion = new UniTaskCompletionSource();
+            outro.stopped += (director) => uniTaskCompletion.TrySetResult();
+            outro.Play();
+            await FsmSystem.Curtain.FadeOutAsync();
+
+            await uniTaskCompletion.Task;
+
             await FsmSystem.Curtain.FadeInAsync();
-            _outro.gameObject.SetActive(false);
+            outro.gameObject.SetActive(false);
 
             _onOutroEnd?.Invoke();
-
             FsmSystem.photonView.RPC(nameof(OutroEndRPC), RpcTarget.MasterClient);
+        }
+
+        private async UniTask<PlayableDirector> GetVictoryCutAsync()
+        {
+            await UniTask.Delay(2000);
+
+            if (PhotonNetwork.OfflineMode)
+            {
+                var player = PhotonNetwork.LocalPlayer;
+
+                var type = (ACharacter.Type)(int)player.CustomProperties[CustomPropertyKeys.PlayerCharacterType];
+                var paletteIndex = (int)player.CustomProperties[CustomPropertyKeys.PlayerPalette];
+                var characterPalette = Array.Find(_outroCutScenes, x => x.Character == type);
+                return characterPalette.Palettes[paletteIndex];
+            }
+
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                var winPoint = (int)player.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
+                if (winPoint == 3)
+                {
+                    var type = (ACharacter.Type)(int)player.CustomProperties[CustomPropertyKeys.PlayerCharacterType];
+                    var paletteIndex = (int)player.CustomProperties[CustomPropertyKeys.PlayerPalette];
+                    var characterPalette = Array.Find(_outroCutScenes, x => x.Character == type);
+                    return characterPalette.Palettes[paletteIndex];
+                }
+            }
+            return null;
         }
 
         [PunRPC]

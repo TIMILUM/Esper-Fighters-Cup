@@ -516,7 +516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7116410780347523539
 Transform:
   m_ObjectHideFlags: 0
@@ -754,17 +754,13 @@ GameObject:
   m_Component:
   - component: {fileID: 5313180026986373800}
   - component: {fileID: 774603751836251038}
+  - component: {fileID: 5978704960213691800}
   - component: {fileID: 7100973928262228261}
-  - component: {fileID: 5629258719865576800}
-  - component: {fileID: 6332250995798064633}
-  - component: {fileID: -1194800018035501244}
-  - component: {fileID: -3404713667547975997}
   - component: {fileID: 8723209735390399545}
   - component: {fileID: -8964775500989688084}
   - component: {fileID: -870678768523667088}
   - component: {fileID: 8016094465907375525}
   - component: {fileID: 4856252141550382025}
-  - component: {fileID: 5978704960213691800}
   m_Layer: 7
   m_Name: SkillObject_Speaker
   m_TagString: Untagged
@@ -814,6 +810,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!65 &5978704960213691800
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825578108793485330}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.21, y: 1.49, z: 1.51}
+  m_Center: {x: 0, y: 0, z: -0.11}
 --- !u!54 &7100973928262228261
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -830,62 +839,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &5629258719865576800
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.1
-  m_Height: 1.08
-  m_Direction: 0
-  m_Center: {x: 0, y: 0.47, z: 0.42}
---- !u!136 &6332250995798064633
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.1
-  m_Height: 1.08
-  m_Direction: 0
-  m_Center: {x: 0, y: -0.3, z: 0.9}
---- !u!136 &-1194800018035501244
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.1
-  m_Height: 1.08
-  m_Direction: 0
-  m_Center: {x: 0, y: 0.46, z: -0.45}
---- !u!136 &-3404713667547975997
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.1
-  m_Height: 1.08
-  m_Direction: 0
-  m_Center: {x: 0, y: -0.38, z: -0.9}
 --- !u!114 &8723209735390399545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -899,16 +852,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: 
-  PlayEvent: 0
+  Event: event:/SFX/OBJ_Collison/ArenaSpeaker_HitGround
+  PlayEvent: 7
   StopEvent: 0
   AllowFadeout: 1
-  TriggerOnce: 0
+  TriggerOnce: 1
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &-8964775500989688084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -923,6 +876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound: event:/SFX/OBJ_Collison/ArenaSpeaker_Coll
   _destroyEffectPosition: {fileID: 0}
   _particleName: Speaker_Object_Destroy
 --- !u!114 &-870678768523667088
@@ -940,10 +894,8 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 1539758636296768190}
   _id: 9
-  _audioEmitter: {fileID: 8723209735390399545}
   _fgravity: 80
   _boxcollider: {fileID: 3836573014775205435}
-  _collideSound: event:/SFX/OBJ_Collison/ArenaSpeaker_Coll
 --- !u!114 &8016094465907375525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,19 +928,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!65 &5978704960213691800
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4825578108793485330}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.12}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5168320457803481529
 GameObject:
   m_ObjectHideFlags: 0

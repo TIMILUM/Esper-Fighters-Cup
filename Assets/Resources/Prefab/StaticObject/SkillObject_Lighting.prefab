@@ -396,8 +396,6 @@ GameObject:
   - component: {fileID: 1285394932241494094}
   - component: {fileID: 1623772674390140268}
   - component: {fileID: -1375651934942601835}
-  - component: {fileID: 4751786771420780168}
-  - component: {fileID: 385798654323639613}
   m_Layer: 7
   m_Name: SkillObject_Lighting
   m_TagString: Untagged
@@ -461,8 +459,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.7, y: 1.2, z: 0.6}
-  m_Center: {x: -0.1, y: -0.1, z: 0.15}
+  m_Size: {x: 1.7, y: 1.2, z: 1.7435989}
+  m_Center: {x: -0.100000024, y: -0.100000024, z: -0.008647084}
 --- !u!54 &-5947829118032247395
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -492,16 +490,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: 
-  PlayEvent: 0
+  Event: event:/SFX/OBJ_Collison/ArenaLight_HitGround
+  PlayEvent: 7
   StopEvent: 0
   AllowFadeout: 1
-  TriggerOnce: 0
+  TriggerOnce: 1
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &8245475252214133918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,6 +514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound: event:/SFX/OBJ_Collison/ArenaLight_Coll
   _destroyEffectPosition: {fileID: 0}
   _particleName: Lighting_Object_Destroy
 --- !u!114 &1285394932241494094
@@ -533,10 +532,8 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 239474858897439303}
   _id: 10
-  _audioEmitter: {fileID: 3423570747809605514}
   _fgravity: 80
   _boxcollider: {fileID: 1109486194728789953}
-  _collideSound: event:/SFX/OBJ_Collison/ArenaLight_Coll
 --- !u!114 &1623772674390140268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,33 +566,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!65 &4751786771420780168
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6919689476003765198}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.7, y: 0.4, z: 0.4}
-  m_Center: {x: -0.01, y: 0.3, z: 0.65}
---- !u!136 &385798654323639613
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6919689476003765198}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.15
-  m_Height: 2
-  m_Direction: 0
-  m_Center: {x: -0.1, y: -0.4, z: -0.7}
 --- !u!1 &8643946364726197484
 GameObject:
   m_ObjectHideFlags: 0

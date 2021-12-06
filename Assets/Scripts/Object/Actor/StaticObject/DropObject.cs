@@ -1,11 +1,8 @@
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-
 namespace EsperFightersCup
 {
-    [RequireComponent(typeof(FMODUnity.StudioEventEmitter))]
     public class DropObject : AStaticObject
     {
+        /*
         [FMODUnity.EventRef]
         [SerializeField] private string _hitGroundSound;
 
@@ -43,5 +40,6 @@ namespace EsperFightersCup
             AudioEmitter.SetParameter("Step", 1f);
             await UniTask.Yield();
         }
+        */
     }
 }

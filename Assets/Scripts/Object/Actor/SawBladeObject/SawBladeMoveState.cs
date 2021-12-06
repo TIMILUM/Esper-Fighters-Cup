@@ -20,7 +20,7 @@ public class SawBladeMoveState : SawBladeFSMBase
         var endPosition = _sawBladeObject.EndPosition;
         // 끝지점에 다다르면 움직임을 종료하고 HitWall상태로 전환
         var endDistance = Vector3.Distance(endPosition.position, position);
-        if (endDistance < 0.5f)
+        if (endDistance < 0.5f && gameObject)
         {
             PhotonNetwork.Destroy(gameObject);
         }

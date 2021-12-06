@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -8,7 +6,7 @@ namespace EsperFightersCup
 {
     public class GrabSkill : SkillObject
     {
-        
+
         [SerializeField, Tooltip("Skill_Effect_Data_1의 값")]
         private float _ThrowfrontDelayTime;
 
@@ -114,7 +112,7 @@ namespace EsperFightersCup
             if (_grabTarget == null)
             {
                 AuthorPlayer.Animator.SetBool("GrabCancel", true);
-                await UniTask.Delay(_animationDelay, cancellationToken : cancellation);
+                await UniTask.Delay(_animationDelay, cancellationToken: cancellation);
                 AuthorPlayer.Animator.SetBool("GrabCancel", false);
 
                 return false;
@@ -125,6 +123,7 @@ namespace EsperFightersCup
 
         protected override void BeforeFrontDelay()
         {
+            SfxManager.Instance.PlaySFXSync("Grab", Author.transform.position);
         }
 
 
@@ -139,19 +138,20 @@ namespace EsperFightersCup
 
                 _buffOnCollision[0].ValueFloat[0] = Author.photonView.ViewID;
                 Obj.BuffController.GenerateBuff(_buffOnCollision[0]);
-
+                print(1);
                 await UniTask.WaitUntil(() =>
                 {
                     if (Input.GetMouseButton(0))
                     {
                         AuthorPlayer.Animator.SetTrigger("Throw");
+                        SfxManager.Instance.PlaySFXSync("Grab_Success", Author.transform.position);
                         return true;
                     }
 
                     return false;
                 });
 
-
+                print(2);
                 await UniTask.WaitUntil(() =>
                 {
                     currentTime += Time.deltaTime * 1000.0f;
@@ -162,11 +162,13 @@ namespace EsperFightersCup
                         _buffOnCollision[1].ValueVector3[0] = Vector3.Normalize(GetMousePosition() - _grabTarget.transform.position);
                         _buffOnCollision[1].ValueFloat[3] = Author.photonView.ViewID;
                         Obj.BuffController.GenerateBuff(_buffOnCollision[1]);
+                        SfxManager.Instance.PlaySFXSync("Grab_Success", Author.transform.position);
                         return true;
                     }
                     return false;
                 });
 
+                print(3);
                 await UniTask.WaitUntil(() =>
                 {
                     if (currentTime > _ThrowendDelayTime)
@@ -175,6 +177,7 @@ namespace EsperFightersCup
                     }
                     return false;
                 });
+                print(4);
             }
 
         }

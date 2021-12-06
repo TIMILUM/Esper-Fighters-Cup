@@ -32,7 +32,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     [SerializeField, Tooltip("CSV의 Pre_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")]
     private int _frontDelay;
-    [SerializeField, Tooltip("CSV의 After_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")] 
+    [SerializeField, Tooltip("CSV의 After_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")]
     private int _endDelay;
 
     private CSVData _commonCsvData;
@@ -152,7 +152,6 @@ public abstract class SkillObject : ControllerObject<SkillController>
         }
         ReleaseMoveSpeedBuffAll();
         gameObject.SetActive(false);
-
         _stateCancellation = null;
     }
 
@@ -177,7 +176,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
             }
             CurrentState = State.Canceled;
             ApplyMovementSpeed(State.Canceled);
-            OnCancel();
+            OnRelease();
             base.Release();
             afterFunc();
         }
@@ -190,7 +189,6 @@ public abstract class SkillObject : ControllerObject<SkillController>
             Debug.Log($"[{ID}] ReadyToUse");
         }
         CurrentState = State.ReadyToUse;
-        await UniTask.Yield();
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
 
         if (canMoveNextState)
@@ -214,7 +212,9 @@ public abstract class SkillObject : ControllerObject<SkillController>
         BeforeFrontDelay();
 
         if (FrontDelayMilliseconds == 0)
+        {
             FrontDelayMilliseconds = _frontDelay;
+        }
 
         await UniTask.Delay(FrontDelayMilliseconds, cancellationToken: cancelltaion);
         await SkillUse(cancelltaion);

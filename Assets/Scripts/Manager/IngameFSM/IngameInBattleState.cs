@@ -86,7 +86,17 @@ namespace EsperFightersCup
             {
                 Debug.Log($"LocalPlayer is dead!");
                 var actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-                int winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                int winner;
+                try
+                {
+                    winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != actorNumber);
+                }
+                catch (System.InvalidOperationException)
+                {
+                    // NOTE: 오프라인 디버깅용 코드임. 본인이 죽어도 본인이 이긴걸로 판단함
+                    winner = actorNumber;
+                }
+
                 PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameRoundWinner, winner);
             }
 
@@ -103,7 +113,7 @@ namespace EsperFightersCup
 
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
-            if (!propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var value))
+            if (!propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var winnerValue))
             {
                 return;
             }
@@ -112,12 +122,16 @@ namespace EsperFightersCup
 
             _onBattleEnd?.Invoke();
 
-            var winner = (int)value;
+            var winner = (int)winnerValue;
             Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
                 // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
-                var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
+                int winPoint = 0;
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var winPointValue))
+                {
+                    winPoint = (int)winPointValue;
+                }
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
             }
         }
@@ -132,7 +146,7 @@ namespace EsperFightersCup
             Debug.Log($"Added WinPoint to [{targetPlayer.ActorNumber}]{targetPlayer.NickName} - {winPoint}");
 
             // 상대방 플레이어가 WinPoint 변경을 확인했을 때 RoundEnd로 넘어감
-            if (targetPlayer != PhotonNetwork.LocalPlayer)
+            if (targetPlayer != PhotonNetwork.LocalPlayer || PhotonNetwork.OfflineMode)
             {
                 ChangeState(IngameFSMSystem.State.RoundEnd);
             }

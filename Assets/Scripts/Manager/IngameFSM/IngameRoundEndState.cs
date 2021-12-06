@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using EsperFightersCup.UI;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -59,23 +60,41 @@ namespace EsperFightersCup
         private void RoundEndNextRPC()
         {
             _onRoundEnd?.Invoke(FsmSystem.Round);
-            /*
-            var sawblades = SawBladeSystem.Instance.LocalSpawnedSawBlades;
-            Debug.Log($"Destroying {sawblades.Count} sawblades");
-            foreach (var sawblade in sawblades.Values)
-            {
-                PhotonNetwork.Destroy(sawblade.gameObject);
-            }
-            */
-            var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
-            Debug.Log($"My win point: {winPoint}");
 
-            var winner = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRoundWinner];
-            if (winner != PhotonNetwork.LocalPlayer.ActorNumber)
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+            }
+
+            if (PhotonNetwork.OfflineMode)
+            {
+                ChangeNextState();
+            }
+        }
+
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            ChangeNextState();
+        }
+
+        private void ChangeNextState()
+        {
+            var roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (!roomProps.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var winnerValue))
             {
                 return;
             }
-
+            var winner = (int)winnerValue;
+            if (PhotonNetwork.LocalPlayer.ActorNumber != winner)
+            {
+                return;
+            }
+            var playerProps = PhotonNetwork.LocalPlayer.CustomProperties;
+            if (!playerProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var winVal))
+            {
+                return;
+            }
+            var winPoint = (int)winVal;
             if (winPoint < 3)
             {
                 ChangeState(IngameFSMSystem.State.RoundIntro);

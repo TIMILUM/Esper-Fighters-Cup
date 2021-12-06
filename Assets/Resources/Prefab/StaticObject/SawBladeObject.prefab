@@ -207,6 +207,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound: 
+  _destroyEffectPosition: {fileID: 0}
+  _particleName: Object_Destroy
 --- !u!1 &3179342520512475396
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,16 +369,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: 
-  PlayEvent: 0
-  StopEvent: 0
+  Event: event:/AMB/AMB_Sawblade
+  PlayEvent: 1
+  StopEvent: 2
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &8452186718357173374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,6 +393,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound: event:/SFX/OBJ_Collison/Sawbalde_Rotate_Coll
+  _destroyEffectPosition: {fileID: 0}
+  _particleName: Object_Destroy
 --- !u!114 &3179342520512475394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,10 +436,8 @@ MonoBehaviour:
     _isOnlyOnce: 1
   _controllerManager: {fileID: 2003298924726973060}
   _id: 7
-  _audioEmitter: {fileID: 8241065219527511304}
   _fgravity: 30
   _boxcollider: {fileID: 8475715845562201901}
-  _collideSound: event:/SFX/OBJ_Collison/Sawbalde_Rotate_Coll
   _allowBuffList: 
   _collider: {fileID: 3179342519834818331}
   _speed: 4

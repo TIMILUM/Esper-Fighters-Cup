@@ -29,7 +29,7 @@ MonoBehaviour:
     EnableLobbyStatistics: 0
     NetworkLogging: 3
   DevRegion: 
-  PunLogging: 2
+  PunLogging: 1
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
@@ -49,6 +49,7 @@ MonoBehaviour:
   - RoundIntroEndRPC
   - RoundIntroRPC
   - RoundSetCompleteRPC
+  - ChangeCharacterRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
