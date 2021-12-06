@@ -43,6 +43,12 @@ public class ShockWaveSkillObject : SkillObject
         base.SetHit(to);
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        Destroy(_collider.gameObject);
+    }
+
     protected override void OnInitializeSkill()
     {
         base.OnInitializeSkill();
