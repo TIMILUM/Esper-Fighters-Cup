@@ -138,7 +138,7 @@ namespace EsperFightersCup
 
                 _buffOnCollision[0].ValueFloat[0] = Author.photonView.ViewID;
                 Obj.BuffController.GenerateBuff(_buffOnCollision[0]);
-                print(1);
+
                 await UniTask.WaitUntil(() =>
                 {
                     if (Input.GetMouseButton(0))
@@ -151,7 +151,7 @@ namespace EsperFightersCup
                     return false;
                 });
 
-                print(2);
+
                 await UniTask.WaitUntil(() =>
                 {
                     currentTime += Time.deltaTime * 1000.0f;
@@ -168,7 +168,7 @@ namespace EsperFightersCup
                     return false;
                 });
 
-                print(3);
+
                 await UniTask.WaitUntil(() =>
                 {
                     if (currentTime > _ThrowendDelayTime)
@@ -177,7 +177,6 @@ namespace EsperFightersCup
                     }
                     return false;
                 });
-                print(4);
             }
 
         }

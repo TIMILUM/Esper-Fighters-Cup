@@ -134,7 +134,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] OnRegistered");
+            Debug.Log($"[{Time.frameCount}] [{ID}] OnRegistered");
         }
         BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
         AuthorPlayer = Author as APlayer;
@@ -148,7 +148,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] OnReleased");
+            Debug.Log($"[{Time.frameCount}] [{ID}] OnReleased");
         }
         ReleaseMoveSpeedBuffAll();
         gameObject.SetActive(false);
@@ -159,7 +159,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] Release (Cancel)");
+            Debug.Log($"[{Time.frameCount}] [{ID}] Release (Cancel)");
         }
         _stateCancellation?.Cancel();
     }
@@ -172,7 +172,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
         {
             if (_debuging)
             {
-                Debug.Log($"[{ID}] Canceled");
+                Debug.Log($"[{Time.frameCount}] [{ID}] Canceled");
             }
             CurrentState = State.Canceled;
             ApplyMovementSpeed(State.Canceled);
@@ -186,7 +186,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] ReadyToUse");
+            Debug.Log($"[{Time.frameCount}] [{ID}] ReadyToUse");
         }
         CurrentState = State.ReadyToUse;
         var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
@@ -205,7 +205,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] FrontDelay {FrontDelayMilliseconds}");
+            Debug.Log($"[{Time.frameCount}] [{ID}] FrontDelay {FrontDelayMilliseconds}");
         }
         CurrentState = State.FrontDelay;
         ApplyMovementSpeed(State.FrontDelay);
@@ -224,7 +224,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] Use");
+            Debug.Log($"[{Time.frameCount}] [{ID}] Use");
         }
         CurrentState = State.Use;
         ApplyMovementSpeed(State.Use);
@@ -236,7 +236,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] EndDelay {EndDelayMilliseconds}");
+            Debug.Log($"[{Time.frameCount}] [{ID}] EndDelay {EndDelayMilliseconds}");
         }
         CurrentState = State.EndDelay;
         ApplyMovementSpeed(State.EndDelay);
@@ -253,7 +253,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     {
         if (_debuging)
         {
-            Debug.Log($"[{ID}] Release");
+            Debug.Log($"[{Time.frameCount}] [{ID}] Release");
         }
         CurrentState = State.Release;
         ApplyMovementSpeed(State.Release);
