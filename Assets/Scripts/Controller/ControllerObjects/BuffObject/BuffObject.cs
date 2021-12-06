@@ -55,12 +55,12 @@ public abstract class BuffObject : ControllerObject<BuffController>
         StartTime = PhotonNetwork.ServerTimestamp;
         gameObject.SetActive(true);
 
+        OnBuffGenerated();
         // IsOnlyOnce일 경우 다음 프레임 기다리고 ReleaseBuff를 또 부를 필요 없이 바로 OnReleased 호출해서 삭제
-        if (Author.photonView.IsMine)
+        if (Author.photonView.IsMine && !Author.photonView.Controller.IsInactive)
         {
             _elapsedTimeout = StartCoroutine(CheckBuffRelease());
         }
-        OnBuffGenerated();
     }
 
     protected sealed override void OnReleased()

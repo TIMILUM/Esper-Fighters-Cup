@@ -124,6 +124,8 @@ public class ReverseGravitySkillObject : SkillObject
 
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
         GameUIManager.Instance.PlaySync(Author, "ReverseGravity_Range", _castUI.Position, _uiSize, duration: duration);
+
+        SfxManager.Instance.PlaySFXSync("ReverseGravity", Author.transform.position);
     }
 
     protected override async UniTask OnUseAsync()

@@ -53,6 +53,7 @@ namespace EsperFightersCup
         {
             GameUIManager.Instance.PlaySync(Author, "GroundSmash_Range", transform.position, _currentSize, Author.transform.rotation.eulerAngles.y, _uIDuration);
             AuthorPlayer.Animator.SetTrigger("GroundSkill");
+            SfxManager.Instance.PlaySFXSync("GroundSmash", Author.transform.position);
         }
 
         protected override void OnCancel()
