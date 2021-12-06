@@ -48,8 +48,14 @@ public class ShockWaveSkillObject : SkillObject
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        Destroy(_collider.gameObject);
-        Destroy(_castUI);
+        if (_collider)
+        {
+            Destroy(_collider.gameObject);
+        }
+        if (_castUI)
+        {
+            Destroy(_castUI);
+        }
     }
 
     protected override void OnInitializeSkill()

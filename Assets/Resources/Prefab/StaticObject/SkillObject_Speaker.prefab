@@ -852,16 +852,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: 
-  Event: 
-  PlayEvent: 0
+  Event: event:/SFX/OBJ_Collison/ArenaSpeaker_HitGround
+  PlayEvent: 7
   StopEvent: 0
   AllowFadeout: 1
-  TriggerOnce: 0
+  TriggerOnce: 1
   Preload: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!114 &-8964775500989688084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -876,6 +876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound: event:/SFX/OBJ_Collison/ArenaSpeaker_Coll
   _destroyEffectPosition: {fileID: 0}
   _particleName: Speaker_Object_Destroy
 --- !u!114 &-870678768523667088
@@ -893,10 +894,8 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 1539758636296768190}
   _id: 9
-  _audioEmitter: {fileID: 8723209735390399545}
   _fgravity: 80
   _boxcollider: {fileID: 3836573014775205435}
-  _collideSound: event:/SFX/OBJ_Collison/ArenaSpeaker_Coll
 --- !u!114 &8016094465907375525
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -25,6 +25,9 @@ public class ObjectHitSystem : MonoBehaviourPun
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
 
+    [SerializeField, FMODUnity.EventRef]
+    private string _hitSound;
+
     [Header("Destroy Effects")]
     [SerializeField, Tooltip("파괴 모션이 나타날 포지션을 뜻합니다. 기본값은 현재 포지션입니다.")]
     private Transform _destroyEffectPosition = null;
@@ -88,11 +91,6 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision other)
     {
-        if (!photonView.IsMine || other.gameObject.CompareTag("Floor"))
-        {
-            return;
-        }
-
         _collisionDirection = Vector3.Normalize(transform.position - other.contacts[0].point);
         Hit(other.gameObject);
     }
@@ -131,12 +129,23 @@ public class ObjectHitSystem : MonoBehaviourPun
         }
         */
 
-        if (_isDestroy)
+        if (!string.IsNullOrEmpty(_hitSound))
         {
-            DestroyObject();
+            var instance = FMODUnity.RuntimeManager.CreateInstance(_hitSound);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform);
+            if (_isDestroy)
+            {
+                instance.setParameterByName("DestroyCheck", 1f);
+            }
+            instance.start();
+            instance.release();
         }
 
         OnHit?.Invoke(this, new HitEventArgs(other, _isDestroy));
+        if (_isDestroy && photonView.IsMine)
+        {
+            DestroyObject();
+        }
     }
 
     private void DestroyObject()
