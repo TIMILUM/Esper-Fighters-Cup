@@ -95,6 +95,7 @@ namespace EsperFightersCup
         {
             AuthorPlayer.Animator.SetTrigger("RandomDrop");
             ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 1);
+            SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position, "Step", 0f);
         }
 
         protected override async UniTask OnUseAsync()
@@ -119,10 +120,6 @@ namespace EsperFightersCup
 
         private async UniTask InstantiateRandomDropObjectAsync(Vector3 position)
         {
-            var audioInstance = FMODUnity.RuntimeManager.CreateInstance(CreateSound);
-            FMODUnity.RuntimeManager.AttachInstanceToGameObject(audioInstance, gameObject.transform, Author.Rigidbody);
-            audioInstance.start();
-
             var delay = _dropDelay * 0.001f;
             GameUIManager.Instance.PlaySync(Author, "RandDrop_Range", position, _uiSize, duration: delay);
             await UniTask.Delay((int)_dropDelay);
@@ -154,10 +151,7 @@ namespace EsperFightersCup
                 Type = BuffObject.Type.Falling,
                 ValueFloat = new float[] { Damage, StunGroggyDuration * 0.001f, 1.0f }
             });
-
-            audioInstance.setParameterByName("Step", 1f);
-            audioInstance.release();
-            audioInstance.clearHandle();
+            SfxManager.Instance.PlaySFXSync("RandDrop", obj.transform.position, "Step", 1f);
         }
 
         private void ReleaseObjects()

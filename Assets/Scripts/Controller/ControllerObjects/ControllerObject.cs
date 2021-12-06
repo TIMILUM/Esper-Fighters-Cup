@@ -34,19 +34,23 @@ public abstract class ControllerObject<T> : ObjectBase where T : ControllerBase
         base.Update();
     }
 
-    protected sealed override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
     public sealed override void OnEnable()
     {
         base.OnEnable();
     }
 
+
     public sealed override void OnDisable()
     {
         base.OnDisable();
+    }
+
+    /// <summary>
+    /// 버프 오브젝트나 스킬 오브젝트가 충돌로 갑자기 삭제될 경우에 해제해야 하는 것들은 여기서 구현
+    /// </summary>
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 
     public bool Register(T controller, Action continueFunc)

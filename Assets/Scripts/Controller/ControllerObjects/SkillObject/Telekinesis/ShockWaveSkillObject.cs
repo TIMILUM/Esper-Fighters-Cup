@@ -115,6 +115,8 @@ public class ShockWaveSkillObject : SkillObject
         //충격파 애니메이션
         AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
         ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 0);
+
+        SfxManager.Instance.PlaySFXSync("Shockwave", Author.transform.position);
     }
 
     protected override async UniTask OnUseAsync()

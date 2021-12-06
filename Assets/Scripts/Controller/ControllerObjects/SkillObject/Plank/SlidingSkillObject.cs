@@ -1,4 +1,3 @@
-using System.Collections;
 
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -26,10 +25,12 @@ namespace EsperFightersCup
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
         {
             if (Range > 0)
+            {
                 _dummyRange = Range;
+            }
 
             _mousePosition = GetMousePosition();
-            await UniTask.Yield(cancellationToken: cancellation);
+            await UniTask.NextFrame();
             return true;
         }
 
@@ -39,6 +40,7 @@ namespace EsperFightersCup
         protected override void BeforeFrontDelay()
         {
             AuthorPlayer.Animator.SetTrigger("Sliding");
+            SfxManager.Instance.PlaySFXSync("Slide", Author.transform.position);
         }
 
         protected override async UniTask OnUseAsync()
@@ -53,7 +55,7 @@ namespace EsperFightersCup
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
 
-            GameUIManager.Instance.PlaySync(Author, "SlidingUI", Author.transform.position, new Vector2(1.0f, 1.0f) ,
+            GameUIManager.Instance.PlaySync(Author, "SlidingUI", Author.transform.position, new Vector2(1.0f, 1.0f),
                 Author.transform.rotation.eulerAngles.y, _buffOnCollision[0].Duration);
 
             await UniTask.Yield();

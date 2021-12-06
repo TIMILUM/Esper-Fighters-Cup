@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class RaiseObject : BuffObject
 {
+    [SerializeField, FMODUnity.EventRef]
+    private string _objectWaverSound;
+
     private float _limitPosY;
     private Sequence _raising;
     private Coroutine _checking;
+
+    private FMOD.Studio.EventInstance _audioInstance;
 
     public override Type BuffType => Type.Raise;
 
@@ -33,6 +38,10 @@ public class RaiseObject : BuffObject
 
             _checking = StartCoroutine(CheckBuffRelease());
         }
+
+        _audioInstance = FMODUnity.RuntimeManager.CreateInstance(_objectWaverSound);
+        _audioInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(Author.transform, Author.Rigidbody));
+        _audioInstance.start();
     }
 
     public override void OnBuffReleased()
@@ -58,6 +67,15 @@ public class RaiseObject : BuffObject
                 });
             }
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        print("raise disable");
+        _audioInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        _audioInstance.release();
+        _audioInstance.clearHandle();
+        base.OnDestroy();
     }
 
     private IEnumerator CheckBuffRelease()

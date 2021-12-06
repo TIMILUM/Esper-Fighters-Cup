@@ -113,7 +113,7 @@ namespace EsperFightersCup
 
         public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
         {
-            if (!propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var value))
+            if (!propertiesThatChanged.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var winnerValue))
             {
                 return;
             }
@@ -122,12 +122,16 @@ namespace EsperFightersCup
 
             _onBattleEnd?.Invoke();
 
-            var winner = (int)value;
+            var winner = (int)winnerValue;
             Debug.Log($"Round winner is {winner}");
             if (winner == PhotonNetwork.LocalPlayer.ActorNumber)
             {
                 // 라운드 우승자는 WinPoint에 1을 더하고 RoundEnd로 GameState 변경
-                var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
+                int winPoint = 0;
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var winPointValue))
+                {
+                    winPoint = (int)winPointValue;
+                }
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
             }
         }

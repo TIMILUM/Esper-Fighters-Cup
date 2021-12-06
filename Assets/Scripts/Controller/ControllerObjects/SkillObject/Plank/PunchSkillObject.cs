@@ -1,5 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using EsperFightersCup;
 using UnityEngine;
 
 public class PunchSkillObject : SkillObject
@@ -85,6 +86,7 @@ public class PunchSkillObject : SkillObject
 
     protected override void BeforeFrontDelay()
     {
+        SfxManager.Instance.PlaySFXSync("Punch", Author.transform.position);
     }
 
     protected override async UniTask OnUseAsync()
