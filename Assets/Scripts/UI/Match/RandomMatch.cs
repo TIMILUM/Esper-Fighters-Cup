@@ -10,7 +10,6 @@ namespace EsperFightersCup.UI
     public class RandomMatch : PunEventCallbacks
     {
         [SerializeField] private Text _matchingText;
-        [SerializeField] private BasicPopup _popup;
 
         //FMOD 사운드 이미터를 가진 오브젝트 3종을 인스펙터에서 입력받습니다. (생성 시 사운드 재생. 제거 시 종료 처리)
         [SerializeField] private GameObject _matchingSound;

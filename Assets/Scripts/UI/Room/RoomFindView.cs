@@ -8,7 +8,6 @@ namespace EsperFightersCup.UI
 {
     public class RoomFindView : MonoBehaviour
     {
-        [SerializeField] private BasicPopup _popup;
         [SerializeField] private InputField _roomCodeInputField;
         [SerializeField] private Button _roomFindButton;
 
@@ -50,10 +49,13 @@ namespace EsperFightersCup.UI
             if (!result)
             {
                 print("방 입장 실패");
-                var popup = Instantiate(_popup, FindObjectOfType<Canvas>().transform);
+                var popup = PopupManager.Instance.CreateNewBasicPopup();
+                popup.OnYesButtonClicked += () =>
+                {
+                    _roomCodeInputField.interactable = true;
+                    _roomFindButton.interactable = true;
+                };
                 popup.Open("<color=red>방 입장에 실패했습니다.</color>", "다시 시도해주세요.");
-                _roomCodeInputField.interactable = true;
-                _roomFindButton.interactable = true;
             }
         }
     }
