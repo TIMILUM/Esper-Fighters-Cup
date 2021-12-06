@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using EsperFightersCup.UI;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -67,18 +68,21 @@ namespace EsperFightersCup
                 PhotonNetwork.Destroy(sawblade.gameObject);
             }
             */
-            var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
-            Debug.Log($"My win point: {winPoint}");
-
-            var winner = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRoundWinner];
-            if (winner != PhotonNetwork.LocalPlayer.ActorNumber)
-            {
-                return;
-            }
 
             if (!PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+            }
+        }
+
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
+            var winner = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRoundWinner];
+
+            if (PhotonNetwork.LocalPlayer.ActorNumber != winner)
+            {
+                return;
             }
 
             if (winPoint < 3)
