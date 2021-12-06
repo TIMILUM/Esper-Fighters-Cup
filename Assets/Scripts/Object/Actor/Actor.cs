@@ -1,5 +1,4 @@
 using EsperFightersCup;
-using FMODUnity;
 using Photon.Pun;
 using UnityEngine;
 
@@ -15,13 +14,9 @@ public class Actor : ObjectBase, IPunObservable
     [SerializeField, Tooltip("해당 오브젝트의 ID 값입니다.")]
     private int _id;
 
-    [SerializeField]
-    private StudioEventEmitter _audioEmitter;
-
     public ControllerManager ControllerManager => _controllerManager;
     public BuffController BuffController { get; protected set; }
     public int ID => _id;
-    public StudioEventEmitter AudioEmitter => _audioEmitter != null ? _audioEmitter : null;
     public Rigidbody Rigidbody { get; protected set; }
 
     /// <summary>
