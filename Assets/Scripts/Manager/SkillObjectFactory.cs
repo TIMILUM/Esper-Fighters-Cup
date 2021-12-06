@@ -80,6 +80,11 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
 
     public void DestroyObject(GameObject obj)
     {
+        if (!obj)
+        {
+            return;
+        }
+
         PhotonNetwork.Destroy(obj);
     }
 }

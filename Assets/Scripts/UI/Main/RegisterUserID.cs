@@ -10,17 +10,18 @@ namespace EsperFightersCup.UI
     {
         [SerializeField] private InputField _idInput;
 
-        private const string NamePrefKey = "username";
+        // private const string NamePrefKey = "username";
 
         private void Start()
         {
             Debug.Assert(_idInput, gameObject);
-
+            /*
             if (PlayerPrefs.HasKey(NamePrefKey))
             {
                 var name = PlayerPrefs.GetString(NamePrefKey);
                 _idInput.text = name;
             }
+            */
         }
 
         public void Register()
@@ -36,7 +37,7 @@ namespace EsperFightersCup.UI
             }
 
             PhotonNetwork.NickName = id;
-            PlayerPrefs.SetString(NamePrefKey, id);
+            // PlayerPrefs.SetString(NamePrefKey, id);
 
             print($"ID: {PhotonNetwork.NickName}");
             GetComponent<GoToScene>().LoadScene("LobbyScene");

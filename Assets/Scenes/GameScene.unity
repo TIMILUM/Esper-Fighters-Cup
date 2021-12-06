@@ -6656,6 +6656,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stadium
       objectReference: {fileID: 0}
+    - target: {fileID: 6859001409661198837, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.02
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdd2ee9d8955fe04f8fc088a726dbbef, type: 3}
 --- !u!1001 &5213860517416915781
@@ -6782,6 +6786,18 @@ PrefabInstance:
     - target: {fileID: 6809152244936392300, guid: 4068c2d915649bf4fbfca2979902f9ee, type: 3}
       propertyPath: m_Name
       value: SfxManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809152244936392302, guid: 4068c2d915649bf4fbfca2979902f9ee, type: 3}
+      propertyPath: _sfxList.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809152244936392302, guid: 4068c2d915649bf4fbfca2979902f9ee, type: 3}
+      propertyPath: _sfxList.Array.data[10]._name
+      value: Destroy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809152244936392302, guid: 4068c2d915649bf4fbfca2979902f9ee, type: 3}
+      propertyPath: _sfxList.Array.data[10]._path
+      value: event:/SFX/Plank_Skill/SFX_Throw
       objectReference: {fileID: 0}
     - target: {fileID: 6809152244936392303, guid: 4068c2d915649bf4fbfca2979902f9ee, type: 3}
       propertyPath: m_RootOrder

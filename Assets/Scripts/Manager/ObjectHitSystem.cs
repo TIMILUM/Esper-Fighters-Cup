@@ -1,13 +1,13 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class HitInfo
+public class HitEventArgs : EventArgs
 {
     public GameObject Other { get; }
     public bool IsDestroy { get; }
 
-    public HitInfo(GameObject other, bool isDestroy)
+    public HitEventArgs(GameObject other, bool isDestroy)
     {
         Other = other;
         IsDestroy = isDestroy;
@@ -28,17 +28,16 @@ public class ObjectHitSystem : MonoBehaviourPun
     [Header("Destroy Effects")]
     [SerializeField, Tooltip("파괴 모션이 나타날 포지션을 뜻합니다. 기본값은 현재 포지션입니다.")]
     private Transform _destroyEffectPosition = null;
-    
+
     [SerializeField, Tooltip("파괴 시 나타날 파티클의 이름을 작성합니다.")]
     private string _particleName = "Object_Destroy";
 
     private Vector3 _collisionDirection = Vector3.up;
-    
 
     private Actor _actor;
     private bool _isDestroy = false;
 
-    public event UnityAction<HitInfo> OnHit;
+    public event EventHandler<HitEventArgs> OnHit;
 
     private void Awake()
     {
@@ -79,20 +78,26 @@ public class ObjectHitSystem : MonoBehaviourPun
         {
             return;
         }
-
+        /*
         if (_isDestroy)
         {
             DestroyObject();
         }
+        */
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        if (!photonView.IsMine || other.gameObject.CompareTag("Floor"))
+        {
+            return;
+        }
+
         _collisionDirection = Vector3.Normalize(transform.position - other.contacts[0].point);
-        OnPlayerHitEnter(other.gameObject);
+        Hit(other.gameObject);
     }
 
-    public void OnPlayerHitEnter(GameObject other)
+    public void Hit(GameObject other)
     {
         var otherHitSystem = other.GetComponent<ObjectHitSystem>();
         if (otherHitSystem == null)
@@ -105,7 +110,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         // 본인의 강도가 더 높은 경우
         if (difference > 0 && otherHitSystem.IsDestroyable)
         {
-            otherHitSystem._isDestroy = true;
+            // otherHitSystem._isDestroy = true;
         }
         // 상대의 강도가 더 높은 경우
         else if (difference < 0 && IsDestroyable)
@@ -116,24 +121,31 @@ public class ObjectHitSystem : MonoBehaviourPun
         else if (difference == 0)
         {
             _isDestroy = IsDestroyable;
-            otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
+            // otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
         }
 
+        /*
         if (otherHitSystem._isDestroy)
         {
             otherHitSystem.DestroyObject();
         }
+        */
 
         if (_isDestroy)
         {
             DestroyObject();
         }
 
-        OnHit?.Invoke(new HitInfo(other, _isDestroy));
+        OnHit?.Invoke(this, new HitEventArgs(other, _isDestroy));
     }
 
     private void DestroyObject()
     {
+        if (!gameObject)
+        {
+            return;
+        }
+
         if (_destroyEffectPosition == null)
         {
             _destroyEffectPosition = transform;

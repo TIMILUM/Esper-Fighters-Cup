@@ -396,8 +396,6 @@ GameObject:
   - component: {fileID: 1285394932241494094}
   - component: {fileID: 1623772674390140268}
   - component: {fileID: -1375651934942601835}
-  - component: {fileID: 4751786771420780168}
-  - component: {fileID: 385798654323639613}
   m_Layer: 7
   m_Name: SkillObject_Lighting
   m_TagString: Untagged
@@ -461,8 +459,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.7, y: 1.2, z: 0.6}
-  m_Center: {x: -0.1, y: -0.1, z: 0.15}
+  m_Size: {x: 1.7, y: 1.2, z: 1.7435989}
+  m_Center: {x: -0.100000024, y: -0.100000024, z: -0.008647084}
 --- !u!54 &-5947829118032247395
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -569,33 +567,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!65 &4751786771420780168
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6919689476003765198}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.7, y: 0.4, z: 0.4}
-  m_Center: {x: -0.01, y: 0.3, z: 0.65}
---- !u!136 &385798654323639613
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6919689476003765198}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.15
-  m_Height: 2
-  m_Direction: 0
-  m_Center: {x: -0.1, y: -0.4, z: -0.7}
 --- !u!1 &8643946364726197484
 GameObject:
   m_ObjectHideFlags: 0
