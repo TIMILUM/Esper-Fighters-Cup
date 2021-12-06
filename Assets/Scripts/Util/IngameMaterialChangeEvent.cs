@@ -37,8 +37,7 @@ public class IngameMaterialChangeEvent : MonoBehaviour
             return;
         }
 
-        var isMine = _actor.photonView.IsMine;
-        _material = isMine ? _mineMaterial : _enemyMaterial;
+        _material = _actor.PaletteIndex == 0 ? _mineMaterial : _enemyMaterial;
     }
 
     private void Reset()
