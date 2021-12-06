@@ -46,6 +46,12 @@ namespace EsperFightersCup
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
             }
 
+            var localPlayer = PhotonNetwork.LocalPlayer;
+            if (!localPlayer.CustomProperties.ContainsKey(CustomPropertyKeys.PlayerWinPoint))
+            {
+                localPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, 0);
+            }
+
             /*
             // 로컬플레이어 설정
             var localplayer = InGamePlayerManager.Instance.LocalPlayer;

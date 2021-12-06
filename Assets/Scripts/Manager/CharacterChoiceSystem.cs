@@ -1,25 +1,74 @@
-using System.Collections.Generic;
 using DG.Tweening;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
+using UnityEngine.Events;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace EsperFightersCup.Manager
 {
+    /// <summary>
+    /// <see cref="int"/> -> sender actor number, <see cref="ACharacter.Type"/> -> changed character type
+    /// </summary>
+    [System.Serializable]
+    public class CharacterChangeEvent : UnityEvent<int, ACharacter.Type>
+    {
+    }
+
+    [RequireComponent(typeof(PhotonView))]
     public class CharacterChoiceSystem : PunEventSingleton<CharacterChoiceSystem>
     {
-        public ACharacter.Type ChooseCharacter { get; set; }
+        [SerializeField]
+        private CharacterChangeEvent _onCharacterChanged;
+        [SerializeField]
+        private UnityEvent _onSubmitted;
+
+        public (ACharacter.Type Type, int PaletteIndex) ChooseCharacter { get; set; }
+
+        public event UnityAction<int, ACharacter.Type> OnCharacterChanged
+        {
+            add => _onCharacterChanged.AddListener(value);
+            remove => _onCharacterChanged.RemoveListener(value);
+        }
+
+        public event UnityAction OnSubmitted
+        {
+            add => _onSubmitted.AddListener(value);
+            remove => _onSubmitted.RemoveListener(value);
+        }
 
         private int _count;
 
-        public bool Submit()
+        protected override void Awake()
         {
-            if (ChooseCharacter == ACharacter.Type.None)
-            {
-                return false;
-            }
+            base.Awake();
 
-            return PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerCharacterType, (int)ChooseCharacter);
+            if (!PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.OfflineMode = true;
+                PhotonNetwork.CreateRoom("OfflineRoom");
+            }
+        }
+
+        public void ChangeCharacter(int type)
+        {
+            photonView.RPC(nameof(ChangeCharacterRPC), RpcTarget.All, type);
+        }
+
+        [PunRPC]
+        private void ChangeCharacterRPC(int typeRaw, PhotonMessageInfo info)
+        {
+            _onCharacterChanged?.Invoke(info.Sender.ActorNumber, (ACharacter.Type)typeRaw);
+        }
+
+        public void Submit()
+        {
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable
+            {
+                [CustomPropertyKeys.PlayerCharacterType] = (int)ChooseCharacter.Type,
+                [CustomPropertyKeys.PlayerPalette] = ChooseCharacter.PaletteIndex
+            });
+            _onSubmitted?.Invoke();
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -32,8 +81,6 @@ namespace EsperFightersCup.Manager
             _count++;
             if (PhotonNetwork.IsMasterClient && _count >= PhotonNetwork.CurrentRoom.PlayerCount)
             {
-                SetPaletteOfRoomPlayers();
-
                 DOTween.Sequence()
                     .SetLink(gameObject)
                     .AppendInterval(3.0f)
@@ -41,6 +88,7 @@ namespace EsperFightersCup.Manager
             }
         }
 
+        /*
         private void SetPaletteOfRoomPlayers()
         {
             var paletteIndex = new Dictionary<int, int>();
@@ -61,5 +109,6 @@ namespace EsperFightersCup.Manager
                 player.SetCustomProperty(CustomPropertyKeys.PlayerPalette, index);
             }
         }
+        */
     }
 }

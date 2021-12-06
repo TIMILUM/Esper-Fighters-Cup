@@ -60,14 +60,6 @@ namespace EsperFightersCup
         private void RoundEndNextRPC()
         {
             _onRoundEnd?.Invoke(FsmSystem.Round);
-            /*
-            var sawblades = SawBladeSystem.Instance.LocalSpawnedSawBlades;
-            Debug.Log($"Destroying {sawblades.Count} sawblades");
-            foreach (var sawblade in sawblades.Values)
-            {
-                PhotonNetwork.Destroy(sawblade.gameObject);
-            }
-            */
 
             if (!PhotonNetwork.IsMasterClient)
             {
@@ -77,14 +69,22 @@ namespace EsperFightersCup
 
         public override void OnMasterClientSwitched(Player newMasterClient)
         {
-            var winPoint = (int)PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint];
-            var winner = (int)PhotonNetwork.CurrentRoom.CustomProperties[CustomPropertyKeys.GameRoundWinner];
-
+            var roomProps = PhotonNetwork.CurrentRoom.CustomProperties;
+            if (!roomProps.TryGetValue(CustomPropertyKeys.GameRoundWinner, out var winnerValue))
+            {
+                return;
+            }
+            var winner = (int)winnerValue;
             if (PhotonNetwork.LocalPlayer.ActorNumber != winner)
             {
                 return;
             }
-
+            var playerProps = PhotonNetwork.LocalPlayer.CustomProperties;
+            if (!playerProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var winVal))
+            {
+                return;
+            }
+            var winPoint = (int)winVal;
             if (winPoint < 3)
             {
                 ChangeState(IngameFSMSystem.State.RoundIntro);
