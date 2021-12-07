@@ -145,12 +145,12 @@ public class PunchSkillObject : SkillObject
             return null;
         }
 
-        var hitSystem = Author.GetComponent<ObjectHitSystem>();
+        var strength = EffectData[1];
 
 
 
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
-        if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
+        if (targetHitSystem.Strength <= strength && targetHitSystem.IsDestroyable)
         {
             var RightRot = Author.transform.rotation;
             var LeftRot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, -Author.transform.eulerAngles.y, Author.transform.eulerAngles.z));
