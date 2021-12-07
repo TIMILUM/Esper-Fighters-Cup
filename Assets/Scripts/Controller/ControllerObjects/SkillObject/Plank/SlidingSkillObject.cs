@@ -55,8 +55,8 @@ namespace EsperFightersCup
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
 
-            GameUIManager.Instance.PlaySync(Author, "Plank_Sliding_UI", Author.transform.position, new Vector2(1.0f, 1.0f),
-                Author.transform.rotation.eulerAngles.y, _buffOnCollision[0].Duration);
+            ParticleManager.Instance.PullParticleAttachedSync("Plank_Sliding_Sonic_Boom", 2);
+
 
             await UniTask.Yield();
         }
