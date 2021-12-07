@@ -71,11 +71,6 @@ public class PunchSkillObject : SkillObject
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
     {
-        // await UniTask.WaitUntil(() =>
-        // {
-        //
-        // }, cancellationToken: cancellation);
-
         Vector3 endPos = GetMousePosition();
         _direction = Vector3.Normalize(endPos - transform.position);
 
@@ -155,9 +150,10 @@ public class PunchSkillObject : SkillObject
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
         {
+            var collision = to.GetComponentInChildren<Collider>();
             ParticleManager.Instance.PullParticleAttachedSync("Plank_Punch_Swing", 0);
             ParticleManager.Instance.PullParticleAttachedSync("Plank_Punch_Swing", 1);
-            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
+            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * collision.bounds.size.x * 1.2f),
                 Author.transform.rotation);
             targetHitSystem.Hit(Author.gameObject);
             obj.transform.rotation = Quaternion.LookRotation(_direction);

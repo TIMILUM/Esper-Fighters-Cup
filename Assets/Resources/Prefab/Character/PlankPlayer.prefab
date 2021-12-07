@@ -822,6 +822,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: cc1fbe03929dce249a8b7f53544f8a4f, type: 2}
+    - target: {fileID: -7312423863453844442, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: cc1fbe03929dce249a8b7f53544f8a4f, type: 2}
     - target: {fileID: -4196013023752696869, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -849,26 +853,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
   m_PrefabInstance: {fileID: 5872387958442266756}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6265721772923352943 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
-  m_PrefabInstance: {fileID: 5872387958442266756}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6411638156285403381 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8537594183844564879, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
-  m_PrefabInstance: {fileID: 5872387958442266756}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3275131306086971362 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8938927477513299814, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
-  m_PrefabInstance: {fileID: 5872387958442266756}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4872141492265002004 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1361137549424080016, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
-  m_PrefabInstance: {fileID: 5872387958442266756}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7925509373639754346 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4360603143418417902, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
@@ -877,6 +861,31 @@ GameObject:
 --- !u!1 &4186426326198989335 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1484000759336623469, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3275131306086971362 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8938927477513299814, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6411638156285403381 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8537594183844564879, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6551977439733590398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 834192292310563322, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6265721772923352943 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
+  m_PrefabInstance: {fileID: 5872387958442266756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4872141492265002004 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1361137549424080016, guid: ce9524851812b1c4d90c66d5b8d09ea0, type: 3}
   m_PrefabInstance: {fileID: 5872387958442266756}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &4568001603331588745
@@ -905,6 +914,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyTexture: {fileID: 2800000, guid: aa6a1df5599ad0c42a6aa11fe6567b11, type: 3}
+--- !u!114 &5822336532189647986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551977439733590398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyTexture: {fileID: 2800000, guid: a9c6a33d5d994ec4fb5516a55716d861, type: 3}
 --- !u!95 &3766738328980702234
 Animator:
   serializedVersion: 3

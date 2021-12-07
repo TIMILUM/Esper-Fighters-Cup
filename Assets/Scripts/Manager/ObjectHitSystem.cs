@@ -43,7 +43,7 @@ public class ObjectHitSystem : MonoBehaviourPun
     /// <summary>
     /// 오브젝트가 파괴가 가능한지 여부
     /// </summary>
-    public bool IsDestroyable { get; private set; } = true;
+    public bool IsDestroyable { get; set; } = true;
 
     /// <summary>
     /// 오브젝트가 충돌하고나서 삭제될 상태인지 여부

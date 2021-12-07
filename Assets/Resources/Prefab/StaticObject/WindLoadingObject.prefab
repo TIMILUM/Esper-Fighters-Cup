@@ -329,11 +329,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 849e68a0ae92c9b4d8703ceedd44f41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buffOnCollision: []
+  _buffOnCollision:
+  - _type: 4
+    _duration: 0.001
+    _valueFloat: []
+    _valueVector3: []
+    _allowDuplicates: 0
+    _damage: 30
+    _isOnlyOnce: 1
   _controllerManager: {fileID: 6820238161038408815}
   _id: 20
   _fgravity: 30
   _colliderChecker: {fileID: 7816771479896800195}
+  _particleSystem: {fileID: 2117065119962480999}
 --- !u!114 &7749474813112553368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,5 +454,10 @@ PrefabInstance:
 --- !u!4 &2117065119962480998 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 610931047757848263, guid: b476d8016d9e7924591735486f2bf38b, type: 3}
+  m_PrefabInstance: {fileID: 1520850048112844705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &2117065119962480999 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 610931047757848262, guid: b476d8016d9e7924591735486f2bf38b, type: 3}
   m_PrefabInstance: {fileID: 1520850048112844705}
   m_PrefabAsset: {fileID: 0}
