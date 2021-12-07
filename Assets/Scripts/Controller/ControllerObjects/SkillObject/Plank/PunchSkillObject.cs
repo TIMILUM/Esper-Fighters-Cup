@@ -152,11 +152,15 @@ public class PunchSkillObject : SkillObject
 
         var hitSystem = Author.GetComponent<ObjectHitSystem>();
 
+
+        ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position + Author.transform.right,
+            Author.transform.rotation);
+        ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position - Author.transform.right,
+            Author.transform.rotation);
+
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
         {
-            ParticleManager.Instance.PullParticleAttachedSync("Plank_Punch_Swing", 0);
-            ParticleManager.Instance.PullParticleAttachedSync("Plank_Punch_Swing", 1);
             var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
                 Author.transform.rotation);
             targetHitSystem.Hit(Author.gameObject);
