@@ -9,12 +9,12 @@ public class AStaticObject : Actor
     [SerializeField]
     private float _fgravity = 30.0f;
 
-    private Vector3 _colliderSize;
+    public Vector3 ColliderSize { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
-        _colliderSize = GetComponent<Collider>().bounds.extents;
+        ColliderSize = GetComponent<Collider>().bounds.extents;
     }
 
     protected override void Start()
@@ -43,14 +43,14 @@ public class AStaticObject : Actor
 
         if (BuffController.ActiveBuffs.Exists(BuffObject.Type.Falling))
         {
-            if (Rigidbody.position.y > _colliderSize.y + 0.1f)
+            if (Rigidbody.position.y > ColliderSize.y + 0.1f)
             {
                 Rigidbody.position -= new Vector3(0.0f, _fgravity, 0.0f) * Time.deltaTime;
             }
             else if (photonView.IsMine)
             {
                 BuffController.ReleaseBuffsByType(BuffObject.Type.Falling);
-                transform.position = new Vector3(transform.position.x, _colliderSize.y + 0.1f, transform.position.z);
+                transform.position = new Vector3(transform.position.x, ColliderSize.y + 0.1f, transform.position.z);
             }
         }
 

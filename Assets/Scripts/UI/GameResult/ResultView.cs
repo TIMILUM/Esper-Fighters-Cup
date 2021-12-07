@@ -17,6 +17,11 @@ namespace EsperFightersCup.UI
         [SerializeField] private Button _homeButton;
         [SerializeField] private Button _lobbyButton;
         [SerializeField] private Button _rematchButton;
+        [SerializeField] private Button _restartTutorialButton;
+        [SerializeField] private Button _titleButton;
+
+        [SerializeField] private GameObject _defaultButtonPanel;
+        [SerializeField] private GameObject _tutorialButtonPanel;
 
         private Text _rematchButtonText;
         private CancellationTokenSource _rematchCancellation;
@@ -24,6 +29,10 @@ namespace EsperFightersCup.UI
 
         private void Start()
         {
+            Debug.Log($"OfflineMode: {PhotonNetwork.OfflineMode}");
+            _defaultButtonPanel.SetActive(!PhotonNetwork.OfflineMode);
+            _tutorialButtonPanel.SetActive(PhotonNetwork.OfflineMode);
+
             if (_rematchButton)
             {
                 _rematchButtonText = _rematchButton.GetComponentInChildren<Text>();
@@ -36,6 +45,14 @@ namespace EsperFightersCup.UI
             if (_homeButton)
             {
                 _homeButton.onClick.AddListener(GoToHome);
+            }
+            if (_restartTutorialButton)
+            {
+                _restartTutorialButton.onClick.AddListener(RestartTutorial);
+            }
+            if (_titleButton)
+            {
+                _titleButton.onClick.AddListener(GoToTitle);
             }
 
             if (!PhotonNetwork.InRoom)
@@ -100,6 +117,18 @@ namespace EsperFightersCup.UI
         {
             _rematchCancellation = new CancellationTokenSource();
             TryRematchAsync(_rematchCancellation.Token).Forget();
+        }
+
+        private void GoToTitle()
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.OfflineMode = false;
+            SceneManager.LoadScene("TitleScene");
+        }
+
+        private void RestartTutorial()
+        {
+            SceneManager.LoadScene("CharacterChoiceScene");
         }
 
         private async UniTask TryRematchAsync(CancellationToken cancellation)

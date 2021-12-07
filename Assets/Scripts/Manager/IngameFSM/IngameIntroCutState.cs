@@ -82,7 +82,8 @@ namespace EsperFightersCup
                 {
                     if (PhotonNetwork.OfflineMode)
                     {
-                        characterType = ACharacter.Type.Telekinesis;
+                        var typeRaw = properties[CustomPropertyKeys.PlayerCharacterType];
+                        characterType = typeRaw is null ? ACharacter.Type.Telekinesis : (ACharacter.Type)typeRaw;
                         return true;
                     }
 
@@ -117,6 +118,12 @@ namespace EsperFightersCup
                 }
 
                 queue.Enqueue(characterPalette.Palettes[paletteIndex]);
+
+                if (PhotonNetwork.OfflineMode)
+                {
+                    var dummyPalette = Array.Find(_introCutScenes, x => x.Character != characterType);
+                    queue.Enqueue(dummyPalette.Palettes[0]);
+                }
             }
         }
 
