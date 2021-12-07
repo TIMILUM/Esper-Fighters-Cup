@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
+using Photon.Pun;
 using UnityEngine;
 
 public class PunchSkillObject : SkillObject
@@ -162,7 +163,8 @@ public class PunchSkillObject : SkillObject
 
             var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
                 Author.transform.rotation);
-            targetHitSystem.Hit(Author.gameObject);
+            targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            targetHitSystem.Hit(Author.gameObject, strength);
             obj.transform.rotation = Quaternion.LookRotation(_direction);
             obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
             return obj.GetComponent<ObjectBase>();

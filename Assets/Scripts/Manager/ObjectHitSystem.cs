@@ -107,16 +107,17 @@ public class ObjectHitSystem : MonoBehaviourPun
         Hit(other.gameObject);
     }
 
-    public void Hit(GameObject other)
+    public void Hit(GameObject other, float customStrength = -1)
     {
         var otherHitSystem = other.GetComponent<ObjectHitSystem>();
+        var strength = customStrength < 0 ? _strength : customStrength;
         if (otherHitSystem == null)
         {
             return;
         }
 
         var otherStrength = otherHitSystem._strength;
-        var difference = _strength - otherStrength;
+        var difference = strength - otherStrength;
         // 본인의 강도가 더 높은 경우
         if (difference > 0 && otherHitSystem.IsDestroyable)
         {
