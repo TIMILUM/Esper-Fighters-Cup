@@ -6520,7 +6520,7 @@ PrefabInstance:
       objectReference: {fileID: 2480101516244202184}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _defaultCharacterType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 296787509014600173, guid: f9a16303ad8abe44ebf6f01637be391a, type: 3}
       propertyPath: _startLocations.Array.data[0]
@@ -7048,10 +7048,14 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.size
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[21]._maxNum
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[22]._maxNum
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
@@ -7059,12 +7063,24 @@ PrefabInstance:
       value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[22]._lifeTime
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[21]._usePalette
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[22]._usePalette
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[21]._particleName
       value: Elena_Random_Drop
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[22]._particleName
+      value: Plank_Punch_Swing
       objectReference: {fileID: 0}
     - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: _particleInfo.Array.data[21]._defaultParticle
@@ -7078,6 +7094,14 @@ PrefabInstance:
       propertyPath: _particleInfo.Array.data[21]._paletteParticle2
       value: 
       objectReference: {fileID: 7145649949678259631, guid: 29993b9b1b54fff49ab2b13fb1a55b67, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[22]._paletteParticle1
+      value: 
+      objectReference: {fileID: 740977408721668117, guid: acbe955bffe485e47be46ee42dacdf44, type: 3}
+    - target: {fileID: 3466341873098705244, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
+      propertyPath: _particleInfo.Array.data[22]._paletteParticle2
+      value: 
+      objectReference: {fileID: 740977408721668117, guid: c5c9c773f6388604b93d2d3f2fc1d5f3, type: 3}
     - target: {fileID: 3466341873098705245, guid: a259654e67389d141b5ced71a125d6a4, type: 3}
       propertyPath: m_Name
       value: ParticleGameManager

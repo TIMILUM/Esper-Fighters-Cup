@@ -56,6 +56,10 @@ public class SkillObjectFactory : MonoBehaviourPunCallbacks
         {
             clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_skillRockStaticObjectPrefab.name}", pos, rot);
         }
+        else if (objectname == "WindLoadingObject")
+        {
+            clone = PhotonNetwork.Instantiate($"Prefab/StaticObject/{_windLoadingObjectPrefab.name}", pos, rot);
+        }
 
         return clone;
     }
