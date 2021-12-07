@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
@@ -32,6 +32,7 @@ public class PunchSkillObject : SkillObject
 
     public override void SetHit(ObjectBase to)
     {
+        print(1);
         var target = AnalyzeTargetObject(to);
         var knockBackBuff = new BuffObject.BuffStruct
         {
@@ -51,9 +52,11 @@ public class PunchSkillObject : SkillObject
 
         _buffOnCollision.Clear();
 
+        print(2);
         // 만약 부딫힌 오브젝트가 파괴되지 않고 밀려나는 경우
         if (target == to)
         {
+            print(3);
             _buffOnCollision.Add(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.DecreaseHp,
@@ -64,11 +67,12 @@ public class PunchSkillObject : SkillObject
         }
         else
         {
+            print(4);
             knockBackBuff.Damage = Damage;
             var windLoadingObject = target as WindLoadingObject;
             windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
-
+        print(5);
         base.SetHit(to);
         AuthorPlayer.Animator.SetTrigger("Punch");
     }
@@ -102,11 +106,11 @@ public class PunchSkillObject : SkillObject
         BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
             Type = BuffObject.Type.KnockBack,
-            Damage = 0,
+            Damage = 0f,
             Duration = duration,
             AllowDuplicates = true,
             ValueVector3 = new[] { _direction },
-            ValueFloat = new[] { _moveSpeed, 0, 0 },
+            ValueFloat = new[] { _moveSpeed, 0f, 0f },
             IsOnlyOnce = false,
         });
 
@@ -145,7 +149,7 @@ public class PunchSkillObject : SkillObject
 
     private ObjectBase AnalyzeTargetObject(ObjectBase to)
     {
-        if (!(to is Actor target))
+        if (!(to is Actor))
         {
             return null;
         }
@@ -159,17 +163,23 @@ public class PunchSkillObject : SkillObject
         var hitSystem = Author.GetComponent<ObjectHitSystem>();
         var strength = EffectData[1];
 
-
+        print("punch - analyze");
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= strength && targetHitSystem.IsDestroyable)
         {
+            print("punch - destroy");
             var collision = to.GetComponentInChildren<Collider>();
-            var Rot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, Author.transform.eulerAngles.y + 180.0f, Author.transform.eulerAngles.z));
+            var rot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, Author.transform.eulerAngles.y + 180.0f, Author.transform.eulerAngles.z));
 
-			ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position, Rot);
+            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position, rot);
             var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject",
-                to.transform.position + (_direction * collision.bounds.size.x * 1.2f), Author.transform.rotation);
-            targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+                to.transform.position + (1.6f * (collision.bounds.size.x < collision.bounds.size.z ? collision.bounds.size.z : collision.bounds.size.x) * _direction), Author.transform.rotation);
+
+            if (!targetHitSystem.photonView.IsMine)
+            {
+                targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
+
             _hitEventCoroutine = StartCoroutine(HitEventCoroutine(targetHitSystem, obj, strength));
             return obj.GetComponent<ObjectBase>();
         }
@@ -180,12 +190,15 @@ public class PunchSkillObject : SkillObject
     private IEnumerator HitEventCoroutine(ObjectHitSystem target, GameObject obj, float strength)
     {
         yield return new WaitUntil(() => target.photonView.IsMine);
-        if(_hitEventCoroutine == null)
+        if (_hitEventCoroutine == null)
         {
             yield break;
         }
+        if (target)
+        {
+            target.Hit(Author.gameObject, strength, true);
+        }
 
-        target.Hit(Author.gameObject, strength, true);
         obj.transform.rotation = Quaternion.LookRotation(_direction);
         obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
     }

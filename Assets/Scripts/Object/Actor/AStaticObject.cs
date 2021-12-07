@@ -62,8 +62,7 @@ public class AStaticObject : Actor
             }
             return;
         }
-
-        if (!Rigidbody.isKinematic)
+        else
         {
             Rigidbody.isKinematic = true;
         }
