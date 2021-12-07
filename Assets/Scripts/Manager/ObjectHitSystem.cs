@@ -189,12 +189,16 @@ public class ObjectHitSystem : MonoBehaviourPun
         OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
         if (IsDestroyed && photonView.IsMine)
         {
-            if (_destroyEffectPosition == null)
+            if (!string.IsNullOrEmpty(_particleName))
             {
-                _destroyEffectPosition = transform;
+                if (_destroyEffectPosition == null)
+                {
+                    _destroyEffectPosition = transform;
+                }
+                var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);;
+                ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position,rotation);
+
             }
-            var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);
-            ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position,rotation);
             PhotonNetwork.Destroy(gameObject);
         }
     }

@@ -6,14 +6,12 @@ namespace EsperFightersCup
 {
     public class SkillRock : AStaticObject
     {
-        protected override void Start()
+        [SerializeField]
+        private Transform _particleTargetTransform;
+        protected override void OnDestroy()
         {
-
-        }
-
-        protected override void Update()
-        {
-
+            base.OnDestroy();
+            ParticleManager.Instance.PullParticleSync("SkillRock_Object_Destroy", _particleTargetTransform.position, _particleTargetTransform.rotation);
         }
     }
 }
