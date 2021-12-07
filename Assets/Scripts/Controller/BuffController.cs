@@ -12,7 +12,9 @@ public sealed class BuffController : ControllerBase
     private readonly Dictionary<BuffObject.Type, BuffObject> _buffTable = new Dictionary<BuffObject.Type, BuffObject>();
     private readonly object _buffReleaseLock = new object();
 
-    // TODO: 값을 올바르게 리턴하는지 체크
+    public ObjectHitSystem HitSystem { get; private set; }
+    public bool IsObjectDestroyed => !(HitSystem is null) && HitSystem.IsDestroyed;
+
     public IReadonlyBuffCollection ActiveBuffs => _activeBuffs;
 
     protected override void Reset()
@@ -27,6 +29,7 @@ public sealed class BuffController : ControllerBase
     protected override void Awake()
     {
         base.Awake();
+        HitSystem = GetComponentInParent<ObjectHitSystem>();
 
         var prefabs = Resources.LoadAll<BuffObject>("Prefab/Buff");
         foreach (var buffObject in prefabs)
@@ -41,6 +44,11 @@ public sealed class BuffController : ControllerBase
     /// <param name="buffStruct">생성할 버프 정보</param>
     public void GenerateBuff(BuffObject.BuffStruct buffStruct)
     {
+        if (IsObjectDestroyed)
+        {
+            return;
+        }
+
         var id = Guid.NewGuid().ToString("N");
         var args = buffStruct.ToBuffArguments(id);
 
@@ -54,6 +62,11 @@ public sealed class BuffController : ControllerBase
     /// <param name="buffType">해제할 버프 타입</param>
     public void ReleaseBuffsByType(BuffObject.Type buffType)
     {
+        if (IsObjectDestroyed)
+        {
+            return;
+        }
+
         photonView.RPC(nameof(ReleaseBuffsByTypeRPC), RpcTarget.All, (int)buffType);
         PhotonNetwork.SendAllOutgoingCommands();
     }
@@ -64,6 +77,11 @@ public sealed class BuffController : ControllerBase
     /// <param name="buff">해제할 버프 오브젝트</param>
     public void ReleaseBuff(BuffObject buff)
     {
+        if (IsObjectDestroyed)
+        {
+            return;
+        }
+
         ReleaseBuff(buff.BuffId);
     }
 
@@ -73,6 +91,11 @@ public sealed class BuffController : ControllerBase
     /// <param name="id">버프오브젝트 아이디</param>
     public void ReleaseBuff(string id)
     {
+        if (IsObjectDestroyed)
+        {
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(id))
         {
             Debug.LogError("해제할 버프의 ID가 비어 있어 버프를 해제하지 못했습니다.");
@@ -103,7 +126,7 @@ public sealed class BuffController : ControllerBase
         buff.SetBuffStruct((BuffObject.BuffStruct)args);
 
         _activeBuffs.Add(buff);
-        Debug.Log($"Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
+        Debug.Log($"[{Time.frameCount}] Buff generate [{ControllerManager.Author.name}] [{buff.BuffType}] [{buff.BuffId}]", gameObject);
         // Debug.Log((BuffObject.BuffStruct)args);
         buff.Register(this, null);
     }
@@ -115,7 +138,7 @@ public sealed class BuffController : ControllerBase
         {
             foreach (var targetBuff in _activeBuffs[(BuffObject.Type)buffType])
             {
-                Debug.Log($"Buff release by type [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+                Debug.Log($"[{Time.frameCount}] Buff release by type [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
                 // Debug.Log(targetBuff.Info.ToString());
                 targetBuff.Release();
             }
@@ -140,7 +163,7 @@ public sealed class BuffController : ControllerBase
                 return;
             }
 
-            Debug.Log($"Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
+            Debug.Log($"[{Time.frameCount}] Buff release [{ControllerManager.Author.name}] [{targetBuff.BuffType}] [{targetBuff.BuffId}]", gameObject);
             // Debug.Log(targetBuff.Info.ToString());
             targetBuff.Release();
         }

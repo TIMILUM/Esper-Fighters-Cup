@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3179342519834818332
 Transform:
   m_ObjectHideFlags: 0
@@ -220,17 +220,20 @@ GameObject:
   m_Component:
   - component: {fileID: 3179342520512475395}
   - component: {fileID: 3126938505245127475}
+  - component: {fileID: 8246827031411474384}
   - component: {fileID: 1959413196410685931}
   - component: {fileID: 2328800679540335472}
   - component: {fileID: 6309777745093915248}
   - component: {fileID: 6171526705020637558}
   - component: {fileID: 2095926083156067989}
-  - component: {fileID: 8241065219527511304}
+  - component: {fileID: 1260579668612551533}
   - component: {fileID: 8452186718357173374}
+  - component: {fileID: 5287138183493982418}
   - component: {fileID: 3179342520512475394}
   - component: {fileID: 8533053961359265577}
   - component: {fileID: 2693972747709286436}
   - component: {fileID: -9178771105032117353}
+  - component: {fileID: 8241065219527511304}
   m_Layer: 7
   m_Name: SawBladeObject
   m_TagString: Untagged
@@ -251,7 +254,6 @@ Transform:
   m_Children:
   - {fileID: 5070644869560437771}
   - {fileID: 2043681562052175159}
-  - {fileID: 8717002518507279433}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -271,6 +273,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &8246827031411474384
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1959413196410685931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startState: 0
-  _colliderCenter: {fileID: 8100003632892096928}
+  _colliderCenter: {fileID: 1260579668612551533}
   _buffController: {fileID: 626158081367375084}
 --- !u!114 &6309777745093915248
 MonoBehaviour:
@@ -356,7 +371,7 @@ MonoBehaviour:
   _transformObject: {fileID: 5070644869560437771}
   _speed: 10
   _rayMinDistance: 0.1
---- !u!114 &8241065219527511304
+--- !u!114 &1260579668612551533
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -365,20 +380,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3179342520512475396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a0ad21a453d25f40b17d741c55c911f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: event:/AMB/AMB_Sawblade
-  PlayEvent: 1
-  StopEvent: 2
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
 --- !u!114 &8452186718357173374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,6 +398,23 @@ MonoBehaviour:
   _strength: 0
   _objectID: 0
   _hitSound: event:/SFX/OBJ_Collison/Sawbalde_Rotate_Coll
+  _destroyEffectPosition: {fileID: 0}
+  _particleName: Object_Destroy
+--- !u!114 &5287138183493982418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
+  _hitSound: 
   _destroyEffectPosition: {fileID: 0}
   _particleName: Object_Destroy
 --- !u!114 &3179342520512475394
@@ -437,9 +458,8 @@ MonoBehaviour:
   _controllerManager: {fileID: 2003298924726973060}
   _id: 7
   _fgravity: 30
-  _boxcollider: {fileID: 8475715845562201901}
   _allowBuffList: 
-  _collider: {fileID: 3179342519834818331}
+  _collider: {fileID: 1260579668612551533}
   _speed: 4
   _animator: {fileID: 8533053961359265577}
 --- !u!114 &8533053961359265577
@@ -490,50 +510,29 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 0
---- !u!1 &4403152359706430281
-GameObject:
+--- !u!114 &8241065219527511304
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8717002518507279433}
-  - component: {fileID: 8475715845562201901}
-  m_Layer: 7
-  m_Name: BoundCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8717002518507279433
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4403152359706430281}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3179342520512475395}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8475715845562201901
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4403152359706430281}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 3179342520512475396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/AMB/AMB_Sawblade
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 0
 --- !u!1 &6804647049068734126
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,14 +791,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0bb6c621516c1e419628e707645c755, type: 3}
---- !u!1 &3841060637423425819 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a0bb6c621516c1e419628e707645c755, type: 3}
-  m_PrefabInstance: {fileID: 4147632314326115402}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4469225458397578145 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a0bb6c621516c1e419628e707645c755, type: 3}
+  m_PrefabInstance: {fileID: 4147632314326115402}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3841060637423425819 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a0bb6c621516c1e419628e707645c755, type: 3}
   m_PrefabInstance: {fileID: 4147632314326115402}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &4587064118331460640

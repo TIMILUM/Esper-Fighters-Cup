@@ -22,7 +22,6 @@ public class ColliderChecker : MonoBehaviour
             return;
         }
 
-        print("OnCollisionEnter");
         _onCollision?.Invoke(target);
     }
 
@@ -35,7 +34,6 @@ public class ColliderChecker : MonoBehaviour
             return;
         }
 
-        print("OnTriggerEnter");
         _onCollision?.Invoke(target);
     }
 
