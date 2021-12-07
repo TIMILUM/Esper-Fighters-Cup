@@ -41,15 +41,18 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
     {
         private readonly Queue<Particle> _parent;
 
+
+
         public string Name { get; set; }
         public GameObject Object { get; set; }
         public float LifeTime { get; set; }
         public float StartTime { get; set; }
 
+
+
         public Particle(GameObject particleFrefab, float lifeTime, Queue<Particle> parent)
         {
             _parent = parent;
-
             Object = particleFrefab;
             LifeTime = lifeTime;
         }
@@ -98,9 +101,16 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
             {
                 if (info.UsePalette)
                 {
-                    // name1, name2
-                    _particleList.Add($"{info.Name}0", new Queue<Particle>());
-                    _particleList.Add($"{info.Name}1", new Queue<Particle>());
+                    if (!_particleList.ContainsKey(info.Name + "0"))
+                    {
+                        // name1, name2
+                        _particleList.Add($"{info.Name}0", new Queue<Particle>());
+                        _particleList.Add($"{info.Name}1", new Queue<Particle>());
+                    }
+                    else
+                    {
+                        Debug.LogError(info.Name);
+                    }
                 }
                 else
                 {
@@ -129,6 +139,9 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
                     var queue = _particleList[info.Name];
                     queue.Enqueue(new Particle(clone, info.LifeTime, queue));
                 }
+
+
+
             }
         }
     }
@@ -139,6 +152,22 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
         foreach (var item in _activeParticle)
         {
             float currentTime = (Time.time - item.StartTime) * 1000;
+
+            //if (item.LifeTime == 0)
+            //{
+            //    if (!item.Object.activeInHierarchy)
+            //    {
+            //        if (item.Object.transform.parent != transform)
+            //        {
+            //            item.Object.transform.SetParent(transform);
+            //        }
+            //
+            //        item.ReturnToPool();
+            //        _removeParticle.Enqueue(item);
+            //    }
+            //    continue;
+            //}
+
 
             if (currentTime >= item.LifeTime)
             {
@@ -167,6 +196,11 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
     /// <param name="angle">파티클 앵글 </param>
     public void PullParticleSync(string particleName, Vector3 pos, Quaternion angle)
     {
+
+        //이펙트가 -90.0f가 기준이기 때문에 -90.0f를 빼주었습니다.
+        angle.eulerAngles = new Vector3(angle.eulerAngles.x - 90.0f, angle.eulerAngles.y, angle.eulerAngles.z);
+
+
         var args = new GameParticlePlayArguments(particleName, pos, angle.eulerAngles);
         EventSender.Broadcast(in args, SendOptions.SendReliable);
     }
