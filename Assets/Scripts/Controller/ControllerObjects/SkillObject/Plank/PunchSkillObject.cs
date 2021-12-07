@@ -57,6 +57,7 @@ public class PunchSkillObject : SkillObject
                 Damage = Damage,
                 IsOnlyOnce = true
             });
+            knockBackBuff.ValueFloat[1] = EffectDuration;
             _buffOnCollision.Add(knockBackBuff);
         }
         else
@@ -153,6 +154,7 @@ public class PunchSkillObject : SkillObject
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= strength && targetHitSystem.IsDestroyable)
         {
+            var collision = to.GetComponentInChildren<Collider>();
             var RightRot = Author.transform.rotation;
             var LeftRot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, -Author.transform.eulerAngles.y, Author.transform.eulerAngles.z));
 
@@ -161,8 +163,8 @@ public class PunchSkillObject : SkillObject
             ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position - Author.transform.right,
                 LeftRot);
 
-            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
-                Author.transform.rotation);
+            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject",
+                to.transform.position + (_direction * collision.bounds.size.x * 1.2f), Author.transform.rotation);
             targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
             targetHitSystem.Hit(Author.gameObject, strength);
             obj.transform.rotation = Quaternion.LookRotation(_direction);

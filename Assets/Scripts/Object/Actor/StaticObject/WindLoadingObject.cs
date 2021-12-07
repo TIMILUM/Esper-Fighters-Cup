@@ -23,6 +23,11 @@ public class WindLoadingObject : AStaticObject
 
     public override void SetHit(ObjectBase to)
     {
+        if (to == this)
+        {
+            return;
+        }
+
         _buffOnCollision[0].Damage = _appendBuffStack[0].Damage;
         base.SetHit(to);
     }
