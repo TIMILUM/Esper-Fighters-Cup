@@ -117,6 +117,7 @@ namespace EsperFightersCup.UI
                     item.SettingPanel.Save();
                 }
             }
+            PlayerPrefs.Save();
         }
     }
 }

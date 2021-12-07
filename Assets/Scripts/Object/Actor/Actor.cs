@@ -53,7 +53,7 @@ public class Actor : ObjectBase, IPunObservable
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        print("destroy");
+        Debug.Log($"Actor destroyed -> {gameObject.name}");
         PhotonNetwork.CleanRpcBufferIfMine(photonView);
     }
 
