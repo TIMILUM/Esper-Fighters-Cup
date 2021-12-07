@@ -85,6 +85,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
     protected int StunGroggyDuration { get; private set; }
     protected int Damage { get; private set; }
     protected float EffectDuration { get; private set; }
+    protected float SkillEffectDamage { get; private set; }
     protected float SkillSpeed { get; private set; }
 
     //Effects CSV Data
@@ -277,6 +278,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
         Range = GetCSVData<float>("Range");
         Damage = (int)GetCSVData<float>("Damage");
         EffectDuration = GetCSVData<float>("Effect_Duration");
+        SkillEffectDamage = GetCSVData<float>("Skill_Effect_Damage");
         SkillSpeed = GetCSVData<float>("Skill_Speed");
         StunGroggyDuration = (int)GetCSVData<float>("Groggy_Duration");
         FrontDelayMilliseconds = (int)GetCSVData<float>("Pre_Delay_Duration");

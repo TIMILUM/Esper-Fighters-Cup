@@ -60,7 +60,7 @@ public class PunchSkillObject : SkillObject
         }
         else
         {
-            knockBackBuff.Damage = Damage;
+            knockBackBuff.Damage = SkillEffectDamage;
             var windLoadingObject = target as WindLoadingObject;
             windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
