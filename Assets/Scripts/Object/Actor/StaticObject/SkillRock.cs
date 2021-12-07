@@ -11,6 +11,11 @@ namespace EsperFightersCup
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            if (!photonView.IsMine)
+            {
+                return;
+            }
+
             ParticleManager.Instance.PullParticleSync("SkillRock_Object_Destroy", _particleTargetTransform.position, _particleTargetTransform.rotation);
         }
     }
