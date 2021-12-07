@@ -206,50 +206,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!1 &3983482917681594039
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8510871311516001663}
-  - component: {fileID: 5909367039007477052}
-  m_Layer: 7
-  m_Name: BoundCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8510871311516001663
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3983482917681594039}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4444177267927563100}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5909367039007477052
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3983482917681594039}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7540981878553075838
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,7 +243,6 @@ Transform:
   - {fileID: 248699250103045756}
   - {fileID: 8380631266869694394}
   - {fileID: 2117065119962480998}
-  - {fileID: 8510871311516001663}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -359,6 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _strength: 0
   _objectID: 0
+  _hitSound: 
   _destroyEffectPosition: {fileID: 0}
   _particleName: Object_Destroy
 --- !u!114 &1377848443672095386
@@ -376,10 +332,7 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 6820238161038408815}
   _id: 20
-  _audioEmitter: {fileID: 0}
   _fgravity: 30
-  _boxcollider: {fileID: 5909367039007477052}
-  _collideSound: 
   _colliderChecker: {fileID: 7816771479896800195}
 --- !u!114 &7749474813112553368
 MonoBehaviour:

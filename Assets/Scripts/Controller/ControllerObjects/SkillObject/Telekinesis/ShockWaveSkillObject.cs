@@ -39,17 +39,20 @@ public class ShockWaveSkillObject : SkillObject
 
         _buffOnCollision.Clear();
         _buffOnCollision.Add(knockBackBuff);
-        print($"buff on collision count: {_buffOnCollision.Count}");
-
-        print("shockwave sethit");
         base.SetHit(to);
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        Destroy(_collider.gameObject);
-        Destroy(_castUI);
+        if (_collider)
+        {
+            Destroy(_collider.gameObject);
+        }
+        if (_castUI)
+        {
+            Destroy(_castUI);
+        }
     }
 
     protected override void OnInitializeSkill()
@@ -68,7 +71,6 @@ public class ShockWaveSkillObject : SkillObject
     {
         if (_castUI == null)
         {
-            print(Author);
             _castUI = GameUIManager.Instance.PlayLocal(Author, "ShockWave_Arrow", transform.position, _uiSize);
             GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
         }

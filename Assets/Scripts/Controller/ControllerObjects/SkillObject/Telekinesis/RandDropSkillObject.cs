@@ -35,8 +35,14 @@ namespace EsperFightersCup
         {
             base.OnDestroy();
 
-            Destroy(_rangeUI.gameObject);
-            Destroy(_castUI.gameObject);
+            if (_rangeUI)
+            {
+                Destroy(_rangeUI.gameObject);
+            }
+            if (_castUI)
+            {
+                Destroy(_castUI.gameObject);
+            }
         }
 
         protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
@@ -103,7 +109,7 @@ namespace EsperFightersCup
         {
             AuthorPlayer.Animator.SetTrigger("RandomDrop");
             ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 1);
-            SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position, "Step", 0f);
+            // SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position, "Step", 0f);
         }
 
         protected override async UniTask OnUseAsync()

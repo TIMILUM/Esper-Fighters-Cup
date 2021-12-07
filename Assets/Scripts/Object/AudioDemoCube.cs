@@ -2,6 +2,7 @@ namespace EsperFightersCup.Object
 {
     public class AudioDemoCube : AStaticObject
     {
+        /*
         protected override void Start()
         {
             base.Start();
@@ -19,5 +20,6 @@ namespace EsperFightersCup.Object
             base.OnHit(from, to, appendBuff);
             AudioEmitter?.SetParameter("Punched", 1f);
         }
+        */
     }
 }

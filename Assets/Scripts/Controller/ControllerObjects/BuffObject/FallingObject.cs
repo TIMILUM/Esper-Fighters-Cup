@@ -48,6 +48,8 @@ namespace EsperFightersCup
             if (_dropSkillEffect != 0)
             {
                 ParticleManager.Instance.PullParticleLocal("Break_Dust", pos, Quaternion.identity);
+                ParticleManager.Instance.PullParticleLocal("Elena_Random_Drop", pos, Quaternion.identity);
+
             }
         }
 

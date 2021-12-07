@@ -94,7 +94,8 @@ namespace EsperFightersCup
         {
             var skillObject = InGameSkillManager.Instance.CreateSkillObject("SkillRockObj", _startPos, _startRot);
             var scale = skillObject.transform.localScale;
-            skillObject.transform.localScale = new Vector3(scale.x * (_currentSize.x - 0.5f), 5, scale.z * (_currentSize.y - 0.5f));
+            skillObject.transform.localScale = new Vector3(scale.x * (_currentSize.x - 0.5f), scale.y, scale.z * (_currentSize.y - 0.5f));
+
         }
 
         protected override async UniTask OnUseAsync()

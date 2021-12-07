@@ -18,12 +18,12 @@ public class ObjectHitSystem : MonoBehaviourPun
 {
     [SerializeField, Tooltip("값은 런타임 시 자동으로 입력됩니다.")]
     private float _strength;
-    public float Strength => _strength;
-
-    public bool IsDestroyable { get; private set; } = true;
 
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
+
+    [SerializeField, FMODUnity.EventRef]
+    private string _hitSound;
 
     [Header("Destroy Effects")]
     [SerializeField, Tooltip("파괴 모션이 나타날 포지션을 뜻합니다. 기본값은 현재 포지션입니다.")]
@@ -33,9 +33,22 @@ public class ObjectHitSystem : MonoBehaviourPun
     private string _particleName = "Object_Destroy";
 
     private Vector3 _collisionDirection = Vector3.up;
+    private Actor _actor = null;
 
-    private Actor _actor;
-    private bool _isDestroy = false;
+    /// <summary>
+    /// 강도값
+    /// </summary>
+    public float Strength => _strength;
+
+    /// <summary>
+    /// 오브젝트가 파괴가 가능한지 여부
+    /// </summary>
+    public bool IsDestroyable { get; private set; } = true;
+
+    /// <summary>
+    /// 오브젝트가 충돌하고나서 삭제될 상태인지 여부
+    /// </summary>
+    public bool IsDestroyed { get; private set; } = false;
 
     public event EventHandler<HitEventArgs> OnHit;
 
@@ -74,12 +87,13 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void Update()
     {
-        if (!_actor || !_actor.photonView.IsMine || !IsDestroyable)
+        /*
+        if (_actor is null || !_actor.photonView.IsMine || !IsDestroyable)
         {
             return;
         }
-        /*
-        if (_isDestroy)
+
+        if (IsDestroyed)
         {
             DestroyObject();
         }
@@ -88,11 +102,6 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision other)
     {
-        if (!photonView.IsMine || other.gameObject.CompareTag("Floor"))
-        {
-            return;
-        }
-
         _collisionDirection = Vector3.Normalize(transform.position - other.contacts[0].point);
         Hit(other.gameObject);
     }
@@ -110,47 +119,48 @@ public class ObjectHitSystem : MonoBehaviourPun
         // 본인의 강도가 더 높은 경우
         if (difference > 0 && otherHitSystem.IsDestroyable)
         {
-            // otherHitSystem._isDestroy = true;
+            otherHitSystem.IsDestroyed = true;
         }
         // 상대의 강도가 더 높은 경우
         else if (difference < 0 && IsDestroyable)
         {
-            _isDestroy = true;
+            IsDestroyed = true;
         }
         // 둘 다 강도값이 같은 경우
         else if (difference == 0)
         {
-            _isDestroy = IsDestroyable;
-            // otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
+            IsDestroyed = IsDestroyable;
+            otherHitSystem.IsDestroyed = otherHitSystem.IsDestroyable;
         }
 
         /*
-        if (otherHitSystem._isDestroy)
+        if (otherHitSystem.IsDestroyed)
         {
             otherHitSystem.DestroyObject();
         }
         */
 
-        if (_isDestroy)
+        if (!string.IsNullOrEmpty(_hitSound))
         {
-            DestroyObject();
+            var instance = FMODUnity.RuntimeManager.CreateInstance(_hitSound);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform);
+            if (IsDestroyed)
+            {
+                instance.setParameterByName("DestroyCheck", 1f);
+            }
+            instance.start();
+            instance.release();
         }
 
-        OnHit?.Invoke(this, new HitEventArgs(other, _isDestroy));
-    }
-
-    private void DestroyObject()
-    {
-        if (!gameObject)
+        OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
+        if (IsDestroyed && photonView.IsMine)
         {
-            return;
+            if (_destroyEffectPosition == null)
+            {
+                _destroyEffectPosition = transform;
+            }
+            ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, Quaternion.LookRotation(_collisionDirection));
+            PhotonNetwork.Destroy(gameObject);
         }
-
-        if (_destroyEffectPosition == null)
-        {
-            _destroyEffectPosition = transform;
-        }
-        ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, Quaternion.LookRotation(_collisionDirection));
-        PhotonNetwork.Destroy(gameObject);
     }
 }

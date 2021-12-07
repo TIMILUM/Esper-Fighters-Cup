@@ -7,16 +7,12 @@ namespace EsperFightersCup
     {
         [SerializeField] private Animator _anim;
 
-        private Collider[] _colliders;
+        private Collider _collider;
 
         protected override void Awake()
         {
-            _colliders = GetComponents<Collider>();
-            foreach (var collider in _colliders)
-            {
-                collider.enabled = false;
-            }
-
+            _collider = GetComponent<Collider>();
+            _collider.enabled = false;
             base.Awake();
         }
 
@@ -29,15 +25,12 @@ namespace EsperFightersCup
 
         private IEnumerator CheckAnimationIsCompleted()
         {
-            if (_anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            while (_anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
             {
                 yield return null;
             }
 
-            foreach (var collider in _colliders)
-            {
-                collider.enabled = true;
-            }
+            _collider.enabled = true;
         }
     }
 }

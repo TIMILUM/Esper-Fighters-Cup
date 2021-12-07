@@ -9,15 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4314589049664778600}
+  - component: {fileID: 8211835443746325872}
   - component: {fileID: 4314589049664778606}
   - component: {fileID: 4314589049664778643}
-  - component: {fileID: 4314589049664778607}
-  - component: {fileID: 8663577832037187048}
-  - component: {fileID: 6623127734546534237}
-  - component: {fileID: 6646747819659544057}
   - component: {fileID: 4573762489192822212}
+  - component: {fileID: 4314589049664778607}
   - component: {fileID: 2942519444146996577}
-  - component: {fileID: 8211835443746325872}
+  - component: {fileID: 8663577832037187048}
+  - component: {fileID: 6646747819659544057}
   m_Layer: 8
   m_Name: TelekinesisPlayer
   m_TagString: Object
@@ -41,6 +40,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8211835443746325872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 4314589049664778607}
+  - {fileID: 2942519444146996577}
+  - {fileID: 8663577832037187048}
+  - {fileID: 6646747819659544057}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!136 &4314589049664778606
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71,6 +96,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &4573762489192822212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _strength: 0
+  _objectID: 0
+  _hitSound: event:/SFX/OBJ_Collison/Wall_Coll
+  _destroyEffectPosition: {fileID: 0}
+  _particleName: Object_Destroy
 --- !u!114 &4314589049664778607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,83 +128,11 @@ MonoBehaviour:
   _buffOnCollision: []
   _controllerManager: {fileID: 4314589049991569685}
   _id: 101
-  _audioEmitter: {fileID: 6623127734546534237}
   _characterType: 1
   _effectTrans:
   - {fileID: 486757356099596439}
   - {fileID: 5962739431116478967}
   _hp: 100
---- !u!114 &8663577832037187048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4314589049664778601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &6623127734546534237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4314589049664778601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: 
-  Event: 
-  PlayEvent: 0
-  StopEvent: 0
-  AllowFadeout: 1
-  TriggerOnce: 0
-  Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: -1
-  OverrideMaxDistance: -1
---- !u!114 &6646747819659544057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4314589049664778601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &4573762489192822212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4314589049664778601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6f0571e556b7ad4491dfdc57b9194c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _strength: 0
-  _objectID: 0
-  _destroyEffectPosition: {fileID: 0}
-  _particleName: Object_Destroy
 --- !u!114 &2942519444146996577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,7 +169,7 @@ MonoBehaviour:
     _type: 4
   - _name: RandomDrop
     _type: 9
---- !u!114 &8211835443746325872
+--- !u!114 &8663577832037187048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -208,23 +178,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 4314589049664778601}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 4314589049664778607}
-  - {fileID: 8663577832037187048}
-  - {fileID: 6646747819659544057}
-  - {fileID: 2942519444146996577}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &6646747819659544057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4314589049664778601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &4314589049991569687
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,7 +576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0144d9f49fc95d04fa6cd53d85a95e91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyTexture: {fileID: 2800000, guid: 3b623df187d315e45b195accb15a0a79, type: 3}
+  _enemyTexture: {fileID: 2800000, guid: e5db20e40cc10e74bb41a9d7f49b52b6, type: 3}
 --- !u!114 &1056153413781396803
 MonoBehaviour:
   m_ObjectHideFlags: 0

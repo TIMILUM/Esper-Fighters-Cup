@@ -1,3 +1,4 @@
+using EsperFightersCup;
 using UnityEngine;
 
 public class StunObject : BuffObject
@@ -12,6 +13,7 @@ public class StunObject : BuffObject
 
             var position = Author.transform.position + new Vector3(0f, 0.01f, 0f);
             ParticleManager.Instance.PullParticleLocal("Character_Hit", position, Quaternion.Euler(90f, 0f, 0f));
+            StunUIManager.Instance.PlayStunUI(Info.Duration, Author.transform);
         }
     }
 
