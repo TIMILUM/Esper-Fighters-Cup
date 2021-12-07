@@ -120,6 +120,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
 
             for (int i = 0; i < info.MaxNum; i++)
             {
+
                 if (info.UsePalette)
                 {
                     var clone1 = Instantiate(info.PaletteParticle1, transform);
@@ -132,6 +133,7 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
                     var palette2Queue = _particleList[$"{info.Name}1"];
                     palette2Queue.Enqueue(new Particle(clone2, info.LifeTime, palette2Queue));
                 }
+
                 else
                 {
                     var clone = Instantiate(info.DefaultParticle, transform);
@@ -153,20 +155,20 @@ public class ParticleManager : PunEventSingleton<ParticleManager>
         {
             float currentTime = (Time.time - item.StartTime) * 1000;
 
-            //if (item.LifeTime == 0)
-            //{
-            //    if (!item.Object.activeInHierarchy)
-            //    {
-            //        if (item.Object.transform.parent != transform)
-            //        {
-            //            item.Object.transform.SetParent(transform);
-            //        }
-            //
-            //        item.ReturnToPool();
-            //        _removeParticle.Enqueue(item);
-            //    }
-            //    continue;
-            //}
+            if (item.LifeTime == 0)
+            {
+                if (!item.Object.activeSelf)
+                {
+                    if (item.Object.transform.parent != transform)
+                    {
+                        item.Object.transform.SetParent(transform);
+                    }
+
+                    item.ReturnToPool();
+                    _removeParticle.Enqueue(item);
+                }
+                continue;
+            }
 
 
             if (currentTime >= item.LifeTime)

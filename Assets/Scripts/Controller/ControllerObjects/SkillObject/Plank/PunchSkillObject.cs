@@ -1,7 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
-using Photon.Pun;
 using UnityEngine;
 
 public class PunchSkillObject : SkillObject
@@ -57,12 +56,11 @@ public class PunchSkillObject : SkillObject
                 Damage = Damage,
                 IsOnlyOnce = true
             });
-            knockBackBuff.ValueFloat[1] = EffectDuration;
             _buffOnCollision.Add(knockBackBuff);
         }
         else
         {
-            knockBackBuff.Damage = SkillEffectDamage;
+            knockBackBuff.Damage = Damage;
             var windLoadingObject = target as WindLoadingObject;
             windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
@@ -73,6 +71,11 @@ public class PunchSkillObject : SkillObject
 
     protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
     {
+        // await UniTask.WaitUntil(() =>
+        // {
+        //
+        // }, cancellationToken: cancellation);
+
         Vector3 endPos = GetMousePosition();
         _direction = Vector3.Normalize(endPos - transform.position);
 
@@ -89,6 +92,8 @@ public class PunchSkillObject : SkillObject
     protected override async UniTask OnUseAsync()
     {
         AuthorPlayer.Animator.SetTrigger("Tackle");
+        ParticleManager.Instance.PullParticleAttachedSync("Plank_Blink", 2);
+
         var duration = Range / _moveSpeed;
         BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
@@ -147,26 +152,21 @@ public class PunchSkillObject : SkillObject
             return null;
         }
 
-        var strength = EffectData[1];
+        var hitSystem = Author.GetComponent<ObjectHitSystem>();
 
 
 
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
-        if (targetHitSystem.Strength <= strength && targetHitSystem.IsDestroyable)
+        if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
         {
-            var collision = to.GetComponentInChildren<Collider>();
-            var RightRot = Author.transform.rotation;
-            var LeftRot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, -Author.transform.eulerAngles.y, Author.transform.eulerAngles.z));
 
-            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position + Author.transform.right,
-            RightRot);
-            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position - Author.transform.right,
-                LeftRot);
+            var Rot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, Author.transform.eulerAngles.y + 180.0f, Author.transform.eulerAngles.z));
 
-            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject",
-                to.transform.position + (_direction * collision.bounds.size.x * 1.2f), Author.transform.rotation);
-            targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-            targetHitSystem.Hit(Author.gameObject, strength);
+            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position, Rot);
+
+            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
+                Author.transform.rotation);
+            targetHitSystem.Hit(Author.gameObject);
             obj.transform.rotation = Quaternion.LookRotation(_direction);
             obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
             return obj.GetComponent<ObjectBase>();

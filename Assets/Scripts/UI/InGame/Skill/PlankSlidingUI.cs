@@ -1,20 +1,12 @@
+using UnityEngine;
+
 namespace EsperFightersCup.UI
 {
-    public class PlankSlidingUI : SkillUI
+    public class PlankSlidingUI : MonoBehaviour
     {
         private void Update()
         {
-            if (Target == null)
-            {
-                return;
-            }
-
-            var targetPos = Target.transform.position;
-            var targetForword = Target.transform.forward * 2.0f;
-
-            transform.SetPositionAndRotation(targetPos + targetForword, Target.transform.rotation);
-
-            if (!Target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Sliding))
+            if (!transform.parent.GetComponent<Actor>().BuffController.ActiveBuffs.Exists(BuffObject.Type.Sliding))
             {
                 gameObject.SetActive(false);
             }
