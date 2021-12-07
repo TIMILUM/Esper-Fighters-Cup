@@ -138,8 +138,6 @@ public class ReverseGravitySkillObject : SkillObject
         //하체는 그냥 실행
         AuthorPlayer.Animator.SetTrigger("ReverseGravityA");
 
-        ParticleManager.Instance.PullParticleSync("Elena_ReverseGravity", _castUI.transform.position, Quaternion.identity);
-
         var duration = (FrontDelayMilliseconds + EndDelayMilliseconds) * 0.001f;
         GameUIManager.Instance.PlaySync(Author, "ReverseGravity_Range", _castUI.Position, _uiSize, duration: duration);
 
@@ -168,6 +166,7 @@ public class ReverseGravitySkillObject : SkillObject
 
     private async UniTask InstantiateStoneAsync(Vector3 position)
     {
+        ParticleManager.Instance.PullParticleSync("Elena_ReverseGravity", _castUI.transform.position, Quaternion.identity);
         var fragment = InGameSkillManager.Instance.CreateSkillObject("Fragment", position);
         // _lineRendererObj.SetActive(true);
 

@@ -109,7 +109,7 @@ namespace EsperFightersCup
         {
             AuthorPlayer.Animator.SetTrigger("RandomDrop");
             ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 1);
-            SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position, "Step", 0f);
+            // SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position, "Step", 0f);
         }
 
         protected override async UniTask OnUseAsync()

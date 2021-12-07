@@ -54,7 +54,7 @@ public class Actor : ObjectBase, IPunObservable
     {
         base.OnDestroy();
         Debug.Log($"Actor destroyed -> {gameObject.name}");
-        PhotonNetwork.CleanRpcBufferIfMine(photonView);
+        // PhotonNetwork.CleanRpcBufferIfMine(photonView);
     }
 
     private void OnCollisionEnter(Collision other)

@@ -1,5 +1,4 @@
 using System.Collections;
-using EsperFightersCup;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -36,6 +35,7 @@ public class IngameDelayCursorObject : MonoBehaviour
     private void OnDestroy()
     {
         _setActiveCursor = null;
+        Cursor.visible = true;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public class IngameDelayCursorObject : MonoBehaviour
 
     private void ActiveCursor(bool isActive, float activeTime = 0)
     {
-        GameCursorUtil.SetVisible(!isActive);
+        Cursor.visible = !isActive;
         _cursorImage.enabled = isActive;
         if (!isActive)
         {
