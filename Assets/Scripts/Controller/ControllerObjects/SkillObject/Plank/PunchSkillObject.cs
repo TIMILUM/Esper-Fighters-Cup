@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
@@ -16,6 +17,8 @@ public class PunchSkillObject : SkillObject
     private Transform _colliderTransform;
 
     private Vector3 _direction = Vector3.zero;
+
+    private Coroutine _hitEventCoroutine = null;
 
 
     protected override void OnInitializeSkill()
@@ -166,12 +169,23 @@ public class PunchSkillObject : SkillObject
             var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject",
                 to.transform.position + (_direction * collision.bounds.size.x * 1.2f), Author.transform.rotation);
             targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-            targetHitSystem.Hit(Author.gameObject, strength);
-            obj.transform.rotation = Quaternion.LookRotation(_direction);
-            obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
+            _hitEventCoroutine = StartCoroutine(HitEventCoroutine(targetHitSystem, obj, strength));
             return obj.GetComponent<ObjectBase>();
         }
 
         return to;
+    }
+
+    private IEnumerator HitEventCoroutine(ObjectHitSystem target, GameObject obj, float strength)
+    {
+        yield return new WaitUntil(() => target.photonView.IsMine);
+        if(_hitEventCoroutine == null)
+        {
+            yield break;
+        }
+
+        target.Hit(Author.gameObject, strength, true);
+        obj.transform.rotation = Quaternion.LookRotation(_direction);
+        obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
     }
 }

@@ -126,7 +126,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         Hit(other.gameObject);
     }
 
-    public void Hit(GameObject other, float customStrength = -1)
+    public void Hit(GameObject other, float customStrength = -1, bool forceActive = false)
     {
         var otherHitSystem = other.GetComponent<ObjectHitSystem>();
         var strength = customStrength < 0 ? _strength : customStrength;
@@ -143,7 +143,7 @@ public class ObjectHitSystem : MonoBehaviourPun
             isActiveHitSystem = true;
         }
 
-        if (!isActiveHitSystem)
+        if (!isActiveHitSystem && !forceActive)
         {
             return;
         }
