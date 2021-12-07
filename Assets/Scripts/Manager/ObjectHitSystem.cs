@@ -91,12 +91,11 @@ public class ObjectHitSystem : MonoBehaviourPun
         {
             return;
         }
-        /*
-        if (_isDestroy)
+
+        if (IsDestroyed)
         {
             DestroyObject();
         }
-        */
     }
 
     private void OnCollisionEnter(Collision other)
@@ -129,15 +128,13 @@ public class ObjectHitSystem : MonoBehaviourPun
         else if (difference == 0)
         {
             IsDestroyed = IsDestroyable;
-            // otherHitSystem._isDestroy = otherHitSystem.IsDestroyable;
+            otherHitSystem.IsDestroyed = otherHitSystem.IsDestroyable;
         }
 
-        /*
-        if (otherHitSystem._isDestroy)
+        if (otherHitSystem.IsDestroyed)
         {
             otherHitSystem.DestroyObject();
         }
-        */
 
         if (!string.IsNullOrEmpty(_hitSound))
         {
@@ -160,7 +157,7 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void DestroyObject()
     {
-        if (!gameObject)
+        if (!gameObject || !photonView.IsMine)
         {
             return;
         }
