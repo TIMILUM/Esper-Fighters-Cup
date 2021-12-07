@@ -132,7 +132,7 @@ public class ShockWaveSkillObject : SkillObject
 
     protected override async UniTask OnUseAsync()
     {
-        ParticleManager.Instance.PullParticleSync("Elena_ShockWave", _startPos + _direction + (Vector3.up * 1f), Quaternion.LookRotation(_direction));
+        ParticleManager.Instance.PullParticleSync("Elena_ShockWave", _startPos + _direction + (Vector3.up * 1f), Quaternion.Euler(90f, _castUI.RotationY, 0f));
 
         _collider.transform.SetPositionAndRotation(_castUI.transform.GetChild(0).position, Quaternion.LookRotation(_direction));
 
