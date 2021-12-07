@@ -90,10 +90,10 @@ namespace EsperFightersCup
         {
             await UniTask.NextFrame();
 
-            IngameBGMManager.Instance.IngameBGMUpdate(round);
             _onRoundStart?.Invoke(round);
             await UniTask.WaitUntil(() => InGamePlayerManager.Instance.GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount);
 
+            IngameBGMManager.Instance.IngameBGMUpdate(round);
             await FsmSystem.Curtain.FadeOutAsync();
 
             await UniTask.Delay(2000);
