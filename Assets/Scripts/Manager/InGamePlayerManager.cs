@@ -66,7 +66,6 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
             transform.position + (Vector3.up * 5f), Quaternion.identity);
 
         var localplayer = player.GetComponent<APlayer>();
-        localplayer.ResetPositionAndRotation();
 
         Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
 
@@ -75,6 +74,44 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 
         Debug.Log($"Create new local player instance = [{pvID}]{LocalPlayer}");
         PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
+
+        localplayer.ResetPositionAndRotation();
+
+        if (PhotonNetwork.OfflineMode)
+        {
+            SpawnDummyPlayer();
+        }
+    }
+
+    private void SpawnDummyPlayer()
+    {
+
+        ACharacter.Type characterType;
+        var props = PhotonNetwork.LocalPlayer.CustomProperties;
+
+        if (props.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var characterTypeRaw))
+        {
+            characterType = (ACharacter.Type)(int)characterTypeRaw;
+        }
+        else
+        {
+            characterType = _defaultCharacterType;
+        }
+
+        var prefab = _characterPrefabs.Find(x => x.CharacterType != characterType);
+
+        var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
+            transform.position + (Vector3.up * 5f), Quaternion.identity);
+
+        var dummyPlayer = player.GetComponent<APlayer>();
+
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
+        var pvID = LocalPlayer.photonView.ViewID;
+
+        GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber + 1] = dummyPlayer;
+
+        Debug.Log($"Create new dummy player instance = [{pvID}]");
+        dummyPlayer.ResetPositionAndRotation();
     }
 
     public void RemoveLocalPlayer()
@@ -83,6 +120,16 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
         LocalPlayer = null;
         Debug.Log($"Remove local player instance");
         PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, -1);
+
+        if (PhotonNetwork.OfflineMode)
+        {
+            RemoveDummyPlayer();
+        }
+    }
+
+    private void RemoveDummyPlayer()
+    {
+        PhotonNetwork.Destroy(GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber + 1].gameObject);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

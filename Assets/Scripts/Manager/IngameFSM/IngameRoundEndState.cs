@@ -85,23 +85,39 @@ namespace EsperFightersCup
                 return;
             }
             var winner = (int)winnerValue;
-            if (PhotonNetwork.LocalPlayer.ActorNumber != winner)
+            if (PhotonNetwork.LocalPlayer.ActorNumber == winner)
             {
-                return;
+                var playerProps = PhotonNetwork.LocalPlayer.CustomProperties;
+                if (!playerProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var winVal))
+                {
+                    return;
+                }
+                var winPoint = (int)winVal;
+                if (winPoint < 3)
+                {
+                    ChangeState(IngameFSMSystem.State.RoundIntro);
+                }
+                else
+                {
+                    ChangeState(IngameFSMSystem.State.EndingCut);
+                }
             }
-            var playerProps = PhotonNetwork.LocalPlayer.CustomProperties;
-            if (!playerProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var winVal))
+            else if (PhotonNetwork.OfflineMode && winner == PhotonNetwork.LocalPlayer.ActorNumber + 1)
             {
-                return;
-            }
-            var winPoint = (int)winVal;
-            if (winPoint < 3)
-            {
-                ChangeState(IngameFSMSystem.State.RoundIntro);
-            }
-            else
-            {
-                ChangeState(IngameFSMSystem.State.EndingCut);
+                var playerProps = PhotonNetwork.LocalPlayer.CustomProperties;
+                if (!playerProps.TryGetValue("dummyWin", out var winVal))
+                {
+                    return;
+                }
+                var winPoint = (int)winVal;
+                if (winPoint < 3)
+                {
+                    ChangeState(IngameFSMSystem.State.RoundIntro);
+                }
+                else
+                {
+                    ChangeState(IngameFSMSystem.State.EndingCut);
+                }
             }
         }
     }

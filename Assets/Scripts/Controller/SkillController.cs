@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
 public class SkillController : ControllerBase
@@ -7,6 +8,7 @@ public class SkillController : ControllerBase
     private readonly SkillCollection _activeSkills = new SkillCollection();
     private readonly object _skillReleaseLock = new object();
 
+    private APlayer _player = null;
     private Dictionary<int, SkillObject> _skillTemplates;
     private BuffController _buffController;
 
@@ -27,6 +29,9 @@ public class SkillController : ControllerBase
     protected override void Start()
     {
         base.Start();
+
+        _player = ControllerManager.GetActor() as APlayer;
+
         if (!ControllerManager.Author.photonView.IsMine)
         {
             return;
@@ -50,6 +55,11 @@ public class SkillController : ControllerBase
     {
         base.Update();
         if (!ControllerManager.Author.photonView.IsMine)
+        {
+            return;
+        }
+
+        if (PhotonNetwork.OfflineMode && _player != InGamePlayerManager.Instance.LocalPlayer)
         {
             return;
         }

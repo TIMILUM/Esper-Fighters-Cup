@@ -32,7 +32,16 @@ namespace EsperFightersCup.UI
                 {
                     return;
                 }
-                _nameText.text = value.photonView.Owner.NickName;
+
+                if (PhotonNetwork.OfflineMode && value != InGamePlayerManager.Instance.LocalPlayer)
+                {
+                    _nameText.text = "더미 플레이어";
+                }
+                else
+                {
+                    _nameText.text = value.photonView.Owner.NickName;
+                }
+
                 SetWinPoint(value.WinPoint);
                 _swapUIs.ForEach(ui => ui.Swap(value.CharacterType, value.PaletteIndex));
             }
@@ -50,6 +59,21 @@ namespace EsperFightersCup.UI
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
+            if (changedProps.TryGetValue("dummyWin", out var dummyWin))
+            {
+                if (TargetPlayer == InGamePlayerManager.Instance.LocalPlayer)
+                {
+                    return;
+                }
+                SetWinPoint((int)dummyWin);
+                return;
+            }
+
+            if (PhotonNetwork.OfflineMode && TargetPlayer != InGamePlayerManager.Instance.LocalPlayer)
+            {
+                return;
+            }
+
             if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
             {
                 return;

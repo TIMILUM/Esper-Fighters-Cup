@@ -45,9 +45,18 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
         }
 
         var positionUI = photonView.Owner.IsLocal ? "Position_LocalPlayer" : "Position_EnemyPlayer";
+        if (PhotonNetwork.OfflineMode && this != InGamePlayerManager.Instance.LocalPlayer)
+        {
+            positionUI = "Position_EnemyPlayer";
+        }
+
         GameUIManager.Instance.PlayLocal(this, positionUI, transform.position, Vector2.one);
 
         WinPoint = (int)(photonView.Owner.CustomProperties[CustomPropertyKeys.PlayerWinPoint] ?? 0);
+        if (PhotonNetwork.OfflineMode && this != InGamePlayerManager.Instance.LocalPlayer)
+        {
+            WinPoint = (int)(photonView.Owner.CustomProperties["dummyWin"] ?? 0);
+        }
 
         PlayerInfoUIManager.Instance.SetPlayer(this);
     }
@@ -62,6 +71,11 @@ public class APlayer : ACharacter, IPunObservable, IPunInstantiateMagicCallback
     {
         // var idx = InGamePlayerManager.FindPlayerIndex(PhotonNetwork.LocalPlayer);
         var idx = PhotonNetwork.IsMasterClient ? 0 : 1;
+        if (PhotonNetwork.OfflineMode && this != InGamePlayerManager.Instance.LocalPlayer)
+        {
+            idx = 1;
+        }
+
         var startLocation = InGamePlayerManager.Instance.StartLocations[idx];
         transform.SetPositionAndRotation(startLocation.position, startLocation.rotation);
     }
