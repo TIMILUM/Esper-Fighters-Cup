@@ -4,9 +4,9 @@ namespace EsperFightersCup
 {
     public class GameCursorUtil : MonoBehaviour
     {
+        /*
         [SerializeField]
         private Texture2D _cursorTexture;
-        private static bool s_isSetCursor = false;
 
         private void Start()
         {
@@ -24,6 +24,7 @@ namespace EsperFightersCup
             Cursor.SetCursor(_cursorTexture, Vector2.zero, CursorMode.Auto);
             s_isSetCursor = true;
         }
+        */
 
         public static void SetVisible(bool isVisible)
         {
