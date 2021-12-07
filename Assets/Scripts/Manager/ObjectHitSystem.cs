@@ -1,5 +1,6 @@
 using System;
 using Photon.Pun;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class HitEventArgs : EventArgs

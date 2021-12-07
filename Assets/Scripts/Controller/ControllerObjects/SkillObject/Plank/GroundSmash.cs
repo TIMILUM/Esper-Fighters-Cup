@@ -39,7 +39,7 @@ namespace EsperFightersCup
 
             var colliderScale = new Vector3(_currentRange, 1, _currentRange);
             transform.localScale = colliderScale;
-            _buffOnCollision[1].Duration = 1.0f;
+            _buffOnCollision[1].Duration = StunGroggyDuration / 1000.0f;
             _buffOnCollision[0].Damage = Damage;
         }
 
