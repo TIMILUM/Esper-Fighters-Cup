@@ -147,13 +147,20 @@ public class PunchSkillObject : SkillObject
 
         var hitSystem = Author.GetComponent<ObjectHitSystem>();
 
+
+
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
         {
-            var collision = to.GetComponentInChildren<Collider>();
-            ParticleManager.Instance.PullParticleAttachedSync("Plank_Punch_Swing", 0);
-            ParticleManager.Instance.PullParticleAttachedSync("Plank_Punch_Swing", 1);
-            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * collision.bounds.size.x * 1.2f),
+            var RightRot = Author.transform.rotation;
+            var LeftRot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, -Author.transform.eulerAngles.y, Author.transform.eulerAngles.z));
+
+            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position + Author.transform.right,
+            RightRot);
+            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position - Author.transform.right,
+                LeftRot);
+
+            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
                 Author.transform.rotation);
             targetHitSystem.Hit(Author.gameObject);
             obj.transform.rotation = Quaternion.LookRotation(_direction);

@@ -82,6 +82,7 @@ namespace EsperFightersCup
         {
             _startPos = new Vector3(Author.transform.position.x, 0.03f, Author.transform.position.z);
             _startRot = Author.transform.rotation;
+
             await UniTask.NextFrame();
             return true;
         }
