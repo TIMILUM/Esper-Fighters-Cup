@@ -91,7 +91,11 @@ namespace EsperFightersCup
             await UniTask.NextFrame();
 
             _onRoundStart?.Invoke(round);
-            await UniTask.WaitUntil(() => InGamePlayerManager.Instance.GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount);
+
+            if (!PhotonNetwork.OfflineMode)
+            {
+                await UniTask.WaitUntil(() => InGamePlayerManager.Instance.GamePlayers.Count == PhotonNetwork.CurrentRoom.PlayerCount);
+            }
 
             IngameBGMManager.Instance.IngameBGMUpdate(round);
             await FsmSystem.Curtain.FadeOutAsync();
@@ -102,7 +106,14 @@ namespace EsperFightersCup
             await UniTask.Delay(1500);
             _gameStateView.Fight();
 
-            FsmSystem.photonView.RPC(nameof(RoundIntroEndRPC), RpcTarget.MasterClient);
+            if (PhotonNetwork.OfflineMode)
+            {
+                ChangeState(IngameFSMSystem.State.InBattle);
+            }
+            else
+            {
+                FsmSystem.photonView.RPC(nameof(RoundIntroEndRPC), RpcTarget.MasterClient);
+            }
         }
 
         [PunRPC]

@@ -41,6 +41,11 @@ namespace EsperFightersCup
 
             _checkCanllation = new CancellationTokenSource();
             CheckLocalPlayerHPAsync(_checkCanllation.Token).Forget();
+            if (PhotonNetwork.OfflineMode)
+            {
+                CheckDummyPlayerHPAsync(_checkCanllation.Token).Forget();
+            }
+
             GenerateSawBladeAsync(_checkCanllation.Token).Forget();
         }
 
@@ -53,6 +58,11 @@ namespace EsperFightersCup
         {
             var start = PhotonNetwork.ServerTimestamp;
             var localplayer = InGamePlayerManager.Instance.LocalPlayer;
+            APlayer dummyPlayer = null;
+            if (PhotonNetwork.OfflineMode)
+            {
+                dummyPlayer = InGamePlayerManager.Instance.GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber + 1];
+            }
 
             while (!cancellation.IsCancellationRequested)
             {
@@ -61,7 +71,7 @@ namespace EsperFightersCup
                     return;
                 }
 
-                if (localplayer.HP <= 30)
+                if (localplayer.HP <= 30 || (!(dummyPlayer is null) && dummyPlayer.HP <= 30))
                 {
                     var time = PhotonNetwork.ServerTimestamp - start;
                     if (time > 5000)
@@ -93,7 +103,6 @@ namespace EsperFightersCup
                 }
                 catch (System.InvalidOperationException)
                 {
-                    // NOTE: 오프라인 디버깅용 코드임. 본인이 죽어도 본인이 이긴걸로 판단함
                     winner = actorNumber;
                 }
 
@@ -108,6 +117,44 @@ namespace EsperFightersCup
                 }
                 var localplayer = InGamePlayerManager.Instance.LocalPlayer;
                 return localplayer.HP <= 0;
+            }
+        }
+
+        private async UniTask CheckDummyPlayerHPAsync(CancellationToken cancellation)
+        {
+            var dummyActorNr = PhotonNetwork.LocalPlayer.ActorNumber + 1;
+            var dummyPlayer = InGamePlayerManager.Instance.GamePlayers.First(x => x.Key == dummyActorNr).Value;
+
+            // 상대방이 먼저 피가 0이 되어서 RPC를 보내면 WaitUntil 종료 및 false 반환
+            var isDead = !await UniTask.WaitUntil(CheckDummyPlayerIsDead, cancellationToken: cancellation)
+                .SuppressCancellationThrow();
+
+            // 본인이 먼저 피가 0이 된 경우에 RPC 호출
+            if (isDead)
+            {
+                Debug.Log($"DummyPlayer is dead!");
+
+                int winner;
+                try
+                {
+                    winner = InGamePlayerManager.Instance.GamePlayers.Keys.First(x => x != dummyActorNr);
+                }
+                catch (System.InvalidOperationException)
+                {
+                    // NOTE: 오프라인 디버깅용 코드임. 본인이 죽어도 본인이 이긴걸로 판단함
+                    winner = dummyActorNr;
+                }
+
+                PhotonNetwork.CurrentRoom.SetCustomPropertyBySafe(CustomPropertyKeys.GameRoundWinner, winner);
+            }
+
+            bool CheckDummyPlayerIsDead()
+            {
+                if (InGamePlayerManager.Instance is null)
+                {
+                    return false;
+                }
+                return dummyPlayer.HP <= 0;
             }
         }
 
@@ -134,10 +181,25 @@ namespace EsperFightersCup
                 }
                 PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerWinPoint, ++winPoint);
             }
+            else if (PhotonNetwork.OfflineMode)
+            {
+                int winPoint = 0;
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("dummyWin", out var winPointValue))
+                {
+                    winPoint = (int)winPointValue;
+                }
+                PhotonNetwork.LocalPlayer.SetCustomProperty("dummyWin", ++winPoint);
+            }
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
+            if (changedProps.TryGetValue("dummyWin", out var _))
+            {
+                ChangeState(IngameFSMSystem.State.RoundEnd);
+                return;
+            }
+
             if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
             {
                 return;

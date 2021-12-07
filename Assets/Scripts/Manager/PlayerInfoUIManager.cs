@@ -1,4 +1,5 @@
 using EsperFightersCup.UI;
+using Photon.Pun;
 using UnityEngine;
 
 namespace EsperFightersCup
@@ -18,6 +19,12 @@ namespace EsperFightersCup
         {
             if (player == null)
             {
+                return;
+            }
+
+            if (PhotonNetwork.OfflineMode && player != InGamePlayerManager.Instance.LocalPlayer)
+            {
+                _rightView.TargetPlayer = player;
                 return;
             }
 

@@ -26,19 +26,38 @@ namespace EsperFightersCup
         {
             base.StartState();
 
-            int myWinPoint = 0;
-            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
+            if (PhotonNetwork.OfflineMode)
             {
-                myWinPoint = (int)value;
-            }
+                var localPlayerPoint = (int)(PhotonNetwork.LocalPlayer.CustomProperties[CustomPropertyKeys.PlayerWinPoint] ?? 0);
+                var dummyPlayerPoint = (int)(PhotonNetwork.LocalPlayer.CustomProperties["dummyWin"] ?? 0);
 
-            if (myWinPoint == 3)
-            {
-                PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameWinner, PhotonNetwork.LocalPlayer.NickName);
+                if (localPlayerPoint > dummyPlayerPoint)
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameWinner, PhotonNetwork.LocalPlayer.NickName);
+                    PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameLooser, "DummyPlayer");
+                }
+                else
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameWinner, "DummyPlayer");
+                    PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameLooser, PhotonNetwork.LocalPlayer.NickName);
+                }
             }
             else
             {
-                PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameLooser, PhotonNetwork.LocalPlayer.NickName);
+                int myWinPoint = 0;
+                if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(CustomPropertyKeys.PlayerWinPoint, out var value))
+                {
+                    myWinPoint = (int)value;
+                }
+
+                if (myWinPoint == 3)
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameWinner, PhotonNetwork.LocalPlayer.NickName);
+                }
+                else
+                {
+                    PhotonNetwork.CurrentRoom.SetCustomProperty(CustomPropertyKeys.GameLooser, PhotonNetwork.LocalPlayer.NickName);
+                }
             }
 
             ResultEndAsync().Forget();

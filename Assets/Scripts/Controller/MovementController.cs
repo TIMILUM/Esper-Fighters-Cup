@@ -1,4 +1,5 @@
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
 public class MovementController : ControllerBase
@@ -49,6 +50,11 @@ public class MovementController : ControllerBase
         base.Update();
         if (_player.photonView.IsMine)
         {
+            if (PhotonNetwork.OfflineMode && _player != InGamePlayerManager.Instance.LocalPlayer)
+            {
+                return;
+            }
+
             UpdateMine();
         }
     }
