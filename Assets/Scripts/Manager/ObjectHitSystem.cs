@@ -102,7 +102,7 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void OnCollisionEnter(Collision other)
     {
-        _collisionDirection = Vector3.Normalize(transform.position - other.contacts[0].point);
+        _collisionDirection = Vector3.Normalize(new Vector3(transform.position.x - other.contacts[0].point.x, 0 , transform.position.z - other.contacts[0].point.z));
         Hit(other.gameObject);
     }
 
@@ -159,7 +159,8 @@ public class ObjectHitSystem : MonoBehaviourPun
             {
                 _destroyEffectPosition = transform;
             }
-            ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, Quaternion.LookRotation(_collisionDirection));
+            var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);
+            ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position,rotation);
             PhotonNetwork.Destroy(gameObject);
         }
     }
