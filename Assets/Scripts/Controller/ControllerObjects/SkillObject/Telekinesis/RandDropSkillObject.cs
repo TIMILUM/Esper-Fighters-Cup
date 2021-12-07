@@ -109,7 +109,7 @@ namespace EsperFightersCup
         {
             AuthorPlayer.Animator.SetTrigger("RandomDrop");
             ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 1);
-            // SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position, "Step", 0f);
+            SfxManager.Instance.PlaySFXSync("RandDrop", Author.transform.position);
         }
 
         protected override async UniTask OnUseAsync()
@@ -145,6 +145,7 @@ namespace EsperFightersCup
             var id = GetRandomDropObjectID();
             var randomRotation = new Vector3(0, Random.Range(-180f, 180f), 0);
 
+            SfxManager.Instance.PlaySFXSync("RandDrop_Fall", createObjectPos);
             var obj = InGameSkillManager.Instance.CreateSkillObject(id, createObjectPos, randomRotation).GetComponent<AStaticObject>();
             if (obj == null)
             {
