@@ -184,17 +184,31 @@ MonoBehaviour:
     _defaultParticle: {fileID: 1859279849153659930, guid: ea227f69f1e7fba428ae227db923aba5, type: 3}
     _paletteParticle1: {fileID: 0}
     _paletteParticle2: {fileID: 0}
+  - _particleName: Elena_Random_Drop
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 7145649949678259631, guid: 0257bc8b50f6d154d83132866844472d, type: 3}
+    _paletteParticle2: {fileID: 7145649949678259631, guid: 29993b9b1b54fff49ab2b13fb1a55b67, type: 3}
   - _particleName: Plank_Punch_Swing
     _maxNum: 10
     _lifeTime: 2000
     _usePalette: 1
     _defaultParticle: {fileID: 0}
-    _paletteParticle1: {fileID: 740977408721668117, guid: acbe955bffe485e47be46ee42dacdf44, type: 3}
+    _paletteParticle1: {fileID: 740977408721668117, guid: 1f6cd49b3a6ae6c4997cb65353f6da88, type: 3}
     _paletteParticle2: {fileID: 740977408721668117, guid: c5c9c773f6388604b93d2d3f2fc1d5f3, type: 3}
-  - _particleName: SkillRock_Object_Destroy
+  - _particleName: Plank_Sliding_Sonic_Boom
     _maxNum: 10
-    _lifeTime: 2000
-    _usePalette: 0
-    _defaultParticle: {fileID: 4074434037705834737, guid: 5886bc75eec42134483902ef920ff37d, type: 3}
-    _paletteParticle1: {fileID: 0}
-    _paletteParticle2: {fileID: 0}
+    _lifeTime: 0
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 2924432639335813765, guid: 295706f671fc6df4297f010cfa106125, type: 3}
+    _paletteParticle2: {fileID: 2924432639335813765, guid: 9ee0a765526486044a32c4fc7c6ae2de, type: 3}
+  - _particleName: Plank_Blink
+    _maxNum: 10
+    _lifeTime: 1000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 6974460583835048992, guid: 311854f6972a89148a04c443e2a3a9b9, type: 3}
+    _paletteParticle2: {fileID: 1993975284265622293, guid: c26a3b86a41645f44999d4be621ed38d, type: 3}
