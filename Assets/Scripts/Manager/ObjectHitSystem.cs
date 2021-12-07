@@ -33,7 +33,7 @@ public class ObjectHitSystem : MonoBehaviourPun
     private string _particleName = "Object_Destroy";
 
     private Vector3 _collisionDirection = Vector3.up;
-    private Actor _actor;
+    private Actor _actor = null;
 
     /// <summary>
     /// 강도값
@@ -87,7 +87,8 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     private void Update()
     {
-        if (!_actor || !_actor.photonView.IsMine || !IsDestroyable)
+        /*
+        if (_actor is null || !_actor.photonView.IsMine || !IsDestroyable)
         {
             return;
         }
@@ -96,6 +97,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         {
             DestroyObject();
         }
+        */
     }
 
     private void OnCollisionEnter(Collision other)
@@ -117,7 +119,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         // 본인의 강도가 더 높은 경우
         if (difference > 0 && otherHitSystem.IsDestroyable)
         {
-            // otherHitSystem._isDestroy = true;
+            otherHitSystem.IsDestroyed = true;
         }
         // 상대의 강도가 더 높은 경우
         else if (difference < 0 && IsDestroyable)
@@ -131,10 +133,12 @@ public class ObjectHitSystem : MonoBehaviourPun
             otherHitSystem.IsDestroyed = otherHitSystem.IsDestroyable;
         }
 
+        /*
         if (otherHitSystem.IsDestroyed)
         {
             otherHitSystem.DestroyObject();
         }
+        */
 
         if (!string.IsNullOrEmpty(_hitSound))
         {
@@ -151,22 +155,12 @@ public class ObjectHitSystem : MonoBehaviourPun
         OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
         if (IsDestroyed && photonView.IsMine)
         {
-            DestroyObject();
+            if (_destroyEffectPosition == null)
+            {
+                _destroyEffectPosition = transform;
+            }
+            ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, Quaternion.LookRotation(_collisionDirection));
+            PhotonNetwork.Destroy(gameObject);
         }
-    }
-
-    private void DestroyObject()
-    {
-        if (!gameObject || !photonView.IsMine)
-        {
-            return;
-        }
-
-        if (_destroyEffectPosition == null)
-        {
-            _destroyEffectPosition = transform;
-        }
-        ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, Quaternion.LookRotation(_collisionDirection));
-        PhotonNetwork.Destroy(gameObject);
     }
 }

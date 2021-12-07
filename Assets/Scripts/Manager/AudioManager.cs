@@ -97,7 +97,7 @@ namespace EsperFightersCup.Manager
                 _uiSfxVCA.getVolume(out _uiSfxVolume);
             }
 
-            MasterVolume = PlayerPrefs.GetFloat(MasterVolumePrefKey, 0.5f);
+            MasterVolume = PlayerPrefs.GetFloat(MasterVolumePrefKey, 0.8f);
             BGMVolume = PlayerPrefs.GetFloat(BGMVolumePrefKey, 1f);
             AMBVolume = PlayerPrefs.GetFloat(AMBVolumePrefKey, 1f);
             SFXVolume = PlayerPrefs.GetFloat(SFXVolumePrefKey, 1f);
