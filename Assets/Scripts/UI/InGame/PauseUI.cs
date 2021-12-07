@@ -29,6 +29,12 @@ namespace EsperFightersCup
 
         public override void OnLeftRoom()
         {
+            if (PhotonNetwork.OfflineMode)
+            {
+                PhotonNetwork.OfflineMode = false;
+                SceneManager.LoadScene("TitleScene");
+            }
+
             SceneManager.LoadScene("MainScene");
         }
     }
