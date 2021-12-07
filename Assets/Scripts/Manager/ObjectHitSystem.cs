@@ -126,7 +126,7 @@ public class ObjectHitSystem : MonoBehaviourPun
         Hit(other.gameObject);
     }
 
-    public void Hit(GameObject other, float customStrength = -1)
+    public void Hit(GameObject other, float customStrength = -1, bool forceActive = false)
     {
         var otherHitSystem = other.GetComponent<ObjectHitSystem>();
         var strength = customStrength < 0 ? _strength : customStrength;
@@ -143,7 +143,7 @@ public class ObjectHitSystem : MonoBehaviourPun
             isActiveHitSystem = true;
         }
 
-        if (!isActiveHitSystem)
+        if (!isActiveHitSystem && !forceActive)
         {
             return;
         }
@@ -189,12 +189,16 @@ public class ObjectHitSystem : MonoBehaviourPun
         OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
         if (IsDestroyed && photonView.IsMine)
         {
-            if (_destroyEffectPosition == null)
+            if (!string.IsNullOrEmpty(_particleName))
             {
-                _destroyEffectPosition = transform;
+                if (_destroyEffectPosition == null)
+                {
+                    _destroyEffectPosition = transform;
+                }
+                var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);;
+                ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position,rotation);
+
             }
-            var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);
-            ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position,rotation);
             PhotonNetwork.Destroy(gameObject);
         }
     }

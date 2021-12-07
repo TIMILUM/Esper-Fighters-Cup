@@ -1,6 +1,8 @@
+﻿using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using EsperFightersCup;
+using Photon.Pun;
 using UnityEngine;
 
 public class PunchSkillObject : SkillObject
@@ -15,6 +17,8 @@ public class PunchSkillObject : SkillObject
     private Transform _colliderTransform;
 
     private Vector3 _direction = Vector3.zero;
+
+    private Coroutine _hitEventCoroutine = null;
 
 
     protected override void OnInitializeSkill()
@@ -153,25 +157,36 @@ public class PunchSkillObject : SkillObject
         }
 
         var hitSystem = Author.GetComponent<ObjectHitSystem>();
-
+        var strength = EffectData[1];
 
 
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
-        if (targetHitSystem.Strength <= hitSystem.Strength && targetHitSystem.IsDestroyable)
+        if (targetHitSystem.Strength <= strength && targetHitSystem.IsDestroyable)
         {
-
+            var collision = to.GetComponentInChildren<Collider>();
             var Rot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, Author.transform.eulerAngles.y + 180.0f, Author.transform.eulerAngles.z));
 
-            ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position, Rot);
-
-            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject", to.transform.position + (_direction * 1),
-                Author.transform.rotation);
-            targetHitSystem.Hit(Author.gameObject);
-            obj.transform.rotation = Quaternion.LookRotation(_direction);
-            obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
+			ParticleManager.Instance.PullParticleSync("Plank_Punch_Swing", Author.transform.position, Rot);
+            var obj = InGameSkillManager.Instance.CreateSkillObject("WindLoadingObject",
+                to.transform.position + (_direction * collision.bounds.size.x * 1.2f), Author.transform.rotation);
+            targetHitSystem.photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            _hitEventCoroutine = StartCoroutine(HitEventCoroutine(targetHitSystem, obj, strength));
             return obj.GetComponent<ObjectBase>();
         }
 
         return to;
+    }
+
+    private IEnumerator HitEventCoroutine(ObjectHitSystem target, GameObject obj, float strength)
+    {
+        yield return new WaitUntil(() => target.photonView.IsMine);
+        if(_hitEventCoroutine == null)
+        {
+            yield break;
+        }
+
+        target.Hit(Author.gameObject, strength, true);
+        obj.transform.rotation = Quaternion.LookRotation(_direction);
+        obj.transform.localScale = new Vector3(EffectSize.x, 1, EffectSize.y);
     }
 }

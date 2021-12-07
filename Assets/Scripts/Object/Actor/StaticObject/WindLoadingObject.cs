@@ -23,6 +23,11 @@ public class WindLoadingObject : AStaticObject
 
     public override void SetHit(ObjectBase to)
     {
+        // 본인이 쓴 풍압인지 확인
+        if (to.GetComponent<APlayer>() != null && to.photonView.IsMine)
+        {
+            return;
+        }
         if (to == this)
         {
             return;
