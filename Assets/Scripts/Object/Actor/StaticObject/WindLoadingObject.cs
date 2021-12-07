@@ -20,6 +20,10 @@ public class WindLoadingObject : AStaticObject
     protected override void Update()
     {
         base.Update();
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         if (_generateKnockBackCoroutine == null)
         {
             _generateKnockBackCoroutine = StartCoroutine(GenerateKnockBackObject());
