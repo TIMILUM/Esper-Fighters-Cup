@@ -27,12 +27,10 @@ namespace EsperFightersCup.UI
         public void Register()
         {
             var id = _idInput.text;
-
-            // 영어랑 숫자만, 최대 10글자
-            if (string.IsNullOrWhiteSpace(id) || id.Length > 10 || !Regex.IsMatch(id, "^[0-9a-zA-Z]*$"))
+            if (string.IsNullOrWhiteSpace(id) || id.Length > 10 || !Regex.IsMatch(id, "^[0-9a-zA-Z가-힣]*$"))
             {
                 var popup = PopupManager.Instance.CreateNewBasicPopup();
-                popup.Open("<color=red>아이디가 잘못되었습니다.</color>", "아이디는 영어와 숫자를 혼합하여 최대 10글자 제한입니다.");
+                popup.Open("<color=red>이름이 잘못되었습니다.</color>", "아이디는 영어와 숫자와 한글을 혼합하여 최대 10글자 제한입니다.");
                 return;
             }
 
