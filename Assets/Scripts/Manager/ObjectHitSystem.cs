@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
@@ -53,8 +55,25 @@ public class ObjectHitSystem : MonoBehaviourPun
 
     public event EventHandler<HitEventArgs> OnHit;
 
+    private static List<BuffObject.Type> s_activateBuffList = null;
+
+    private void SetActiveBuffList()
+    {
+        s_activateBuffList.Add(BuffObject.Type.Sliding);
+        s_activateBuffList.Add(BuffObject.Type.Raise);
+        s_activateBuffList.Add(BuffObject.Type.Falling);
+        s_activateBuffList.Add(BuffObject.Type.KnockBack);
+        s_activateBuffList.Add(BuffObject.Type.DecreaseHp);
+    }
+
     private void Awake()
     {
+        if (s_activateBuffList == null)
+        {
+            s_activateBuffList = new List<BuffObject.Type>();
+            SetActiveBuffList();
+        }
+        
         _actor = GetComponentInParent<Actor>();
         if (_actor != null)
         {
@@ -107,16 +126,30 @@ public class ObjectHitSystem : MonoBehaviourPun
         Hit(other.gameObject);
     }
 
-    public void Hit(GameObject other)
+    public void Hit(GameObject other, float customStrength = -1)
     {
         var otherHitSystem = other.GetComponent<ObjectHitSystem>();
+        var strength = customStrength < 0 ? _strength : customStrength;
         if (otherHitSystem == null)
         {
             return;
         }
 
+        bool isActiveHitSystem = _actor != null && HasActiveBuff(_actor);
+
+        var otherActor = other.GetComponent<Actor>();
+        if (otherActor != null && HasActiveBuff(otherActor))
+        {
+            isActiveHitSystem = true;
+        }
+
+        if (!isActiveHitSystem)
+        {
+            return;
+        }
+
         var otherStrength = otherHitSystem._strength;
-        var difference = _strength - otherStrength;
+        var difference = strength - otherStrength;
         // 본인의 강도가 더 높은 경우
         if (difference > 0 && otherHitSystem.IsDestroyable)
         {
@@ -164,5 +197,15 @@ public class ObjectHitSystem : MonoBehaviourPun
             ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position,rotation);
             PhotonNetwork.Destroy(gameObject);
         }
+    }
+
+    private bool HasActiveBuff(Actor actor)
+    {
+        if (s_activateBuffList == null)
+        {
+            s_activateBuffList = new List<BuffObject.Type>();
+            SetActiveBuffList();
+        }
+        return s_activateBuffList.Any(buffType => actor.BuffController.ActiveBuffs[buffType].Count > 0);
     }
 }
