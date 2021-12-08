@@ -63,13 +63,16 @@ public class PunchSkillObject : SkillObject
                 Damage = Damage,
                 IsOnlyOnce = true
             });
+            if (to.GetComponent<APlayer>() == null)
+            {
+                knockBackBuff.ValueFloat[1] = Damage;
+            }
             _buffOnCollision.Add(knockBackBuff);
         }
         else
         {
             print(4);
             knockBackBuff.Damage = Damage;
-            knockBackBuff.ValueFloat[1] = Damage;
             var windLoadingObject = target as WindLoadingObject;
             windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
