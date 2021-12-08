@@ -69,6 +69,7 @@ public class PunchSkillObject : SkillObject
         {
             print(4);
             knockBackBuff.Damage = Damage;
+            knockBackBuff.ValueFloat[1] = Damage;
             var windLoadingObject = target as WindLoadingObject;
             windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
