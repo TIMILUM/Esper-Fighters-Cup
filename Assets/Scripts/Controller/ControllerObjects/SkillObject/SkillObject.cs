@@ -358,11 +358,7 @@ public abstract class SkillObject : ControllerObject<SkillController>
 
     private void ReleaseMoveSpeedBuffAll()
     {
-        foreach (var speedObject in _moveSpeedObjects)
-        {
-            BuffController.ReleaseBuff(speedObject);
-        }
-
+        BuffController.ReleaseBuffsByType(BuffObject.Type.MoveSpeed);
         _moveSpeedObjects.Clear();
     }
 
