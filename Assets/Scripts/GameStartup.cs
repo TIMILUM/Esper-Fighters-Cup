@@ -23,8 +23,8 @@ public class GameStartup : MonoBehaviour
     {
         // 포톤의 게임버전은 프로젝트의 버전을 따라갑니다.
         // 같은 게임버전인 플레이어끼리만 매칭이 가능합니다.
-        PhotonNetwork.GameVersion = Application.version;
-        Debug.Log($"Game Version: {PhotonNetwork.GameVersion}");
+        // PhotonNetwork.GameVersion = Application.version;
+        // Debug.Log($"Game Version: {PhotonNetwork.GameVersion}");
     }
 
     /*

@@ -18,15 +18,15 @@ namespace EsperFightersCup.UI
         {
             _connectButtonText = _connectButton.GetComponentInChildren<Text>();
             _defaultText = _connectButtonText.text;
-        }
 
-        private void Start()
-        {
             if (PhotonNetwork.IsConnected)
             {
                 _connectButton.interactable = false;
                 PhotonNetwork.Disconnect();
             }
+
+            PhotonNetwork.GameVersion = Application.version;
+            Debug.Log($"Game Version: {PhotonNetwork.GameVersion}");
         }
 
         public override void OnConnectedToMaster()
@@ -59,6 +59,7 @@ namespace EsperFightersCup.UI
 
             _connectButton.interactable = false;
             _connectButtonText.text = "연결 중...";
+            Debug.Log($"Version: {PhotonNetwork.AppVersion}");
             PhotonNetwork.ConnectUsingSettings();
         }
 
