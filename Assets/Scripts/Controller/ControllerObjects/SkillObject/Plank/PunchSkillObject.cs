@@ -32,7 +32,6 @@ public class PunchSkillObject : SkillObject
 
     public override void SetHit(ObjectBase to)
     {
-        print(1);
         var target = AnalyzeTargetObject(to);
         var knockBackBuff = new BuffObject.BuffStruct
         {
@@ -52,11 +51,9 @@ public class PunchSkillObject : SkillObject
 
         _buffOnCollision.Clear();
 
-        print(2);
         // 만약 부딫힌 오브젝트가 파괴되지 않고 밀려나는 경우
         if (target == to)
         {
-            print(3);
             _buffOnCollision.Add(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.DecreaseHp,
@@ -71,12 +68,10 @@ public class PunchSkillObject : SkillObject
         }
         else
         {
-            print(4);
             knockBackBuff.Damage = Damage;
             var windLoadingObject = target as WindLoadingObject;
             windLoadingObject.SetBuffStack(new[] { knockBackBuff });
         }
-        print(5);
         base.SetHit(to);
         AuthorPlayer.Animator.SetTrigger("Punch");
     }
@@ -167,11 +162,9 @@ public class PunchSkillObject : SkillObject
         var hitSystem = Author.GetComponent<ObjectHitSystem>();
         var strength = EffectData[1];
 
-        print("punch - analyze");
         // 오브젝트가 파괴될 경우 풍압 오브젝트를 생성하여 날림
         if (targetHitSystem.Strength <= strength && targetHitSystem.IsDestroyable)
         {
-            print("punch - destroy");
             var collision = to.GetComponentInChildren<Collider>();
             var rot = Quaternion.Euler(new Vector3(Author.transform.eulerAngles.x, Author.transform.eulerAngles.y + 180.0f, Author.transform.eulerAngles.z));
 
