@@ -20,12 +20,6 @@ public class KnockBackObject : BuffObject
 
     public override Type BuffType => Type.KnockBack;
 
-    public override void SetHit(ObjectBase to)
-    {
-        print("set hit");
-        base.SetHit(to);
-    }
-
     public override void OnBuffGenerated()
     {
         // BuffStruct Help

@@ -34,18 +34,12 @@ namespace EsperFightersCup
             return true;
         }
 
-        /// <summary>
-        /// 여기서 잡기 기술이 들어갑니다.
-        /// </summary>
         protected override void BeforeFrontDelay()
         {
-            AuthorPlayer.Animator.SetTrigger("Sliding");
-            SfxManager.Instance.PlaySFXSync("Slide", Author.transform.position);
         }
 
         protected override async UniTask OnUseAsync()
         {
-
             ///처음 시작 위치
             _buffOnCollision[0].ValueVector3[0] = Author.transform.position;
             ///목표 위치
@@ -55,6 +49,8 @@ namespace EsperFightersCup
             ///슬라이드 버프 추가
             BuffController.GenerateBuff(_buffOnCollision[0]);
 
+            AuthorPlayer.Animator.SetTrigger("Sliding");
+            SfxManager.Instance.PlaySFXSync("Slide", Author.transform.position);
             ParticleManager.Instance.PullParticleAttachedSync("Plank_Sliding_Sonic_Boom", 2);
 
 
