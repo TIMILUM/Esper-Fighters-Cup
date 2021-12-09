@@ -57,7 +57,7 @@ public class PunchSkillObject : SkillObject
             _buffOnCollision.Add(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.DecreaseHp,
-                Damage = Damage * 0.7f,
+                Damage = Damage * 0.1f,
                 IsOnlyOnce = true
             });
             if (to.GetComponent<APlayer>() == null)
