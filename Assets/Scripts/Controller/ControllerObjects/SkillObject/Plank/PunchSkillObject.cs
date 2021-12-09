@@ -40,7 +40,7 @@ public class PunchSkillObject : SkillObject
             Duration = EffectDuration / SkillSpeed,
             AllowDuplicates = false,
             ValueVector3 = new[] { _direction },
-            ValueFloat = new[] { SkillSpeed, Damage, 0.5f },
+            ValueFloat = new[] { SkillSpeed, 0f, 0f },
             IsOnlyOnce = false,
         };
 
@@ -57,7 +57,7 @@ public class PunchSkillObject : SkillObject
             _buffOnCollision.Add(new BuffObject.BuffStruct
             {
                 Type = BuffObject.Type.DecreaseHp,
-                Damage = Damage * 0.1f,
+                Damage = Damage,
                 IsOnlyOnce = true
             });
             if (to.GetComponent<APlayer>() == null)
