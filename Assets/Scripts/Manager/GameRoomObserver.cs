@@ -21,6 +21,7 @@ namespace EsperFightersCup
         private void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
+            SceneManager.LoadScene("LobbyScene");
             Time.timeScale = 1f;
         }
 
@@ -28,11 +29,6 @@ namespace EsperFightersCup
         {
             SceneManager.LoadScene("TitleScene");
             Time.timeScale = 1f;
-        }
-
-        public override void OnLeftRoom()
-        {
-            SceneManager.LoadScene("LobbyScene");
         }
 
         private void StopGameAndShowPopup(string title, string content, UnityAction afterPopupClicked)

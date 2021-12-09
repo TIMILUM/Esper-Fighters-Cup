@@ -77,7 +77,9 @@ namespace EsperFightersCup
 
                 if (localPlayerWinPoint > dummyWinPoint)
                 {
-                    var type = (ACharacter.Type)(int)player.CustomProperties[CustomPropertyKeys.PlayerCharacterType];
+                    var value = player.CustomProperties[CustomPropertyKeys.PlayerCharacterType];
+
+                    var type = value is null ? InGamePlayerManager.Instance.DefaultCharacter : (ACharacter.Type)(int)value;
                     var paletteIndex = (int)player.CustomProperties[CustomPropertyKeys.PlayerPalette];
                     var characterPalette = Array.Find(_outroCutScenes, x => x.Character == type);
                     return characterPalette.Palettes[paletteIndex];

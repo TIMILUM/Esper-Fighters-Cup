@@ -16,6 +16,8 @@ public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
     [SerializeField] private List<ACharacter> _characterPrefabs;
     [SerializeField] private List<Transform> _startLocations;
 
+    public ACharacter.Type DefaultCharacter => _defaultCharacterType;
+
     /// <summary>
     /// 현재 씬의 로컬 플레이어 인스턴스를 가져옵니다.
     /// </summary>
