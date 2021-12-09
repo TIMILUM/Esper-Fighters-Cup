@@ -33,6 +33,7 @@ namespace EsperFightersCup
             {
                 PhotonNetwork.OfflineMode = false;
                 SceneManager.LoadScene("TitleScene");
+                return;
             }
 
             SceneManager.LoadScene("MainScene");

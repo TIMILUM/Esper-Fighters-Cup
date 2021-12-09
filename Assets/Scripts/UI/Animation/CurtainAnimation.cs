@@ -22,6 +22,7 @@ namespace EsperFightersCup.UI
         public UniTask FadeInAsync()
         {
             return DOTween.Sequence()
+                .SetLink(gameObject)
                 .AppendCallback(() => _curtain.alpha = 0f)
                 .AppendCallback(() => _curtain.blocksRaycasts = true)
                 .Append(_curtain.DOFade(1f, _duration).SetEase(_fadeInEase))
@@ -32,6 +33,7 @@ namespace EsperFightersCup.UI
         public UniTask FadeOutAsync()
         {
             return DOTween.Sequence()
+                .SetLink(gameObject)
                 .AppendCallback(() => _curtain.alpha = 1f)
                 .Append(_curtain.DOFade(0f, _duration).SetEase(_fadeOutEase))
                 .AppendCallback(() => _curtain.blocksRaycasts = false)
