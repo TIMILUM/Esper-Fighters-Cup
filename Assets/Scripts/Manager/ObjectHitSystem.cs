@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EsperFightersCup;
 using Photon.Pun;
 using Unity.Mathematics;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class ObjectHitSystem : MonoBehaviourPun
     [SerializeField, Tooltip("값은 Actor를 상속받고 있을 경우에만 자동으로 입력됩니다. 그 외에는 수동으로 입력하셔야합니다.")]
     private int _objectID;
 
-    [SerializeField, FMODUnity.EventRef]
+    [SerializeField]
     private string _hitSound;
 
     [Header("Destroy Effects")]
@@ -105,21 +106,6 @@ public class ObjectHitSystem : MonoBehaviourPun
         }
     }
 
-    private void Update()
-    {
-        /*
-        if (_actor is null || !_actor.photonView.IsMine || !IsDestroyable)
-        {
-            return;
-        }
-
-        if (IsDestroyed)
-        {
-            DestroyObject();
-        }
-        */
-    }
-
     private void OnCollisionEnter(Collision other)
     {
         _collisionDirection = Vector3.Normalize(new Vector3(transform.position.x - other.contacts[0].point.x, 0, transform.position.z - other.contacts[0].point.z));
@@ -173,33 +159,36 @@ public class ObjectHitSystem : MonoBehaviourPun
             otherHitSystem.DestroyObject();
         }
         */
+        OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
 
-        if (!string.IsNullOrEmpty(_hitSound))
+        if (!(photonView is null) && photonView.IsMine)
         {
-            var instance = FMODUnity.RuntimeManager.CreateInstance(_hitSound);
-            FMODUnity.RuntimeManager.AttachInstanceToGameObject(instance, gameObject.transform);
+            if (!string.IsNullOrEmpty(_hitSound))
+            {
+                if (IsDestroyed)
+                {
+                    SfxManager.Instance.PlaySFXSync(_hitSound, transform.position, "DestroyCheck", 1f);
+                }
+                else
+                {
+                    SfxManager.Instance.PlaySFXSync(_hitSound, transform.position);
+                }
+            }
+
             if (IsDestroyed)
             {
-                instance.setParameterByName("DestroyCheck", 1f);
-            }
-            instance.start();
-            instance.release();
-        }
-
-        OnHit?.Invoke(this, new HitEventArgs(other, IsDestroyed));
-        if (IsDestroyed && photonView.IsMine)
-        {
-            if (!string.IsNullOrEmpty(_particleName))
-            {
-                if (_destroyEffectPosition == null)
+                if (!string.IsNullOrEmpty(_particleName))
                 {
-                    _destroyEffectPosition = transform;
-                }
-                var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);
-                ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, rotation);
+                    if (_destroyEffectPosition == null)
+                    {
+                        _destroyEffectPosition = transform;
+                    }
+                    var rotation = Quaternion.LookRotation(_collisionDirection) * quaternion.Euler(-90, 0, 0);
+                    ParticleManager.Instance.PullParticleSync(_particleName, _destroyEffectPosition.position, rotation);
 
+                }
+                PhotonNetwork.Destroy(gameObject);
             }
-            PhotonNetwork.Destroy(gameObject);
         }
     }
 
@@ -210,6 +199,12 @@ public class ObjectHitSystem : MonoBehaviourPun
             s_activateBuffList = new List<BuffObject.Type>();
             SetActiveBuffList();
         }
+
+        if (actor is null || actor.BuffController is null)
+        {
+            return false;
+        }
+
         return s_activateBuffList.Any(buffType => actor.BuffController.ActiveBuffs[buffType].Count > 0);
     }
 }
