@@ -1,33 +1,48 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace EsperFightersCup.UI
 {
-    [RequireComponent(typeof(Button), typeof(GoToScene))]
     public class ConnectToServer : MonoBehaviourPunCallbacks
     {
-        private Button _connectButton;
+        [SerializeField] private Button _connectButton;
+
         private Text _connectButtonText;
 
         private string _defaultText;
 
         private void Awake()
         {
-            _connectButton = GetComponent<Button>();
-
             _connectButtonText = _connectButton.GetComponentInChildren<Text>();
             _defaultText = _connectButtonText.text;
         }
 
+        private void Start()
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                _connectButton.interactable = false;
+                PhotonNetwork.Disconnect();
+            }
+        }
+
         public override void OnConnectedToMaster()
         {
-            GetComponent<GoToScene>().LoadScene("MainScene");
+            SceneManager.LoadScene("MainScene");
         }
 
         public override void OnDisconnected(DisconnectCause cause)
         {
+            if (cause == DisconnectCause.DisconnectByClientLogic)
+            {
+                _connectButton.interactable = true;
+                Debug.Log($"정상적으로 서버와의 접속이 끊어졌습니다.");
+                return;
+            }
+
             var popup = PopupManager.Instance.CreateNewBasicPopup();
 
             popup.OnYesButtonClicked += () => CoroutineTimer.SetTimerOnce(ResetButton, 1f);

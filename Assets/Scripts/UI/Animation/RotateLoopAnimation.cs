@@ -19,14 +19,14 @@ namespace EsperFightersCup.UI
             _image = GetComponent<Image>();
 
             DOTween.Sequence()
+                .SetLink(gameObject)
                 .Append(_image.DOFade(0f, 0f))
                 .AppendInterval(1f)
                 .AppendCallback(() => DOTween.Sequence()
+                    .SetLink(gameObject))
                     .Append(_transform.DORotate(_transform.rotation.eulerAngles + (Vector3.forward * _rotate), 1f).SetEase(_easeType))
                     .SetLoops(-1, LoopType.Incremental)
-                    .SetLink(gameObject))
-                .Join(_image.DOFade(1f, 1f))
-                .SetLink(gameObject);
+                .Join(_image.DOFade(1f, 1f));
         }
     }
 }
