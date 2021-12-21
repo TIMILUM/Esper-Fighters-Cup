@@ -1,33 +1,24 @@
-using System;
+using EsperFightersCup;
 using UnityEngine;
 
 public class StunObject : BuffObject
 {
-    private void Reset()
+    public override Type BuffType => Type.Stun;
+
+    public override void OnBuffGenerated()
     {
-        _name = "Stun";
-        _buffStruct.Type = Type.Stun;
+        if (Author is APlayer player && player.Animator != null)
+        {
+            player.Animator.SetTrigger("Hit", false);
+
+            var position = Author.transform.position + new Vector3(0f, 0.01f, 0f);
+            ParticleManager.Instance.PullParticleLocal("Character_Hit", position, Quaternion.Euler(90f, 0f, 0f));
+            StunUIManager.Instance.PlayStunUI(Info.Duration, Author.transform);
+        }
     }
 
-
-    // Start is called before the first frame update
-    private new void Start()
+    public override void OnBuffReleased()
     {
-        base.Start();
-    }
-
-    // Update is called once per frame
-    private new void Update()
-    {
-        base.Update();
-    }
-
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
+        base.OnBuffReleased();
     }
 }

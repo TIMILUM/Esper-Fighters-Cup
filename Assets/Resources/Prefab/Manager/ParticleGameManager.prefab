@@ -1,0 +1,214 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3466341873098705245
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3466341873098705247}
+  - component: {fileID: 3466341873098705244}
+  m_Layer: 0
+  m_Name: ParticleGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3466341873098705247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466341873098705245}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3466341873098705244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466341873098705245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fbb774f6d422a346b44801cb68383aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _particleInfo:
+  - _particleName: Elena_ReverseGravity_Solidarity
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 1489636694070488404, guid: 6bff3107bf5401e4195701b2d95de961, type: 3}
+    _paletteParticle2: {fileID: 1489636694070488404, guid: ea7775de500af064ea2dd46fb30b889c, type: 3}
+  - _particleName: Break_Dust
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 8055399218500536941, guid: 7f9840d2acb63a646ae6a0fab69e3654, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Character_Hit
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 937467195567152476, guid: c732871483bd8bf4aa54787a03d4e3f7, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Elena_Blink
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 3274366373025206198, guid: 5932edb56e8b1af40aaed24681ffcaf5, type: 3}
+    _paletteParticle2: {fileID: 3274366373025206198, guid: 57b4d722e0ca97142824a9f86e87189f, type: 3}
+  - _particleName: Elena_Ready
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 187095210896297993, guid: 831bc37bd73ad5c43aed3db1f6d24ae8, type: 3}
+    _paletteParticle2: {fileID: 187095210896297993, guid: 550b9896a47bf624da791c999e92ca18, type: 3}
+  - _particleName: Elena_ReverseGravity
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 1330632347847076570, guid: 990386892e7d1674ba1dc84c76bc66ba, type: 3}
+    _paletteParticle2: {fileID: 1330632347847076570, guid: 7c475098f71cc0f429c686472e7d6d36, type: 3}
+  - _particleName: Elena_ReverseGravity_Glow
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 1744012830986207041, guid: 9fdcd0f06c7b0a94399e71ec5c2699d4, type: 3}
+    _paletteParticle2: {fileID: 1095443619652304203, guid: ea883af253c8c0b468db880ed139beb6, type: 3}
+  - _particleName: Elena_ShockWave_Hand_Waver
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 187095210896297993, guid: 79af6b9abf16f2f48b3737cbd13c1e14, type: 3}
+    _paletteParticle2: {fileID: 2240542626285468976, guid: 2a734d30477d646428cca93c98c412c7, type: 3}
+  - _particleName: Elena_ShockWave
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 8785596094442787592, guid: 629764732c099544b9be1400bc9b9ba4, type: 3}
+    _paletteParticle2: {fileID: 8785596094442787592, guid: c39d0183d41dd3a4cb0ff56d76c6976b, type: 3}
+  - _particleName: Elena_Victory
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 187095210896297993, guid: 934b56e6febda3146814b2b7edbcfa73, type: 3}
+    _paletteParticle2: {fileID: 187095210896297993, guid: 475c006280491f045a814f0258acca15, type: 3}
+  - _particleName: Plank_GroundSmash_Smite
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 1081832489839075987, guid: d00f20c75ac67504da6b3990ab52c2e6, type: 3}
+    _paletteParticle2: {fileID: 1081832489839075987, guid: 273d8dcbcbbf00549853bb1e3f28e404, type: 3}
+  - _particleName: Plank_Sliding_Wave
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 9099147860344955467, guid: ca9da471a41a57849a8ae9c4713564e1, type: 3}
+    _paletteParticle2: {fileID: 9099147860344955467, guid: 79f9d2fa6ba775a4c87135b5b63c81a5, type: 3}
+  - _particleName: Plank_TacklePunch_Slash
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 610931047757848260, guid: 4d0554a0558bbc444ab54da2cea798da, type: 3}
+    _paletteParticle2: {fileID: 610931047757848260, guid: b476d8016d9e7924591735486f2bf38b, type: 3}
+  - _particleName: Plank_TacklePunch_Swing
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 740977408721668117, guid: 1f6cd49b3a6ae6c4997cb65353f6da88, type: 3}
+    _paletteParticle2: {fileID: 740977408721668117, guid: c5c9c773f6388604b93d2d3f2fc1d5f3, type: 3}
+  - _particleName: SawBlade_Hit
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 2394894540614903867, guid: e2123aa92542e434e9622afa54eb5105, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Object_Destroy
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 8055399218500536941, guid: 7f9840d2acb63a646ae6a0fab69e3654, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Fragment_Object_Destroy
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 2079066127745328221, guid: 61570352dea8ce24f82281c845311a87, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Lighting_Object_Destroy
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 4103113057361318421, guid: 7e8b3c5295bc71d409a7d2017d5875c8, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Speaker_Object_Destroy
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 0
+    _defaultParticle: {fileID: 1859279849153659930, guid: ea227f69f1e7fba428ae227db923aba5, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}
+  - _particleName: Elena_Random_Drop
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 7145649949678259631, guid: 0257bc8b50f6d154d83132866844472d, type: 3}
+    _paletteParticle2: {fileID: 7145649949678259631, guid: 29993b9b1b54fff49ab2b13fb1a55b67, type: 3}
+  - _particleName: Plank_Punch_Swing
+    _maxNum: 10
+    _lifeTime: 2000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 740977408721668117, guid: 1f6cd49b3a6ae6c4997cb65353f6da88, type: 3}
+    _paletteParticle2: {fileID: 740977408721668117, guid: c5c9c773f6388604b93d2d3f2fc1d5f3, type: 3}
+  - _particleName: Plank_Sliding_Sonic_Boom
+    _maxNum: 10
+    _lifeTime: 0
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 2924432639335813765, guid: 295706f671fc6df4297f010cfa106125, type: 3}
+    _paletteParticle2: {fileID: 2924432639335813765, guid: 9ee0a765526486044a32c4fc7c6ae2de, type: 3}
+  - _particleName: Plank_Blink
+    _maxNum: 10
+    _lifeTime: 1000
+    _usePalette: 1
+    _defaultParticle: {fileID: 0}
+    _paletteParticle1: {fileID: 6974460583835048992, guid: 311854f6972a89148a04c443e2a3a9b9, type: 3}
+    _paletteParticle2: {fileID: 1993975284265622293, guid: c26a3b86a41645f44999d4be621ed38d, type: 3}
+  - _particleName: SkillRock_Object_Destroy
+    _maxNum: 10
+    _lifeTime: 1000
+    _usePalette: 0
+    _defaultParticle: {fileID: 4074434037705834737, guid: 5886bc75eec42134483902ef920ff37d, type: 3}
+    _paletteParticle1: {fileID: 0}
+    _paletteParticle2: {fileID: 0}

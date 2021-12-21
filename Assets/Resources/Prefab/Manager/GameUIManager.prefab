@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2470138121703495510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2470138121703495511}
+  - component: {fileID: 2470138121703495508}
+  m_Layer: 0
+  m_Name: GameUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2470138121703495511
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470138121703495510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2470138121703495508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2470138121703495510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32445dec9833ad044866edbee44d5002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiParent: {fileID: 0}
+  _positionY: 0.07
+  _uiList:
+  - _name: Skill_Range
+    _prefab: {fileID: 1506241234304734123, guid: 528957cb890354e47833efa81797618b, type: 3}
+  - _name: ShockWave_Arrow
+    _prefab: {fileID: 7777918327910784537, guid: 2bf6c2fd19f7e6c4fba07ecba2edfec7, type: 3}
+  - _name: ShockWave_Range
+    _prefab: {fileID: -3706689521334415213, guid: 22d4055e6ef825141b5ab6663799c16d, type: 3}
+  - _name: ReverseGravity_Casting
+    _prefab: {fileID: 2012874535035243228, guid: e0c03364b3e2f304491cd548cad181f1, type: 3}
+  - _name: ReverseGravity_Range
+    _prefab: {fileID: 859274110090925874, guid: 144a4232e4235a641899614305e74938, type: 3}
+  - _name: RandDrop_Casting
+    _prefab: {fileID: 3222550910489697473, guid: 77cd07a122406d641a86ed69347fb18a, type: 3}
+  - _name: RandDrop_Range
+    _prefab: {fileID: 1788431007540115852, guid: 25e40b779e442774990c781295ad7ff3, type: 3}
+  - _name: GroundSmash_Range
+    _prefab: {fileID: 504102112461806419, guid: b618ca803942232459999ef945bfcd68, type: 3}
+  - _name: Position_LocalPlayer
+    _prefab: {fileID: 2979315643931502337, guid: 3438e6a935a9e514a992aa835fc877a2, type: 3}
+  - _name: Position_EnemyPlayer
+    _prefab: {fileID: 8381760829762192651, guid: 3e7b822d04c20b14bbd9728fecd311db, type: 3}

@@ -1,88 +1,106 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using EsperFightersCup;
+using EsperFightersCup.UI;
 using UnityEngine;
 
 public class ShockWaveSkillObject : SkillObject
 {
-    [SerializeField]
-    private float _range = 3;
-
-    [SerializeField]
-    private float _onHitDuration = 0.5f;
-
-    [SerializeField]
-    private GameObject[] _firstCasting;
-
-    [SerializeField]
-    private GameObject[] _secondCasting;
-
-    [SerializeField]
-    [Header("Collider")]
-    private Transform _colliderParentTransform;
-
-    [SerializeField]
-    private ColliderChecker _collider;
-
-    [SerializeField]
-    [Tooltip("[세로, 가로]")]
-    private Vector2 _colliderSize = new Vector2(0.5f, 2);
-
-    private Vector3 _direction = Vector3.right;
-    private Vector3 _startPos = Vector3.zero;
-
-    // Start is called before the first frame update
-    protected override void Start()
+    private class ShockWaveSkillData
     {
-        base.Start();
-        ScaleGameObjects(_firstCasting, new Vector3(_range, 1, _range));
-
-        var colliderScale = new Vector3(_colliderSize.y, 1, _colliderSize.x);
-        ScaleGameObjects(_secondCasting, colliderScale);
-        _colliderParentTransform.localScale = colliderScale;
-        _collider.OnCollision += SetHit;
+        public List<int> TargetID { get; set; }
+        public List<bool> Raise { get; set; }
+        public List<int> MoveSpeed { get; set; }
+        public List<int> MoveTime { get; set; }
+        public List<int> Damage { get; set; }
+        public List<int> StunDuration { get; set; }
     }
+
+    [Header("Collider")]
+    [SerializeField] private ColliderChecker _collider;
+
+    private ShockWaveSkillData _data;
+    private SkillUI _castUI;
+    private Vector3 _startPos = Vector3.zero;
+    private Vector3 _direction = Vector3.right;
+    private Vector2 _uiSize;
 
     public override void SetHit(ObjectBase to)
     {
-        _buffOnCollision[0].ValueVector3[0] = _direction;
+        // TODO: 충격파 대쉬 적용
+        var knockBackBuff = AnalyzeBuff(to);
+        if (knockBackBuff is null)
+        {
+            return;
+        }
+        knockBackBuff.ValueVector3[0] = _direction;
+
+        _buffOnCollision.Clear();
+        _buffOnCollision.Add(knockBackBuff);
         base.SetHit(to);
     }
 
-    protected override IEnumerator OnReadyToUse()
+    protected override void OnDestroy()
     {
-        var isCanceled = false;
+        base.OnDestroy();
+        if (_collider)
+        {
+            Destroy(_collider.gameObject);
+        }
+        if (_castUI)
+        {
+            Destroy(_castUI);
+        }
+    }
+
+    protected override void OnInitializeSkill()
+    {
+        base.OnInitializeSkill();
+        LoadShockWaveData();
+
+        _uiSize = new Vector2(Size.y, Size.y) * 0.1f;
+
+        _collider.transform.SetParent(null);
+        GameObjectUtil.ScaleGameObject(_collider.gameObject, new Vector3(Size.x, 50, Size.y));
+        _collider.OnCollision += SetHit;
+    }
+
+    protected override async UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation)
+    {
+        if (_castUI == null)
+        {
+            _castUI = GameUIManager.Instance.PlayLocal(Author, "ShockWave_Arrow", transform.position, _uiSize);
+            GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+        }
+
+        bool isCanceled = false;
         Vector3 endPos;
 
-        ActiveGameObjects(_firstCasting);
+        _startPos = SetStartPos();
+        if (float.IsPositiveInfinity(_startPos.x))
+        {
+            return false;
+        }
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, true);
+        _castUI.SetPositionAndRotation(_startPos, Vector3.zero);
 
-        yield return new WaitUntil(() =>
+        await UniTask.WaitUntil(() =>
         {
             // 우클릭 시 취소
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            if (Input.GetMouseButtonDown(1))
             {
                 isCanceled = true;
-            }
-
-            // 시작점 설정
-            if (Input.GetMouseButtonDown(0))
-            {
-                _startPos = SetStartPos();
-                if (float.IsPositiveInfinity(_startPos.x))
-                {
-                    isCanceled = true;
-                }
-
-                ActiveGameObjects(_firstCasting, false);
-                ActiveGameObjects(_secondCasting);
             }
             // 끝점 설정
             else if (Input.GetMouseButton(0) && _startPos != Vector3.positiveInfinity)
             {
                 endPos = GetMousePosition();
                 _direction = Vector3.Normalize(endPos - _startPos);
-                TranslateGameObjects(_secondCasting, _startPos);
-                RotateGameObjects(_secondCasting, Quaternion.LookRotation(_direction));
+
+                var rotation = _direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(_direction);
+                _castUI.SetRotation(rotation.eulerAngles);
             }
             // 판정 범위 최종 계산
             else if (Input.GetMouseButtonUp(0))
@@ -91,68 +109,68 @@ public class ShockWaveSkillObject : SkillObject
             }
 
             return isCanceled;
-        });
 
-        if (isCanceled)
-        {
-            SetState(State.Canceled);
-            yield break;
-        }
+        }, cancellationToken: cancellation);
 
-        ActiveGameObjects(_firstCasting, false);
-        ActiveGameObjects(_secondCasting, false);
-        SetNextState();
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+        return !isCanceled;
     }
 
-    protected override IEnumerator OnFrontDelay()
+    protected override void BeforeFrontDelay()
     {
-        SetNextState();
-        yield break;
+        var pos = _castUI.transform.position;
+        var rot = _castUI.transform.rotation.eulerAngles;
+
+        GameUIManager.Instance.PlaySync(Author, "ShockWave_Range", new Vector2(pos.x, pos.z), _uiSize, rot.y, 0.5f);
+
+        //충격파 애니메이션
+        AuthorPlayer.Animator.SetTrigger("ShockWaveSkill");
+        ParticleManager.Instance.PullParticleAttachedSync("Elena_ShockWave_Hand_Waver", 0);
+
+        SfxManager.Instance.PlaySFXSync("Shockwave", Author.transform.position);
     }
 
-    protected override IEnumerator OnUse()
+    protected override async UniTask OnUseAsync()
     {
-        _colliderParentTransform.SetPositionAndRotation(_startPos, Quaternion.LookRotation(_direction));
-        _colliderParentTransform.gameObject.SetActive(true);
-        var startTime = DateTime.Now;
-        var nowTime = DateTime.Now;
-        while ((nowTime - startTime).TotalMilliseconds <= _onHitDuration * 1000)
-        {
-            _colliderParentTransform.transform.position = _startPos;
-            yield return null;
-            nowTime = DateTime.Now;
-        }
+        ParticleManager.Instance.PullParticleSync("Elena_ShockWave", _startPos + _direction + (Vector3.up * 1f), Quaternion.Euler(90f, _castUI.RotationY, 0f));
 
-        _colliderParentTransform.gameObject.SetActive(false);
-        SetNextState();
+        _collider.transform.SetPositionAndRotation(_castUI.transform.GetChild(0).position, Quaternion.LookRotation(_direction));
+
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, true);
+        await UniTask.DelayFrame(3);
+        GameObjectUtil.ActiveGameObject(_collider.gameObject, false);
     }
 
-    protected override IEnumerator OnEndDelay()
+    protected override void BeforeEndDelay()
     {
-        SetNextState();
-        yield break;
     }
 
-    protected override IEnumerator OnCanceled()
+    protected override void OnCancel()
     {
-        SetState(State.Release);
-        yield return null;
+        ReleaseShockWave();
     }
 
-    protected override IEnumerator OnRelease()
+    protected override void OnRelease()
     {
-        Destroy(gameObject);
-        yield return null;
+        ReleaseShockWave();
+    }
+
+    private void ReleaseShockWave()
+    {
+        // 중간에 스킬이 취소되어서 미처 제거하지 못한 코드들 여기서 제거
+        GameObjectUtil.ActiveGameObject(_castUI.gameObject, false);
+        _collider.gameObject.SetActive(false);
     }
 
     private Vector3 SetStartPos()
     {
         var startPos = GetMousePosition();
-        if (Vector3.Distance(startPos, transform.position) > _range)
+        /*
+        if (Vector3.Distance(startPos, transform.position) > Range)
         {
             return Vector3.positiveInfinity;
         }
-
+        */
         return startPos;
     }
 
@@ -171,41 +189,89 @@ public class ShockWaveSkillObject : SkillObject
         return Vector3.positiveInfinity;
     }
 
-    private void ActiveGameObjects(IEnumerable<GameObject> gameObjects, bool isActive = true)
+    private void LoadShockWaveData()
     {
-        foreach (var gameObj in gameObjects)
+        if (_data != null)
         {
-            gameObj.SetActive(isActive);
+            return;
+        }
+
+        var csvData = CSVUtil.GetData("ShockWaveKnockBackDataTable");
+        _data = new ShockWaveSkillData();
+
+        if (csvData.Get<float>("ShockWave_Data_ID", out var targetIds))
+        {
+            _data.TargetID = targetIds.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("FloatCheck", out var floatChecks))
+        {
+            _data.Raise = floatChecks.Select(x => x > 0).ToList();
+        }
+        if (csvData.Get<float>("ShockWave_MoveSpeed", out var moveSpeeds))
+        {
+            _data.MoveSpeed = moveSpeeds.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("ShockWave_MoveTime", out var moveTimes))
+        {
+            _data.MoveTime = moveTimes.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("Damage", out var damages))
+        {
+            _data.Damage = damages.Select(x => (int)x).ToList();
+        }
+        if (csvData.Get<float>("Groggy_Duration", out var durations))
+        {
+            _data.StunDuration = durations.Select(x => (int)x).ToList();
         }
     }
 
-    private void RotateGameObjects(IEnumerable<GameObject> gameObjects, Quaternion rotation)
+    private BuffObject.BuffStruct AnalyzeBuff(ObjectBase to)
     {
-        foreach (var gameObj in gameObjects)
+        if (!(to is Actor target))
         {
-            gameObj.transform.rotation = rotation;
+            return null;
         }
-    }
 
-    private void ScaleGameObjects(IEnumerable<GameObject> gameObjects, Vector3 scale)
-    {
-        foreach (var gameObj in gameObjects)
+        var targetID = target.ID;
+        var targetIsRaised = target.BuffController.ActiveBuffs.Exists(BuffObject.Type.Raise);
+
+        for (int i = 0; i < _data.TargetID.Count; i++)
         {
-            gameObj.transform.localScale = scale;
+            var id = _data.TargetID[i];
+            var raise = _data.Raise[i];
+            var movespeed = _data.MoveSpeed[i];
+            var movetime = _data.MoveTime[i];
+            var damage = _data.Damage[i];
+            var stunDuration = _data.StunDuration[i];
+
+            // CSV의 타겟 ID가 아니면 확인할 필요가 없으니 1차적으로 필터링
+            if (targetID != id)
+            {
+                continue;
+            }
+            // CSV의 띄워짐 상태와 오브젝트의 띄워짐 상태를 확인하여 2차 필터링
+            if (targetIsRaised != raise)
+            {
+                continue;
+            }
+
+            var result = new BuffObject.BuffStruct
+            {
+                Type = BuffObject.Type.KnockBack,
+                AllowDuplicates = false,
+                Duration = movetime * 0.001f,
+                ValueFloat = new float[]
+                {
+                    movespeed,
+                    damage,
+                    stunDuration * 0.001f
+                },
+                ValueVector3 = new Vector3[1]
+            };
+
+            return result;
         }
-    }
 
-    private void TranslateGameObjects(IEnumerable<GameObject> gameObjects, Vector3 position)
-    {
-        foreach (var gameObj in gameObjects)
-        {
-            gameObj.transform.position = position;
-        }
-    }
-
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffObject.BuffStruct[] appendBuff) { }
-
-    public override void OnPlayerHitEnter(GameObject other)
-    {
+        return null;
     }
 }

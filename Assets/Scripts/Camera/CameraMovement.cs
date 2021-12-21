@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
+    private int _cameraViewState = 1;
+
     [SerializeField]
     private Camera _camera;
 
@@ -40,6 +42,11 @@ public class CameraMovement : MonoBehaviour
         if (_movementTargets.Count == 0)
         {
             return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ViewStateChanger();
         }
 
         CalcAllBounds();
@@ -81,4 +88,52 @@ public class CameraMovement : MonoBehaviour
     {
         _movementTargets.Remove(target);
     }
+
+
+    private void ViewStateChanger()
+    {
+        if (_cameraViewState == 1) { _cameraViewState = 2; Debug.Log("ViewState Changed to [" + _cameraViewState + "]"); }
+        else if (_cameraViewState == 2) { _cameraViewState = 1; Debug.Log("ViewState Changed to [" + _cameraViewState + "]"); }
+        CameraViewChanger(_cameraViewState);
+    }
+
+    private void CameraViewChanger(int viewState)
+    {
+        if (viewState == 1)        //60
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+            _offset.z = -11;
+            _minZoom = 80;
+            _maxZoom = 20;
+        }
+        else if (viewState == 2)   //45
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
+            _offset.z = -20;
+            _minZoom = 65;
+            _maxZoom = 15;
+        }
+    }
+
+    public void CameraViewStateFirstInput(int inputedViewState)
+    {
+        Debug.Log("Fitst ViewState Inputer Loaded. ViewState [" + inputedViewState + "] Inputed");
+        if (inputedViewState == 1)
+        {
+            _cameraViewState = inputedViewState;
+            transform.rotation = Quaternion.Euler(new Vector3(60, 0, 0));
+            _offset.z = -11;
+            _minZoom = 80;
+            _maxZoom = 20;
+        }
+        else if (inputedViewState == 2)
+        {
+            _cameraViewState = inputedViewState;
+            transform.rotation = Quaternion.Euler(new Vector3(45, 0, 0));
+            _offset.z = -18;
+            _minZoom = 65;
+            _maxZoom = 15;
+        }
+    }
+
 }

@@ -1,65 +1,157 @@
 using System;
 using System.Collections.Generic;
+using EsperFightersCup;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
-public class InGamePlayerManager : MonoBehaviourPunCallbacks
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
+public class InGamePlayerManager : PunEventSingleton<InGamePlayerManager>
 {
-    [Header("Player Generate")]
+    private const string CharacterPrefabLocation = "Prefab/Character/{0}";
 
-    [SerializeField]
-    private List<ACharacter> _characterPrefabs;
+    [SerializeField] private ACharacter.Type _defaultCharacterType = ACharacter.Type.Telekinesis;
+    [Header("[Player Generate]")]
+    [SerializeField] private List<ACharacter> _characterPrefabs;
+    [SerializeField] private List<Transform> _startLocations;
 
-    // TODO: 나중에 캐릭터 선택 구현 시 임시로 작성한 PlayerSpawnManager 해당 코드의 수정이 필요함
-    [SerializeField]
-    private ACharacter.Type _currentCharacterType = ACharacter.Type.Telekinesis;
-    [SerializeField]
-    private Transform _spawnTransform;
+    public ACharacter.Type DefaultCharacter => _defaultCharacterType;
 
+    /// <summary>
+    /// 현재 씬의 로컬 플레이어 인스턴스를 가져옵니다.
+    /// </summary>
+    public APlayer LocalPlayer { get; private set; }
 
-    private static ACharacter s_myCharacter = null;
-    private static ACharacter s_enemyCharacter = null;
+    /// <summary>
+    /// 키가 ActorNumber, 값이 플레이어 인스턴스인 딕셔너리를 제공합니다.
+    /// </summary>
+    public Dictionary<int, APlayer> GamePlayers { get; } = new Dictionary<int, APlayer>();
 
-    [Header("Player's Camera")]
+    /// <summary>
+    /// 인게임의 플레이어 시작 위치를 담고 있습니다.
+    /// </summary>
+    public List<Transform> StartLocations => _startLocations;
 
-    [SerializeField]
-    private CameraMovement _cameraMovement;
-
-    // Start is called before the first frame update
-    private void Start()
+    /// <summary>
+    /// 액터 번호로 정렬된 플레이어 목록 중 해당 플레이어가 몇 번째에 존재하는지 검색합니다.
+    /// </summary>
+    /// <param name="searchPlayer"></param>
+    /// <returns></returns>
+    public static int FindPlayerIndex(Player searchPlayer)
     {
-#if UNITY_EDITOR
-        // 연결되지 않고 인게임 화면이 나온다면 오프라인 모드를 통한 디버깅을 허용
-        if (!PhotonNetwork.IsConnected)
-        {
-            Debug.LogWarning("Enable Offline Mode!");
-            PhotonNetwork.OfflineMode = true;
-            PhotonNetwork.JoinRandomRoom();
-        }
-#endif
-        SpawnPlayer();
+        return Array.FindIndex(PhotonNetwork.PlayerList, p => p.ActorNumber == searchPlayer.ActorNumber);
     }
 
-    private void SpawnPlayer()
+    public void SpawnLocalPlayer()
     {
-        var prefab = _characterPrefabs.Find(x => x.CharacterType == _currentCharacterType);
+        ACharacter.Type characterType;
+        var props = PhotonNetwork.LocalPlayer.CustomProperties;
+
+        if (props.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var characterTypeRaw))
+        {
+            characterType = (ACharacter.Type)(int)characterTypeRaw;
+        }
+        else
+        {
+            Debug.LogWarning($"Can not found local player's character type.");
+            characterType = _defaultCharacterType;
+        }
+
+        var prefab = _characterPrefabs.Find(x => x.CharacterType == characterType);
         if (prefab == null)
         {
             throw new Exception("생성할 캐릭터의 타입을 찾을 수 없습니다.");
         }
 
-        var player = PhotonNetwork.Instantiate("Prefabs/Characters/" + prefab.name,
-            _spawnTransform.position + Vector3.up, Quaternion.identity);
-        // player.transform.SetParent(_spawnTransform);
+        var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
+            transform.position + (Vector3.up * 5f), Quaternion.identity);
+
+        var localplayer = player.GetComponent<APlayer>();
+
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
+
+        LocalPlayer = localplayer;
+        var pvID = LocalPlayer.photonView.ViewID;
+
+        Debug.Log($"Create new local player instance = [{pvID}]{LocalPlayer}");
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, pvID);
+
+        localplayer.ResetPositionAndRotation();
+
+        if (PhotonNetwork.OfflineMode)
+        {
+            SpawnDummyPlayer();
+        }
     }
 
-    public static void SetMyPlayer(ACharacter character)
+    private void SpawnDummyPlayer()
     {
-        s_myCharacter = character;
+
+        ACharacter.Type characterType;
+        var props = PhotonNetwork.LocalPlayer.CustomProperties;
+
+        if (props.TryGetValue(CustomPropertyKeys.PlayerCharacterType, out var characterTypeRaw))
+        {
+            characterType = (ACharacter.Type)(int)characterTypeRaw;
+        }
+        else
+        {
+            characterType = _defaultCharacterType;
+        }
+
+        var prefab = _characterPrefabs.Find(x => x.CharacterType != characterType);
+
+        var player = PhotonNetwork.Instantiate(string.Format(CharacterPrefabLocation, prefab.name),
+            transform.position + (Vector3.up * 5f), Quaternion.identity);
+
+        var dummyPlayer = player.GetComponent<APlayer>();
+
+        Camera.main.GetComponent<FMODUnity.StudioListener>().attenuationObject = gameObject;
+        var pvID = LocalPlayer.photonView.ViewID;
+
+        GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber + 1] = dummyPlayer;
+
+        Debug.Log($"Create new dummy player instance = [{pvID}]");
+        dummyPlayer.ResetPositionAndRotation();
     }
 
-    public static void SetEnemyPlayer(ACharacter character)
+    public void RemoveLocalPlayer()
     {
-        s_enemyCharacter = character;
+        PhotonNetwork.Destroy(LocalPlayer.gameObject);
+        LocalPlayer = null;
+        Debug.Log($"Remove local player instance");
+        PhotonNetwork.LocalPlayer.SetCustomProperty(CustomPropertyKeys.PlayerPhotonView, -1);
+
+        if (PhotonNetwork.OfflineMode)
+        {
+            RemoveDummyPlayer();
+        }
+    }
+
+    private void RemoveDummyPlayer()
+    {
+        PhotonNetwork.Destroy(GamePlayers[PhotonNetwork.LocalPlayer.ActorNumber + 1].gameObject);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        if (!changedProps.TryGetValue(CustomPropertyKeys.PlayerPhotonView, out var value))
+        {
+            return;
+        }
+
+        var targetPV = (int)value;
+
+        if (targetPV == -1)
+        {
+            Debug.Log($"Remove player instance: [{targetPlayer.ActorNumber}]");
+            GamePlayers.Remove(targetPlayer.ActorNumber);
+            return;
+        }
+
+        var playerInstance = PhotonNetwork.GetPhotonView(targetPV).gameObject.GetComponent<APlayer>();
+        GamePlayers[targetPlayer.ActorNumber] = playerInstance;
+        Debug.Log($"New player instance: [{targetPlayer.ActorNumber}] = {targetPV}-{playerInstance}");
     }
 }

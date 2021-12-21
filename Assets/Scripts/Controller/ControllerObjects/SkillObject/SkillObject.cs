@@ -1,144 +1,399 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public abstract class SkillObject : ControllerObject
+public abstract class SkillObject : ControllerObject<SkillController>
 {
     /// <summary>
-    ///     스킬 FSM의 상태변화가 정리된 enum입니다.
+    /// 스킬 FSM의 상태변화가 정리된 enum입니다.
     /// </summary>
     public enum State
     {
         ReadyToUse = 0,
-        FrontDelay = 1,
-        Use = 2,
-        EndDelay = 3,
-        Canceled = 4,
-        Release = 5
+        FrontDelay,
+        Use,
+        EndDelay,
+        Canceled,
+        Release
     }
 
-    [SerializeField]
-    private State _currentState = State.ReadyToUse;
+    [SerializeField] private int _id;
+    [SerializeField] private KeyCode _inputKey;
+    [SerializeField] private bool _debuging;
+
+
+    //기획자 분들께서 밸런스 맞추기 위해서 인스펙터에 frontDelay및 endDelay를
+    //넣어 달라고 부탁하셔서 넣었습니다.
+    //csv가 0일때 인스펙터의 딜레이가 들어갑니다.
+
+    [SerializeField, Tooltip("CSV의 Pre_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")]
+    private int _frontDelay;
+    [SerializeField, Tooltip("CSV의 After_Delay_Duration이 0인 경우 해당 값이 적용됩니다.")]
+    private int _endDelay;
+
+    private CSVData _commonCsvData;
+    private int _commonCsvIndex;
+
+    private CancellationTokenSource _stateCancellation;
+
+    // 움직임 버프 관련하여 안전하게 생성하는 코루틴 함수입니다.
+    private Coroutine _generateMoveSpeedCoroutine;
 
     /// <summary>
-    ///     플레이어의 버프 컨트롤러입니다.
+    /// 스킬 캐스팅 중 움직임 관련하여 주어진 버프를 따로 모아 안전하게 해지하고자 합니다.
     /// </summary>
-    protected BuffController _buffController;
+    private readonly List<MoveSpeedObject> _moveSpeedObjects = new List<MoveSpeedObject>();
 
     /// <summary>
-    ///     이 스킬에서 현재 실행 중인 코루틴입니다. (코루틴의 수정은 지정된 함수로 진행하는걸 권장합니다.)
+    /// 플레이어
     /// </summary>
-    protected Coroutine _currentCoroutine;
+    protected APlayer AuthorPlayer { get; private set; }
 
     /// <summary>
-    ///     현재 해당 스킬의 FSM입니다.
+    /// 플레이어의 버프 컨트롤러입니다.
     /// </summary>
-    protected State CurrentState
-    {
-        get => _currentState;
-        set => SetState(_currentState);
-    }
+    protected BuffController BuffController { get; private set; }
+
+    public KeyCode InputKey { get => _inputKey; set => _inputKey = value; }
 
     /// <summary>
-    ///     해당 스킬을 중복으로 호출(생성)이 가능한지에 대한 여부입니다.
+    /// 현재 해당 스킬의 FSM입니다.
     /// </summary>
-    public bool AllowDuplicates { get; protected set; } = false;
+    public State CurrentState { get; private set; } = State.ReadyToUse;
 
     /// <summary>
-    ///     UI에 나타날 스킬 이름입니다.
+    /// UI에 나타날 스킬 이름입니다.
     /// </summary>
     public string Name { get; set; }
+    public int ID => _id;
+    protected float Range { get; private set; }
+    protected Vector2 Size { get; private set; }
+    /// <summary>
+    /// 해당 스킬이 사용되기 전 딜레이 밀리초 입니다.
+    /// </summary>
+    protected int FrontDelayMilliseconds { get; private set; }
+    /// <summary>
+    /// 해당 스킬이 사용되고 난 뒤 딜레이 밀리초 입니다.
+    /// </summary>
+    protected int EndDelayMilliseconds { get; private set; }
+    protected float FrontDelayMoveSpeed { get; private set; }
+    protected float EndDelayMoveSpeed { get; private set; }
+    protected int StunGroggyDuration { get; private set; }
+    protected int Damage { get; private set; }
+    protected float EffectDuration { get; private set; }
+    protected float SkillEffectDamage { get; private set; }
+    protected float SkillSpeed { get; private set; }
 
-    protected virtual void Start()
+    //Effects CSV Data
+    protected Vector4 EffectData { get; private set; }
+    protected Vector2 EffectSize { get; private set; }
+
+    #region abstract
+
+    /// <summary>
+    /// 스킬 사용 전 캐스팅 단계입니다.
+    /// </summary>
+    protected abstract UniTask<bool> OnReadyToUseAsync(CancellationToken cancellation);
+
+    /// <summary>
+    /// 캐스팅 후 스킬 사용하기까지 사이의 선 딜레이 진행 전 단계입니다.
+    /// </summary>
+    protected abstract void BeforeFrontDelay();
+
+    /// <summary>
+    /// 스킬이 본격적으로 실행되는 단계입니다.
+    /// </summary>
+    protected abstract UniTask OnUseAsync();
+
+    /// <summary>
+    /// 스킬 실행이 끝나고 스킬을 종료하기까지 사이의 후 딜레이 진행 전 단계입니다.
+    /// </summary>
+    protected abstract void BeforeEndDelay();
+
+    /// <summary>
+    /// 스킬이 끝나고 릴리즈되는 단계입니다.
+    /// </summary>
+    protected abstract void OnRelease();
+
+    /// <summary>
+    /// 스킬 사용이 취소되는 단계입니다.
+    /// </summary>
+    protected abstract void OnCancel();
+
+    #endregion
+
+    protected sealed override void OnInitialized()
     {
-        SetState(State.ReadyToUse);
+        OnInitializeSkill();
     }
 
-    public override void Register(ControllerBase controller)
+    protected sealed override void OnRegistered(Action continueFunc)
     {
-        base.Register(controller);
-        _buffController =
-            controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] OnRegistered");
+        }
+        BuffController = Controller.ControllerManager.GetController<BuffController>(ControllerManager.Type.BuffController);
+        AuthorPlayer = Author as APlayer;
+
+        gameObject.SetActive(true);
+        _stateCancellation = new CancellationTokenSource();
+        RunAsync(_stateCancellation.Token, continueFunc).Forget();
+    }
+
+    protected sealed override void OnReleased()
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] OnReleased");
+        }
+        ReleaseMoveSpeedBuffAll();
+        gameObject.SetActive(false);
+        _stateCancellation = null;
+    }
+
+    public sealed override void Release()
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] Release (Cancel)");
+        }
+        _stateCancellation?.Cancel();
+    }
+
+    private async UniTaskVoid RunAsync(CancellationToken cancelltaion, Action afterFunc)
+    {
+        var isCanceled = await SkillReadyToUse(cancelltaion).ContinueWith(afterFunc).SuppressCancellationThrow();
+
+        if (isCanceled)
+        {
+            if (_debuging)
+            {
+                Debug.Log($"[{Time.frameCount}] [{ID}] Canceled");
+            }
+            CurrentState = State.Canceled;
+            ApplyMovementSpeed(State.Canceled);
+            OnRelease();
+            base.Release();
+            afterFunc();
+        }
+    }
+
+    private async UniTask SkillReadyToUse(CancellationToken cancelltaion)
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] ReadyToUse");
+        }
+        CurrentState = State.ReadyToUse;
+        var canMoveNextState = await OnReadyToUseAsync(cancelltaion);
+
+        if (canMoveNextState)
+        {
+            await SkillFrontDelay(cancelltaion);
+        }
+        else
+        {
+            throw new OperationCanceledException(cancelltaion);
+        }
+    }
+
+    private async UniTask SkillFrontDelay(CancellationToken cancelltaion)
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] FrontDelay {FrontDelayMilliseconds}");
+        }
+        CurrentState = State.FrontDelay;
+        ApplyMovementSpeed(State.FrontDelay);
+        BeforeFrontDelay();
+
+        if (FrontDelayMilliseconds == 0)
+        {
+            FrontDelayMilliseconds = _frontDelay;
+        }
+
+        await UniTask.Delay(FrontDelayMilliseconds, cancellationToken: cancelltaion);
+        await SkillUse(cancelltaion);
+    }
+
+    private async UniTask SkillUse(CancellationToken cancelltaion)
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] Use");
+        }
+        CurrentState = State.Use;
+        ApplyMovementSpeed(State.Use);
+        await OnUseAsync();
+        await SkillEndDelay(cancelltaion);
+    }
+
+    private async UniTask SkillEndDelay(CancellationToken cancelltaion)
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] EndDelay {EndDelayMilliseconds}");
+        }
+        CurrentState = State.EndDelay;
+        ApplyMovementSpeed(State.EndDelay);
+        BeforeEndDelay();
+
+        if (EndDelayMilliseconds == 0)
+            EndDelayMilliseconds = _endDelay;
+
+        await UniTask.Delay(EndDelayMilliseconds, cancellationToken: cancelltaion);
+        SkillRelease();
+    }
+
+    private void SkillRelease()
+    {
+        if (_debuging)
+        {
+            Debug.Log($"[{Time.frameCount}] [{ID}] Release");
+        }
+        CurrentState = State.Release;
+        ApplyMovementSpeed(State.Release);
+        OnRelease();
+        base.Release();
     }
 
     /// <summary>
-    ///     스킬 사용 전 캐스팅 단계입니다.
+    /// 스킬이 최초 생성되는 시점에 호출됩니다.<para/>
+    /// 스킬이 실행되는 시점이 아닙니다! 스킬 실행 시점 콜백은 OnReadyToUse를 사용해주세요.
     /// </summary>
-    protected abstract IEnumerator OnReadyToUse();
-
-    /// <summary>
-    ///     캐스팅 후 스킬 사용하기까지 사이의 선 딜레이 단계입니다.
-    /// </summary>
-    protected abstract IEnumerator OnFrontDelay();
-
-    /// <summary>
-    ///     스킬이 본격적으로 실행되는 단계입니다.
-    /// </summary>
-    protected abstract IEnumerator OnUse();
-
-    /// <summary>
-    ///     스킬 실행이 끝나고 스킬을 종료하기까지 사이의 후 딜레이 단계입니다.
-    /// </summary>
-    protected abstract IEnumerator OnEndDelay();
-
-    /// <summary>
-    ///     스킬 사용이 취소되는 단계입니다.
-    /// </summary>
-    protected abstract IEnumerator OnCanceled();
-
-    /// <summary>
-    ///     스킬이 끝나고 릴리즈되는 단계입니다.
-    /// </summary>
-    protected abstract IEnumerator OnRelease();
-
-    /// <summary>
-    ///     다음 단계의 스킬 FSM으로 이동합니다.
-    /// </summary>
-    public void SetNextState()
+    protected virtual void OnInitializeSkill()
     {
-        if (_currentState >= State.Release)
+        // CSV 데이터 적용
+        _commonCsvData = CSVUtil.GetData("SkillDataTable");
+        // csv 위치값
+        _commonCsvData.Get<float>("Skill_ID", out var idList);
+        _commonCsvIndex = idList.FindIndex(x => (int)x == _id);
+
+        // Name = GetCSVData<string>("Name");
+        Range = GetCSVData<float>("Range");
+        Damage = (int)GetCSVData<float>("Damage");
+        EffectDuration = GetCSVData<float>("Effect_Duration");
+        SkillEffectDamage = GetCSVData<float>("Skill_Effect_Damage");
+        SkillSpeed = GetCSVData<float>("Skill_Speed");
+        StunGroggyDuration = (int)GetCSVData<float>("Groggy_Duration");
+        FrontDelayMilliseconds = (int)GetCSVData<float>("Pre_Delay_Duration");
+        EndDelayMilliseconds = (int)GetCSVData<float>("After_Delay_Duration");
+        FrontDelayMoveSpeed = GetCSVData<float>("Pre_Delay_MoveSpeed");
+        EndDelayMoveSpeed = GetCSVData<float>("After_Delay_MoveSpeed");
+        Size = new Vector2(GetCSVData<float>("ShapeData_1"), GetCSVData<float>("ShapeData_2"));
+
+        // Effect Data
+        EffectData = new Vector4(GetCSVData<float>("Skill_Effect_Data_1"), GetCSVData<float>("Skill_Effect_Data_2"), 0, 0);
+        EffectSize = new Vector2(GetCSVData<float>("Effect_Size_1"), GetCSVData<float>("Effect_Size_2"));
+
+        // TODO: 아래 코드 제거
+        // 스턴 지속 시간
+        var stunBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.Stun);
+        if (stunBuff != null)
+        {
+            stunBuff.Duration = GetCSVData<float>("Groggy_Duration") * 0.001f;
+        }
+
+        // 데미지
+        var decreaseHpBuff = _buffOnCollision.Find(x => x.Type == BuffObject.Type.DecreaseHp);
+        if (decreaseHpBuff != null)
+        {
+            decreaseHpBuff.Damage = GetCSVData<float>("Damage");
+        }
+    }
+
+    /// <summary>
+    /// 해당 스킬의 CSV 데이터를 들고옵니다.
+    /// 캐스팅 시 float, bool, string만 허용됩니다.
+    /// </summary>
+    /// <param name="key">가져올 데이터의 이름입니다.</param>
+    /// <typeparam name="T">캐스팅 시 float, bool, string만 허용됩니다.</typeparam>
+    protected T GetCSVData<T>(string key)
+    {
+        if (!_commonCsvData.Get<T>(key, out var valueList))
+        {
+            throw new Exception("Error to parse csv data.");
+        }
+
+        return valueList[_commonCsvIndex];
+    }
+
+    private void ApplyMovementSpeed(State state)
+    {
+        if (!Author.photonView.IsMine)
         {
             return;
         }
 
-        _currentState += 1;
-        SetState(_currentState);
-    }
+        // 나머지 상태인 경우 움직임 버프와 관련한 요소가 없으므로 버프요소 삭제
+        if (state != State.FrontDelay && state != State.EndDelay)
+        {
+            ReleaseMoveSpeedBuffAll();
+            return;
+        }
 
-    /// <summary>
-    ///     특정 단계의 스킬 FSM으로 이동합니다.
-    ///     인스펙터 및 애니메이터에 사용하는 용도로 해당 함수를 삭제하지 마세요!
-    /// </summary>
-    /// <param name="state">이동할 스킬 FSM의 상태입니다.</param>
-    public void SetState(State state)
-    {
-        if (state < 0 || state > State.Release)
+        var value = state == State.FrontDelay ? FrontDelayMilliseconds : EndDelayMilliseconds;
+        var moveSpeed = state == State.FrontDelay ? FrontDelayMoveSpeed : EndDelayMoveSpeed;
+        ReleaseMoveSpeedBuffAll();
+
+        if (value <= 0)
         {
             return;
         }
 
-        _currentState = state;
-
-        if (_currentCoroutine != null)
+        IngameDelayCursorObject.SetActiveCursor(true, value / 1000.0f);
+        if (_generateMoveSpeedCoroutine != null)
         {
-            StopCoroutine(_currentCoroutine);
-            _currentCoroutine = null;
+            StopCoroutine(_generateMoveSpeedCoroutine);
+            _generateMoveSpeedCoroutine = null;
         }
 
-        var currentEnumerator = GetStateFunction();
-        _currentCoroutine = StartCoroutine(currentEnumerator);
+        _generateMoveSpeedCoroutine = StartCoroutine(GenerateMoveSpeedBuff(moveSpeed));
     }
 
-    private IEnumerator GetStateFunction()
+    private void ReleaseMoveSpeedBuffAll()
     {
-        return _currentState switch
+        BuffController.ReleaseBuffsByType(BuffObject.Type.MoveSpeed);
+        _moveSpeedObjects.Clear();
+    }
+
+    private IEnumerator GenerateMoveSpeedBuff(float value)
+    {
+        var speedBuffs = BuffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+        var leastMoveSpeedBuff = speedBuffs.Count > 0 ? speedBuffs.Last() : null;
+
+        BuffController.GenerateBuff(new BuffObject.BuffStruct
         {
-            State.ReadyToUse => OnReadyToUse(),
-            State.FrontDelay => OnFrontDelay(),
-            State.Use => OnUse(),
-            State.EndDelay => OnEndDelay(),
-            State.Canceled => OnCanceled(),
-            State.Release => OnRelease(),
-            _ => null,
-        };
+            Type = BuffObject.Type.MoveSpeed,
+            Duration = 0f,
+            AllowDuplicates = true,
+            Damage = 0f,
+            IsOnlyOnce = false,
+            ValueFloat = new[] { value }
+        });
+
+        IReadOnlyList<BuffObject> moveSpeedBuffList = null;
+
+        // 만들기 전 최신의 움직임 버프 ID값과 비교하여 실제로 구현이 되었는지 확인합니다.
+        yield return new WaitUntil(() =>
+        {
+            var leastBuffId = leastMoveSpeedBuff != null ? leastMoveSpeedBuff.BuffId : null;
+
+            moveSpeedBuffList = BuffController.ActiveBuffs[BuffObject.Type.MoveSpeed];
+
+            // TODO: 테스트 필요
+            var currentBuffId = moveSpeedBuffList.Count > 0 ? moveSpeedBuffList.Last().BuffId : null;
+            return currentBuffId != null && !currentBuffId.Equals(leastBuffId);
+        });
+
+        if (moveSpeedBuffList != null)
+        {
+            _moveSpeedObjects.Add(moveSpeedBuffList[moveSpeedBuffList.Count - 1] as MoveSpeedObject);
+        }
     }
 }

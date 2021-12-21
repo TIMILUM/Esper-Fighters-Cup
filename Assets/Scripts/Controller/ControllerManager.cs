@@ -14,16 +14,11 @@ public class ControllerManager : MonoBehaviour
     private readonly Dictionary<Type, ControllerBase> _controllers =
         new Dictionary<Type, ControllerBase>();
 
-    private Actor _actor;
+    public Actor Author { get; private set; }
 
     protected void Awake()
     {
         RegisterControllers();
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
     }
 
     public T GetController<T>(Type type) where T : ControllerBase
@@ -64,12 +59,12 @@ public class ControllerManager : MonoBehaviour
 
     public void SetActor(Actor actor)
     {
-        _actor = actor;
+        Author = actor;
     }
 
     public Actor GetActor()
     {
-        return _actor;
+        return Author;
     }
 
     public void OnPlayerHitEnter(GameObject other)

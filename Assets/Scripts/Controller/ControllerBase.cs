@@ -7,8 +7,7 @@ public abstract class ControllerBase : MonoBehaviourPunCallbacks
     [SerializeField]
     private ControllerManager.Type _type = ControllerManager.Type.None;
 
-    protected ControllerManager _controllerManager;
-    public ControllerManager ControllerManager => _controllerManager;
+    public ControllerManager ControllerManager { get; private set; }
 
     private UnityAction<GameObject> _onPlayerHitEnterEvent = null;
     public event UnityAction<GameObject> PlayerHitEnterEvent
@@ -17,7 +16,14 @@ public abstract class ControllerBase : MonoBehaviourPunCallbacks
         remove => _onPlayerHitEnterEvent -= value;
     }
 
-    // Start is called before the first frame update
+    protected virtual void Reset()
+    {
+    }
+
+    protected virtual void Awake()
+    {
+    }
+
     protected virtual void Start()
     {
     }
@@ -28,8 +34,8 @@ public abstract class ControllerBase : MonoBehaviourPunCallbacks
 
     public void Register(ControllerManager controllerManager)
     {
-        _controllerManager = controllerManager;
-        _controllerManager.RegisterController(_type, this);
+        ControllerManager = controllerManager;
+        ControllerManager.RegisterController(_type, this);
     }
 
     protected virtual void SetControllerType(ControllerManager.Type type)

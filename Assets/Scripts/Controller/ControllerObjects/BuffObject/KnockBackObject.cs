@@ -1,68 +1,26 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 public class KnockBackObject : BuffObject
 {
-    [SerializeField]
-    [Tooltip("넉백 방향 입니다.")]
     private Vector3 _normalizedDirection = Vector3.zero;
-
-    [SerializeField]
-    [Tooltip("최종 넉백 거리는 (스피드 * 지속시간) 입니다.")]
     private float _speed = 1;
-
-    private Actor _actor;
-    private Vector3 _endPosition;
-    private Rigidbody _rigidbody;
-
-    private Vector3 _startPosition;
-
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 HP가 줄어듬
     private float _decreaseHp = 0;
-
     // 넉백 후 오브젝트와 충돌 시 해당값 만큼 스턴 지속기간(초) 지정됨
     private float _durationStunSeconds = 0;
+    private float _playerChracterID = -1;
+    private Coroutine _moving;
 
     public Vector3 NormalizedDirection
     {
+        get => _normalizedDirection;
         set => _normalizedDirection = value;
     }
 
-    public float Speed
-    {
-        set => _speed = value;
-    }
+    public override Type BuffType => Type.KnockBack;
 
-    private void Reset()
-    {
-        _name = "";
-        _buffStruct.Type = Type.KnockBack;
-    }
-
-    // Start is called before the first frame update
-    private new void Start()
-    {
-        base.Start();
-        _normalizedDirection = _normalizedDirection.normalized;
-        _actor = _controller.ControllerManager.GetActor();
-        _rigidbody = _actor.GetComponent<Rigidbody>();
-        _startPosition = _rigidbody.position;
-        _endPosition = _startPosition + (_buffStruct.Duration * _speed * _normalizedDirection);
-    }
-
-    // Update is called once per frame
-    private new void Update()
-    {
-        base.Update();
-        if (photonView != null && !photonView.IsMine)
-        {
-            return;
-        }
-
-        _rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
-    }
-
-    public override void SetBuffStruct(BuffStruct buffStruct)
+    public override void OnBuffGenerated()
     {
         // BuffStruct Help
         // ---------------
@@ -72,17 +30,48 @@ public class KnockBackObject : BuffObject
         // ValueFloat[1]    : _decreaseHp (0이면 HP감소 효과 없음)
         // ValueFloat[2]    : _durationStunSeconds (0이면 스턴 효과 없음)
         // ---------------
+        _normalizedDirection = Info.ValueVector3[0].normalized;
+        _speed = Info.ValueFloat[0];
+        _decreaseHp = Info.ValueFloat[1];
+        _durationStunSeconds = Info.ValueFloat[2];
 
-        base.SetBuffStruct(buffStruct);
-        _normalizedDirection = buffStruct.ValueVector3[0];
-        _speed = buffStruct.ValueFloat[0];
-        _decreaseHp = buffStruct.ValueFloat[1];
-        _durationStunSeconds = buffStruct.ValueFloat[2];
+        if (Info.ValueFloat.Length > 3)
+        {
+            _playerChracterID = Info.ValueFloat[3];
+        }
+
+        if (Author.photonView.IsMine)
+        {
+            _moving = StartCoroutine(Knockback());
+        }
     }
 
-    protected override void OnHit(ObjectBase from, ObjectBase to, BuffStruct[] appendBuff)
+    public override void OnBuffReleased()
     {
-        throw new NotImplementedException();
+        if (Author.photonView.IsMine)
+        {
+            StopCoroutine(_moving);
+        }
+        /*
+        if (Author is AStaticObject)
+        {
+            Author.BuffController.GenerateBuff(new BuffStruct()
+            {
+                Type = Type.Falling,
+                ValueFloat = new float[2] { 0.0f, 0.0f }
+            });
+        }
+        */
+    }
+
+    private IEnumerator Knockback()
+    {
+        var waitForFixedUpdate = new WaitForFixedUpdate();
+        while (true)
+        {
+            Author.Rigidbody.position += _speed * Time.deltaTime * _normalizedDirection;
+            yield return waitForFixedUpdate;
+        }
     }
 
     public override void OnPlayerHitEnter(GameObject other)
@@ -92,42 +81,39 @@ public class KnockBackObject : BuffObject
             return;
         }
 
-        if (_actor.ControllerManager.TryGetController(
-            ControllerManager.Type.BuffController, out BuffController myController))
-        {
-            _rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
-            GenerateAfterBuff(myController);
-            myController.ReleaseBuff(this);
-        }
-
-        if (otherActor is null)
+        if (otherActor != null && otherActor.photonView.ViewID == _playerChracterID)
         {
             return;
         }
 
-        if (otherActor.ControllerManager.TryGetController(
-            ControllerManager.Type.BuffController, out BuffController otherController))
+        Author.Rigidbody.velocity = -_normalizedDirection * 2; // 넉백 후 충돌로 인한 튕기는 효과 추가
+
+        GenerateAfterBuff(Controller);
+
+        if (otherActor != null)
         {
-            GenerateAfterBuff(otherController);
+            GenerateAfterBuff(otherActor.BuffController);
         }
+
+        Controller.ReleaseBuff(this);
     }
 
     // 넉백 후 오브젝트와 충돌 시 추가적으로 얻는 버프를 이 함수에서 생성함
-    private void GenerateAfterBuff(BuffController controller)
+    private void GenerateAfterBuff(BuffController target)
     {
         if (_decreaseHp > 0)
         {
-            controller.GenerateBuff(new BuffStruct()
+            target.GenerateBuff(new BuffStruct()
             {
                 Type = Type.DecreaseHp,
                 Damage = _decreaseHp,
-                Duration = 0.001f
+                IsOnlyOnce = true
             });
         }
 
         if (_durationStunSeconds > 0)
         {
-            controller.GenerateBuff(new BuffStruct()
+            target.GenerateBuff(new BuffStruct()
             {
                 Type = Type.Stun,
                 Duration = _durationStunSeconds
